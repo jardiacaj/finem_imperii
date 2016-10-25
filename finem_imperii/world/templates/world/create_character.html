@@ -1,0 +1,21 @@
+{% extends "base/base.html" %}
+
+{% load bootstrap %}
+
+{% block content %}
+
+    <h1 class="page-header">Create new character</h1>
+
+    <div class="container-fluid">
+        <form class="form-horizontal" role="form" method="post">
+            {% csrf_token %}
+            {{ form|bootstrap }}
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}
+
+

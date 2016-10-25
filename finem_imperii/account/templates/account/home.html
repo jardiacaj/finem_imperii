@@ -1,0 +1,14 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+
+    <h1 class="page-header">{{ user.username }}'s characters</h1>
+
+    <p>
+        {% for character in user.character_set.all %}
+            <a href="{{ character.activation_url }}" class="btn btn-default">{{ character.name }}</a>
+        {% endfor %}
+    </p>
+
+    <p><a href="{% url 'world:create_character' %}">Create a new character</a></p>
+{% endblock %}

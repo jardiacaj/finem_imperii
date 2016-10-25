@@ -1,0 +1,19 @@
+[report]
+omit =  
+    */python?.?/*
+    */site-packages/nose/*
+    */migrations/*
+    */tests/*
+    */apps*
+    */wsgi*
+    *__init__*
+    *manage*
+    *settings*
+
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    raise AssertionError
+    raise NotImplementedError
+    if __name__ == .__main__.:
+    pass

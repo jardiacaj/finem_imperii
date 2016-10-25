@@ -1,0 +1,24 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+
+    <h1 class="page-header">Login</h1>
+
+    <div class="col-xs-12 col-md-6">
+        <form method="post" action="{% url 'account:login' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" placeholder="Username" name="username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Password" name="password">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+        <p>
+            Don't have an account yet? <a href="{% url 'account:register' %}">Register here</a>.
+        </p>
+    </div>
+{% endblock %}

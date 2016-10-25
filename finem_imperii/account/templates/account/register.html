@@ -1,0 +1,32 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+
+    <h1 class="page-header">Register</h1>
+
+    <div class="col-xs-12 col-md-6">
+        <form method="post" action="{% url 'account:register' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" placeholder="Username" name="username">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="Email" name="email">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Password" name="password">
+            </div>
+            <div class="form-group">
+                <label for="password2">Confirm password</label>
+                <input type="password" class="form-control" id="password2" placeholder="Password" name="password2">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+        <p>
+            Already have an account? <a href="{% url 'account:login' %}">Login here</a>.
+        </p>
+    </div>
+{% endblock %}

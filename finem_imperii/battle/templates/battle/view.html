@@ -66,9 +66,9 @@
             var scene = new THREE.Scene();
             //camera
             var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.z = 10;
-            camera.position.x = 10;
-            camera.position.y = 10;
+            camera.position.z = 0;
+            camera.position.x = 25;
+            camera.position.y = 25;
             camera.lookAt(new THREE.Vector3( 0, 0, 0 ));
             camera.aspect = (window.innerWidth - 30) / (window.innerHeight-300);
             camera.updateProjectionMatrix();

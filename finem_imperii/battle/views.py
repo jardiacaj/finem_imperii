@@ -1,7 +1,7 @@
 import json
 
 from django.forms.models import model_to_dict
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 
 from battle.models import Battle, BattleTurn, BattleUnit, BattleUnitInTurn, BattleObject, BattleObjectInTurn
 from decorators import inchar_required
@@ -11,6 +11,23 @@ from decorators import inchar_required
 def setup_view(request):
     return render(request, 'battle/setup.html')
 
+
+def view_battle(request, battle_id):
+    battle = get_object_or_404(Battle, pk=battle_id)
+
+    context = {
+        'battle_data': json.dumps(battle.render_for_view())
+    }
+    return render(request, 'battle/view.html', context=context)
+
+def create_test_battle3(request):
+    battle = Battle()
+    battle.save()
+    battle.start_battle()
+    for i in range(30):
+        print(i)
+        battle.do_turn()
+    return redirect(battle.get_absolute_url())
 
 def test_view(request):
     battle = Battle()
@@ -83,7 +100,7 @@ def test_view(request):
         )
     }
 
-    return render(request, 'battle/test.html', context=context)
+    return render(request, 'battle/view.html', context=context)
 
 
 def create_test_battle(request):
@@ -154,4 +171,4 @@ def create_test_battle(request):
     context = {
         'battle_data': json.dumps(battle.render_for_view())
     }
-    return render(request, 'battle/test.html', context=context)
+    return render(request, 'battle/view.html', context=context)

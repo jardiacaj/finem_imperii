@@ -1,13 +1,9 @@
-import logging
-from collections import namedtuple, defaultdict
+from collections import namedtuple
 
 import math
-from heapq import heappush, heappop
 
 from django.core.urlresolvers import reverse
-from django.db import models, transaction
-from django.db.models.aggregates import Max
-from django.db.models.expressions import F
+from django.db import models
 from django.forms.models import model_to_dict
 
 Coordinates = namedtuple("Coordinates", ['x', 'z'])
@@ -24,11 +20,12 @@ class Battle(models.Model):
             'turn_count': self.battleturn_set.count(),
             'heightmap': [0]*100
         }
-        for battle_unit in self.battleunit_set.all():
-            unit_data = {
-                'turn_data': [model_to_dict(battle_unit_in_turn) for battle_unit_in_turn in battle_unit.battleunitinturn_set.all()]
-            }
-            result['unit_data'].append(unit_data)
+        for char in self.battlecharacter_set.all():
+            for battle_unit in char.battleunit_set.all():
+                unit_data = {
+                    'turn_data': [model_to_dict(battle_unit_in_turn) for battle_unit_in_turn in battle_unit.battleunitinturn_set.all()]
+                }
+                result['unit_data'].append(unit_data)
         for battle_object in self.battleobject_set.all():
             object_data = {
                 'turn_data': [model_to_dict(battle_object_in_turn) for battle_object_in_turn in battle_object.battleobjectinturn_set.all()]
@@ -37,33 +34,57 @@ class Battle(models.Model):
         return result
 
     def get_latest_turn(self):
-        return self.battleturn_set.order_by('-num')[0]
+        turns = self.battleturn_set.order_by('-num')
+        if not turns:
+            return None
+        return turns[0]
 
-    def start_battle_test(self):
+    def generate_first_turn(self):
         turn = BattleTurn(battle=self, num=0)
         turn.save()
 
-        order = Order(what="move", target_location_x=45, target_location_z=20, done=False)
-        order.save()
-        unit = BattleUnit(battle=self)
-        unit.save()
-        order_in_list = OrderListElement(order=order, battle_unit=unit, position=0)
-        order_in_list.save()
-        unit_in_turn = BattleUnitInTurn(battle_unit=unit, battle_turn=turn, x_pos=50, z_pos=0)
-        unit_in_turn.order = order
-        unit_in_turn.save()
+        for char in self.battlecharacter_set.all():
+            for unit in char.battleunit_set.all():
+                x = 50 + (unit.starting_x_pos * 20)
+                z = 10 + (unit.starting_z_pos * 10)
+                if char.z:
+                    z = 100 - z
+
+                while turn.battleunitinturn_set.filter(x_pos=x, z_pos=z).exists():
+                    x += 1
+
+                unit_in_turn = BattleUnitInTurn(battle_unit=unit, battle_turn=turn, x_pos=x, z_pos=z,
+                                                order=unit.orders.all()[0])
+                unit_in_turn.save()
 
     def start_battle(self, char1, char2):
-        for char in (char1, char2):
-            bchar = BattleCharacter(battle=self, character=char)
+        z = False
+        for wchar in (char1, char2):
+            bchar = BattleCharacter(battle=self, character=wchar, z=z)
             bchar.save()
-            for unit in char.worldunit_set.all():
-                bunit = BattleUnit(owner=bchar)
+            z = True
+            for wunit in wchar.worldunit_set.all():
+                bunit = BattleUnit(owner=bchar, world_unit=wunit)
                 bunit.save()
+
+    def check_all_ready(self):
+        all_ready = True
+        for combatant in self.battlecharacter_set.all():
+            if not combatant.ready:
+                all_ready = False
+
+        if all_ready:
+            for i in range(10):
+                self.do_turn()
+
+        for combatant in self.battlecharacter_set.all():
+            combatant.ready = False
+            combatant.save()
 
     def do_turn(self):
         if not self.get_latest_turn():
-            self.start_battle_test()
+            self.generate_first_turn()
+            return
 
         prev_turn = self.get_latest_turn()
         next_turn = prev_turn.create_next()
@@ -81,6 +102,7 @@ class BattleCharacter(models.Model):
 
     battle = models.ForeignKey(Battle)
     character = models.ForeignKey('world.Character')
+    z = models.BooleanField(default=False)
     ready = models.BooleanField(default=False)
 
 
@@ -139,6 +161,12 @@ class OrderListElement(models.Model):
 class BattleUnit(models.Model):
     orders = models.ManyToManyField(through=OrderListElement, to=Order)
     owner = models.ForeignKey(BattleCharacter)
+    world_unit = models.ForeignKey('world.WorldUnit')
+    starting_x_pos = models.IntegerField(default=0)
+    starting_z_pos = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.world_unit.name
 
 
 class BattleUnitInTurn(models.Model):
@@ -163,6 +191,10 @@ class BattleUnitInTurn(models.Model):
                 if len(path) > 1:
                     self.x_pos = path[1].x
                     self.z_pos = path[1].z
+            if self.order.what == 'attack':
+                pass
+            if self.order.what == 'stand':
+                pass
 
     def path_heuristic(self, start, goal):
         return math.sqrt((start.x - goal.x)**2 + (start.z - goal.z)**2)

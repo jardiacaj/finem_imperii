@@ -1,0 +1,43 @@
+{% extends "base/base.html" %}
+
+{% load bootstrap %}
+
+{% block content %}
+
+    <h1 class="page-header">{{ request.hero }}</h1>
+
+    <p>
+        Cash: {{ request.hero.cash }} gold coins
+    </p>
+
+    <h2>Units</h2>
+
+    {% for unit in request.hero.worldunit_set.all %}
+        <p>
+            <a class="btn btn-default" href="#">{{ unit }} with {{ unit.power }} men</a>
+        </p>
+    {% empty %}
+        <p>
+            You don't own any units.
+        </p>
+    {% endfor %}
+
+    <a href="{% url 'world:recruit' %}">Recruit new unit</a>
+
+    <h2>Battles</h2>
+
+    {% for battle_character in request.hero.battlecharacter_set.all %}
+        <p>
+            <a href="{% url 'battle:setup' battle_character.battle_id %}">{{ battle_character.battle }}</a>
+        </p>
+    {% empty %}
+        <p>No battles</p>
+    {% endfor %}
+
+    <p>
+        <a href="{% url 'world:setup_battle' %}">Set up new battle</a>
+    </p>
+
+{% endblock %}
+
+

@@ -4,11 +4,11 @@
 
     <h1 class="page-header">{{ user.username }}'s characters</h1>
 
-    <p>
-        {% for character in user.character_set.all %}
+    {% for character in user.character_set.all %}
+        <p>
             <a href="{{ character.activation_url }}" class="btn btn-default">{{ character.name }}</a>
-        {% endfor %}
-    </p>
+        </p>
+    {% endfor %}
 
     <p><a href="{% url 'world:create_character' %}">Create a new character</a></p>
 {% endblock %}

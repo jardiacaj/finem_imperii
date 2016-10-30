@@ -39,7 +39,7 @@ class Battle(models.Model):
     def get_latest_turn(self):
         return self.battleturn_set.order_by('-num')[0]
 
-    def start_battle(self):
+    def start_battle_test(self):
         turn = BattleTurn(battle=self, num=0)
         turn.save()
 
@@ -53,9 +53,17 @@ class Battle(models.Model):
         unit_in_turn.order = order
         unit_in_turn.save()
 
+    def start_battle(self, char1, char2):
+        for char in (char1, char2):
+            bchar = BattleCharacter(battle=self, character=char)
+            bchar.save()
+            for unit in char.worldunit_set.all():
+                bunit = BattleUnit(owner=bchar)
+                bunit.save()
+
     def do_turn(self):
         if not self.get_latest_turn():
-            self.start_battle()
+            self.start_battle_test()
 
         prev_turn = self.get_latest_turn()
         next_turn = prev_turn.create_next()
@@ -63,6 +71,17 @@ class Battle(models.Model):
         for unit in next_turn.battleunitinturn_set.all():
             unit.do_turn()
             unit.save()
+
+
+class BattleCharacter(models.Model):
+    class Meta:
+        unique_together = (
+            ("battle", "character"),
+        )
+
+    battle = models.ForeignKey(Battle)
+    character = models.ForeignKey('world.Character')
+    ready = models.BooleanField(default=False)
 
 
 class BattleTurn(models.Model):
@@ -118,8 +137,8 @@ class OrderListElement(models.Model):
 
 
 class BattleUnit(models.Model):
-    battle = models.ForeignKey(Battle)
     orders = models.ManyToManyField(through=OrderListElement, to=Order)
+    owner = models.ForeignKey(BattleCharacter)
 
 
 class BattleUnitInTurn(models.Model):
@@ -204,6 +223,7 @@ class BattleUnitInTurn(models.Model):
                 gScore[neighbor] = tentative_gScore
                 fScore[neighbor] = gScore[neighbor] + self.path_heuristic(neighbor, goal)
         return None
+
 
 class BattleObject(models.Model):
     battle = models.ForeignKey(Battle)

@@ -2,6 +2,14 @@
 
 {% block content %}
 
-    <h1 class="page-header">Setup</h1>
+    <h1 class="page-header">Setup for battle {{ battle }}</h1>
+
+    <h2>Your units</h2>
+
+    {% for unit in units %}
+        <p>
+            {{ unit }}
+        </p>
+    {% endfor %}
 
 {% endblock %}

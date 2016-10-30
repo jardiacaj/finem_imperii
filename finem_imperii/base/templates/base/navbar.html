@@ -18,19 +18,26 @@
                 {% if user.is_authenticated %}
                     <li class="active"><a href="{% url 'base:home' %}">Home <span class="sr-only">(current)</span></a></li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown
-                            <span class="caret"></span></a>
+
+                        {% if request.hero %}
+                            <a href="{{ request.hero.activation_url }}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                {{ request.hero }}
+                                <span class="caret"></span>
+                            </a>
+                        {% else %}
+                            <a href="{% url 'account:home' %}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                Choose a character
+                                <span class="caret"></span>
+                            </a>
+                        {% endif %}
+
                         <ul class="dropdown-menu" role="menu">
                             {% for character in user.character_set.all %}
-                                <li><a href="#">{{ character.name }}</a></li>
+                                <li><a href="{{ character.activation_url }}">{{ character.name }}</a></li>
                             {% endfor %}
-                            <li class="divider"></li>
-                            <li><a href="#">Separated link</a></li>
-                            <li class="divider"></li>
-                            <li><a href="#">One more separated link</a></li>
                         </ul>
                     </li>
-                    <li><a href="#">Two</a></li>
+                    <li><a href="#">Help</a></li>
                 {%  else %}
                     <li class="active"><a href="{% url 'base:home' %}">Home <span class="sr-only">(current)</span></a></li>
                     <li><a href="#">About</a></li>

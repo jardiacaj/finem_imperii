@@ -196,7 +196,7 @@ class BattleUnitInTurn(models.Model):
             if self.order.what == 'stand':
                 pass
 
-    def path_heuristic(self, start, goal):
+    def euclidean_distance(self, start, goal):
         return math.sqrt((start.x - goal.x)**2 + (start.z - goal.z)**2)
 
     def coordinate_neighbours(self, coord):
@@ -215,7 +215,7 @@ class BattleUnitInTurn(models.Model):
         gScore = {}
         gScore[self.coordinates()] = 0
         fScore = {}
-        fScore[self.coordinates()] = self.path_heuristic(self.coordinates(), goal)
+        fScore[self.coordinates()] = self.euclidean_distance(self.coordinates(), goal)
 
         while open_set:
             minel = None
@@ -241,7 +241,7 @@ class BattleUnitInTurn(models.Model):
                 if neighbor in closed_set:
                     #print("Already closed: {}".format(neighbor))
                     continue
-                tentative_gScore = gScore[current] + self.path_heuristic(current, neighbor)
+                tentative_gScore = gScore[current] + self.euclidean_distance(current, neighbor)
                 #print("Considering {} with score {}".format(neighbor, tentative_gScore))
                 if neighbor not in open_set:
                     #print("Adding to open set")
@@ -253,7 +253,7 @@ class BattleUnitInTurn(models.Model):
                 #print("Found better path")
                 cameFrom[neighbor] = current
                 gScore[neighbor] = tentative_gScore
-                fScore[neighbor] = gScore[neighbor] + self.path_heuristic(neighbor, goal)
+                fScore[neighbor] = gScore[neighbor] + self.euclidean_distance(neighbor, goal)
         return None
 
 

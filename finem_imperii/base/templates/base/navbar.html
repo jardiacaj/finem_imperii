@@ -37,10 +37,10 @@
                             {% endfor %}
                         </ul>
                     </li>
-                    <li><a href="#">Help</a></li>
+                    <li><a href="{% url 'base:help' %}">Help</a></li>
                 {%  else %}
                     <li class="active"><a href="{% url 'base:home' %}">Home <span class="sr-only">(current)</span></a></li>
-                    <li><a href="#">About</a></li>
+                    <li><a href="{% url 'base:help' %}">About</a></li>
                     <li><a href="{% url 'account:register' %}">Join</a></li>
                 {% endif %}
             </ul>

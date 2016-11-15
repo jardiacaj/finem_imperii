@@ -1,3 +1,5 @@
+import json
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
@@ -7,7 +9,24 @@ from django.views.generic.base import View
 
 from battle.models import Battle, BattleCharacter
 from decorators import inchar_required
-from world.models import Character, WorldUnit
+from world.models import Character, WorldUnit, World
+
+
+def world_view(request, world_id):
+    world = get_object_or_404(World, id=world_id)
+    context = {
+        'world': world,
+        'regions': json.dumps([region.render_for_view() for region in world.worldregion_set.all()])
+    }
+    return render(request, 'world/view_world.html', context)
+
+
+@login_required
+def create_character(request):
+    context = {
+        'worlds': World.objects.all()
+    }
+    return render(request, 'world/create_character_step1.html', context=context)
 
 
 class CharacterCreationForm(ModelForm):

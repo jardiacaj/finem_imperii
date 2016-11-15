@@ -1,0 +1,27 @@
+{% extends "base/base.html" %}
+
+{% load bootstrap %}
+
+{% block content %}
+
+    <h1 class="page-header">Create new character</h1>
+
+    <h2>Choose a world</h2>
+
+    <div class="container-fluid">
+        <ul>
+            {% for world in worlds %}
+                <li>
+                    {{ world }}
+                    <a href="{{ world.get_absolute_url }}" class="btn btn-default">View</a>
+                    <a href="{% url 'world:create_character' world.id %}" class="btn btn-default">Choose</a>
+                </li>
+            {% empty %}
+                <li>No worlds :(</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+{% endblock %}
+
+

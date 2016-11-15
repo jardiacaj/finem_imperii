@@ -51,10 +51,10 @@ def login_view(request):
                 return redirect('base:home')
             else:
                 messages.add_message(request, messages.ERROR, "You account is disabled.", extra_tags='danger')
-                return redirect('base:login')
+                return redirect('account:login')
         else:
             messages.add_message(request, messages.ERROR, "Your username and/or your password is incorrect.", extra_tags='warning')
-            return redirect('base:login')
+            return redirect('account:login')
     else:
         if request.user.is_authenticated():
             return redirect('account:home')

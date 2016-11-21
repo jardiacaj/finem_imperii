@@ -23,6 +23,8 @@
     <option name="TEMPLATE_FOLDERS">
       <list>
         <option value="$MODULE_DIR$/finem_imperii/base/templates" />
+        <option value="$MODULE_DIR$/finem_imperii/battle/templates" />
+        <option value="$MODULE_DIR$/finem_imperii/account/templates" />
       </list>
     </option>
   </component>

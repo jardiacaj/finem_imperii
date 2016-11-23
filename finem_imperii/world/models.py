@@ -14,7 +14,7 @@ class World(models.Model):
         return reverse('world:world', kwargs={'world_id': self.id})
 
 
-class WorldRegion(models.Model):
+class Tile(models.Model):
     name = models.CharField(max_length=100)
     world = models.ForeignKey(World)
     x_pos = models.IntegerField()
@@ -32,7 +32,7 @@ class WorldRegion(models.Model):
 class Character(models.Model):
     name = models.CharField(max_length=100)
     world = models.ForeignKey(World)
-    region = models.ForeignKey(WorldRegion)
+    region = models.ForeignKey(Tile)
     owner_user = models.ForeignKey(User)
     cash = models.IntegerField(default=0)
 
@@ -50,7 +50,7 @@ class Character(models.Model):
 class WorldUnit(models.Model):
     owner_character = models.ForeignKey(Character)
     world = models.ForeignKey(World)
-    region = models.ForeignKey(WorldRegion)
+    region = models.ForeignKey(Tile)
     name = models.CharField(max_length=100)
     power = models.IntegerField()
 

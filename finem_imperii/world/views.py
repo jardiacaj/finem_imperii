@@ -16,7 +16,7 @@ def world_view(request, world_id):
     world = get_object_or_404(World, id=world_id)
     context = {
         'world': world,
-        'regions': json.dumps([region.render_for_view() for region in world.worldregion_set.all()])
+        'regions': json.dumps([region.render_for_view() for region in world.tile_set.all()])
     }
     return render(request, 'world/view_world.html', context)
 

@@ -2,8 +2,92 @@
   pk: 1
   fields:
     name: Emortuus
-- model: world.WorldRegion
-  pk: 1
+
+# ROW -4
+- model: world.Tile
+  fields:
+    name: Aedon ocean
+    world_id: 1
+    x_pos: -4
+    z_pos: -4
+    y_pos: 0
+    type: deepsea
+- model: world.Tile
+  fields:
+    name: Aedon ocean
+    world_id: 1
+    x_pos: -3
+    z_pos: -4
+    y_pos: 0
+    type: deepsea
+- model: world.Tile
+  fields:
+    name: Aedon ocean
+    world_id: 1
+    x_pos: -2
+    z_pos: -4
+    y_pos: 0
+    type: deepsea
+- model: world.Tile
+  fields:
+    name: Aedon ocean
+    world_id: 1
+    x_pos: -1
+    z_pos: -4
+    y_pos: 0
+    type: deepsea
+- model: world.Tile
+  fields:
+    name: Sea
+    world_id: 1
+    x_pos: 0
+    z_pos: -4
+    y_pos: 0
+    type: shore
+- model: world.Tile
+  fields:
+    name: Sea
+    world_id: 1
+    x_pos: 1
+    z_pos: -4
+    y_pos: 0
+    type: shore
+- model: world.Tile
+  fields:
+    name: Sea
+    world_id: 1
+    x_pos: 2
+    z_pos: -4
+    y_pos: 0
+    type: shore
+- model: world.Tile
+  fields:
+    name: Sea
+    world_id: 1
+    x_pos: 3
+    z_pos: -4
+    y_pos: 0
+    type: shore
+- model: world.Tile
+  fields:
+    name: Sea
+    world_id: 1
+    x_pos: 4
+    z_pos: -4
+    y_pos: 0
+    type: shore
+- model: world.Tile
+  fields:
+    name: Sea
+    world_id: 1
+    x_pos: 5
+    z_pos: -4
+    y_pos: 0
+    type: shore
+
+
+
+- model: world.Tile
   fields:
     name: Wattingham
     world_id: 1
@@ -11,8 +95,7 @@
     y_pos: 0.0
     z_pos: 0
     type: plain
-- model: world.WorldRegion
-  pk: 2
+- model: world.Tile
   fields:
     name: Dewbury
     world_id: 1
@@ -20,8 +103,7 @@
     y_pos: 0.0
     z_pos: 0
     type: forest
-- model: world.WorldRegion
-  pk: 3
+- model: world.Tile
   fields:
     name: Wray
     world_id: 1
@@ -29,8 +111,7 @@
     y_pos: 0.0
     z_pos: 1
     type: plain
-- model: world.WorldRegion
-  pk: 4
+- model: world.Tile
   fields:
     name: Muria
     world_id: 1

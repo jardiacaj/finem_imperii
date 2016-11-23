@@ -14,9 +14,18 @@ class World(models.Model):
         return reverse('world:world', kwargs={'world_id': self.id})
 
 
+class Region(models.Model):
+    name = models.CharField(max_length=100)
+    world = models.ForeignKey(World)
+
+    def __str__(self):
+        return self.name
+
+
 class Tile(models.Model):
     name = models.CharField(max_length=100)
     world = models.ForeignKey(World)
+    region = models.ForeignKey(Region)
     x_pos = models.IntegerField()
     y_pos = models.FloatField()
     z_pos = models.IntegerField()

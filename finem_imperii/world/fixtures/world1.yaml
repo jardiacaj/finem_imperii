@@ -3,119 +3,979 @@
   fields:
     name: Emortuus
 
+- model: world.Region
+  pk: 1
+  fields:
+    world_id: 1
+    name: Cardell Peninsula
+- model: world.Region
+  pk: 2
+  fields:
+    world_id: 1
+    name: Jade Mountains
+- model: world.Region
+  pk: 3
+  fields:
+    world_id: 1
+    name: Mir Woods
+- model: world.Region
+  pk: 4
+  fields:
+    world_id: 1
+    name: Shamba Peninsula
+- model: world.Region
+  pk: 5
+  fields:
+    world_id: 1
+    name: Bular Plains
+- model: world.Region
+  pk: 6
+  fields:
+    world_id: 1
+    name: Fallen
+- model: world.Region
+  pk: 7
+  fields:
+    world_id: 1
+    name: Aedon Ocean
+- model: world.Region
+  pk: 8
+  fields:
+    world_id: 1
+    name: Tortuga Bay
+- model: world.Region
+  pk: 9
+  fields:
+    world_id: 1
+    name: Maab Ocean
+- model: world.Region
+  pk: 10
+  fields:
+    world_id: 1
+    name: West Bay
+- model: world.Region
+  pk: 11
+  fields:
+    world_id: 1
+    name: Tortuga Sea
+
 # ROW -4
 - model: world.Tile
   fields:
-    name: Aedon ocean
+    name: Aedon Ocean
     world_id: 1
+    region_id: 7
     x_pos: -4
     z_pos: -4
     y_pos: 0
     type: deepsea
 - model: world.Tile
   fields:
-    name: Aedon ocean
+    name: Aedon Ocean
     world_id: 1
+    region_id: 7
     x_pos: -3
     z_pos: -4
     y_pos: 0
     type: deepsea
 - model: world.Tile
   fields:
-    name: Aedon ocean
+    name: Aedon Ocean
     world_id: 1
+    region_id: 7
     x_pos: -2
     z_pos: -4
     y_pos: 0
     type: deepsea
 - model: world.Tile
   fields:
-    name: Aedon ocean
+    name: Aedon Ocean
     world_id: 1
+    region_id: 7
     x_pos: -1
     z_pos: -4
     y_pos: 0
     type: deepsea
 - model: world.Tile
   fields:
-    name: Sea
+    name: Aedon Ocean
     world_id: 1
+    region_id: 7
     x_pos: 0
     z_pos: -4
     y_pos: 0
     type: shore
 - model: world.Tile
   fields:
-    name: Sea
+    name: North Cardell shore
     world_id: 1
+    region_id: 1
     x_pos: 1
     z_pos: -4
     y_pos: 0
     type: shore
 - model: world.Tile
   fields:
-    name: Sea
+    name: North Cardell shore
     world_id: 1
+    region_id: 1
     x_pos: 2
     z_pos: -4
     y_pos: 0
     type: shore
 - model: world.Tile
   fields:
-    name: Sea
+    name: North Cardell shore
     world_id: 1
+    region_id: 1
     x_pos: 3
     z_pos: -4
     y_pos: 0
     type: shore
 - model: world.Tile
   fields:
-    name: Sea
+    name: North Cardell shore
     world_id: 1
+    region_id: 1
     x_pos: 4
     z_pos: -4
     y_pos: 0
     type: shore
 - model: world.Tile
   fields:
-    name: Sea
+    name: Northeast Cardell shore
     world_id: 1
+    region_id: 1
     x_pos: 5
     z_pos: -4
     y_pos: 0
     type: shore
 
 
-
+# ROW -3
+- model: world.Tile
+  fields:
+    name: Aedon Ocean
+    world_id: 1
+    region_id: 7
+    x_pos: -4
+    z_pos: -3
+    y_pos: 0
+    type: deepsea
+- model: world.Tile
+  fields:
+    name: Aedon Ocean
+    world_id: 1
+    region_id: 7
+    x_pos: -3
+    z_pos: -3
+    y_pos: 0
+    type: deepsea
+- model: world.Tile
+  fields:
+    name: Aedon Ocean
+    world_id: 1
+    region_id: 7
+    x_pos: -2
+    z_pos: -3
+    y_pos: 0
+    type: deepsea
+- model: world.Tile
+  fields:
+    name: North Cardell shore
+    world_id: 1
+    region_id: 1
+    x_pos: -1
+    z_pos: -3
+    y_pos: 0
+    type: shore
+- model: world.Tile
+  fields:
+    name: North Cardell shore
+    world_id: 1
+    region_id: 7
+    x_pos: 0
+    z_pos: -3
+    y_pos: 0
+    type: shore
 - model: world.Tile
   fields:
     name: Wattingham
     world_id: 1
-    x_pos: 0
-    y_pos: 0.0
-    z_pos: 0
-    type: plain
+    region_id: 1
+    x_pos: 1
+    z_pos: -3
+    y_pos: 0.1
+    type: plains
 - model: world.Tile
   fields:
     name: Dewbury
     world_id: 1
-    x_pos: 1
-    y_pos: 0.0
-    z_pos: 0
-    type: forest
+    region_id: 1
+    x_pos: 2
+    z_pos: -3
+    y_pos: 0.1
+    type: plains
 - model: world.Tile
   fields:
     name: Wray
     world_id: 1
-    x_pos: 0
-    y_pos: 0.0
-    z_pos: 1
-    type: plain
+    region_id: 1
+    x_pos: 3
+    z_pos: -3
+    y_pos: 0.2
+    type: forest
 - model: world.Tile
   fields:
     name: Muria
     world_id: 1
-    x_pos: 1
+    region_id: 1
+    x_pos: 4
+    z_pos: -3
+    y_pos: 0.15
+    type: forest
+- model: world.Tile
+  fields:
+    name: East Cardell shore
+    world_id: 1
+    region_id: 1
+    x_pos: 5
+    z_pos: -3
+    y_pos: 0
+    type: shore
+
+# ROW -2
+- model: world.Tile
+  fields:
+    name: Aedon Ocean
+    world_id: 1
+    region_id: 7
+    x_pos: -4
+    z_pos: -2
+    y_pos: 0
+    type: deepsea
+- model: world.Tile
+  fields:
+    name: Aedon Ocean
+    world_id: 1
+    region_id: 7
+    x_pos: -3
+    z_pos: -2
+    y_pos: 0
+    type: deepsea
+- model: world.Tile
+  fields:
+    name: North Mir shore
+    world_id: 1
+    region_id: 3
+    x_pos: -2
+    z_pos: -2
+    y_pos: 0
+    type: shore
+- model: world.Tile
+  fields:
+    name: Narris
+    world_id: 1
+    region_id: 1
+    x_pos: -1
+    z_pos: -2
     y_pos: 0.1
+    type: forest
+- model: world.Tile
+  fields:
+    name: Warcton
+    world_id: 1
+    region_id: 1
+    x_pos: 0
+    z_pos: -2
+    y_pos: 0.2
+    type: plains
+- model: world.Tile
+  fields:
+    name: West Luria
+    world_id: 1
+    region_id: 1
+    x_pos: 1
+    z_pos: -2
+    y_pos: 0.5
+    type: mountain
+- model: world.Tile
+  fields:
+    name: Central Luria
+    world_id: 1
+    region_id: 1
+    x_pos: 2
+    z_pos: -2
+    y_pos: 0.6
+    type: mountain
+- model: world.Tile
+  fields:
+    name: East Luria
+    world_id: 1
+    region_id: 1
+    x_pos: 3
+    z_pos: -2
+    y_pos: 0.4
+    type: mountain
+- model: world.Tile
+  fields:
+    name: East Cardell shore
+    world_id: 1
+    region_id: 1
+    x_pos: 4
+    z_pos: -2
+    y_pos: 0
+    type: shore
+- model: world.Tile
+  fields:
+    name: Tortuga Sea
+    world_id: 1
+    region_id: 11
+    x_pos: 5
+    z_pos: -2
+    y_pos: 0
+    type: deepsea
+
+# ROW -1
+- model: world.Tile
+  fields:
+    name: Aedon Ocean
+    world_id: 1
+    region_id: 7
+    x_pos: -4
+    z_pos: -1
+    y_pos: 0
+    type: deepsea
+- model: world.Tile
+  fields:
+    name: East Mir shore
+    world_id: 1
+    region_id: 3
+    x_pos: -3
+    z_pos: -1
+    y_pos: 0
+    type: shore
+- model: world.Tile
+  fields:
+    name: North Mir
+    world_id: 1
+    region_id: 3
+    x_pos: -2
+    z_pos: -1
+    y_pos: 0.15
+    type: forest
+- model: world.Tile
+  fields:
+    name: North Jade
+    world_id: 1
+    region_id: 2
+    x_pos: -1
+    z_pos: -1
+    y_pos: 0.4
+    type: mountain
+- model: world.Tile
+  fields:
+    name: Tortuga Bay
+    world_id: 1
+    region_id: 8
+    x_pos: 0
+    z_pos: -1
+    y_pos: 0
+    type: shore
+- model: world.Tile
+  fields:
+    name: Tortuga Bay
+    world_id: 1
+    region_id: 8
+    x_pos: 1
+    z_pos: -1
+    y_pos: 0
+    type: shore
+- model: world.Tile
+  fields:
+    name: Clarn Plains
+    world_id: 1
+    region_id: 1
+    x_pos: 2
+    z_pos: -1
+    y_pos: 0.15
+    type: plains
+- model: world.Tile
+  fields:
+    name: Clarn Woords
+    world_id: 1
+    region_id: 1
+    x_pos: 3
+    z_pos: -1
+    y_pos: 0.2
+    type: forest
+- model: world.Tile
+  fields:
+    name: East Cardell shore
+    world_id: 1
+    region_id: 1
+    x_pos: 4
+    z_pos: -1
+    y_pos: 0
+    type: shore
+- model: world.Tile
+  fields:
+    name: Tortuga Sea
+    world_id: 1
+    region_id: 11
+    x_pos: 5
+    z_pos: -1
+    y_pos: 0
+    type: deepsea
+
+# ROW 0
+- model: world.Tile
+  fields:
+    name: East Mir shore
+    world_id: 1
+    region_id: 3
+    x_pos: -4
+    z_pos: 0
+    y_pos: 0
+    type: shore
+- model: world.Tile
+  fields:
+    name: East Mir
+    world_id: 1
+    region_id: 3
+    x_pos: -3
+    z_pos: 0
+    y_pos: 0.15
+    type: forest
+- model: world.Tile
+  fields:
+    name: Mir Trunk
+    world_id: 1
+    region_id: 1
+    x_pos: -2
+    z_pos: 0
+    y_pos: 0.2
+    type: forest
+- model: world.Tile
+  fields:
+    name: Jade Mir Peaks
+    world_id: 1
+    region_id: 2
+    x_pos: -1
+    z_pos: 0
+    y_pos: 0.5
+    type: mountain
+- model: world.Tile
+  fields:
+    name: Deep Jade
+    world_id: 1
+    region_id: 2
+    x_pos: 0
+    z_pos: 0
+    y_pos: 0.6
+    type: mountain
+- model: world.Tile
+  fields:
+    name: Tortuga Bay
+    world_id: 1
+    region_id: 8
+    x_pos: 1
+    z_pos: 0
+    y_pos: 0
+    type: shore
+- model: world.Tile
+  fields:
+    name: Tortuga Bay entry
+    world_id: 1
+    region_id: 8
+    x_pos: 2
+    z_pos: 0
+    y_pos: 0
+    type: shore
+- model: world.Tile
+  fields:
+    name: South Cardell shore
+    world_id: 1
+    region_id: 8
+    x_pos: 3
+    z_pos: 0
+    y_pos: 0
+    type: shore
+- model: world.Tile
+  fields:
+    name: Tortuga Sea
+    world_id: 1
+    region_id: 11
+    x_pos: 4
+    z_pos: 0
+    y_pos: 0
+    type: deepsea
+- model: world.Tile
+  fields:
+    name: Tortuga Sea
+    world_id: 1
+    region_id: 11
+    x_pos: 5
+    z_pos: 0
+    y_pos: 0
+    type: deepsea
+
+# ROW 1
+- model: world.Tile
+  fields:
+    name: West Bay
+    world_id: 1
+    region_id: 10
+    x_pos: -4
     z_pos: 1
-    type: plain
+    y_pos: 0
+    type: deepsea
+- model: world.Tile
+  fields:
+    name: West Bay
+    world_id: 1
+    region_id: 10
+    x_pos: -3
+    z_pos: 1
+    y_pos: 0
+    type: shore
+- model: world.Tile
+  fields:
+    name: West Bay
+    world_id: 1
+    region_id: 10
+    x_pos: -2
+    z_pos: 1
+    y_pos: 0
+    type: shore
+- model: world.Tile
+  fields:
+    name: West Jade
+    world_id: 1
+    region_id: 2
+    x_pos: -1
+    z_pos: 1
+    y_pos: 0.45
+    type: mountain
+- model: world.Tile
+  fields:
+    name: Knarkt
+    world_id: 1
+    region_id: 2
+    x_pos: 0
+    z_pos: 1
+    y_pos: 0.55
+    type: mountain
+- model: world.Tile
+  fields:
+    name: Casmir
+    world_id: 1
+    region_id: 6
+    x_pos: 1
+    z_pos: 1
+    y_pos: 0.25
+    type: plains
+- model: world.Tile
+  fields:
+    name: Balan
+    world_id: 1
+    region_id: 6
+    x_pos: 2
+    z_pos: 1
+    y_pos: 0.2
+    type: forest
+- model: world.Tile
+  fields:
+    name: North Fallen shore
+    world_id: 1
+    region_id: 6
+    x_pos: 3
+    z_pos: 1
+    y_pos: 0
+    type: shore
+- model: world.Tile
+  fields:
+    name: North Fallen shore
+    world_id: 1
+    region_id: 6
+    x_pos: 4
+    z_pos: 1
+    y_pos: 0
+    type: shore
+- model: world.Tile
+  fields:
+    name: Tortuga Sea
+    world_id: 1
+    region_id: 11
+    x_pos: 5
+    z_pos: 1
+    y_pos: 0
+    type: deepsea
+
+# ROW 2
+- model: world.Tile
+  fields:
+    name: West Bay
+    world_id: 1
+    region_id: 10
+    x_pos: -4
+    z_pos: 2
+    y_pos: 0
+    type: deepsea
+- model: world.Tile
+  fields:
+    name: West Bay
+    world_id: 1
+    region_id: 10
+    x_pos: -3
+    z_pos: 2
+    y_pos: 0
+    type: shore
+- model: world.Tile
+  fields:
+    name: West Bay
+    world_id: 1
+    region_id: 10
+    x_pos: -2
+    z_pos: 2
+    y_pos: 0
+    type: shore
+- model: world.Tile
+  fields:
+    name: Khandir
+    world_id: 1
+    region_id: 5
+    x_pos: -1
+    z_pos: 2
+    y_pos: 0.2
+    type: plains
+- model: world.Tile
+  fields:
+    name: Jade Creek
+    world_id: 1
+    region_id: 2
+    x_pos: 0
+    z_pos: 2
+    y_pos: 0.4
+    type: mountain
+- model: world.Tile
+  fields:
+    name: Cor Valley
+    world_id: 1
+    region_id: 6
+    x_pos: 1
+    z_pos: 2
+    y_pos: 0.15
+    type: plains
+- model: world.Tile
+  fields:
+    name: Fallenwood
+    world_id: 1
+    region_id: 6
+    x_pos: 2
+    z_pos: 2
+    y_pos: 0.17
+    type: forest
+- model: world.Tile
+  fields:
+    name: Tamba
+    world_id: 1
+    region_id: 6
+    x_pos: 3
+    z_pos: 2
+    y_pos: 0.2
+    type: forest
+- model: world.Tile
+  fields:
+    name: Fallenhavn
+    world_id: 1
+    region_id: 6
+    x_pos: 4
+    z_pos: 2
+    y_pos: 0.17
+    type: forest
+- model: world.Tile
+  fields:
+    name: West Fallen shore
+    world_id: 1
+    region_id: 6
+    x_pos: 5
+    z_pos: 2
+    y_pos: 0
+    type: shore
+
+# ROW 3
+- model: world.Tile
+  fields:
+    name: West shamba shore
+    world_id: 1
+    region_id: 4
+    x_pos: -4
+    z_pos: 3
+    y_pos: 0
+    type: shore
+- model: world.Tile
+  fields:
+    name: West Shatak
+    world_id: 1
+    region_id: 4
+    x_pos: -3
+    z_pos: 3
+    y_pos: 0.3
+    type: forest
+- model: world.Tile
+  fields:
+    name: East Shatak
+    world_id: 1
+    region_id: 4
+    x_pos: -2
+    z_pos: 3
+    y_pos: 0.35
+    type: forest
+- model: world.Tile
+  fields:
+    name: Bambular
+    world_id: 1
+    region_id: 5
+    x_pos: -1
+    z_pos: 3
+    y_pos: 0.2
+    type: plains
+- model: world.Tile
+  fields:
+    name: Lut Gholein
+    world_id: 1
+    region_id: 5
+    x_pos: 0
+    z_pos: 3
+    y_pos: 0.15
+    type: plains
+- model: world.Tile
+  fields:
+    name: Temi
+    world_id: 1
+    region_id: 5
+    x_pos: 1
+    z_pos: 3
+    y_pos: 0.2
+    type: plains
+- model: world.Tile
+  fields:
+    name: Nafat Ke
+    world_id: 1
+    region_id: 6
+    x_pos: 2
+    z_pos: 3
+    y_pos: 0.18
+    type: forest
+- model: world.Tile
+  fields:
+    name: South Fallen shore
+    world_id: 1
+    region_id: 6
+    x_pos: 3
+    z_pos: 3
+    y_pos: 0
+    type: shore
+- model: world.Tile
+  fields:
+    name:  South Fallen shore
+    world_id: 1
+    region_id: 6
+    x_pos: 4
+    z_pos: 3
+    y_pos: 0
+    type: shore
+- model: world.Tile
+  fields:
+    name: Maab Ocean
+    world_id: 1
+    region_id: 9
+    x_pos: 5
+    z_pos: 3
+    y_pos: 0
+    type: deepsea
+
+# ROW 4
+- model: world.Tile
+  fields:
+    name: Maab Ocean
+    world_id: 1
+    region_id: 9
+    x_pos: -4
+    z_pos: 4
+    y_pos: 0
+    type: deepsea
+- model: world.Tile
+  fields:
+    name: West Shamba shore
+    world_id: 1
+    region_id: 4
+    x_pos: -3
+    z_pos: 4
+    y_pos: 0
+    type: shore
+- model: world.Tile
+  fields:
+    name: Ludur
+    world_id: 1
+    region_id: 4
+    x_pos: -2
+    z_pos: 4
+    y_pos: 0.1
+    type: plains
+- model: world.Tile
+  fields:
+    name: Kutashnedra
+    world_id: 1
+    region_id: 4
+    x_pos: -1
+    z_pos: 4
+    y_pos: 0.12
+    type: plains
+- model: world.Tile
+  fields:
+    name: South Bular coast
+    world_id: 1
+    region_id: 3
+    x_pos: 0
+    z_pos: 4
+    y_pos: 0
+    type: shore
+- model: world.Tile
+  fields:
+    name: South Bular coast
+    world_id: 1
+    region_id: 3
+    x_pos: 1
+    z_pos: 4
+    y_pos: 0
+    type: shore
+- model: world.Tile
+  fields:
+    name: South Fallen coast
+    world_id: 1
+    region_id: 6
+    x_pos: 2
+    z_pos: 4
+    y_pos: 0
+    type: shore
+- model: world.Tile
+  fields:
+    name: Maab Ocean
+    world_id: 1
+    region_id: 9
+    x_pos: 3
+    z_pos: 4
+    y_pos: 0
+    type: deepsea
+- model: world.Tile
+  fields:
+    name: Maab Ocean
+    world_id: 1
+    region_id: 9
+    x_pos: 4
+    z_pos: 4
+    y_pos: 0
+    type: deepsea
+- model: world.Tile
+  fields:
+    name: Maab Ocean
+    world_id: 1
+    region_id: 9
+    x_pos: 5
+    z_pos: 4
+    y_pos: 0
+    type: deepsea
+
+# ROW 5
+- model: world.Tile
+  fields:
+    name: Maab Ocean
+    world_id: 1
+    region_id: 9
+    x_pos: -4
+    z_pos: 5
+    y_pos: 0
+    type: deepsea
+- model: world.Tile
+  fields:
+    name: Maab Ocean
+    world_id: 1
+    region_id: 9
+    x_pos: -3
+    z_pos: 5
+    y_pos: 0
+    type: deepsea
+- model: world.Tile
+  fields:
+    name: South Shamba Coast
+    world_id: 1
+    region_id: 4
+    x_pos: -2
+    z_pos: 5
+    y_pos: 0
+    type: shore
+- model: world.Tile
+  fields:
+    name: South Shamba Coast
+    world_id: 1
+    region_id: 4
+    x_pos: -1
+    z_pos: 5
+    y_pos: 0
+    type: shore
+- model: world.Tile
+  fields:
+    name: Maab Ocean
+    world_id: 1
+    region_id: 9
+    x_pos: 0
+    z_pos: 5
+    y_pos: 0
+    type: deepsea
+- model: world.Tile
+  fields:
+    name: Maab Ocean
+    world_id: 1
+    region_id: 9
+    x_pos: 1
+    z_pos: 5
+    y_pos: 0
+    type: deepsea
+- model: world.Tile
+  fields:
+    name: Maab Ocean
+    world_id: 1
+    region_id: 9
+    x_pos: 2
+    z_pos: 5
+    y_pos: 0
+    type: deepsea
+- model: world.Tile
+  fields:
+    name: Maab Ocean
+    world_id: 1
+    region_id: 9
+    x_pos: 3
+    z_pos: 5
+    y_pos: 0
+    type: deepsea
+- model: world.Tile
+  fields:
+    name: Maab Ocean
+    world_id: 1
+    region_id: 9
+    x_pos: 4
+    z_pos: 5
+    y_pos: 0
+    type: deepsea
+- model: world.Tile
+  fields:
+    name: Maab Ocean
+    world_id: 1
+    region_id: 9
+    x_pos: 5
+    z_pos: 5
+    y_pos: 0
+    type: deepsea

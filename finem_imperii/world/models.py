@@ -5,7 +5,7 @@ from django.forms.models import model_to_dict
 
 
 class World(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
         return self.name
@@ -15,6 +15,11 @@ class World(models.Model):
 
 
 class Region(models.Model):
+    class Meta:
+        unique_together = (
+            ("world", "name"),
+        )
+
     name = models.CharField(max_length=100)
     world = models.ForeignKey(World)
 
@@ -23,6 +28,11 @@ class Region(models.Model):
 
 
 class Tile(models.Model):
+    class Meta:
+        unique_together = (
+            ("world", "x_pos", "z_pos"),
+        )
+
     name = models.CharField(max_length=100)
     world = models.ForeignKey(World)
     region = models.ForeignKey(Region)

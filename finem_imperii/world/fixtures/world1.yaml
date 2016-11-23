@@ -1,0 +1,40 @@
+- model: world.World
+  pk: 1
+  fields:
+    name: Emortuus
+- model: world.WorldRegion
+  pk: 1
+  fields:
+    name: Wattingham
+    world_id: 1
+    x_pos: 0
+    y_pos: 0.0
+    z_pos: 0
+    type: plain
+- model: world.WorldRegion
+  pk: 2
+  fields:
+    name: Dewbury
+    world_id: 1
+    x_pos: 1
+    y_pos: 0.0
+    z_pos: 0
+    type: forest
+- model: world.WorldRegion
+  pk: 3
+  fields:
+    name: Wray
+    world_id: 1
+    x_pos: 0
+    y_pos: 0.0
+    z_pos: 1
+    type: plain
+- model: world.WorldRegion
+  pk: 4
+  fields:
+    name: Muria
+    world_id: 1
+    x_pos: 1
+    y_pos: 0.1
+    z_pos: 1
+    type: plain

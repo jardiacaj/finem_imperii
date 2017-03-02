@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'account',
     'world',
     'battle',
+    'organization',
 ]
 
 MIDDLEWARE_CLASSES = [

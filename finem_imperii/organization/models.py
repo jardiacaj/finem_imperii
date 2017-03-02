@@ -12,6 +12,7 @@ class Organization(models.Model):
         (DISTRIBUTED, DISTRIBUTED),
     )
 
+    world = models.ForeignKey('world.World')
     name = models.CharField(max_length=100)
     type = models.CharField(max_length=100)
     description = models.TextField()

@@ -3,9 +3,9 @@ from django.contrib.auth.models import User
 
 
 class Organization(models.Model):
-    DEMOCRATIC = 'democratic'
-    AUTOCRATIC = 'autocratic'
-    DISTRIBUTED = 'distributed'
+    DEMOCRATIC = 'democratic'  # decisions are voted among members
+    AUTOCRATIC = 'autocratic'  # decisions are taken by leader
+    DISTRIBUTED = 'distributed'  # decisions can be taken by each member
     DECISION_TAKING_CHOICES = (
         (DEMOCRATIC, DEMOCRATIC),
         (AUTOCRATIC, AUTOCRATIC),

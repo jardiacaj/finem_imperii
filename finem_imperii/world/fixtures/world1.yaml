@@ -4,6 +4,85 @@
     name: Emortuus
     description: The default world. A good place to start in.
 
+- model: organization.Organization
+  pk: 1
+  fields:
+    world_id: 1
+    name: "Kingdom of Cardell"
+    type: "Kingdom"
+    description: "It's a kingdom with a missing description"
+    is_position: false
+    inherit_capabilities: true
+    parent_id: null
+    leader_id: 1
+    violence_monopoly: true
+    decision_taking: autocratic
+- model: organization.Organization
+  pk: 2
+  fields:
+    world_id: 1
+    name: "King of Cardell"
+    type: "King"
+    description: "It's a king without description"
+    is_position: true
+    inherit_capabilities: false
+    parent_id: 1
+    leader_id: null
+    violence_monopoly: false
+    decision_taking: autocratic
+- model: organization.Organization
+  pk: 3
+  fields:
+    world_id: 1
+    name: "Federated States of Central Emortuus"
+    type: "Federation"
+    description: "It's a federation without description"
+    is_position: false
+    inherit_capabilities: false
+    parent_id: null
+    leader_id: 4
+    violence_monopoly: true
+    decision_taking: democratic
+- model: organization.Organization
+  pk: 4
+  fields:
+    world_id: 1
+    name: "President of the Federated States of Central Emortuus"
+    type: "Presidency"
+    description: "It's a president without description"
+    is_position: true
+    inherit_capabilities: false
+    parent_id: 3
+    leader_id: null
+    violence_monopoly: false
+    decision_taking: autocratic
+- model: organization.Organization
+  pk: 5
+  fields:
+    world_id: 1
+    name: "Knarkt commonwealth"
+    type: "Federated State"
+    description: "It's a federated state without description"
+    is_position: false
+    inherit_capabilities: false
+    parent_id: 3
+    leader_id: null
+    violence_monopoly: false
+    decision_taking: democratic
+- model: organization.Organization
+  pk: 6
+  fields:
+    world_id: 1
+    name: "Casmir"
+    type: "Casmir Free State"
+    description: "Federated State"
+    is_position: false
+    inherit_capabilities: false
+    parent_id: 3
+    leader_id: null
+    violence_monopoly: false
+    decision_taking: democratic
+
 - model: world.Region
   pk: 1
   fields:
@@ -213,6 +292,7 @@
     name: Dewbury
     world_id: 1
     region_id: 1
+    controlled_by: 1
     x_pos: 2
     z_pos: -3
     y_pos: 0.1
@@ -222,6 +302,7 @@
     name: Wray
     world_id: 1
     region_id: 1
+    controlled_by: 1
     x_pos: 3
     z_pos: -3
     y_pos: 0.2
@@ -231,6 +312,7 @@
     name: Muria
     world_id: 1
     region_id: 1
+    controlled_by: 1
     x_pos: 4
     z_pos: -3
     y_pos: 0.15
@@ -563,6 +645,7 @@
     name: Knarkt
     world_id: 1
     region_id: 2
+    controlled_by: 5
     x_pos: 0
     z_pos: 1
     y_pos: 0.55
@@ -572,6 +655,7 @@
     name: Casmir
     world_id: 1
     region_id: 6
+    controlled_by: 6
     x_pos: 1
     z_pos: 1
     y_pos: 0.25

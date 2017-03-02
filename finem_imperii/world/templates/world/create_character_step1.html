@@ -4,15 +4,18 @@
 
 {% block content %}
 
-    <h1 class="page-header">Create new character</h1>
+    <h1 class="page-header">New character - choose a world</h1>
 
-    <h2>Choose a world</h2>
+    <p>
+        Choose the world where your character will start.
+    </p>
 
     <div class="container-fluid">
         <ul>
             {% for world in worlds %}
                 <li>
-                    {{ world }}
+                    <h4>{{ world }}</h4>
+                    <p>{{ world.description }}</p>
                     <a href="{{ world.get_absolute_url }}" class="btn btn-default">View</a>
                     <a href="{% url 'world:create_character' world.id %}" class="btn btn-default">Choose</a>
                 </li>

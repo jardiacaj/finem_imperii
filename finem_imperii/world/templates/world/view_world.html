@@ -4,14 +4,18 @@
 
 {% block content %}
 
-    <h1 class="page-header">
-        {{ world.name }}
-    </h1>
+    <div class="row">
+        <div class="col-md-3 placeholder">
+            <h1 class="">
+                {{ world.name }}
+            </h1>
+            <p id="region_name"></p>
+            <p id="region_type"></p>
+        </div>
 
-    <div class="row container-fluid">
-        <p id="region_name"></p>
-        <p id="region_type"></p>
+        <div id="canvas-container" class="col-md-9 placeholder" style="height: 600px;"></div>
     </div>
+
 
     <script src="{% static 'battle/js/three.min.js' %}"></script>
     <script src="{% static 'battle/js/OrbitControls.js' %}"></script>
@@ -30,24 +34,25 @@
             var scene = new THREE.Scene();
             //camera
             var camera = new THREE.PerspectiveCamera(75, viewWidth / viewHeight, 0.1, 1000);
-            camera.position.z = 2;
+            camera.position.z = 0;
             camera.position.x = 0;
-            camera.position.y = 7;
+            camera.position.y = 8;
             camera.lookAt(new THREE.Vector3( 0, 0, 0 ));
             camera.aspect = viewWidth / viewHeight;
             camera.updateProjectionMatrix();
 
             //renderer
-            var renderer = new THREE.WebGLRenderer();
+            var renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
             renderer.setSize(viewWidth, viewHeight);
+            renderer.setClearColor( 0xffffff, 0);
             //controls
             var controls = new THREE.OrbitControls(camera, renderer.domElement);
             //axes
-            var axes = new THREE.AxisHelper(2);
-            scene.add(axes);
+            // var axes = new THREE.AxisHelper(2);
+            // scene.add(axes);
             //grid xz
-            var gridXZ = new THREE.GridHelper(10, 1);
-            scene.add(gridXZ);
+            // var gridXZ = new THREE.GridHelper(10, 1);
+            // scene.add(gridXZ);
             //ambient light
             var ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
             scene.add(ambientLight);
@@ -77,7 +82,7 @@
                 var mesh = new THREE.Mesh(region_geometry, region_materials[region.type]);
 
                 var geo = new THREE.EdgesGeometry( mesh.geometry ); // or WireframeGeometry
-                var mat = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 2 } );
+                var mat = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 1 } );
                 var wireframe = new THREE.LineSegments( geo, mat );
                 mesh.add( wireframe );
 
@@ -139,7 +144,5 @@
         });
 
     </script>
-
-    <div id="canvas-container" style="height: 600px;" class="row container-fluid"></div>
 
 {% endblock %}

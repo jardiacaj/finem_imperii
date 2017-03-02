@@ -47,6 +47,8 @@ class CharacterCreationView(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             character = form.save(commit=False)
+            character.world = get_object_or_404(World, id=kwargs['world_id'])
+            character.region = character.world.tile_set.all()[0]
             character.owner_user = request.user
             character.cash = 1000
             character.save()

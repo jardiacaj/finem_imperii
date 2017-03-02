@@ -6,6 +6,7 @@ from django.forms.models import model_to_dict
 
 class World(models.Model):
     name = models.CharField(max_length=100, unique=True)
+    description = models.TextField()
 
     def __str__(self):
         return self.name
@@ -28,6 +29,19 @@ class Region(models.Model):
 
 
 class Tile(models.Model):
+    PLAINS = 'plains'
+    FOREST = 'forest'
+    SHORE = 'shore'
+    DEEPSEA = 'deepsea'
+    MOUNTAIN = 'mountain'
+    TYPE_CHOICES = (
+        (PLAINS, PLAINS),
+        (FOREST, FOREST),
+        (SHORE, SHORE),
+        (DEEPSEA, DEEPSEA),
+        (MOUNTAIN, MOUNTAIN),
+    )
+
     class Meta:
         unique_together = (
             ("world", "x_pos", "z_pos"),
@@ -39,7 +53,7 @@ class Tile(models.Model):
     x_pos = models.IntegerField()
     y_pos = models.FloatField()
     z_pos = models.IntegerField()
-    type = models.CharField(max_length=15)
+    type = models.CharField(max_length=15, choices=TYPE_CHOICES)
 
     def __str__(self):
         return self.name

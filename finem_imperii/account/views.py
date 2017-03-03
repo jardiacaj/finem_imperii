@@ -33,7 +33,7 @@ def register_view(request):
         )
 
         messages.add_message(request, messages.SUCCESS, "Account created. Please log in.", extra_tags="success")
-        return redirect('base:login')
+        return redirect('account:login')
 
     else:
         return render(request, 'account/register.html')

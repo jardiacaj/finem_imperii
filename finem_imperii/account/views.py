@@ -15,15 +15,15 @@ def register_view(request):
         password2 = request.POST.get('password2')
 
         if User.objects.filter(email=email).exists():
-            messages.add_message(request, messages.ERROR, "An account with this email address already exists", extra_tags="error")
+            messages.add_message(request, messages.ERROR, "An account with this email address already exists", extra_tags="danger")
             return redirect('base:register')
 
         if User.objects.filter(username=username).exists():
-            messages.add_message(request, messages.ERROR, "An account with this username already exists", extra_tags="error")
+            messages.add_message(request, messages.ERROR, "An account with this username already exists", extra_tags="danger")
             return redirect('base:register')
 
         if password != password2:
-            messages.add_message(request, messages.ERROR, "Your passwords don't match!", extra_tags="error")
+            messages.add_message(request, messages.ERROR, "Your passwords don't match!", extra_tags="danger")
             return redirect('base:register')
 
         User.objects.create_user(

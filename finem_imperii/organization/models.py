@@ -54,9 +54,9 @@ class Capability(models.Model):
     BAN = 'ban'
     POLICY_DOCUMENT = 'policy'
     TYPE_CHOICES = (
-        (ARREST_ORDER, ARREST_ORDER),
-        (BAN, BAN),
-        (POLICY_DOCUMENT, POLICY_DOCUMENT),
+        (ARREST_ORDER, 'ordering arrests'),
+        (BAN, 'banning'),
+        (POLICY_DOCUMENT, 'writing policy and law'),
     )
 
     organization = models.ForeignKey(Organization)

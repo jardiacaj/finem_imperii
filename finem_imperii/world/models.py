@@ -80,6 +80,26 @@ class Settlement(models.Model):
     def render_for_view(self):
         return model_to_dict(self)
 
+    def size_name(self):
+        if self.population < 10:
+            return "dwelling"
+        if self.population < 100:
+            return "hamlet"
+        if self.population < 1000:
+            return "village"
+        if self.population < 5000:
+            return "town"
+        if self.population < 10000:
+            return "large town"
+        if self.population < 50000:
+            return "city"
+        if self.population < 200000:
+            return "large city"
+        return "metropolis"
+
+    def __str__(self):
+        return self.name
+
 
 class Building(models.Model):
     RESIDENCE = 'residence'

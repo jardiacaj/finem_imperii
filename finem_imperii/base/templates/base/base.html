@@ -47,8 +47,37 @@
                         </div>
                     {% endfor %}
             {% endif %}
-            {% block content %}
-            {% endblock %}
+
+            {% if request.hero %}
+                <div class="col-xs-12 col-md-3">
+                    <p>
+                        {% if request.hero.oath_sworn_to %}
+                            Sworn oath to {{ request.hero.oath_sworn_to }}
+                        {% else %}
+                            No allegiance sworn.
+                        {% endif %}
+                    </p>
+                    <p>
+                        You are in {{ request.hero.location }}, a {{ request.hero.location.size_name }} in
+                        {{ request.hero.location.tile }}.
+                    </p>
+                    <p>MAP GOES HERE</p>
+                    <p>
+                        {{ request.hero.location.tile }} is part of {{ request.hero.location.tile.controlled_by }} in
+                        <a href="{{ request.hero.world.get_absolute_url }}">{{ request.hero.world }}</a>.
+                    </p>
+                    <h4>Your units</h4>
+                    <h4>Your inventory</h4>
+                    <h4>Your position</h4>
+                </div>
+                <div class="col-xs-12 col-md-9">
+            {% endif %}
+
+            {% block content %}{% endblock %}
+
+            {% if request.hero %}
+                </div>
+            {% endif %}
         </div>
 
         <footer class="footer">

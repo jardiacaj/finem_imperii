@@ -3,6 +3,7 @@
   fields:
     name: Emortuus
     description: The default world. A good place to start in.
+    initialized: false
 
 - model: organization.Organization
   pk: 1
@@ -141,7 +142,7 @@
 
 # ROW -4
 - model: world.Tile
-  pk: 0
+  pk: 100
   fields:
     name: Aedon Ocean
     world_id: 1
@@ -1164,3 +1165,31 @@
     z_pos: 5
     y_pos: 0
     type: deepsea
+
+
+- model: world.Settlement
+  pk: 1
+  fields:
+    name: Iadar
+    tile_id: 15
+    population: 355
+    x_pos: 14
+    z_pos: 5
+
+- model: world.Settlement
+  pk: 2
+  fields:
+    name: Diorynnhavn
+    tile_id: 15
+    population: 4010
+    x_pos: 5
+    z_pos: 60
+
+- model: world.Settlement
+  pk: 3
+  fields:
+    name: Diorynn
+    tile_id: 15
+    population: 1300
+    x_pos: 43
+    z_pos: 73

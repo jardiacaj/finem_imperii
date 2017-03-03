@@ -7,6 +7,7 @@ from django.forms.models import model_to_dict
 class World(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField()
+    initialized = models.BooleanField(default=False)
 
     def get_violence_monopolies(self):
         return self.organization_set.filter(violence_monopoly=True)
@@ -41,7 +42,7 @@ class Tile(models.Model):
         (PLAINS, PLAINS),
         (FOREST, FOREST),
         (SHORE, SHORE),
-        (DEEPSEA, DEEPSEA),
+        (DEEPSEA, "deep sea"),
         (MOUNTAIN, MOUNTAIN),
     )
 
@@ -61,6 +62,19 @@ class Tile(models.Model):
 
     def __str__(self):
         return self.name
+
+    def render_for_view(self):
+        result = model_to_dict(self)
+        result['settlements'] = [settlement.render_for_view() for settlement in self.settlement_set.all()]
+        return result
+
+
+class Settlement(models.Model):
+    name = models.CharField(max_length=100)
+    tile = models.ForeignKey(Tile)
+    population = models.IntegerField()
+    x_pos = models.IntegerField()
+    z_pos = models.IntegerField()
 
     def render_for_view(self):
         return model_to_dict(self)

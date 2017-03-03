@@ -77,6 +77,7 @@
                 "deepsea": new THREE.MeshLambertMaterial({color: 0x000E85, shading: THREE.SmoothShading}),
                 "mountain": new THREE.MeshLambertMaterial({color: 0x837D71, shading: THREE.SmoothShading}),
             };
+
             for (var i = 0; i < regions.length; i++)  {
                 var region = regions[i];
                 var mesh = new THREE.Mesh(region_geometry, region_materials[region.type]);
@@ -89,9 +90,29 @@
                 mesh.position.x = region.x_pos - 1;
                 mesh.position.z = region.z_pos - 1;
                 mesh.position.y = region.y_pos;
+
                 regions[i].mesh = mesh;
                 mesh.region = regions[i];
+
                 scene.add(mesh);
+
+                for (var j = 0; j < region.settlements.length; j++) {
+                    var settlement = region.settlements[j];
+
+                    radius = Math.log10(settlement.population) * 0.02;
+                    var settlement_geometry = new THREE.CylinderGeometry( radius/2, radius, 0.01, 16 );
+                    var settlement_material = new THREE.MeshBasicMaterial( {color: 0x000000} );
+
+                    var cylinder = new THREE.Mesh( settlement_geometry, settlement_material );
+                    cylinder.position.x = (region.x_pos - 1) - 0.5 + settlement.x_pos/100;
+                    cylinder.position.z = (region.z_pos - 1) - 0.5 + settlement.z_pos/100;
+                    cylinder.position.y = region.y_pos + 0.5;
+
+                    cylinder.settlement = settlement;
+                    regions[i].settlements[j].mesh = cylinder;
+
+                    scene.add(cylinder);
+                }
             }
 
 

@@ -3,7 +3,7 @@ import random
 
 def load_file(filename):
     with open(filename) as file:
-        return [line for line in file]
+        return [line.strip() for line in file]
 
 
 class NameGenerator:

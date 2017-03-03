@@ -1,4 +1,5 @@
 import json
+import random
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -9,6 +10,8 @@ from django.views.generic.base import View
 
 from battle.models import Battle, BattleCharacter
 from decorators import inchar_required
+from name_generator.name_generator import NameGenerator
+from organization.models import Organization
 from world.models import Character, WorldUnit, World
 
 
@@ -29,32 +32,54 @@ def create_character(request):
     return render(request, 'world/create_character_step1.html', context=context)
 
 
-class CharacterCreationForm(ModelForm):
-    class Meta:
-        model = Character
-        fields = ['name']
-
-
 class CharacterCreationView(View):
-    form_class = CharacterCreationForm
     template_name = 'world/create_character.html'
 
     def get(self, request, *args, **kwargs):
-        form = self.form_class()
-        return render(request, self.template_name, {'form': form})
+        name_generator = NameGenerator()
+        return render(request, self.template_name, {
+            'world': get_object_or_404(World, id=kwargs['world_id']),
+            'names': name_generator.get_names(limit=100),
+            'surnames': name_generator.get_surnames(limit=100),
+        })
+
+    @staticmethod
+    def fail_post_with_error(request, world_id, message):
+        messages.add_message(request, messages.ERROR, message, extra_tags='danger')
+        return redirect('world:create_character', world_id=world_id)
 
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            character = form.save(commit=False)
-            character.world = get_object_or_404(World, id=kwargs['world_id'])
-            character.region = character.world.tile_set.all()[0]
-            character.owner_user = request.user
-            character.cash = 1000
-            character.save()
-            return redirect(reverse('world:activate_character', kwargs={'char_id': character.id}))
-        else:
-            return render(request, self.template_name, {'form': form})
+        try:
+            world_id = kwargs['world_id']
+            world = World.objects.get(id=world_id)
+        except World.DoesNotExist:
+            messages.add_message(request, request.ERROR, "Invalid World")
+            return redirect('world:create_character')
+
+        try:
+            state_id = request.POST.get('state_id')
+            state = None if state_id == '0' else Organization.objects.get(id=state_id)
+        except Organization.DoesNotExist:
+            return self.fail_post_with_error(request, world_id, "Select a valid state")
+
+        name = request.POST.get('name')
+        surname = request.POST.get('surname')
+
+        name_generator = NameGenerator()
+        if name not in name_generator.get_names() or surname not in name_generator.get_surnames():
+            return self.fail_post_with_error(request, world_id, "Select a valid name/surname")
+
+        character = Character.objects.create(
+            name=name + ' ' + surname,
+            world=world,
+            region=random.choice(
+                state.tile_set.all() if state is not None else world.tile_set.all()
+            ),
+            oath_sworn_to=state,
+            owner_user=request.user,
+            cash=0
+        )
+        return redirect(character.activation_url)
 
 
 class RectruitForm(ModelForm):

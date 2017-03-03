@@ -8,6 +8,9 @@ class World(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField()
 
+    def get_violence_monopolies(self):
+        return self.organization_set.filter(violence_monopoly=True)
+
     def __str__(self):
         return self.name
 
@@ -67,6 +70,7 @@ class Character(models.Model):
     name = models.CharField(max_length=100)
     world = models.ForeignKey(World)
     region = models.ForeignKey(Tile)
+    oath_sworn_to = models.ForeignKey('organization.Organization', null=True, blank=True)
     owner_user = models.ForeignKey(User)
     cash = models.IntegerField(default=0)
 

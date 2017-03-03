@@ -4,12 +4,79 @@
 
 {% block content %}
 
-    <h1 class="page-header">Choose your character's name</h1>
+    <h1 class="page-header">New character in {{ world }}</h1>
 
     <div class="container-fluid">
         <form class="form-horizontal" role="form" method="post">
             {% csrf_token %}
-            {{ form|bootstrap }}
+
+            <div class="form-group">
+                <h2>Choose your State</h2>
+                <ul>
+                    {% for state in world.get_violence_monopolies.all %}
+                        <li>
+                            <h4>
+                                <input type="radio" name="state_id" value="{{ state.id }}"> {{ state }}
+                            </h4>
+                            <p>{{ state.description }}</p>
+                            <p>{{ state.get_membership_including_descendants|length }} members</p>
+                            <p>{{ state.get_all_controlled_tiles|length }} regions</p>
+                            <p>
+                                {% if state.leader %}
+                                    Leader: {{ state.leader }}
+                                {% else %}
+                                    Fully horizontal State.
+                                {% endif %}
+                            </p>
+                        </li>
+                    {% endfor %}
+                    <li>
+                        <h4><input type="radio" name="state_id" value="0"> Stateless</h4>
+                        <p>For experienced players only!</p>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="form-group">
+                <h2>Choose your profile</h2>
+                <ul>
+                    <li>
+                        <h4><input type="radio" name="profile" value="commander"> Commander</h4>
+                        <p>Lorem</p>
+                    </li>
+                    <li>
+                        <h4><input type="radio" name="profile" value="fighter"> Fighter</h4>
+                        <p>Lorem</p>
+                    </li>
+                    <li>
+                        <h4><input type="radio" name="profile" value="trader"> Trader</h4>
+                        <p>Lorem</p>
+                    </li>
+                    <li>
+                        <h4><input type="radio" name="profile" value="spy"> Spy</h4>
+                        <p>Lorem</p>
+                    </li>
+                    <li>
+                        <h4><input type="radio" name="profile" value="bureaucrat"> Bureaucrat</h4>
+                        <p>Lorem</p>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="form-group form-inline">
+                <h2>Choose your name</h2>
+                <select class="form-control" name="name">
+                    {% for name in names %}
+                        <option value="{{ name }}">{{ name }}</option>
+                    {% endfor %}
+                </select>
+                <select class="form-control" name="surname">
+                    {% for surname in surnames %}
+                        <option value="{{ surname }}">{{ surname }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>

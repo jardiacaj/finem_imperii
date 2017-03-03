@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from world.models import Tile
+
 
 class Organization(models.Model):
     DEMOCRATIC = 'democratic'  # decisions are voted among members
@@ -24,6 +26,24 @@ class Organization(models.Model):
     leader = models.ForeignKey('Organization', null=True, blank=True, related_name='leaded_organizations')
     violence_monopoly = models.BooleanField(default=False)
     decision_taking = models.CharField(max_length=15, choices=DECISION_TAKING_CHOICES)
+    members = models.ManyToManyField('world.Character')
+
+    def get_all_descendants(self, including_self=False):
+        descendants = list(self.children.all())
+        if including_self:
+            descendants.append(self)
+        for child in descendants:
+            descendants += child.get_all_descendants()
+        return descendants
+
+    def get_membership_including_descendants(self):
+        members = list(self.members.all())
+        for child in self.children.all():
+            members += child.get_membership_including_descendants()
+        return members
+
+    def get_all_controlled_tiles(self):
+        return Tile.objects.filter(controlled_by__in=self.get_all_descendants(including_self=True)).all()
 
     def __str__(self):
         return self.name

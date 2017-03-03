@@ -15,7 +15,7 @@
     is_position: false
     inherit_capabilities: true
     parent_id: null
-    leader_id: 1
+    leader_id: 2
     violence_monopoly: true
     decision_taking: autocratic
 - model: organization.Organization
@@ -1223,3 +1223,39 @@
     type: prison
     level: 1
     settlement_id: 3
+
+- model: world.Settlement
+  pk: 4
+  fields:
+    name: Upcreek
+    tile_id: 16
+    population: 1600
+    x_pos: 43
+    z_pos: 40
+- model: world.Building
+  fields:
+    type: residence
+    level: 2
+    quantity: 200
+    settlement_id: 4
+- model: world.Building
+  fields:
+    type: prison
+    level: 2
+    settlement_id: 4
+
+- model: world.Settlement
+  pk: 5
+  fields:
+    name: Valley
+    tile_id: 16
+    population: 900
+    x_pos: 15
+    z_pos: 73
+- model: world.Building
+  fields:
+    type: residence
+    level: 2
+    quantity: 80
+    settlement_id: 5
+

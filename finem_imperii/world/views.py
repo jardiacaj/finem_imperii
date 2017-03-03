@@ -4,6 +4,7 @@ import random
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
+from django.db import transaction
 from django.forms.models import ModelForm
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic.base import View
@@ -48,6 +49,7 @@ class CharacterCreationView(View):
         messages.add_message(request, messages.ERROR, message, extra_tags='danger')
         return redirect('world:create_character', world_id=world_id)
 
+    @transaction.atomic
     def post(self, request, *args, **kwargs):
         try:
             world_id = kwargs['world_id']
@@ -75,10 +77,13 @@ class CharacterCreationView(View):
             region=random.choice(
                 state.tile_set.all() if state is not None else world.tile_set.all()
             ),
-            oath_sworn_to=state,
+            oath_sworn_to=None if state is None else state if state.leader is None else state.leader,
             owner_user=request.user,
             cash=0
         )
+
+        state.members.add(character)
+
         return redirect(character.activation_url)
 
 

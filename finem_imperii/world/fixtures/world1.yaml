@@ -1175,6 +1175,13 @@
     population: 355
     x_pos: 14
     z_pos: 5
+- model: world.Building
+  fields:
+    type: residence
+    level: 2
+    quantity: 50
+    settlement_id: 1
+
 
 - model: world.Settlement
   pk: 2
@@ -1184,6 +1191,18 @@
     population: 4010
     x_pos: 5
     z_pos: 60
+- model: world.Building
+  fields:
+    type: residence
+    level: 2
+    quantity: 300
+    settlement_id: 2
+- model: world.Building
+  fields:
+    type: residence
+    level: 1
+    quantity: 270
+    settlement_id: 2
 
 - model: world.Settlement
   pk: 3
@@ -1193,3 +1212,14 @@
     population: 1300
     x_pos: 43
     z_pos: 73
+- model: world.Building
+  fields:
+    type: residence
+    level: 2
+    quantity: 200
+    settlement_id: 3
+- model: world.Building
+  fields:
+    type: prison
+    level: 1
+    settlement_id: 3

@@ -13,7 +13,7 @@ from battle.models import Battle, BattleCharacter
 from decorators import inchar_required
 from name_generator.name_generator import NameGenerator
 from organization.models import Organization
-from world.models import Character, WorldUnit, World
+from world.models import Character, WorldUnit, World, Settlement
 
 
 def world_view(request, world_id):
@@ -74,15 +74,16 @@ class CharacterCreationView(View):
         character = Character.objects.create(
             name=name + ' ' + surname,
             world=world,
-            region=random.choice(
-                state.tile_set.all() if state is not None else world.tile_set.all()
+            location=random.choice(
+                Settlement.objects.filter(tile__controlled_by=state) if state is not None else Settlement.objects.filter(tile__world=world)
             ),
             oath_sworn_to=None if state is None else state if state.leader is None else state.leader,
             owner_user=request.user,
             cash=0
         )
 
-        state.members.add(character)
+        if state:
+            state.members.add(character)
 
         return redirect(character.activation_url)
 
@@ -90,7 +91,7 @@ class CharacterCreationView(View):
 class RectruitForm(ModelForm):
     class Meta:
         model = WorldUnit
-        fields = ['name', 'power']
+        fields = ['name']
 
 
 class RecruitView(View):

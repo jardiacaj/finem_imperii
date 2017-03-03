@@ -8,6 +8,7 @@ class World(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField()
     initialized = models.BooleanField(default=False)
+    current_turn = models.IntegerField(default=0)
 
     def get_violence_monopolies(self):
         return self.organization_set.filter(violence_monopoly=True)
@@ -80,10 +81,40 @@ class Settlement(models.Model):
         return model_to_dict(self)
 
 
+class Building(models.Model):
+    RESIDENCE = 'residence'
+    SAWMILL = 'sawmill'
+    IRON_MINE = 'iron mine'
+    GRANARY = 'granary'
+    PRISON = 'prison'
+
+    TYPE_CHOICES = (
+        (RESIDENCE, RESIDENCE),
+        (SAWMILL, SAWMILL),
+        (IRON_MINE, IRON_MINE),
+        (PRISON, PRISON),
+    )
+
+    level = models.SmallIntegerField(default=1)
+    type = models.CharField(max_length=15, choices=TYPE_CHOICES)
+    quantity = models.IntegerField(default=1)
+    settlement = models.ForeignKey(Settlement)
+    owner = models.ForeignKey('organization.Organization', null=True, blank=True)
+
+
+class NPC(models.Model):
+    male = models.BooleanField()
+    age_months = models.IntegerField()
+    residence = models.ForeignKey(Building, null=True, blank=True, related_name='resident')
+    location = models.ForeignKey(Settlement, null=True, blank=True)
+    workplace = models.ForeignKey(Building, null=True, blank=True, related_name='worker')
+    unit = models.ForeignKey('WorldUnit', null=True, blank=True, related_name='soldier')
+
+
 class Character(models.Model):
     name = models.CharField(max_length=100)
     world = models.ForeignKey(World)
-    region = models.ForeignKey(Tile)
+    location = models.ForeignKey(Settlement)
     oath_sworn_to = models.ForeignKey('organization.Organization', null=True, blank=True)
     owner_user = models.ForeignKey(User)
     cash = models.IntegerField(default=0)
@@ -104,7 +135,6 @@ class WorldUnit(models.Model):
     world = models.ForeignKey(World)
     region = models.ForeignKey(Tile)
     name = models.CharField(max_length=100)
-    power = models.IntegerField()
 
     def __str__(self):
         return self.name

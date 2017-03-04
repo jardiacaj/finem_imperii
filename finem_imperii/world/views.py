@@ -20,23 +20,30 @@ def world_view(request, world_id):
     world = get_object_or_404(World, id=world_id)
     context = {
         'world': world,
-        'regions': json.dumps([region.render_for_view() for region in world.tile_set.all()])
     }
     return render(request, 'world/view_world.html', context)
+
+
+def world_view_iframe(request, world_id):
+    world = get_object_or_404(World, id=world_id)
+    context = {
+        'world': world,
+        'regions': json.dumps([region.render_for_view() for region in world.tile_set.all()])
+    }
+    return render(request, 'world/view_world_iframe.html', context)
 
 
 def minimap_view(request, world_id, tile_id=None, settlement_id=None):
     world = get_object_or_404(World, id=world_id)
     tile = None if tile_id is None else get_object_or_404(Tile, id=tile_id)
     settlement = None if settlement_id is None else get_object_or_404(Settlement, id=settlement_id)
-
     context = {
         'world': world,
         'tile': tile,
         'settlement': settlement,
         'regions': json.dumps([region.render_for_view() for region in world.tile_set.all()])
     }
-    return render(request, 'world/minimap.html', context)
+    return render(request, 'world/minimap_iframe.html', context)
 
 
 @login_required

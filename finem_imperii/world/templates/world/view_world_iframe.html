@@ -1,0 +1,13 @@
+{% extends "base/base_naked.html" %}
+
+{% block body %}
+
+    {% include "world/renderer.html" %}
+
+    <script>
+        $(function () {
+            load_map({{ regions|safe }}, window.parent.region_callback, window.parent.settlement_callback)
+        })
+    </script>
+
+{% endblock %}

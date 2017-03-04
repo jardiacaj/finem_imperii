@@ -14,10 +14,20 @@
             <p id="settlement_name"></p>
         </div>
 
-        <div id="canvas-container" class="col-md-9 placeholder" style="height: 600px; padding: 0"></div>
+        <div class="col-md-9 placeholder">
+            <iframe
+                    id="minimap"
+                    class="placeholder"
+                    scrolling="no"
+                    style="height: 600px; width: 100%; padding: 0; border: 0;"
+                    src="{% url 'world:world_iframe' world.id %}"
+            ></iframe>
+        </div>
     </div>
 
-    {% include "world/view_world_inc.html" %}
+
+
+    {% include "world/renderer.html" %}
 
     <script>
         function region_callback(region) {
@@ -27,10 +37,6 @@
         function settlement_callback(settlement) {
             $("#settlement_name").text(settlement ? settlement.name : '');
         }
-
-        $(function () {
-            load_map($("#canvas-container"), {{ regions|safe }}, region_callback, settlement_callback)
-        })
     </script>
 
 {% endblock %}

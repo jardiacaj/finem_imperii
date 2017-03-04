@@ -6,9 +6,7 @@
 
 <script type="text/javascript">
 
-    var regions = {{ regions|safe }};
-
-    function load_map(canvas_container, regions, region_callback, settlement_callback) {
+    function load_map(regions, region_callback, settlement_callback) {
 
         container = document.createElement( 'div' );
         document.body.appendChild( container );
@@ -18,11 +16,16 @@
 
         //scene
         var scene = new THREE.Scene();
+
         //camera
-        var camera = new THREE.PerspectiveCamera(75, viewWidth / viewHeight, 0.1, 1000);
-        camera.position.z = 0;
-        camera.position.x = 0;
-        camera.position.y = 8;
+        //var aspect = window.innerWidth / window.innerHeight;
+        //var d = 5;
+        //var camera = new THREE.OrthographicCamera( - d * aspect, d * aspect, d, - d, 1, 1000 );
+
+        var camera = new THREE.PerspectiveCamera(45, viewWidth / viewHeight, 0.1, 1000);
+        camera.position.z = 2.5;
+        camera.position.x = 2.5;
+        camera.position.y = 12;
         camera.lookAt(new THREE.Vector3( 0, 0, 0 ));
         camera.aspect = viewWidth / viewHeight;
         camera.updateProjectionMatrix();
@@ -114,7 +117,6 @@
             // calculate mouse position in normalized device coordinates
             // (-1 to +1) for both components
 
-            // var el = canvas_container.offset();
             mouse.x = (event.clientX / window.innerWidth ) * 2 - 1;
             mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
         }
@@ -162,8 +164,6 @@
 
         animate();
         render();
-
-        // canvas_container.mousemove(onMouseMove);
 
     }
 

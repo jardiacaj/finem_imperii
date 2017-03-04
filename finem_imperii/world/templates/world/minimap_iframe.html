@@ -12,7 +12,7 @@
         }
 
         $(function () {
-            load_map(
+            var map = new MapRenderer(
                 {{ regions|safe }},
                 region_callback,
                 settlement_callback,

@@ -6,7 +6,7 @@
 
     <script>
         $(function () {
-            load_map({{ regions|safe }}, window.parent.region_callback, window.parent.settlement_callback)
+            var map = new MapRenderer({{ regions|safe }}, window.parent.region_callback, window.parent.settlement_callback)
         })
     </script>
 

@@ -9,8 +9,12 @@
     var regions = {{ regions|safe }};
 
     function load_map(canvas_container, regions, region_callback, settlement_callback) {
-        var viewWidth = canvas_container.width();
-        var viewHeight = canvas_container.height();
+
+        container = document.createElement( 'div' );
+        document.body.appendChild( container );
+
+        var viewWidth = window.innerWidth;
+        var viewHeight = window.innerHeight;
 
         //scene
         var scene = new THREE.Scene();
@@ -49,7 +53,7 @@
 
         //show canvas
 
-        canvas_container.html(renderer.domElement);
+        container.appendChild(renderer.domElement);
 
         var region_geometry = new THREE.CubeGeometry(1, 1, 1);
         var region_materials = {
@@ -97,6 +101,7 @@
             }
 
             window.addEventListener( 'resize', onWindowResize, false );
+            document.addEventListener( 'mousemove', onMouseMove, false );
         }
 
 
@@ -109,15 +114,15 @@
             // calculate mouse position in normalized device coordinates
             // (-1 to +1) for both components
 
-            var el = canvas_container.offset();
-            mouse.x = ( (event.clientX - el.left) / viewWidth ) * 2 - 1;
-            mouse.y = - ( (event.clientY - el.top) / viewHeight ) * 2 + 1;
+            // var el = canvas_container.offset();
+            mouse.x = (event.clientX / window.innerWidth ) * 2 - 1;
+            mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
         }
 
         function onWindowResize() {
-            camera.aspect = canvas_container.width() / canvas_container.height();
+            camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
-            renderer.setSize( canvas_container.width(), canvas_container.height() );
+            renderer.setSize( window.innerWidth, window.innerHeight );
         }
 
         //render scene
@@ -158,7 +163,7 @@
         animate();
         render();
 
-        canvas_container.mousemove(onMouseMove);
+        // canvas_container.mousemove(onMouseMove);
 
     }
 

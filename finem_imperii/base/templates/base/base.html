@@ -1,90 +1,60 @@
-{% load staticfiles %}<!DOCTYPE html>
+{% extends 'base/base_naked.html' %}
 
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-        <title>Finem Imperii</title>
+{% block body %}
+    {% include "base/navbar.html" %}
 
-        <!-- Bootstrap -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-              crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="{% static 'base/css/bootstrap.min.css' %}" />
+    <div class="container-fluid">
+        {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+        {% endif %}
 
-
-        <!-- custom stylings -->
-        <link rel="stylesheet" type="text/css" href="{% static 'base/css/sticky-footer.css' %}" />
-
-        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-            <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-        <![endif]-->
-
-        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-        <!-- Include all compiled plugins (below), or include individual files as needed -->
-
-        <!-- Latest compiled and minified JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-                crossorigin="anonymous"></script>
-
-    </head>
-    <body class="body">
-        {% include "base/navbar.html" %}
-
-        <div class="container-fluid">
-            {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-            {% endif %}
-
-            {% if request.hero %}
-                <div class="col-xs-12 col-md-3">
-                    <p>
-                        {% if request.hero.oath_sworn_to %}
-                            Sworn oath to {{ request.hero.oath_sworn_to }}
-                        {% else %}
-                            No allegiance sworn.
-                        {% endif %}
-                    </p>
-                    <p>
-                        You are in {{ request.hero.location }}, a {{ request.hero.location.size_name }} in
-                        {{ request.hero.location.tile }}.
-                    </p>
-                    <p>MAP GOES HERE</p>
-                    <p>
-                        {{ request.hero.location.tile }} is part of {{ request.hero.location.tile.controlled_by }} in
-                        <a href="{{ request.hero.world.get_absolute_url }}">{{ request.hero.world }}</a>.
-                    </p>
-                    <h4>Your units</h4>
-                    <h4>Your inventory</h4>
-                    <h4>Your position</h4>
-                </div>
-                <div class="col-xs-12 col-md-9">
-            {% endif %}
-
-            {% block content %}{% endblock %}
-
-            {% if request.hero %}
-                </div>
-            {% endif %}
-        </div>
-
-        <footer class="footer">
-            <div class="container">
-                <p class="text-muted">Finem Imperii - <a href="http://joanardiaca.net">Joan Ardiaca Jové</a>
+        {% if request.hero %}
+            <div class="col-xs-12 col-md-3">
+                <p class="text-center">
+                    {% if request.hero.oath_sworn_to %}
+                        Sworn oath to {{ request.hero.oath_sworn_to }}
+                    {% else %}
+                        No allegiance sworn.
+                    {% endif %}
                 </p>
+                <p class="text-center">
+                    You are in {{ request.hero.location }}, a {{ request.hero.location.size_name }} in
+                    {{ request.hero.location.tile }}.
+                </p>
+                <iframe
+                        id="minimap"
+                        class="placeholder"
+                        scrolling="no"
+                        style="height: 20vw; min-height: 200px; width: 100%; padding: 0; border: 0;"
+                        src="{% url 'world:minimap' request.hero.world.id request.hero.location.tile_id request.hero.location_id %}"
+                ></iframe>
+                <p>
+                    {{ request.hero.location.tile }} is part of {{ request.hero.location.tile.controlled_by }} in
+                    <a href="{{ request.hero.world.get_absolute_url }}">{{ request.hero.world }}</a>.
+                </p>
+                <h4>Your units</h4>
+                <h4>Your inventory</h4>
+                <h4>Your position</h4>
             </div>
-        </footer>
-    </body>
-</html>
+            <div class="col-xs-12 col-md-9">
+        {% endif %}
+
+        {% block content %}{% endblock %}
+
+        {% if request.hero %}
+            </div>
+        {% endif %}
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p class="text-muted">Finem Imperii - <a href="http://joanardiaca.net">Joan Ardiaca Jové</a>
+            </p>
+        </div>
+    </footer>
+{% endblock %}

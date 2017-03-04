@@ -13,7 +13,7 @@ from battle.models import Battle, BattleCharacter
 from decorators import inchar_required
 from name_generator.name_generator import NameGenerator
 from organization.models import Organization
-from world.models import Character, WorldUnit, World, Settlement
+from world.models import Character, WorldUnit, World, Settlement, Tile
 
 
 def world_view(request, world_id):
@@ -23,6 +23,20 @@ def world_view(request, world_id):
         'regions': json.dumps([region.render_for_view() for region in world.tile_set.all()])
     }
     return render(request, 'world/view_world.html', context)
+
+
+def minimap_view(request, world_id, tile_id=None, settlement_id=None):
+    world = get_object_or_404(World, id=world_id)
+    tile = None if tile_id is None else get_object_or_404(Tile, id=tile_id)
+    settlement = None if settlement_id is None else get_object_or_404(Settlement, id=settlement_id)
+
+    context = {
+        'world': world,
+        'tile': tile,
+        'settlement': settlement,
+        'regions': json.dumps([region.render_for_view() for region in world.tile_set.all()])
+    }
+    return render(request, 'world/minimap.html', context)
 
 
 @login_required

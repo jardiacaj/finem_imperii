@@ -1,0 +1,20 @@
+{% extends "base/base_naked.html" %}
+
+{% block body %}
+
+    {% include "world/view_world_inc.html" %}
+
+    <script>
+        function region_callback(region) {
+            if (region) console.log(region.name);
+        }
+        function settlement_callback(settlement) {
+            if (settlement) console.log(settlement.name);
+        }
+
+        $(function () {
+            load_map(0, {{ regions|safe }}, region_callback, settlement_callback)
+        })
+    </script>
+
+{% endblock %}

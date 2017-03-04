@@ -6,7 +6,7 @@
 
 <script type="text/javascript">
 
-    function load_map(regions, region_callback, settlement_callback) {
+    function load_map(regions, region_callback, settlement_callback, focus_region_id, focus_settlement_id) {
 
         container = document.createElement( 'div' );
         document.body.appendChild( container );
@@ -84,6 +84,13 @@
             mesh.region = regions[i];
 
             scene.add(mesh);
+
+            if (focus_region_id == region.id) {
+                camera.position.x = mesh.position.x;
+                camera.position.y = 4;
+                camera.position.z = mesh.position.z;
+                camera.lookAt(mesh.position);
+            }
 
             for (var j = 0; j < region.settlements.length; j++) {
                 var settlement = region.settlements[j];

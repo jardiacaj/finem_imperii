@@ -39,8 +39,8 @@ def minimap_view(request, world_id, tile_id=None, settlement_id=None):
     settlement = None if settlement_id is None else get_object_or_404(Settlement, id=settlement_id)
     context = {
         'world': world,
-        'tile': tile,
-        'settlement': settlement,
+        'focused_tile': tile,
+        'focused_settlement': settlement,
         'regions': json.dumps([region.render_for_view() for region in world.tile_set.all()])
     }
     return render(request, 'world/minimap_iframe.html', context)

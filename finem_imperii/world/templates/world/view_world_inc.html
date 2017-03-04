@@ -95,6 +95,8 @@
 
                 scene.add(cylinder);
             }
+
+            window.addEventListener( 'resize', onWindowResize, false );
         }
 
 
@@ -110,6 +112,12 @@
             var el = canvas_container.offset();
             mouse.x = ( (event.clientX - el.left) / viewWidth ) * 2 - 1;
             mouse.y = - ( (event.clientY - el.top) / viewHeight ) * 2 + 1;
+        }
+
+        function onWindowResize() {
+            camera.aspect = canvas_container.width() / canvas_container.height();
+            camera.updateProjectionMatrix();
+            renderer.setSize( canvas_container.width(), canvas_container.height() );
         }
 
         //render scene

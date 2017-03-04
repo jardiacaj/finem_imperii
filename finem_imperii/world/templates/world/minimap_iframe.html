@@ -12,7 +12,13 @@
         }
 
         $(function () {
-            load_map({{ regions|safe }}, region_callback, settlement_callback, {{ focused_tile.id }});
+            load_map(
+                {{ regions|safe }},
+                region_callback,
+                settlement_callback,
+                {{ focused_tile.id }},
+                {{ focused_settlement.id }}
+            );
         })
     </script>
 

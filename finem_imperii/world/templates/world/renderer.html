@@ -97,7 +97,11 @@
 
                 radius = Math.log10(settlement.population) * 0.02;
                 var settlement_geometry = new THREE.CylinderGeometry( radius, radius, 0.01, 16 );
-                var settlement_material = new THREE.MeshBasicMaterial( {color: 0x000000} );
+                var settlement_material;
+                if (settlement.id == focus_settlement_id)
+                    settlement_material = new THREE.MeshBasicMaterial( {color: 0xFFFFFF} );
+                else
+                    settlement_material = new THREE.MeshBasicMaterial( {color: 0x000000} );
 
                 var cylinder = new THREE.Mesh( settlement_geometry, settlement_material );
                 cylinder.position.x = (region.x_pos - 1) - 0.5 + settlement.x_pos/100;

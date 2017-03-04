@@ -35,7 +35,10 @@
         renderer.setSize(viewWidth, viewHeight);
         renderer.setClearColor( 0xffffff, 0);
         //controls
-        var controls = new THREE.OrbitControls(camera, renderer.domElement);
+        if (focus_region_id === undefined) {
+            var controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.addEventListener( 'change', render );
+        }
         //axes
         // var axes = new THREE.AxisHelper(2);
         // scene.add(axes);
@@ -130,16 +133,19 @@
 
             mouse.x = (event.clientX / window.innerWidth ) * 2 - 1;
             mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+            pick();
         }
 
         function onWindowResize() {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize( window.innerWidth, window.innerHeight );
+            render();
+            pick();
         }
 
-        //render scene
-        function render() {
+        function pick() {
+
             raycaster.setFromCamera( mouse, camera );
 
             // calculate objects intersecting the picking ray
@@ -164,16 +170,20 @@
 
             if (!settlement_intersected) settlement_callback(undefined);
             if (!region_intersected) region_callback(undefined);
+        }
 
-            requestAnimationFrame(render);
+        //render scene
+        function render() {
+
+            //requestAnimationFrame(render);
             renderer.render(scene, camera);
         };
 
-        function animate(){
-            requestAnimationFrame(animate);
-        }
+        //function animate(){
+        //    requestAnimationFrame(animate);
+        //}
 
-        animate();
+        //animate();
         render();
 
     }

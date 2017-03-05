@@ -53,6 +53,8 @@ class Capability(models.Model):
     ARREST_ORDER = 'arrest_order'
     BAN = 'ban'
     POLICY_DOCUMENT = 'policy'
+    CONSCRIPT = 'conscript'
+
     TYPE_CHOICES = (
         (ARREST_ORDER, 'ordering arrests'),
         (BAN, 'banning'),

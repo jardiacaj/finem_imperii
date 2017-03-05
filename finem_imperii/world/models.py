@@ -148,7 +148,7 @@ class Settlement(models.Model):
 
             if able:
                 assigned_workers += 1
-                if assigned_workers < self.population / 4:  # we assign 75% of population to fields
+                if assigned_workers < self.population / 4 or total_other_workplaces == 0:  # we assign 75% of population to fields
                     # we do a weighted assignment
                     pos = random.randrange(total_field_workplaces)
                     cumulative = 0

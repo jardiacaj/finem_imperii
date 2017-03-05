@@ -1181,6 +1181,12 @@
     level: 2
     quantity: 50
     settlement_id: 1
+- model: world.Building
+  fields:
+    type: grain field
+    level: 2
+    quantity: 2378
+    settlement_id: 1
 
 
 - model: world.Settlement
@@ -1203,6 +1209,18 @@
     level: 1
     quantity: 270
     settlement_id: 2
+- model: world.Building
+  fields:
+    type: grain field
+    level: 2
+    quantity: 2819
+    settlement_id: 2
+- model: world.Building
+  fields:
+    type: granary
+    level: 2
+    quantity: 1
+    settlement_id: 2
 
 - model: world.Settlement
   pk: 3
@@ -1222,6 +1240,18 @@
   fields:
     type: prison
     level: 1
+    settlement_id: 3
+- model: world.Building
+  fields:
+    type: grain field
+    level: 2
+    quantity: 17310
+    settlement_id: 3
+- model: world.Building
+  fields:
+    type: granary
+    level: 2
+    quantity: 1
     settlement_id: 3
 
 - model: world.Settlement
@@ -1243,6 +1273,18 @@
     type: prison
     level: 2
     settlement_id: 4
+- model: world.Building
+  fields:
+    type: grain field
+    level: 2
+    quantity: 21737
+    settlement_id: 4
+- model: world.Building
+  fields:
+    type: granary
+    level: 2
+    quantity: 1
+    settlement_id: 4
 
 - model: world.Settlement
   pk: 5
@@ -1258,4 +1300,16 @@
     level: 2
     quantity: 80
     settlement_id: 5
+- model: world.Building
+  fields:
+    type: grain field
+    level: 2
+    quantity: 3110
+    settlement_id: 5
+- model: world.Building
+  fields:
+    type: granary
+    level: 2
+    quantity: 1
+    settlement_id: 4
 

@@ -1,7 +1,12 @@
+import random
+
+import math
 from django.core.urlresolvers import reverse
-from django.db import models
+from django.db import models, transaction
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
+
+from name_generator.name_generator import NameGenerator
 
 
 class World(models.Model):
@@ -18,6 +23,71 @@ class World(models.Model):
 
     def get_absolute_url(self):
         return reverse('world:world', kwargs={'world_id': self.id})
+
+    @transaction.atomic
+    def initialize(self):
+        if self.initialized:
+            raise Exception("World {} already initialized!".format(self))
+
+        name_generator = NameGenerator()
+        for tile in self.tile_set.all():
+            for settlement in tile.settlement_set.all():
+                residences = settlement.building_set.filter(type=Building.RESIDENCE).all()
+                fields = settlement.building_set.filter(type=Building.GRAIN_FIELD).all()
+                total_field_workplaces = sum(field.max_employment() for field in fields)
+                other_workplaces = settlement.building_set.exclude(type__in=(Building.RESIDENCE, Building.GRAIN_FIELD)).all()
+                total_other_workplaces = sum(j.max_employment() for j in other_workplaces)
+
+                assigned_workers = 0
+
+                for i in range(settlement.population):
+                    male = random.getrandbits(1)
+                    name = (
+                        (name_generator.get_female_names(1).pop() if not male else name_generator.get_male_names(1).pop())
+                        + ' ' +
+                        name_generator.get_surnames(1).pop()
+                    )
+
+                    over_sixty = (random.getrandbits(4) == 0)
+                    if over_sixty:
+                        age_months = random.randrange(60*12, 90*12)
+                        able = random.getrandbits(1)
+                    else:
+                        age_months = random.randrange(0, 60*12)
+                        able = (random.getrandbits(7) == 0)
+
+                    if able:
+                        assigned_workers += 1
+                        if assigned_workers < settlement.population / 4:  # we assign 75% of population to fields
+                            # we do a weighted assignment
+                            pos = random.randrange(total_field_workplaces)
+                            cumulative = 0
+                            for field in fields:
+                                cumulative += field.max_employment()
+                                if pos < cumulative:
+                                    break
+                            workplace = field
+                        else:
+                            pos = random.randrange(total_other_workplaces)
+                            cumulative = 0
+                            for other_workplace in other_workplaces:
+                                cumulative += other_workplace.max_employment()
+                                if pos < cumulative:
+                                    break
+                            workplace = other_workplace
+
+                    NPC.objects.create(
+                        name=name,
+                        male=male,
+                        able=able,
+                        age_months=age_months,
+                        residence=residences[i % residences.count()],
+                        location=settlement,
+                        workplace=workplace if able else None,
+                        unit=None
+                    )
+        self.initialized = True
+        self.save()
 
 
 class Region(models.Model):
@@ -102,6 +172,7 @@ class Settlement(models.Model):
 
 
 class Building(models.Model):
+    GRAIN_FIELD = 'grain field'
     RESIDENCE = 'residence'
     SAWMILL = 'sawmill'
     IRON_MINE = 'iron mine'
@@ -109,9 +180,11 @@ class Building(models.Model):
     PRISON = 'prison'
 
     TYPE_CHOICES = (
+        (GRAIN_FIELD, GRAIN_FIELD),
         (RESIDENCE, RESIDENCE),
         (SAWMILL, SAWMILL),
         (IRON_MINE, IRON_MINE),
+        (GRANARY, GRANARY),
         (PRISON, PRISON),
     )
 
@@ -121,9 +194,15 @@ class Building(models.Model):
     settlement = models.ForeignKey(Settlement)
     owner = models.ForeignKey('organization.Organization', null=True, blank=True)
 
+    def max_employment(self):
+        if self.type:
+            return math.ceil(self.quantity / 2)
+
 
 class NPC(models.Model):
+    name = models.CharField(max_length=100)
     male = models.BooleanField()
+    able = models.BooleanField()
     age_months = models.IntegerField()
     residence = models.ForeignKey(Building, null=True, blank=True, related_name='resident')
     location = models.ForeignKey(Settlement, null=True, blank=True)

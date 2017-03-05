@@ -5,15 +5,14 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from django.forms.models import ModelForm
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic.base import View
 
-from battle.models import Battle, BattleCharacter
+from battle.models import Battle
 from decorators import inchar_required
 from name_generator.name_generator import NameGenerator
 from organization.models import Organization
-from world.models import Character, WorldUnit, World, Settlement, Tile
+from world.models import Character, World, Settlement, Tile
 
 
 def world_view(request, world_id):
@@ -109,36 +108,20 @@ class CharacterCreationView(View):
         return redirect(character.activation_url)
 
 
-class RectruitForm(ModelForm):
-    class Meta:
-        model = WorldUnit
-        fields = ['name']
-
-
-class RecruitView(View):
-    form_class = RectruitForm
+class RecruitmentView(View):
     template_name = 'world/recruit.html'
 
     def get(self, request, *args, **kwargs):
-        form = self.form_class()
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name)
 
+    @staticmethod
+    def fail_post_with_error(request, world_id, message):
+        messages.add_message(request, messages.ERROR, message, extra_tags='danger')
+        return redirect('world:create_character', world_id=world_id)
+
+    @transaction.atomic
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            unit = form.save(commit=False)
-
-            if request.hero.cash < unit.power * 5:
-                messages.error(request, "Not enough gold coins!")
-                return self.get(request)
-
-            unit.owner_character = request.hero
-            request.hero.cash -= unit.power * 5
-            request.hero.save()
-            unit.save()
-            return redirect(reverse('world:character_home'))
-        else:
-            return render(request, self.template_name, {'form': form})
+        pass
 
 
 @login_required

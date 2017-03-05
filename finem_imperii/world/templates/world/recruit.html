@@ -1,22 +1,55 @@
 {% extends "base/base.html" %}
 
-{% load bootstrap %}
-
 {% block content %}
 
-    <h1 class="page-header">Recruit new unit</h1>
+    <h1 class="page-header">Recruitment</h1>
 
-    <p>
-        Cost is 5 gold coins per man.
-    </p>
+    <p>To form a new unit, you can choose different options.</p>
+    <ol>
+        <li>
+            You may <b>conscript</b> forces from the local population.
+            <ul>
+                <li>Pro: it's almost always possible and cheap to conscript units.</li>
+                <li>Con: conscripted units will probably lack proper training.</li>
+            </ul>
+        </li>
+        <li>
+            You may form a <b>professional unit</b> of soldiers.
+            <ul>
+                <li>Pro: properly trained and better willingness to fight.</li>
+                <li>Con: more expensive.</li>
+            </ul>
+        </li>
+        <li>
+            You may hire <b>mercenaries</b>.
+            <ul>
+                <li>Pro: mostly true battle-hardened fighters.</li>
+                <li>Con: most expensive, sporadic availability.</li>
+            </ul>
+        </li>
+    </ol>
 
-    <div class="container-fluid">
+    <div class="col-xs-12 col-md-4">
+        <h4>Conscription</h4>
+
         <form class="form-horizontal" role="form" method="post">
             {% csrf_token %}
-            {{ form|bootstrap }}
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
+        </form>
+    </div>
+
+    <div class="col-xs-12 col-md-4">
+        <h4>Professional unit</h4>
+        <form class="form-horizontal" role="form" method="post">
+            {% csrf_token %}
+
+        </form>
+    </div>
+
+    <div class="col-xs-12 col-md-4">
+        <h4>Mercenaries</h4>
+        <form class="form-horizontal" role="form" method="post">
+            {% csrf_token %}
+
         </form>
     </div>
 

@@ -38,6 +38,8 @@
                     <a href="{{ request.hero.world.get_absolute_url }}">{{ request.hero.world }}</a>.
                 </p>
 
+                <hr>
+
                 <h4>Your position</h4>
 
                 <h4>Your units</h4>
@@ -48,7 +50,7 @@
                                 <td>{{ unit }}</td>
                             </tr>
                         {% empty %}
-                            <tr><td>You own no units.</td></tr>
+                            <tr><td class="text-center">You own no units.</td></tr>
                         {% endfor %}
                         <tr><td colspan="100%" class="text-center small">
                             <a href="{% url 'world:recruit' %}">Recruit</a>

@@ -30,3 +30,10 @@ class NameGenerator:
 
     def get_male_names(self, limit=None):
         return self.get_file('name_generator/data_sources/names_male', limit)
+
+    def generate_name(self, male):
+        return (
+                (self.get_female_names(1).pop() if not male else self.get_male_names(1).pop())
+                + ' ' +
+                self.get_surnames(1).pop()
+            )

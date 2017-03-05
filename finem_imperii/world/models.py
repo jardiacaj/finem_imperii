@@ -28,64 +28,9 @@ class World(models.Model):
     def initialize(self):
         if self.initialized:
             raise Exception("World {} already initialized!".format(self))
-
         name_generator = NameGenerator()
         for tile in self.tile_set.all():
-            for settlement in tile.settlement_set.all():
-                residences = settlement.building_set.filter(type=Building.RESIDENCE).all()
-                fields = settlement.building_set.filter(type=Building.GRAIN_FIELD).all()
-                total_field_workplaces = sum(field.max_employment() for field in fields)
-                other_workplaces = settlement.building_set.exclude(type__in=(Building.RESIDENCE, Building.GRAIN_FIELD)).all()
-                total_other_workplaces = sum(j.max_employment() for j in other_workplaces)
-
-                assigned_workers = 0
-
-                for i in range(settlement.population):
-                    male = random.getrandbits(1)
-                    name = (
-                        (name_generator.get_female_names(1).pop() if not male else name_generator.get_male_names(1).pop())
-                        + ' ' +
-                        name_generator.get_surnames(1).pop()
-                    )
-
-                    over_sixty = (random.getrandbits(4) == 0)
-                    if over_sixty:
-                        age_months = random.randrange(60*12, 90*12)
-                        able = random.getrandbits(1)
-                    else:
-                        age_months = random.randrange(0, 60*12)
-                        able = (random.getrandbits(7) == 0)
-
-                    if able:
-                        assigned_workers += 1
-                        if assigned_workers < settlement.population / 4:  # we assign 75% of population to fields
-                            # we do a weighted assignment
-                            pos = random.randrange(total_field_workplaces)
-                            cumulative = 0
-                            for field in fields:
-                                cumulative += field.max_employment()
-                                if pos < cumulative:
-                                    break
-                            workplace = field
-                        else:
-                            pos = random.randrange(total_other_workplaces)
-                            cumulative = 0
-                            for other_workplace in other_workplaces:
-                                cumulative += other_workplace.max_employment()
-                                if pos < cumulative:
-                                    break
-                            workplace = other_workplace
-
-                    NPC.objects.create(
-                        name=name,
-                        male=male,
-                        able=able,
-                        age_months=age_months,
-                        residence=residences[i % residences.count()],
-                        location=settlement,
-                        workplace=workplace if able else None,
-                        unit=None
-                    )
+            tile.initialize(name_generator)
         self.initialized = True
         self.save()
 
@@ -139,6 +84,10 @@ class Tile(models.Model):
         result['settlements'] = [settlement.render_for_view() for settlement in self.settlement_set.all()]
         return result
 
+    def initialize(self, name_generator):
+        for settlement in self.settlement_set.all():
+            settlement.initialize(name_generator)
+
 
 class Settlement(models.Model):
     name = models.CharField(max_length=100)
@@ -169,6 +118,58 @@ class Settlement(models.Model):
 
     def __str__(self):
         return self.name
+
+    def initialize(self, name_generator):
+        residences = self.building_set.filter(type=Building.RESIDENCE).all()
+        fields = self.building_set.filter(type=Building.GRAIN_FIELD).all()
+        total_field_workplaces = sum(field.max_employment() for field in fields)
+        other_workplaces = self.building_set.exclude(type__in=(Building.RESIDENCE, Building.GRAIN_FIELD)).all()
+        total_other_workplaces = sum(j.max_employment() for j in other_workplaces)
+
+        assigned_workers = 0
+
+        for i in range(self.population):
+            male = random.getrandbits(1)
+            name = name_generator.generate_name(male)
+
+            over_sixty = (random.getrandbits(4) == 0)
+            if over_sixty:
+                age_months = random.randrange(60 * 12, 90 * 12)
+                able = random.getrandbits(1)
+            else:
+                age_months = random.randrange(0, 60 * 12)
+                able = (random.getrandbits(7) == 0)
+
+            if able:
+                assigned_workers += 1
+                if assigned_workers < self.population / 4:  # we assign 75% of population to fields
+                    # we do a weighted assignment
+                    pos = random.randrange(total_field_workplaces)
+                    cumulative = 0
+                    for field in fields:
+                        cumulative += field.max_employment()
+                        if pos < cumulative:
+                            break
+                    workplace = field
+                else:
+                    pos = random.randrange(total_other_workplaces)
+                    cumulative = 0
+                    for other_workplace in other_workplaces:
+                        cumulative += other_workplace.max_employment()
+                        if pos < cumulative:
+                            break
+                    workplace = other_workplace
+
+            NPC.objects.create(
+                name=name,
+                male=male,
+                able=able,
+                age_months=age_months,
+                residence=residences[i % residences.count()],
+                location=self,
+                workplace=workplace if able else None,
+                unit=None
+            )
 
 
 class Building(models.Model):
@@ -208,6 +209,9 @@ class NPC(models.Model):
     location = models.ForeignKey(Settlement, null=True, blank=True)
     workplace = models.ForeignKey(Building, null=True, blank=True, related_name='worker')
     unit = models.ForeignKey('WorldUnit', null=True, blank=True, related_name='soldier')
+
+    def __str__(self):
+        return self.name
 
 
 class Character(models.Model):

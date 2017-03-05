@@ -234,10 +234,38 @@ class Character(models.Model):
 
 
 class WorldUnit(models.Model):
+    CONSCRIPTED = 'conscripted'
+    PROFESSIONAL = 'professional'
+    MERCENARY = 'mercenary'
+    RECTRUITMENT_CHOICES = (
+        (CONSCRIPTED, CONSCRIPTED),
+        (PROFESSIONAL, PROFESSIONAL),
+        (MERCENARY, MERCENARY),
+    )
+
+    INFANTRY = 'infantry'
+    PIKEMEN = 'pikemen'
+    ARCHERS = 'archers'
+    CAVALRY = 'cavalry'
+    CATAPULT = 'catapult'
+    SIEGE_TOWER = 'siege tower'
+    RAM = 'ram'
+    TYPE_CHOICES = (
+        (INFANTRY, INFANTRY),
+        (PIKEMEN, PIKEMEN),
+        (ARCHERS, ARCHERS),
+        (CAVALRY, CAVALRY),
+        (CATAPULT, CATAPULT),
+        (SIEGE_TOWER, SIEGE_TOWER),
+        (RAM, RAM),
+    )
+
     owner_character = models.ForeignKey(Character)
     world = models.ForeignKey(World)
     region = models.ForeignKey(Tile)
     name = models.CharField(max_length=100)
+    recruitment_type = models.CharField(max_length=30, choices=RECTRUITMENT_CHOICES)
+    type = models.CharField(max_length=30, choices=TYPE_CHOICES)
 
     def __str__(self):
         return self.name

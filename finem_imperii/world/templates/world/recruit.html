@@ -32,6 +32,13 @@
     <div class="col-xs-12 col-md-4">
         <h4>Conscription</h4>
 
+        <p>Conscripting soldiers from {{ request.hero.location }}.</p>
+
+        <select class="form-control" name="filter">
+            <option value="everyone">Able-bodied men and women ({{ request.hero.location.conscriptable_npcs|length }})</option>
+            <option value="everyone">Able-bodied men ({{ request.hero.location.conscriptable_npcs_male_only|length }})</option>
+        </select>
+
         <form class="form-horizontal" role="form" method="post">
             {% csrf_token %}
         </form>

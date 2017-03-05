@@ -119,6 +119,12 @@ class Settlement(models.Model):
     def __str__(self):
         return self.name
 
+    def conscriptable_npcs(self):
+        return self.npc_set.filter(able=True, age_months__gte=16*12, unit__isnull=True)
+
+    def conscriptable_npcs_male_only(self):
+        return self.npc_set.filter(able=True, age_months__gte=16*12, unit__isnull=True, male=True)
+
     def initialize(self, name_generator):
         residences = self.building_set.filter(type=Building.RESIDENCE).all()
         fields = self.building_set.filter(type=Building.GRAIN_FIELD).all()
@@ -138,7 +144,7 @@ class Settlement(models.Model):
                 able = random.getrandbits(1)
             else:
                 age_months = random.randrange(0, 60 * 12)
-                able = (random.getrandbits(7) == 0)
+                able = (random.getrandbits(7) != 0)
 
             if able:
                 assigned_workers += 1

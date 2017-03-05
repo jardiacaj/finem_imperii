@@ -12,7 +12,7 @@ from battle.models import Battle
 from decorators import inchar_required
 from name_generator.name_generator import NameGenerator
 from organization.models import Organization
-from world.models import Character, World, Settlement, Tile
+from world.models import Character, World, Settlement, Tile, WorldUnit
 
 
 def world_view(request, world_id):
@@ -112,12 +112,15 @@ class RecruitmentView(View):
     template_name = 'world/recruit.html'
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name)
+        context = {
+            'unit_types': (unit_type[1] for unit_type in WorldUnit.TYPE_CHOICES)
+        }
+        return render(request, self.template_name, context)
 
     @staticmethod
-    def fail_post_with_error(request, world_id, message):
+    def fail_post_with_error(request, message):
         messages.add_message(request, messages.ERROR, message, extra_tags='danger')
-        return redirect('world:create_character', world_id=world_id)
+        return redirect('world:recruit')
 
     @transaction.atomic
     def post(self, request, *args, **kwargs):

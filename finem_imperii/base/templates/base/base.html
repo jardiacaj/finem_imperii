@@ -15,7 +15,7 @@
 
         {% if request.hero %}
             <div class="col-xs-12 col-md-3">
-                <p class="text-center">
+                <p class="text-center highlight">
                     {% if request.hero.oath_sworn_to %}
                         Sworn oath to {{ request.hero.oath_sworn_to }}
                     {% else %}
@@ -40,10 +40,21 @@
 
                 <hr>
 
-                <h4>Your position</h4>
+                <h5>Your position</h5>
+                <ul>
+                    {% for organization in request.hero.organization_set.all %}
+                        <li>{% if not organization.is_position %}Part in{% endif %}
+                            {{ organization }}
+                        </li>
+                    {% empty %}
+                        <li>No political positions</li>
+                    {% endfor %}
+                </ul>
 
-                <h4>Your units</h4>
                 <table class="table table-striped table-hover">
+                    <thead>
+                        <tr><td class="h5">Your units</td></tr>
+                    </thead>
                     <tbody>
                         {% for unit in request.hero.worldunit_set.all %}
                             <tr>
@@ -58,7 +69,7 @@
                     </tbody>
                 </table>
 
-                <h4>Your inventory</h4>
+                <h5>Your inventory</h5>
                 <p>{{ request.hero.cash }} silver coins</p>
             </div>
             <div class="col-xs-12 col-md-9">

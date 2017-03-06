@@ -15,12 +15,15 @@
 
         {% if request.hero %}
             <div class="col-xs-12 col-md-3">
-                <p class="text-center highlight">
+                <p class="text-center">
                     {% if request.hero.oath_sworn_to %}
                         Sworn oath to {{ request.hero.oath_sworn_to }}
                     {% else %}
                         No allegiance sworn.
                     {% endif %}
+                </p>
+                <p class="text-center">
+                    It's January 815 I.E.
                 </p>
                 <p class="text-center">
                     You are in {{ request.hero.location }}, a {{ request.hero.location.size_name }} in

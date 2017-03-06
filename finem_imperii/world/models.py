@@ -227,9 +227,7 @@ class Character(models.Model):
     oath_sworn_to = models.ForeignKey('organization.Organization', null=True, blank=True)
     owner_user = models.ForeignKey(User)
     cash = models.IntegerField(default=0)
-
-    # def get_absolute_url(self):
-    #    return reverse('users:profile', args=[str(self.steam_id)])
+    hours_in_turn_left = models.IntegerField(default=15*24)
 
     @property
     def activation_url(self):

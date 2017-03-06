@@ -6,6 +6,10 @@
 
     <h1 class="page-header">{{ request.hero }}</h1>
 
+    <p>
+        <a href="{% url 'world:travel' %}">Travel</a>
+    </p>
+
     <h2>Battles</h2>
 
     {% for battle_character in request.hero.battlecharacter_set.all %}

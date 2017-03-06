@@ -153,3 +153,7 @@ def setup_battle(request, rival_char_id=None):
         battle.save()
         battle.start_battle(request.hero, rival)
         return redirect(reverse('battle:setup', kwargs={'battle_id': battle.id}))
+
+@inchar_required
+def travel(request):
+    pass

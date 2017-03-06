@@ -6,15 +6,12 @@
 
     <script>
         $(function () {
-            var map = new MapRenderer(
-                {{ regions|safe }},
-                window.parent.region_callback,
-                window.parent.settlement_callback,
-                window.parent.click_callback,
-                {{ focused_tile.id }},
-                {{ focused_settlement.id }},
-                true
-            )
+            var map = new MapRenderer({{ regions|safe }}, {{ focused_tile.id }});
+
+            map.region_callback = window.parent.region_callback;
+            map.settlement_callback = window.parent.settlement_callback;
+            map.click_callback = window.parent.click_callback;
+            map.highlight_settlement({{ focused_settlement.id }});
         })
     </script>
 

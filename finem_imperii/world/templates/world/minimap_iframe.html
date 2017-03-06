@@ -6,15 +6,8 @@
 
     <script>
         $(function () {
-            var map = new MapRenderer(
-                {{ regions|safe }},
-                undefined,
-                undefined,
-                undefined,
-                {{ focused_tile.id }},
-                {{ focused_settlement.id }},
-                true
-            );
+            var map = new MapRenderer({{ regions|safe }}, {{ focused_tile.id }});
+            map.highlight_settlement({{ focused_settlement.id }});
         })
     </script>
 

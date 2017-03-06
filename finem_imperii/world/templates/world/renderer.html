@@ -129,6 +129,23 @@
             pick();
         }
 
+        var picked_region;
+        var picked_settlement;
+
+        function notify_region_pick(region) {
+            if (region !== picked_region) {
+                region_callback(region);
+                picked_region = region;
+            }
+        }
+
+        function notify_settlement_pick(settlement) {
+            if (settlement !== picked_settlement) {
+                settlement_callback(settlement);
+                picked_settlement = settlement;
+            }
+        }
+
         function pick() {
 
             raycaster.setFromCamera( mouse, camera );
@@ -142,25 +159,25 @@
 
                 var region = intersects[ i ].object.region;
                 if (region !== undefined && !region_intersected) {
-                    region_callback(region);
+                    notify_region_pick(region);
                     region_intersected = true;
                 }
                 var settlement = intersects[ i ].object.settlement;
                 if (settlement !== undefined && !settlement_intersected) {
-                    settlement_callback(settlement);
+                    notify_settlement_pick(settlement);
                     settlement_intersected = true;
                 }
 
             }
 
-            if (!settlement_intersected) settlement_callback(undefined);
-            if (!region_intersected) region_callback(undefined);
+            if (!settlement_intersected) notify_settlement_pick(undefined);
+            if (!region_intersected) notify_region_pick(undefined);
         }
 
         //render scene
         function render() {
             renderer.render(scene, camera);
-        };
+        }
 
         render();
 

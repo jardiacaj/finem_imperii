@@ -1,0 +1,86 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+
+    <h1 class="page-header">Recruitment</h1>
+
+    <p>To form a new unit, you can choose different options.</p>
+    <ol>
+        <li>
+            You may <b>conscript</b> forces from the local population.
+            <ul>
+                <li>Pro: it's almost always possible and cheap to conscript units.</li>
+                <li>Con: conscripted units will probably lack proper training.</li>
+            </ul>
+        </li>
+        <li>
+            You may form a <b>professional unit</b> of soldiers.
+            <ul>
+                <li>Pro: properly trained and better willingness to fight.</li>
+                <li>Con: more expensive.</li>
+            </ul>
+        </li>
+        <li>
+            You may hire <b>mercenaries</b>.
+            <ul>
+                <li>Pro: mostly true battle-hardened fighters.</li>
+                <li>Con: most expensive, sporadic availability.</li>
+            </ul>
+        </li>
+    </ol>
+
+    <div class="col-xs-12 col-md-4 well">
+        <h4>Conscription</h4>
+
+        <p>Conscripting soldiers from {{ request.hero.location }}.</p>
+
+        <form class="form-horizontal" role="form" method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="conscript_filter">Candidates</label>
+                <select class="form-control" id="conscript_filter" name="conscript_filter">
+                    <option value="everyone">Able-bodied men and women ({{ request.hero.location.conscriptable_npcs|length }})</option>
+                    <option value="everyone">Able-bodied men ({{ request.hero.location.conscriptable_npcs_male_only|length }})</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="conscript_type">Unit type</label>
+                <select class="form-control" id="conscript_filter" name="conscript_filter">
+                    {% for type in unit_types %}
+                        <option value="{{ type }}">{{ type|capfirst }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="conscript_count">Unit size</label>
+                <input class="form-control" id="conscript_count" name="conscript_count" type="number" min="1">
+            </div>
+
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary">Conscript</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-xs-12 col-md-4 well">
+        <h4>Professional unit</h4>
+        <form class="form-horizontal" role="form" method="post">
+            {% csrf_token %}
+
+        </form>
+    </div>
+
+    <div class="col-xs-12 col-md-4 well">
+        <h4>Mercenaries</h4>
+        <form class="form-horizontal" role="form" method="post">
+            {% csrf_token %}
+
+        </form>
+    </div>
+
+{% endblock %}
+
+

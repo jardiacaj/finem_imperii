@@ -1,12 +1,21 @@
 import random
 
 import math
+from collections import namedtuple
+from math import sqrt
+
 from django.core.urlresolvers import reverse
 from django.db import models, transaction
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
 
 from name_generator.name_generator import NameGenerator
+
+Point = namedtuple('Point', ['x', 'z'])
+
+
+def euclidean_distance(p1, p2):
+    return sqrt((p1.x - p2.x)**2 + (p1.z - p2.z)**2)
 
 
 class World(models.Model):
@@ -79,6 +88,14 @@ class Tile(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_coords(self):
+        return Point(x=self.x_pos, z=self.z_pos)
+
+    def distance_to(self, tile):
+        if self.world != tile.world:
+            raise Exception("Can't calculate distance between worlds")
+        return euclidean_distance(self.get_absolute_coords(), tile.get_absolute_coords())
+
     def render_for_view(self):
         result = model_to_dict(self)
         result['settlements'] = [settlement.render_for_view() for settlement in self.settlement_set.all()]
@@ -124,6 +141,17 @@ class Settlement(models.Model):
 
     def conscriptable_npcs_male_only(self):
         return self.npc_set.filter(able=True, age_months__gte=16*12, unit__isnull=True, male=True)
+
+    def get_absolute_coords(self):
+        return Point(
+            x=self.tile.x_pos * 100 + self.x_pos,
+            z=self.tile.z_pos * 100 + self.z_pos,
+        )
+
+    def distance_to(self, settlement):
+        if self.tile.world != settlement.tile.world:
+            raise Exception("Can't calculate distance between worlds")
+        return euclidean_distance(self.get_absolute_coords(), settlement.get_absolute_coords())
 
     def initialize(self, name_generator):
         residences = self.building_set.filter(type=Building.RESIDENCE).all()
@@ -232,6 +260,11 @@ class Character(models.Model):
     @property
     def activation_url(self):
         return reverse('world:activate_character', kwargs={'char_id': self.id})
+
+    def travel_time(self, target_settlement):
+        distance = self.location.distance_to(target_settlement)
+        days = distance / 100 * 2
+        return math.ceil(days * 24)
 
     def __str__(self):
         return self.name

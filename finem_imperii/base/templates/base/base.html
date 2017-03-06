@@ -6,7 +6,7 @@
     <div class="container-fluid">
 
         {% if request.hero %}
-            <div class="col-xs-12 col-md-3">
+            <div class="col-xs-12 col-md-3 well">
                 <p class="text-center">
                     {% if request.hero.oath_sworn_to %}
                         Sworn oath to {{ request.hero.oath_sworn_to }}
@@ -59,7 +59,7 @@
                             <tr><td class="text-center">You own no units.</td></tr>
                         {% endfor %}
                         <tr><td colspan="100%" class="text-center">
-                            <a href="{% url 'world:recruit' %}">To recruitment</a>
+                            <a href="{% url 'world:recruit' %}" class="btn btn-primary btn-sm">To recruitment</a>
                         </td></tr>
                     </tbody>
                 </table>

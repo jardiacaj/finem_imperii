@@ -1,85 +1,74 @@
 {% extends "base/base.html" %}
 
+{% load extra_filters %}
+
 {% block content %}
 
-    <h1 class="page-header">Recruitment</h1>
+    <h1 class="page-header">Travel</h1>
 
-    <p>To form a new unit, you can choose different options.</p>
-    <ol>
-        <li>
-            You may <b>conscript</b> forces from the local population.
-            <ul>
-                <li>Pro: it's almost always possible and cheap to conscript units.</li>
-                <li>Con: conscripted units will probably lack proper training.</li>
-            </ul>
-        </li>
-        <li>
-            You may form a <b>professional unit</b> of soldiers.
-            <ul>
-                <li>Pro: properly trained and better willingness to fight.</li>
-                <li>Con: more expensive.</li>
-            </ul>
-        </li>
-        <li>
-            You may hire <b>mercenaries</b>.
-            <ul>
-                <li>Pro: mostly true battle-hardened fighters.</li>
-                <li>Con: most expensive, sporadic availability.</li>
-            </ul>
-        </li>
-    </ol>
+    {% if target_settlement %}
+        <p>
+            The distance from your current location, {{ request.hero.location }}, to {{ target_settlement }} is
+            {{ travel_time|nice_hours }}.
+        </p>
 
-    <div class="col-xs-12 col-md-4 well">
-        <h4>Conscription</h4>
-
-        <p>Conscripting soldiers from {{ request.hero.location }}.</p>
+        {% if request.hero.location.tile != target_settlement.tile %}
+            <p>Because you are leaving your current region, you will reach your destination in the next turn!</p>
+        {% elif request.hero.hours_in_turn_left < travel_time %}
+            <p>Because you don't have enough time left in this turn, you will reach your destination in the next turn!</p>
+        {% endif %}
 
         <form class="form-horizontal" role="form" method="post">
             {% csrf_token %}
-
-            <div class="form-group">
-                <label for="conscript_filter">Candidates</label>
-                <select class="form-control" id="conscript_filter" name="conscript_filter">
-                    <option value="everyone">Able-bodied men and women ({{ request.hero.location.conscriptable_npcs|length }})</option>
-                    <option value="everyone">Able-bodied men ({{ request.hero.location.conscriptable_npcs_male_only|length }})</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="conscript_type">Unit type</label>
-                <select class="form-control" id="conscript_filter" name="conscript_filter">
-                    {% for type in unit_types %}
-                        <option value="{{ type }}">{{ type|capfirst }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="conscript_count">Unit size</label>
-                <input class="form-control" id="conscript_count" name="conscript_count" type="number" min="1">
-            </div>
+            <input type="hidden" name="target_settlement_id" value="{{ target_settlement.id }}">
 
             <div class="form-group text-center">
-                <button type="submit" class="btn btn-primary">Conscript</button>
+                <p>
+                    <button type="submit" class="btn btn-primary">Confirm journey</button>
+                </p>
             </div>
         </form>
-    </div>
 
-    <div class="col-xs-12 col-md-4 well">
-        <h4>Professional unit</h4>
-        <form class="form-horizontal" role="form" method="post">
-            {% csrf_token %}
+    {% else %}
+        <p>
+            As long as you have time left and you stay in the same region, you may travel as much as you want each turn.
+        </p>
 
-        </form>
-    </div>
+        <p>
+            If you want to travel to a different region, you will need to wait until the turn ends.
+        </p>
+    {% endif %}
 
-    <div class="col-xs-12 col-md-4 well">
-        <h4>Mercenaries</h4>
-        <form class="form-horizontal" role="form" method="post">
-            {% csrf_token %}
+    <hr>
 
-        </form>
-    </div>
+    <h4>
+        Chosen settlement: <span id="settlement_name">none</span>
+    </h4>
+
+    <script>
+        var selected_region = {};
+
+        function click_callback(region, settlement) {
+            if (settlement !== undefined) {
+                window.location.href = '{% url 'world:travel' %}' + settlement.id
+            }
+        }
+
+        function region_callback(region) {
+            selected_region = region;
+        }
+        function settlement_callback(settlement) {
+            $("#settlement_name").text(settlement ? settlement.name + ' (click to open travel dialog)' : 'none');
+        }
+    </script>
+
+    <iframe
+            id="travel_map"
+            class="placeholder"
+            scrolling="no"
+            style="height: 700px; width: 100%; padding: 0; border: 0;"
+            src="{% url 'world:travel_iframe' %}"
+    ></iframe>
 
 {% endblock %}
 

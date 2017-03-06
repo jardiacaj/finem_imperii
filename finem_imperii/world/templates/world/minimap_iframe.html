@@ -5,17 +5,12 @@
     {% include "world/renderer.html" %}
 
     <script>
-        function region_callback(region) {
-        }
-
-        function settlement_callback(settlement) {
-        }
-
         $(function () {
             var map = new MapRenderer(
                 {{ regions|safe }},
-                region_callback,
-                settlement_callback,
+                undefined,
+                undefined,
+                undefined,
                 {{ focused_tile.id }},
                 {{ focused_settlement.id }}
             );

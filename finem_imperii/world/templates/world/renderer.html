@@ -6,7 +6,7 @@
 
 <script type="text/javascript">
 
-    function MapRenderer(regions, region_callback, settlement_callback, focus_region_id, focus_settlement_id) {
+    function MapRenderer(regions, region_callback, settlement_callback, click_callback, focus_region_id, focus_settlement_id) {
 
         container = document.createElement( 'div' );
         document.body.appendChild( container );
@@ -105,6 +105,7 @@
 
             window.addEventListener( 'resize', onWindowResize, false );
             document.addEventListener( 'mousemove', onMouseMove, false );
+            document.addEventListener( 'click', notify_click, false );
         }
 
 
@@ -113,7 +114,8 @@
         var mouse = new THREE.Vector2();
 
         function onMouseMove( event ) {
-
+            if(region_callback === undefined && settlement_callback === undefined && click_callback === undefined)
+                return
             // calculate mouse position in normalized device coordinates
             // (-1 to +1) for both components
             mouse.x = (event.clientX / window.innerWidth ) * 2 - 1;
@@ -132,17 +134,23 @@
         var picked_region;
         var picked_settlement;
 
+        function notify_click() {
+            if (click_callback !== undefined) {
+                return click_callback(picked_region, picked_settlement);
+            }
+        }
+
         function notify_region_pick(region) {
-            if (region !== picked_region) {
-                region_callback(region);
+            if (region !== picked_region && region_callback !== undefined) {
                 picked_region = region;
+                return region_callback(region);
             }
         }
 
         function notify_settlement_pick(settlement) {
-            if (settlement !== picked_settlement) {
-                settlement_callback(settlement);
+            if (settlement !== picked_settlement && settlement_callback !== undefined) {
                 picked_settlement = settlement;
+                return settlement_callback(settlement);
             }
         }
 

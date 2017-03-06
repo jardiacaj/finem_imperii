@@ -146,14 +146,84 @@ def setup_battle(request, rival_char_id=None):
         return render(request, 'world/setup_battle.html', context={'rivals': rivals})
     else:
         if rival_char_id == request.hero.id:
-            messages.error("Cannot battle yourself!")
+            messages.error(request, "Cannot battle yourself!", extra_tags="danger")
             return setup_battle(request)
         rival = get_object_or_404(Character, id=rival_char_id)
         battle = Battle()
         battle.save()
         battle.start_battle(request.hero, rival)
+
         return redirect(reverse('battle:setup', kwargs={'battle_id': battle.id}))
 
+
+class TravelView(View):
+    template_name = 'world/travel.html'
+
+    @staticmethod
+    def check(request, target_settlement):
+        if target_settlement == request.hero.location:
+            messages.error(
+                request,
+                "You can't travel to {} as you are already there.".format(target_settlement),
+                extra_tags="danger"
+            )
+            return redirect('world:travel')
+        if target_settlement.tile.distance_to(request.hero.location.tile) > 1.5:
+            messages.error(
+                request,
+                "You can only travel to contiguous regions.".format(target_settlement),
+                extra_tags="danger"
+            )
+            return redirect('world:travel')
+
+    def get(self, request, settlement_id=None):
+        if settlement_id is not None:
+            target_settlement = get_object_or_404(Settlement, id=settlement_id, tile__world_id=request.hero.world_id)
+
+            check_result = self.check(request, target_settlement)
+            if check_result is not None:
+                return check_result
+
+            travel_time = request.hero.travel_time(target_settlement)
+            context = {
+                'target_settlement': target_settlement,
+                'travel_time': travel_time
+            }
+        else:
+            context = {'target_settlement': None}
+
+        return render(request, self.template_name, context)
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        target_settlement = get_object_or_404(
+            Settlement,
+            id=request.POST.get('target_settlement_id'),
+            tile__world_id=request.hero.world_id
+        )
+        check_result = self.check(request, target_settlement)
+        if check_result is not None:
+            return check_result
+        travel_time = request.hero.travel_time(target_settlement)
+
+        if request.hero.location.tile == target_settlement.tile and travel_time <= request.hero.hours_in_turn_left:
+            # travel instantly
+            request.hero.location = target_settlement
+            request.hero.hours_in_turn_left -= travel_time
+            request.hero.save()
+            messages.success(request, "You are now in {}".format(target_settlement), extra_tags="success")
+            return redirect('world:travel')
+        else:
+            pass
+
+
 @inchar_required
-def travel(request):
-    pass
+def travel_view_iframe(request, settlement_id=None):
+    world = request.hero.world
+    context = {
+        'world': world,
+        'regions': json.dumps([region.render_for_view() for region in world.tile_set.all()]),
+        'focused_tile': request.hero.location.tile,
+        'focused_settlement': request.hero.location,
+    }
+    return render(request, 'world/travel_map_iframe.html', context)

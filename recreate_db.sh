@@ -1,8 +1,9 @@
 #!/bin/bash
 
+rm -i finem_imperii/db.sqlite3
+
 set -e
 
-rm -i finem_imperii/db.sqlite3
 finem_imperii/manage.py migrate
 finem_imperii/manage.py loaddata world1
 

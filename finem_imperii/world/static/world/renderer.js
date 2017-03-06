@@ -1,57 +1,38 @@
-function MapRenderer(regions, region_callback, settlement_callback, click_callback, focus_region_id, focus_settlement_id, show_region_tags) {
+function MapRenderer(region_raw_data, region_callback, settlement_callback, click_callback, focus_region_id, focus_settlement_id, show_region_tags, orbit_controls) {
 
-    container = document.createElement( 'div' );
-    document.body.appendChild( container );
+    var zis = this;
 
-    //scene
-    var scene = new THREE.Scene();
-
-    //camera
-    //var aspect = window.innerWidth / window.innerHeight;
-    //var d = 5;
-    //var camera = new THREE.OrthographicCamera( - d * aspect, d * aspect, d, - d, 1, 1000 );
-
-    var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 2.5;
-    camera.position.x = 2.5;
-    camera.position.y = 12;
-    camera.lookAt(new THREE.Vector3( 0, 0, 0 ));
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-
-    //renderer
-    var renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor( 0xffffff, 0);
-    //controls
-    if (focus_region_id === undefined) {
-        var controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.addEventListener( 'change', render );
-    }
-
-    //ambient light
-    var ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
-    scene.add(ambientLight);
-    //directional light
-    var directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-    directionalLight.position.set(1, 1, 1).normalize();
-    scene.add(directionalLight);
-
-    //show canvas
-    container.appendChild(renderer.domElement);
-
-    var region_geometry = new THREE.CubeGeometry(1, 1, 1);
-    var region_materials = {
-        "plains": new THREE.MeshLambertMaterial({color: 0x90CD00, shading: THREE.SmoothShading}),
-        "forest": new THREE.MeshLambertMaterial({color: 0x207F07, shading: THREE.SmoothShading}),
-        "shore": new THREE.MeshLambertMaterial({color: 0x0D81CD, shading: THREE.SmoothShading}),
-        "deepsea": new THREE.MeshLambertMaterial({color: 0x000E85, shading: THREE.SmoothShading}),
-        "mountain": new THREE.MeshLambertMaterial({color: 0x837D71, shading: THREE.SmoothShading}),
+    zis.init_camera = function () {
+        zis.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        zis.camera.position.z = 2.5;
+        zis.camera.position.x = 2.5;
+        zis.camera.position.y = 12;
+        zis.camera.lookAt(new THREE.Vector3( 0, 0, 0 ));
+        zis.camera.aspect = window.innerWidth / window.innerHeight;
+        zis.camera.updateProjectionMatrix();
     };
 
-    for (var i = 0; i < regions.length; i++)  {
-        var region = regions[i];
-        var mesh = new THREE.Mesh(region_geometry, region_materials[region.type]);
+    zis.init_renderer = function () {
+        zis.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        zis.renderer.setSize(window.innerWidth, window.innerHeight);
+        zis.renderer.setClearColor( 0xffffff, 0);
+    };
+
+    zis.add_orbit_controls = function () {
+        zis.controls = new THREE.OrbitControls(zis.camera, zis.renderer.domElement);
+        zis.controls.addEventListener( 'change', zis.render );
+    };
+
+    zis.init_lighting = function () {
+        zis.ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+        zis.scene.add(zis.ambientLight);
+        zis.directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        zis.directionalLight.position.set(1, 1, 1).normalize();
+        zis.scene.add(zis.directionalLight);
+    };
+
+    zis.render_region_REFACTOR_ME = function () {
+        var mesh = new THREE.Mesh(zis.region_geometry, zis.region_materials[region.type]);
         var geo = new THREE.EdgesGeometry( mesh.geometry ); // or WireframeGeometry
         var mat = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 1 } );
         var wireframe = new THREE.LineSegments( geo, mat );
@@ -61,28 +42,28 @@ function MapRenderer(regions, region_callback, settlement_callback, click_callba
         mesh.position.z = region.z_pos - 1;
         mesh.position.y = region.y_pos;
 
-        regions[i].mesh = mesh;
-        mesh.region = regions[i];
+        region_raw_data[i].mesh = mesh;
+        mesh.region = region_raw_data[i];
 
-        scene.add(mesh);
+        zis.scene.add(mesh);
 
         if (focus_region_id == region.id) {
-            camera.position.x = mesh.position.x;
-            camera.position.y = 4;
-            camera.position.z = mesh.position.z;
-            camera.lookAt(mesh.position);
+            zis.camera.position.x = mesh.position.x;
+            zis.camera.position.y = 4;
+            zis.camera.position.z = mesh.position.z;
+            zis.camera.lookAt(mesh.position);
         }
 
         if (show_region_tags) {
-            camera.updateMatrixWorld();
-            camera.updateProjectionMatrix();
+            zis.camera.updateMatrixWorld();
+            zis.camera.updateProjectionMatrix();
 
             var width = window.innerWidth, height = window.innerHeight;
             var widthHalf = width / 2, heightHalf = height / 2;
 
             var pos = mesh.position.clone();
             pos.y += 0.5;
-            pos.project(camera);
+            pos.project(zis.camera);
             pos.x = ( pos.x * widthHalf ) + widthHalf;
             pos.y = -( pos.y * heightHalf ) + heightHalf;
 
@@ -117,68 +98,55 @@ function MapRenderer(regions, region_callback, settlement_callback, click_callba
             cylinder.position.y = region.y_pos + 0.5;
 
             cylinder.settlement = settlement;
-            regions[i].settlements[j].mesh = cylinder;
+            region_raw_data[i].settlements[j].mesh = cylinder;
 
-            scene.add(cylinder);
+            zis.scene.add(cylinder);
         }
-    }
+    };
 
-
-    window.addEventListener( 'resize', onWindowResize, false );
-    document.addEventListener( 'mousemove', onMouseMove, false );
-    document.addEventListener( 'click', notify_click, false );
-
-    var raycaster = new THREE.Raycaster();
-
-    var mouse = new THREE.Vector2();
-
-    function onMouseMove( event ) {
+    zis.mouse_move_listener = function (event) {
         if(region_callback === undefined && settlement_callback === undefined && click_callback === undefined)
-            return
+            return;
         // calculate mouse position in normalized device coordinates
         // (-1 to +1) for both components
-        mouse.x = (event.clientX / window.innerWidth ) * 2 - 1;
-        mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
-        pick();
-    }
+        zis.mouse_vector.x = (event.clientX / window.innerWidth ) * 2 - 1;
+        zis.mouse_vector.y = - (event.clientY / window.innerHeight) * 2 + 1;
+        zis.pick();
+    };
 
-    function onWindowResize() {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize( window.innerWidth, window.innerHeight );
-        render();
-        pick();
-    }
+    zis.window_resize_listener = function (event) {
+        zis.camera.aspect = window.innerWidth / window.innerHeight;
+        zis.camera.updateProjectionMatrix();
+        zis.renderer.setSize( window.innerWidth, window.innerHeight );
+        zis.render();
+        zis.pick();
+    };
 
-    var picked_region;
-    var picked_settlement;
-
-    function notify_click() {
+    zis.mouse_click_listener = function (event) {
         if (click_callback !== undefined) {
-            return click_callback(picked_region, picked_settlement);
+            return click_callback(zis.picked_region, zis.picked_settlement);
         }
-    }
+    };
 
-    function notify_region_pick(region) {
-        if (region !== picked_region && region_callback !== undefined) {
-            picked_region = region;
+    zis.notify_region_pick = function (region) {
+        if (region !== zis.picked_region && region_callback !== undefined) {
+            zis.picked_region = region;
             return region_callback(region);
         }
-    }
+    };
 
-    function notify_settlement_pick(settlement) {
-        if (settlement !== picked_settlement && settlement_callback !== undefined) {
-            picked_settlement = settlement;
+    zis.notify_settlement_pick = function (settlement) {
+        if (settlement !== zis.picked_settlement && settlement_callback !== undefined) {
+            zis.picked_settlement = settlement;
             return settlement_callback(settlement);
         }
-    }
+    };
 
-    function pick() {
-
-        raycaster.setFromCamera( mouse, camera );
+    zis.pick = function () {
+        zis.raycaster.setFromCamera( zis.mouse_vector, zis.camera );
 
         // calculate objects intersecting the picking ray
-        var intersects = raycaster.intersectObjects( scene.children );
+        var intersects = zis.raycaster.intersectObjects( zis.scene.children );
         var region_intersected = false;
         var settlement_intersected = false;
 
@@ -186,26 +154,61 @@ function MapRenderer(regions, region_callback, settlement_callback, click_callba
 
             var region = intersects[ i ].object.region;
             if (region !== undefined && !region_intersected) {
-                notify_region_pick(region);
+                zis.notify_region_pick(region);
                 region_intersected = true;
             }
             var settlement = intersects[ i ].object.settlement;
             if (settlement !== undefined && !settlement_intersected) {
-                notify_settlement_pick(settlement);
+                zis.notify_settlement_pick(settlement);
                 settlement_intersected = true;
             }
 
         }
 
-        if (!settlement_intersected) notify_settlement_pick(undefined);
-        if (!region_intersected) notify_region_pick(undefined);
+        if (!settlement_intersected) zis.notify_settlement_pick(undefined);
+        if (!region_intersected) zis.notify_region_pick(undefined);
+    };
+
+    zis.render = function () {
+        zis.renderer.render(zis.scene, zis.camera);
+    };
+
+
+    zis.region_geometry = new THREE.CubeGeometry(1, 1, 1);
+    zis.region_materials = {
+        "plains": new THREE.MeshLambertMaterial({color: 0x90CD00, shading: THREE.SmoothShading}),
+        "forest": new THREE.MeshLambertMaterial({color: 0x207F07, shading: THREE.SmoothShading}),
+        "shore": new THREE.MeshLambertMaterial({color: 0x0D81CD, shading: THREE.SmoothShading}),
+        "deepsea": new THREE.MeshLambertMaterial({color: 0x000E85, shading: THREE.SmoothShading}),
+        "mountain": new THREE.MeshLambertMaterial({color: 0x837D71, shading: THREE.SmoothShading}),
+    };
+
+    zis.picked_region = undefined;
+    zis.picked_settlement = undefined;
+
+
+    zis.canvas_container = document.createElement( 'div' );
+    document.body.appendChild( zis.canvas_container );
+
+    zis.scene = new THREE.Scene();
+    zis.init_camera();
+    zis.init_renderer();
+    if(orbit_controls) zis.add_orbit_controls();
+    zis.init_lighting();
+    zis.raycaster = new THREE.Raycaster();
+    zis.mouse_vector = new THREE.Vector2();
+
+    zis.canvas_container.appendChild(zis.renderer.domElement);
+
+    $(window).on('resize', zis.window_resize_listener);
+    $(document).on('mousemove', zis.mouse_move_listener);
+    $(document).on('click', zis.mouse_click_listener);
+
+    for (var i = 0; i < region_raw_data.length; i++)  {
+        var region = region_raw_data[i];
+        zis.render_region_REFACTOR_ME(region);
     }
 
-    //render scene
-    function render() {
-        renderer.render(scene, camera);
-    }
-
-    render();
+    zis.render();
 
 }

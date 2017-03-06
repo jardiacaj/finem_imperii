@@ -6,7 +6,16 @@
 
     <script>
         $(function () {
-            var map = new MapRenderer({{ regions|safe }}, window.parent.region_callback, window.parent.settlement_callback)
+            var map = new MapRenderer(
+                {{ regions|safe }},
+                window.parent.region_callback,
+                window.parent.settlement_callback,
+                undefined,
+                undefined,
+                undefined,
+                false,
+                true
+            )
         })
     </script>
 

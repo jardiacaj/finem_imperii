@@ -6,7 +6,7 @@
 
 <script type="text/javascript">
 
-    function MapRenderer(regions, region_callback, settlement_callback, click_callback, focus_region_id, focus_settlement_id) {
+    function MapRenderer(regions, region_callback, settlement_callback, click_callback, focus_region_id, focus_settlement_id, show_region_tags) {
 
         container = document.createElement( 'div' );
         document.body.appendChild( container );
@@ -81,6 +81,33 @@
                 camera.lookAt(mesh.position);
             }
 
+            if (show_region_tags) {
+                camera.updateMatrixWorld();
+                camera.updateProjectionMatrix();
+
+                var width = window.innerWidth, height = window.innerHeight;
+                var widthHalf = width / 2, heightHalf = height / 2;
+
+                var pos = mesh.position.clone();
+                pos.y += 0.5;
+                pos.project(camera);
+                pos.x = ( pos.x * widthHalf ) + widthHalf;
+                pos.y = -( pos.y * heightHalf ) + heightHalf;
+
+                if (pos.x < width && pos.y < height) {
+                    var region_tag = document.createElement('div');
+                    region_tag.style.position = 'absolute';
+                    region_tag.style.width = "100px";
+                    region_tag.style.textAlign = "center";
+                    region_tag.style.height = 100;
+                    region_tag.style.background = "transparent";
+                    region_tag.innerHTML = region.name;
+                    region_tag.style.top = pos.y + 'px';
+                    region_tag.style.left = (pos.x - 50) + 'px';
+                    document.body.appendChild(region_tag);
+                }
+            }
+
             for (var j = 0; j < region.settlements.length; j++) {
                 var settlement = region.settlements[j];
 
@@ -102,12 +129,12 @@
 
                 scene.add(cylinder);
             }
-
-            window.addEventListener( 'resize', onWindowResize, false );
-            document.addEventListener( 'mousemove', onMouseMove, false );
-            document.addEventListener( 'click', notify_click, false );
         }
 
+
+        window.addEventListener( 'resize', onWindowResize, false );
+        document.addEventListener( 'mousemove', onMouseMove, false );
+        document.addEventListener( 'click', notify_click, false );
 
         var raycaster = new THREE.Raycaster();
 

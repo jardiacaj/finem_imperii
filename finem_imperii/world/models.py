@@ -268,6 +268,8 @@ class Character(models.Model):
 
     def travel_time(self, target_settlement):
         distance = self.location.distance_to(target_settlement)
+        if self.location.tile.type == Tile.MOUNTAIN or target_settlement.tile.type == Tile.MOUNTAIN:
+            distance *= 2
         days = distance / 100 * 2
         return math.ceil(days * 24)
 

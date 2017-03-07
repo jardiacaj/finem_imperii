@@ -43,6 +43,9 @@ The passing of time is turn based, and all players take their turns at the same 
 In the game world, each turn marks the pass of a month. Some actions in the game have an immediate effect, while others
 happen always at the end of turn.
 
+Finem Imperii takes inspiration from many different games, like Crusader Kings 2 and Rome: Total War just to name some.
+But it's main inspiration is the rather obscure [BattleMaster][5].
+
 The game is web-based and playable with any modern browser. The main focus is on desktop computers. It should be
 possible to play also on other devices, like tablets and smartphones. Simple 3D rendering of the world is a part of the
 game.
@@ -198,3 +201,4 @@ Final delivery
 [2]: https://jquery.com
 [3]: https://threejs.org
 [4]: https://www.djangoproject.com
+[5]: https://battlemaster.org

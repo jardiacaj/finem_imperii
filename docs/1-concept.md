@@ -81,7 +81,22 @@ The rationale for these decisions is based on the following key points:
 
 # Roadmap
 
-*wait for it...*
+Week    | Dates          | Objective | Notes
+------- | -------------- | ---- | -----
+Week 1  | 02-27 to 03-05 |  | 
+Week 2  | 03-06 to 03-12 |  | 
+Week 3  | 03-13 to 03-19 |  | 03-15 is PAC1 end date
+Week 4  | 03-20 to 03-26 |  | 
+Week 5  | 03-27 to 04-02 |  | 
+Week 6  | 04-03 to 04-09 |  | 
+Week 7  | 04-10 to 04-16 |  | 
+Week 8  | 04-17 to 04-24 |  | 04-23 is PAC2 end date
+Week 9  | 04-25 to 04-30 |  | 
+Week 10 | 05-01 to 05-07 |  | 
+Week 11 | 05-08 to 05-14 |  | 
+Week 12 | 05-15 to 05-21 |  | 05-20 is PAC3 end date
+Week 13 | 05-22 to 05-28 |  | 
+Week 14 | 05-29 to 06-04 |  | 04-06 is the final delivery date
 
 
 [1]: https://getboostrap.com

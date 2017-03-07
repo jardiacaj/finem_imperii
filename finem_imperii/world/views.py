@@ -13,6 +13,7 @@ from decorators import inchar_required
 from name_generator.name_generator import NameGenerator
 from organization.models import Organization
 from world.models import Character, World, Settlement, Tile, WorldUnit
+from world.renderer import render_world_for_view
 
 
 def world_view(request, world_id):
@@ -27,7 +28,7 @@ def world_view_iframe(request, world_id):
     world = get_object_or_404(World, id=world_id)
     context = {
         'world': world,
-        'regions': json.dumps([region.render_for_view() for region in world.tile_set.all()])
+        'regions': render_world_for_view(world)
     }
     return render(request, 'world/view_world_iframe.html', context)
 
@@ -40,7 +41,7 @@ def minimap_view(request, world_id, tile_id=None, settlement_id=None):
         'world': world,
         'focused_tile': tile,
         'focused_settlement': settlement,
-        'regions': json.dumps([region.render_for_view() for region in world.tile_set.all()])
+        'regions': render_world_for_view(world)
     }
     return render(request, 'world/minimap_iframe.html', context)
 
@@ -222,7 +223,7 @@ def travel_view_iframe(request, settlement_id=None):
     world = request.hero.world
     context = {
         'world': world,
-        'regions': json.dumps([region.render_for_view() for region in world.tile_set.all()]),
+        'regions': render_world_for_view(world),
         'focused_tile': request.hero.location.tile,
         'focused_settlement': request.hero.location,
     }

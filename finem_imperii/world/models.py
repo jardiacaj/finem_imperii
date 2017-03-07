@@ -7,7 +7,6 @@ from math import sqrt
 from django.core.urlresolvers import reverse
 from django.db import models, transaction
 from django.contrib.auth.models import User
-from django.forms.models import model_to_dict
 
 from name_generator.name_generator import NameGenerator
 
@@ -96,11 +95,6 @@ class Tile(models.Model):
             raise Exception("Can't calculate distance between worlds")
         return euclidean_distance(self.get_absolute_coords(), tile.get_absolute_coords())
 
-    def render_for_view(self):
-        result = model_to_dict(self)
-        result['settlements'] = [settlement.render_for_view() for settlement in self.settlement_set.all()]
-        return result
-
     def initialize(self, name_generator):
         for settlement in self.settlement_set.all():
             settlement.initialize(name_generator)
@@ -112,9 +106,6 @@ class Settlement(models.Model):
     population = models.IntegerField()
     x_pos = models.IntegerField()
     z_pos = models.IntegerField()
-
-    def render_for_view(self):
-        return model_to_dict(self)
 
     def size_name(self):
         if self.population < 10:

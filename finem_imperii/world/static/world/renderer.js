@@ -1,28 +1,21 @@
-function MapRenderer(region_raw_data, focus_region_id) {
+function MapRenderer(world_data, focus_region_id) {
 
     var zis = this;
 
     /* API */
 
-    this.region_callback = undefined;
-    this.settlement_callback = undefined;
-    this.click_callback = undefined;
+    zis.region_callback = undefined;
+    zis.settlement_callback = undefined;
+    zis.click_callback = undefined;
 
-    this.highlight_settlement = function (settlement_id) {
-        for (var i = 0; i < region_raw_data.length; i++) {
-            var region = region_raw_data[i];
-            for (var j = 0; j < region.settlements.length; j++) {
-                var settlement = region.settlements[j];
-                if (settlement.id == settlement_id) {
-                    settlement.mesh.material = zis.settlement_material_highlighted;
-                    zis.render();
-                }
-            }
-        }
+    zis.highlight_settlement = function (settlement_id) {
+        settlement = zis.settlements[settlement_id];
+        settlement.mesh.material = zis.settlement_material_highlighted;
+        zis.render();
     };
 
-    this.enable_region_tags = function () {
-
+    zis.enable_region_tags = function () {
+        zis.region_tags_enabled = true;
     };
 
     /* INTERNALS */
@@ -56,19 +49,18 @@ function MapRenderer(region_raw_data, focus_region_id) {
         zis.scene.add(zis.directionalLight);
     };
 
-    zis.render_region_REFACTOR_ME = function () {
+    zis.render_region = function (region) {
         var mesh = new THREE.Mesh(zis.region_geometry, zis.region_materials[region.type]);
-        var geo = new THREE.EdgesGeometry( mesh.geometry );
         var mat = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 1 } );
-        var wireframe = new THREE.LineSegments( geo, mat );
+        var wireframe = new THREE.LineSegments( zis.region_edges_geometry, mat );
         mesh.add( wireframe );
 
         mesh.position.x = region.x_pos - 1;
         mesh.position.z = region.z_pos - 1;
         mesh.position.y = region.y_pos;
 
-        region_raw_data[i].mesh = mesh;
-        mesh.region = region_raw_data[i];
+        region.mesh = mesh;
+        mesh.region = region;
 
         zis.scene.add(mesh);
 
@@ -78,48 +70,47 @@ function MapRenderer(region_raw_data, focus_region_id) {
             zis.camera.position.z = mesh.position.z;
             zis.camera.lookAt(mesh.position);
         }
+    };
 
-        if (false) { // show_region_tags) {
-            zis.camera.updateMatrixWorld();
-            zis.camera.updateProjectionMatrix();
+    zis.render_settlement = function (settlement) {
+        var region = zis.regions[settlement.tile];
+        var radius = Math.log10(settlement.population) * 0.02;
+        var settlement_geometry = new THREE.CylinderGeometry( radius, radius, 0.01, 16 );
+        var cylinder = new THREE.Mesh( settlement_geometry, zis.settlement_material );
+        cylinder.position.x = (region.x_pos - 1) - 0.5 + settlement.x_pos/100;
+        cylinder.position.z = (region.z_pos - 1) - 0.5 + settlement.z_pos/100;
+        cylinder.position.y = region.y_pos + 0.5;
 
-            var width = window.innerWidth, height = window.innerHeight;
-            var widthHalf = width / 2, heightHalf = height / 2;
+        cylinder.settlement = settlement;
+        settlement.mesh = cylinder;
 
-            var pos = mesh.position.clone();
-            pos.y += 0.5;
-            pos.project(zis.camera);
-            pos.x = ( pos.x * widthHalf ) + widthHalf;
-            pos.y = -( pos.y * heightHalf ) + heightHalf;
+        zis.scene.add(cylinder);
+    };
 
-            if (pos.x < width && pos.y < height) {
-                var region_tag = document.createElement('div');
-                region_tag.style.position = 'absolute';
-                region_tag.style.width = "100px";
-                region_tag.style.textAlign = "center";
-                region_tag.style.height = 100;
-                region_tag.style.background = "transparent";
-                region_tag.innerHTML = region.name;
-                region_tag.style.top = pos.y + 'px';
-                region_tag.style.left = (pos.x - 50) + 'px';
-                document.body.appendChild(region_tag);
-            }
-        }
+    zis.render_region_tag = function (region) {
+        zis.camera.updateMatrixWorld();
+        zis.camera.updateProjectionMatrix();
 
-        for (var j = 0; j < region.settlements.length; j++) {
-            var settlement = region.settlements[j];
+        var width = window.innerWidth, height = window.innerHeight;
+        var widthHalf = width / 2, heightHalf = height / 2;
 
-            var radius = Math.log10(settlement.population) * 0.02;
-            var settlement_geometry = new THREE.CylinderGeometry( radius, radius, 0.01, 16 );
-            var cylinder = new THREE.Mesh( settlement_geometry, zis.settlement_material );
-            cylinder.position.x = (region.x_pos - 1) - 0.5 + settlement.x_pos/100;
-            cylinder.position.z = (region.z_pos - 1) - 0.5 + settlement.z_pos/100;
-            cylinder.position.y = region.y_pos + 0.5;
+        var pos = region.mesh.position.clone();
+        pos.y += 0.5;
+        pos.project(zis.camera);
+        pos.x = ( pos.x * widthHalf ) + widthHalf;
+        pos.y = -( pos.y * heightHalf ) + heightHalf;
 
-            cylinder.settlement = settlement;
-            region_raw_data[i].settlements[j].mesh = cylinder;
-
-            zis.scene.add(cylinder);
+        if (pos.x < width && pos.y < height) {
+            var region_tag = document.createElement('div');
+            region_tag.style.position = 'absolute';
+            region_tag.style.width = "100px";
+            region_tag.style.textAlign = "center";
+            region_tag.style.height = 100;
+            region_tag.style.background = "transparent";
+            region_tag.innerHTML = region.name;
+            region_tag.style.top = pos.y + 'px';
+            region_tag.style.left = (pos.x - 50) + 'px';
+            document.body.appendChild(region_tag);
         }
     };
 
@@ -194,8 +185,13 @@ function MapRenderer(region_raw_data, focus_region_id) {
         zis.renderer.render(zis.scene, zis.camera);
     };
 
+    /* VARS */
+
+    zis.regions = world_data.regions;
+    zis.settlements = world_data.settlements;
 
     zis.region_geometry = new THREE.CubeGeometry(1, 1, 1);
+    zis.region_edges_geometry = new THREE.EdgesGeometry( zis.region_geometry );
     zis.region_materials = {
         "plains": new THREE.MeshLambertMaterial({color: 0x90CD00, shading: THREE.SmoothShading}),
         "forest": new THREE.MeshLambertMaterial({color: 0x207F07, shading: THREE.SmoothShading}),
@@ -209,6 +205,9 @@ function MapRenderer(region_raw_data, focus_region_id) {
     zis.picked_region = undefined;
     zis.picked_settlement = undefined;
 
+    zis.region_tags_enabled = false;
+
+    /* CONSTRUCTION */
 
     zis.canvas_container = document.createElement( 'div' );
     document.body.appendChild( zis.canvas_container );
@@ -226,9 +225,14 @@ function MapRenderer(region_raw_data, focus_region_id) {
     $(document).on('mousemove', zis.mouse_move_listener);
     $(document).on('click', zis.mouse_click_listener_notifier);
 
-    for (var i = 0; i < region_raw_data.length; i++)  {
-        var region = region_raw_data[i];
-        zis.render_region_REFACTOR_ME(region);
+    for (var region_id in zis.regions)  {
+        var region = world_data.regions[region_id];
+        zis.render_region(region);
+    }
+
+    for (var settlement_id in zis.settlements)  {
+        var settlement = world_data.settlements[settlement_id];
+        zis.render_settlement(settlement);
     }
 
     zis.render();

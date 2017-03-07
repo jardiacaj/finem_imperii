@@ -6,7 +6,9 @@
 
     <h1 class="page-header">Travel</h1>
 
-    {% if target_settlement %}
+    {% if request.hero.travel_destination %}
+        <p>You wil reach {{ request.hero.travel_destination }} in the next turn.</p>
+    {% elif target_settlement %}
         <p>
             The distance from your current location, {{ request.hero.location }}, to {{ target_settlement }} is
             {{ travel_time|nice_hours }}.
@@ -41,9 +43,9 @@
 
     <hr>
 
-    <h4>
-        Chosen settlement: <span id="settlement_name">none</span>
-    </h4>
+    <p>
+        Click on a settlement to travel (<span id="settlement_name">none</span>).
+    </p>
 
     <script>
         var selected_region = {};
@@ -58,7 +60,7 @@
             selected_region = region;
         }
         function settlement_callback(settlement) {
-            $("#settlement_name").text(settlement ? settlement.name + ' (click to open travel dialog)' : 'none');
+            $("#settlement_name").text(settlement ? settlement.name : 'none');
         }
     </script>
 

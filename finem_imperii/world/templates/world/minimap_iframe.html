@@ -6,14 +6,21 @@
 
     <script>
         $(function () {
-            var map = new MapRenderer({{ regions|safe }});
-            map.focus_to_region({{ focused_tile.id }});
-            map.highlight_settlement({{ focused_settlement.id }});
+            var map = new MapRenderer({{ world_data|safe }});
+            map.focus_to_region({{ request.hero.location.tile_id }});
+            map.highlight_settlement({{ request.hero.location_id }});
+            {% if request.hero.travel_destination %}
+                map.add_travel_line({{ request.hero.location_id }}, {{ request.hero.travel_destination_id }});
+            {% endif %}
         })
     </script>
 
     <div style="position: absolute; top: 10px; left: 10px">
-        <a href="{% url 'world:travel' %}" class="btn btn-primary" target="_parent">Travel</a>
+        {% if request.hero.travel_destination %}
+            <a href="{% url 'world:travel' %}" class="btn btn-default" target="_parent">Travelling to {{ request.hero.travel_destination }}</a>
+        {% else %}
+            <a href="{% url 'world:travel' %}" class="btn btn-primary" target="_parent">Travel</a>
+        {% endif %}
     </div>
 
 {% endblock %}

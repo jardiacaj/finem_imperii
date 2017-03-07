@@ -9,6 +9,7 @@ from django.db import models, transaction
 from django.contrib.auth.models import User
 
 from name_generator.name_generator import NameGenerator
+from world.turn import TurnProcessor
 
 Point = namedtuple('Point', ['x', 'z'])
 
@@ -22,6 +23,7 @@ class World(models.Model):
     description = models.TextField()
     initialized = models.BooleanField(default=False)
     current_turn = models.IntegerField(default=0)
+    blocked_for_turn = models.BooleanField(default=False, help_text="True during turn processing")
 
     def get_violence_monopolies(self):
         return self.organization_set.filter(violence_monopoly=True)
@@ -40,6 +42,14 @@ class World(models.Model):
         for tile in self.tile_set.all():
             tile.initialize(name_generator)
         self.initialized = True
+        self.save()
+
+    def pass_turn(self):
+        self.blocked_for_turn = True
+        self.save()
+        turn_processor = TurnProcessor(self)
+        turn_processor.do_turn()
+        self.blocked_for_turn = False
         self.save()
 
 
@@ -247,6 +257,7 @@ class Character(models.Model):
     owner_user = models.ForeignKey(User)
     cash = models.IntegerField(default=0)
     hours_in_turn_left = models.IntegerField(default=15*24)
+    travel_destination = models.ForeignKey(Settlement, null=True, blank=True, related_name='travellers_heading')
 
     @property
     def activation_url(self):
@@ -256,6 +267,18 @@ class Character(models.Model):
         distance = self.location.distance_to(target_settlement)
         days = distance / 100 * 2
         return math.ceil(days * 24)
+
+    def check_travelability(self, target_settlement):
+        if target_settlement == self.location:
+            return "You can't travel to {} as you are already there.".format(target_settlement)
+        if target_settlement.tile.distance_to(self.location.tile) > 1.5:
+            return "You can only travel to contiguous regions."
+        if self.travel_destination is not None and self.travel_destination != target_settlement:
+            return "You cant travel to {} because you are already travelling to {}.".format(
+                target_settlement,
+                self.travel_destination
+            )
+        return None
 
     def __str__(self):
         return self.name

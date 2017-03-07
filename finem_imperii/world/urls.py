@@ -16,5 +16,5 @@ urlpatterns = [
     url(r'^setup_battle/(?P<rival_char_id>[0-9]+)?$', setup_battle, name='setup_battle'),
     url(r'^world/(?P<world_id>[0-9]+)$', world_view, name='world'),
     url(r'^world_iframe/(?P<world_id>[0-9]+)$', world_view_iframe, name='world_iframe'),
-    url(r'^minimap/(?P<world_id>[0-9]+)/(?P<tile_id>[0-9]+)?/(?P<settlement_id>[0-9]+)?$', minimap_view, name='minimap'),
+    url(r'^minimap?$', minimap_view, name='minimap'),
 ]

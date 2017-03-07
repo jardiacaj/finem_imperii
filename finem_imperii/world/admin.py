@@ -17,6 +17,12 @@ def initialize_world(modeladmin, request, queryset):
 initialize_world.short_description = "Initialize world"
 
 
+def pass_turn(modeladmin, request, queryset):
+    for world in queryset.all():
+        world.pass_turn()
+pass_turn.short_description = "Pass turn"
+
+
 @admin.register(World)
 class WorldAdmin(admin.ModelAdmin):
-    actions = [initialize_world]
+    actions = [pass_turn, initialize_world]

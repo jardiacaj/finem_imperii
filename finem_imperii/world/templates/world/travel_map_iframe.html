@@ -15,7 +15,9 @@
             map.click_callback = window.parent.click_callback;
             map.highlight_settlement({{ request.hero.location_id }});
 
-            {% if target_settlement %}
+            {% if request.hero.travel_destination %}
+                map.add_travel_line({{ request.hero.location_id }}, {{ request.hero.travel_destination_id }});
+            {% elif target_settlement %}
                 map.add_travel_line({{ request.hero.location_id }}, {{ target_settlement.id }});
             {% endif %}
         })

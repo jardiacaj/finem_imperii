@@ -33,16 +33,9 @@ def world_view_iframe(request, world_id):
     return render(request, 'world/view_world_iframe.html', context)
 
 
-def minimap_view(request, world_id, tile_id=None, settlement_id=None):
-    world = get_object_or_404(World, id=world_id)
-    tile = None if tile_id is None else get_object_or_404(Tile, id=tile_id)
-    settlement = None if settlement_id is None else get_object_or_404(Settlement, id=settlement_id)
-    context = {
-        'world': world,
-        'focused_tile': tile,
-        'focused_settlement': settlement,
-        'regions': render_world_for_view(world)
-    }
+@inchar_required
+def minimap_view(request):
+    context = {'world_data': render_world_for_view(request.hero.world)}
     return render(request, 'world/minimap_iframe.html', context)
 
 
@@ -160,30 +153,14 @@ def setup_battle(request, rival_char_id=None):
 class TravelView(View):
     template_name = 'world/travel.html'
 
-    @staticmethod
-    def check(request, target_settlement):
-        if target_settlement == request.hero.location:
-            messages.error(
-                request,
-                "You can't travel to {} as you are already there.".format(target_settlement),
-                extra_tags="danger"
-            )
-            return redirect('world:travel')
-        if target_settlement.tile.distance_to(request.hero.location.tile) > 1.5:
-            messages.error(
-                request,
-                "You can only travel to contiguous regions.".format(target_settlement),
-                extra_tags="danger"
-            )
-            return redirect('world:travel')
-
     def get(self, request, settlement_id=None):
         if settlement_id is not None:
             target_settlement = get_object_or_404(Settlement, id=settlement_id, tile__world_id=request.hero.world_id)
 
-            check_result = self.check(request, target_settlement)
+            check_result = request.hero.check_travelability(target_settlement)
             if check_result is not None:
-                return check_result
+                messages.error(request, check_result, extra_tags="danger")
+                return redirect('world:travel')
 
             travel_time = request.hero.travel_time(target_settlement)
             context = {
@@ -202,9 +179,11 @@ class TravelView(View):
             id=request.POST.get('target_settlement_id'),
             tile__world_id=request.hero.world_id
         )
-        check_result = self.check(request, target_settlement)
+        check_result = request.hero.check_travelability(target_settlement)
         if check_result is not None:
-            return check_result
+            messages.error(request, check_result, extra_tags="danger")
+            return redirect('world:travel')
+
         travel_time = request.hero.travel_time(target_settlement)
 
         if request.hero.location.tile == target_settlement.tile and travel_time <= request.hero.hours_in_turn_left:
@@ -215,7 +194,10 @@ class TravelView(View):
             messages.success(request, "You are now in {}".format(target_settlement), extra_tags="success")
             return redirect('world:travel')
         else:
-            pass
+            messages.success(request, "You you will reach {} when the turn ends.".format(target_settlement), extra_tags="success")
+            request.hero.travel_destination = target_settlement
+            request.hero.save()
+            return redirect('world:travel')
 
 
 @inchar_required

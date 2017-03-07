@@ -26,10 +26,15 @@
                         class="placeholder"
                         scrolling="no"
                         style="height: 20vw; min-height: 200px; width: 100%; padding: 0; border: 0;"
-                        src="{% url 'world:minimap' request.hero.world.id request.hero.location.tile_id request.hero.location_id %}"
+                        src="{% url 'world:minimap' %}"
                 ></iframe>
                 <p>
-                    {{ request.hero.location.tile }} is part of {{ request.hero.location.tile.controlled_by }} in
+                    {{ request.hero.location.tile }} is
+                    {% if request.hero.location.tile.controlled_by %}
+                         part of {{ request.hero.location.tile.controlled_by }}
+                    {% else %}
+                        a barbaric region
+                    {% endif %}in
                     <a href="{{ request.hero.world.get_absolute_url }}">{{ request.hero.world }}</a>.
                 </p>
 

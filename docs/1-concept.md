@@ -29,8 +29,8 @@ But there are many open possibilities. A player may choose to constructively tak
 forward in many different ways, or they may choose to strive to attain as much power as possible. They may also try
 to work for their own personal gain, explore the world freely or engage in trade.
 
-The different states in the fictional world are all opposed to the barbaric regions. They may freely decide their
-relationships with each other, declaring war, making peace and forming alliances.
+The different states in the fictional world are all opposed to the barbaric regions. Additionally, yhey may freely 
+form their relationships with each other, for example by declaring war, making peace and forming alliances.
 
 Hierarchies and political organizations are a core part of the realms in the game. And, as in the real world, a good
 ruler will need to delegate it's powers to his subordinates if he want to rule efficiently. As such, trust and treason
@@ -96,7 +96,7 @@ Week 10 | 05-01 to 05-07 |
 Week 11 | 05-08 to 05-14 |
 Week 12 | 05-15 to 05-21 | 05-20 is PAC3 end date
 Week 13 | 05-22 to 05-28 | 
-Week 14 | 05-29 to 06-04 | 04-06 is final delivery date
+Week 14 | 05-29 to 06-04 | 06-04 is final delivery date
 
 ## Week 1
 

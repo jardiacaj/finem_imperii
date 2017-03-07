@@ -15,7 +15,7 @@
                     {% endif %}
                 </p>
                 <p class="text-center">
-                    It's January 815 I.E.
+                    It's {{ request.hero.world.get_current_date }}
                 </p>
                 <p class="text-center">
                     You are in {{ request.hero.location }}, a {{ request.hero.location.size_name }} in

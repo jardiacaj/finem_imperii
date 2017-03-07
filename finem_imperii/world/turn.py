@@ -1,14 +1,23 @@
 from django.db import transaction
 
 
+months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November',
+          'December']
+
+def turn_to_date(turn):
+    return "{} {} I.E.".format(months[turn % 12], turn//12 + 815)
+
 class TurnProcessor:
     def __init__(self, world):
-        self.world =world
+        self.world = world
 
     @transaction.atomic
     def do_turn(self):
         self.do_travels()
         self.restore_hours()
+
+        self.world.current_turn += 1
+        self.world.save()
 
     def do_travels(self):
         for character in self.world.character_set.all():

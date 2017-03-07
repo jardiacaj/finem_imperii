@@ -9,7 +9,7 @@ from django.db import models, transaction
 from django.contrib.auth.models import User
 
 from name_generator.name_generator import NameGenerator
-from world.turn import TurnProcessor
+from world.turn import TurnProcessor, turn_to_date
 
 Point = namedtuple('Point', ['x', 'z'])
 
@@ -30,6 +30,9 @@ class World(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_current_date(self):
+        return turn_to_date(self.current_turn)
 
     def get_absolute_url(self):
         return reverse('world:world', kwargs={'world_id': self.id})

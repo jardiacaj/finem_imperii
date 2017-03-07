@@ -114,6 +114,7 @@ function MapRenderer(world_data) {
             region_tag.style.height = 100;
             region_tag.style.background = "transparent";
             region_tag.style.fontWeight = "bold";
+            region_tag.style.textDecoration = "underline";
             region_tag.innerHTML = region.name;
             region_tag.style.top = pos.y + 'px';
             region_tag.style.left = (pos.x - 50) + 'px';

@@ -64,7 +64,7 @@ states and rulers are starting to rise again, bringing the people the hope of se
 
 This is a screenshot of the current "travel" page.
 
-![Travel page screenshot](https://github.com/jardiacaj/finem_imperii/raw/master/docs/screenshot-travel-2017-03-07.png.png "Travel page screenshot")
+![Travel page screenshot](https://github.com/jardiacaj/finem_imperii/raw/master/docs/screenshot-travel-2017-03-07.png "Travel page screenshot")
 
 # Development
 

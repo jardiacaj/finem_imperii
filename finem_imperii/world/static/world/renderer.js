@@ -24,6 +24,18 @@ function MapRenderer(world_data) {
         zis.rerender_settlement_tags()
     };
 
+    zis.add_travel_line = function (source_settlement_id, target_settlement_id) {
+        var source_settlement = zis.settlements[source_settlement_id];
+        var target_settlement = zis.settlements[target_settlement_id];
+
+        var geometry = new THREE.Geometry();
+        geometry.vertices.push(source_settlement.mesh.position, target_settlement.mesh.position);
+
+        var line = new THREE.Line( geometry, zis.travel_line_material );
+        zis.scene.add( line );
+        zis.render();
+    };
+
     /* INTERNALS */
 
     zis.init_camera = function () {
@@ -78,7 +90,7 @@ function MapRenderer(world_data) {
         var cylinder = new THREE.Mesh( settlement_geometry, zis.settlement_material );
         cylinder.position.x = (region.x_pos - 1) - 0.5 + settlement.x_pos/100;
         cylinder.position.z = (region.z_pos - 1) - 0.5 + settlement.z_pos/100;
-        cylinder.position.y = region.y_pos + 0.5;
+        cylinder.position.y = region.y_pos + 0.51;
 
         cylinder.settlement = settlement;
         settlement.mesh = cylinder;
@@ -243,6 +255,7 @@ function MapRenderer(world_data) {
     zis.regions = world_data.regions;
     zis.settlements = world_data.settlements;
 
+    zis.travel_line_material = new THREE.LineBasicMaterial({color: 0x801919, linewidth: 3});
     zis.region_geometry = new THREE.CubeGeometry(1, 1, 1);
     zis.region_edges_geometry = new THREE.EdgesGeometry( zis.region_geometry );
     zis.region_materials = {

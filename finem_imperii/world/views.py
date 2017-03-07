@@ -220,11 +220,15 @@ class TravelView(View):
 
 @inchar_required
 def travel_view_iframe(request, settlement_id=None):
+    if settlement_id is not None:
+        target_settlement = get_object_or_404(Settlement, id=settlement_id, tile__world_id=request.hero.world_id)
+    else:
+        target_settlement = None
+
     world = request.hero.world
     context = {
         'world': world,
         'regions': render_world_for_view(world),
-        'focused_tile': request.hero.location.tile,
-        'focused_settlement': request.hero.location,
+        'target_settlement': target_settlement,
     }
     return render(request, 'world/travel_map_iframe.html', context)

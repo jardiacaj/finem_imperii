@@ -67,7 +67,11 @@
             class="placeholder"
             scrolling="no"
             style="height: 700px; width: 100%; padding: 0; border: 0;"
-            src="{% url 'world:travel_iframe' %}"
+            {% if target_settlement %}
+                src="{% url 'world:travel_iframe' target_settlement.id %}"
+            {% else %}
+                src="{% url 'world:travel_iframe' %}"
+            {% endif %}
     ></iframe>
 
 {% endblock %}

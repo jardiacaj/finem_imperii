@@ -17,9 +17,9 @@ Finem Imperii is a web-based role-strategy multiplayer game. Characters are part
 placed in the late middle ages, where they will usually take the role of prominent members of society (e.g. commanders, 
 traders, treasurers, rulers). Cooperation among players is a core part of the game, and is required for most scenarios.
 
-Unlike other games, the players do not need to log-in frequently or at certain times. Also, the level of deepness and
-involvement can be variable, and there is no benefit from spending large amounts of time playing. There is no fixed
-objective in this game, but there are many open possibilities for the players.
+Unlike other similar games, the players do not need to log-in frequently or at certain times. Also, the level of 
+deepness and involvement can be variable, and there is no benefit from spending large amounts of time playing. There is 
+no fixed objective in this game, but there are many open possibilities for the players.
 
 The in-game world is set in a fictional history after a long period of peace where a large empire controlled the whole
 known world. This empire entered a decadent state and finally fell.
@@ -29,7 +29,7 @@ But there are many open possibilities. A player may choose to constructively tak
 forward in many different ways, or they may choose to strive to attain as much power as possible. They may also try
 to work for their own personal gain, explore the world freely or engage in trade.
 
-The different states in the fictional world are all opposed to the barbaric regions. Additionally, yhey may freely 
+The different states in the fictional world are all opposed to the barbaric regions. Additionally, they may freely 
 form their relationships with each other, for example by declaring war, making peace and forming alliances.
 
 Hierarchies and political organizations are a core part of the realms in the game. And, as in the real world, a good

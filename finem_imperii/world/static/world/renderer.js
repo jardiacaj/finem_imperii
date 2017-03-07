@@ -2,9 +2,12 @@ function MapRenderer(region_raw_data, focus_region_id) {
 
     var zis = this;
 
+    /* API */
+
     this.region_callback = undefined;
     this.settlement_callback = undefined;
     this.click_callback = undefined;
+
     this.highlight_settlement = function (settlement_id) {
         for (var i = 0; i < region_raw_data.length; i++) {
             var region = region_raw_data[i];
@@ -21,6 +24,8 @@ function MapRenderer(region_raw_data, focus_region_id) {
     this.enable_region_tags = function () {
 
     };
+
+    /* INTERNALS */
 
     zis.init_camera = function () {
         zis.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -119,6 +124,7 @@ function MapRenderer(region_raw_data, focus_region_id) {
     };
 
     zis.mouse_move_listener = function (event) {
+        // it's pointless to do anything if there are no callbacks set
         if(zis.region_callback === undefined && zis.settlement_callback === undefined && zis.click_callback === undefined)
             return;
         // calculate mouse position in normalized device coordinates
@@ -136,23 +142,23 @@ function MapRenderer(region_raw_data, focus_region_id) {
         zis.pick();
     };
 
-    zis.mouse_click_listener = function (event) {
+    zis.mouse_click_listener_notifier = function (event) {
         if (zis.click_callback !== undefined) {
             return zis.click_callback(zis.picked_region, zis.picked_settlement);
         }
     };
 
     zis.notify_region_pick = function (region) {
-        if (region !== zis.picked_region && zis.region_callback !== undefined) {
+        if (region !== zis.picked_region) {
             zis.picked_region = region;
-            return zis.region_callback(region);
+            if (zis.region_callback !== undefined) return zis.region_callback(region);
         }
     };
 
     zis.notify_settlement_pick = function (settlement) {
-        if (settlement !== zis.picked_settlement && zis.settlement_callback !== undefined) {
+        if (settlement !== zis.picked_settlement) {
             zis.picked_settlement = settlement;
-            return zis.settlement_callback(settlement);
+            if (zis.settlement_callback !== undefined) return zis.settlement_callback(settlement);
         }
     };
 
@@ -164,6 +170,7 @@ function MapRenderer(region_raw_data, focus_region_id) {
         var region_intersected = false;
         var settlement_intersected = false;
 
+        // notify only the first intersected element
         for ( var i = 0; i < intersects.length; i++ ) {
 
             var region = intersects[ i ].object.region;
@@ -217,7 +224,7 @@ function MapRenderer(region_raw_data, focus_region_id) {
 
     $(window).on('resize', zis.window_resize_listener);
     $(document).on('mousemove', zis.mouse_move_listener);
-    $(document).on('click', zis.mouse_click_listener);
+    $(document).on('click', zis.mouse_click_listener_notifier);
 
     for (var i = 0; i < region_raw_data.length; i++)  {
         var region = region_raw_data[i];

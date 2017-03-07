@@ -6,8 +6,10 @@
 
     <script>
         $(function () {
-            var map = new MapRenderer({{ regions|safe }}, {{ focused_tile.id }});
-
+            var map = new MapRenderer({{ regions|safe }});
+            map.focus_to_region({{ focused_tile.id }});
+            map.enable_region_tags();
+            map.enable_settlement_tags();
             map.region_callback = window.parent.region_callback;
             map.settlement_callback = window.parent.settlement_callback;
             map.click_callback = window.parent.click_callback;

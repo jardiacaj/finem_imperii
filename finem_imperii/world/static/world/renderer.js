@@ -1,4 +1,4 @@
-function MapRenderer(world_data, focus_region_id) {
+function MapRenderer(world_data) {
 
     var zis = this;
 
@@ -16,6 +16,12 @@ function MapRenderer(world_data, focus_region_id) {
 
     zis.enable_region_tags = function () {
         zis.region_tags_enabled = true;
+        zis.rerender_region_tags()
+    };
+
+    zis.enable_settlement_tags = function () {
+        zis.settlement_tags_enabled = true;
+        zis.rerender_settlement_tags()
     };
 
     /* INTERNALS */
@@ -63,13 +69,6 @@ function MapRenderer(world_data, focus_region_id) {
         mesh.region = region;
 
         zis.scene.add(mesh);
-
-        if (focus_region_id == region.id) {
-            zis.camera.position.x = mesh.position.x;
-            zis.camera.position.y = 4;
-            zis.camera.position.z = mesh.position.z;
-            zis.camera.lookAt(mesh.position);
-        }
     };
 
     zis.render_settlement = function (settlement) {
@@ -88,30 +87,82 @@ function MapRenderer(world_data, focus_region_id) {
     };
 
     zis.render_region_tag = function (region) {
-        zis.camera.updateMatrixWorld();
-        zis.camera.updateProjectionMatrix();
-
-        var width = window.innerWidth, height = window.innerHeight;
-        var widthHalf = width / 2, heightHalf = height / 2;
-
+        var widthHalf = window.innerWidth / 2, heightHalf = window.innerHeight / 2;
         var pos = region.mesh.position.clone();
         pos.y += 0.5;
         pos.project(zis.camera);
         pos.x = ( pos.x * widthHalf ) + widthHalf;
         pos.y = -( pos.y * heightHalf ) + heightHalf;
 
-        if (pos.x < width && pos.y < height) {
+        if (pos.x < window.innerWidth && pos.y < window.innerHeight) {
             var region_tag = document.createElement('div');
             region_tag.style.position = 'absolute';
             region_tag.style.width = "100px";
             region_tag.style.textAlign = "center";
             region_tag.style.height = 100;
             region_tag.style.background = "transparent";
+            region_tag.style.fontWeight = "bold";
             region_tag.innerHTML = region.name;
             region_tag.style.top = pos.y + 'px';
             region_tag.style.left = (pos.x - 50) + 'px';
+            region_tag.className = 'region_tag';
             document.body.appendChild(region_tag);
         }
+    };
+
+    zis.render_settlement_tag = function (settlement) {
+        var widthHalf = window.innerWidth / 2, heightHalf = window.innerHeight / 2;
+        var pos = settlement.mesh.position.clone();
+        pos.z -= 0.12;
+        pos.project(zis.camera);
+        pos.x = ( pos.x * widthHalf ) + widthHalf;
+        pos.y = -( pos.y * heightHalf ) + heightHalf;
+
+        if (pos.x < window.innerWidth && pos.y < window.innerHeight) {
+            var settlement_tag = document.createElement('div');
+            settlement_tag.style.position = 'absolute';
+            settlement_tag.style.width = "100px";
+            settlement_tag.style.textAlign = "center";
+            settlement_tag.style.height = 100;
+            settlement_tag.style.background = "transparent";
+            settlement_tag.innerHTML = settlement.name;
+            settlement_tag.style.top = pos.y + 'px';
+            settlement_tag.style.left = (pos.x - 50) + 'px';
+            settlement_tag.className = 'settlement_tag';
+            document.body.appendChild(settlement_tag);
+        }
+    };
+
+    zis.rerender_region_tags = function () {
+        $('.region_tag').remove();
+
+        zis.camera.updateMatrixWorld();
+        zis.camera.updateProjectionMatrix();
+
+        for (var region_id in zis.regions)  {
+            var region = world_data.regions[region_id];
+            zis.render_region_tag(region);
+        }
+    };
+
+    zis.rerender_settlement_tags = function () {
+        $('.settlement_tag').remove();
+
+        zis.camera.updateMatrixWorld();
+        zis.camera.updateProjectionMatrix();
+
+        for (var settlement_id in zis.settlements)  {
+            var settlement = world_data.settlements[settlement_id];
+            zis.render_settlement_tag(settlement);
+        }
+    };
+
+    zis.focus_to_region = function (region_id) {
+        var region = zis.regions[region_id];
+        zis.camera.position.x = region.mesh.position.x;
+        zis.camera.position.y = 4;
+        zis.camera.position.z = region.mesh.position.z;
+        zis.camera.lookAt(region.mesh.position);
     };
 
     zis.mouse_move_listener = function (event) {
@@ -130,6 +181,8 @@ function MapRenderer(world_data, focus_region_id) {
         zis.camera.updateProjectionMatrix();
         zis.renderer.setSize( window.innerWidth, window.innerHeight );
         zis.render();
+        if(zis.region_tags_enabled) zis.rerender_region_tags();
+        if(zis.settlement_tags_enabled) zis.rerender_settlement_tags();
         zis.pick();
     };
 
@@ -206,6 +259,7 @@ function MapRenderer(world_data, focus_region_id) {
     zis.picked_settlement = undefined;
 
     zis.region_tags_enabled = false;
+    zis.settlement_tags_enabled = false;
 
     /* CONSTRUCTION */
 

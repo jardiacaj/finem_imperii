@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load extra_filters %}
 
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
@@ -38,32 +39,33 @@
                         </ul>
                     </li>
 
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                            Messages
-                            <span class="badge">0</span>
-                            <span class="caret"></span>
-                        </a>
+                    {% if request.hero %}
+                        <li><p class="navbar-text">{{ request.hero.hours_in_turn_left|nice_hours }} left</p></li>
 
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="#">You're fired</a></li>
-                        </ul>
-                    </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                Messages
+                                <span class="badge">0</span>
+                                <span class="caret"></span>
+                            </a>
 
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                            Notifications
-                            <span class="badge">0</span>
-                            <span class="caret"></span>
-                        </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="#">You're fired</a></li>
+                            </ul>
+                        </li>
 
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="#">You're fired</a></li>
-                        </ul>
-                    </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                Notifications
+                                <span class="badge">0</span>
+                                <span class="caret"></span>
+                            </a>
 
-
-                    <li><p class="navbar-text">January 815 I.E.</p></li>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="#">You're fired</a></li>
+                            </ul>
+                        </li>
+                    {% endif %}
 
                 {%  else %}
 

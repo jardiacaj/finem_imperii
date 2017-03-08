@@ -4,23 +4,18 @@
     {% include "base/navbar.html" %}
 
     <div class="container-fluid">
-        {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        {{ message }}
-                    </div>
-                {% endfor %}
-        {% endif %}
 
         {% if request.hero %}
-            <div class="col-xs-12 col-md-3">
-                <p class="text-center highlight">
+            <div class="col-xs-12 col-md-3 well">
+                <p class="text-center">
                     {% if request.hero.oath_sworn_to %}
                         Sworn oath to {{ request.hero.oath_sworn_to }}
                     {% else %}
                         No allegiance sworn.
                     {% endif %}
+                </p>
+                <p class="text-center">
+                    It's {{ request.hero.world.get_current_date }}
                 </p>
                 <p class="text-center">
                     You are in {{ request.hero.location }}, a {{ request.hero.location.size_name }} in
@@ -31,10 +26,15 @@
                         class="placeholder"
                         scrolling="no"
                         style="height: 20vw; min-height: 200px; width: 100%; padding: 0; border: 0;"
-                        src="{% url 'world:minimap' request.hero.world.id request.hero.location.tile_id request.hero.location_id %}"
+                        src="{% url 'world:minimap' %}"
                 ></iframe>
                 <p>
-                    {{ request.hero.location.tile }} is part of {{ request.hero.location.tile.controlled_by }} in
+                    {{ request.hero.location.tile }} is
+                    {% if request.hero.location.tile.controlled_by %}
+                         part of {{ request.hero.location.tile.controlled_by }}
+                    {% else %}
+                        a barbaric region
+                    {% endif %}in
                     <a href="{{ request.hero.world.get_absolute_url }}">{{ request.hero.world }}</a>.
                 </p>
 
@@ -64,7 +64,7 @@
                             <tr><td class="text-center">You own no units.</td></tr>
                         {% endfor %}
                         <tr><td colspan="100%" class="text-center">
-                            <a href="{% url 'world:recruit' %}">To recruitment</a>
+                            <a href="{% url 'world:recruit' %}" class="btn btn-primary btn-sm">To recruitment</a>
                         </td></tr>
                     </tbody>
                 </table>
@@ -74,6 +74,8 @@
             </div>
             <div class="col-xs-12 col-md-9">
         {% endif %}
+
+        {% include 'base/messages.html' %}
 
         {% block content %}{% endblock %}
 

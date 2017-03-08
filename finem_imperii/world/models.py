@@ -1,12 +1,21 @@
 import random
 
 import math
+from collections import namedtuple
+from math import sqrt
+
 from django.core.urlresolvers import reverse
 from django.db import models, transaction
 from django.contrib.auth.models import User
-from django.forms.models import model_to_dict
 
 from name_generator.name_generator import NameGenerator
+from world.turn import TurnProcessor, turn_to_date
+
+Point = namedtuple('Point', ['x', 'z'])
+
+
+def euclidean_distance(p1, p2):
+    return sqrt((p1.x - p2.x)**2 + (p1.z - p2.z)**2)
 
 
 class World(models.Model):
@@ -14,12 +23,16 @@ class World(models.Model):
     description = models.TextField()
     initialized = models.BooleanField(default=False)
     current_turn = models.IntegerField(default=0)
+    blocked_for_turn = models.BooleanField(default=False, help_text="True during turn processing")
 
     def get_violence_monopolies(self):
         return self.organization_set.filter(violence_monopoly=True)
 
     def __str__(self):
         return self.name
+
+    def get_current_date(self):
+        return turn_to_date(self.current_turn)
 
     def get_absolute_url(self):
         return reverse('world:world', kwargs={'world_id': self.id})
@@ -32,6 +45,14 @@ class World(models.Model):
         for tile in self.tile_set.all():
             tile.initialize(name_generator)
         self.initialized = True
+        self.save()
+
+    def pass_turn(self):
+        self.blocked_for_turn = True
+        self.save()
+        turn_processor = TurnProcessor(self)
+        turn_processor.do_turn()
+        self.blocked_for_turn = False
         self.save()
 
 
@@ -79,10 +100,13 @@ class Tile(models.Model):
     def __str__(self):
         return self.name
 
-    def render_for_view(self):
-        result = model_to_dict(self)
-        result['settlements'] = [settlement.render_for_view() for settlement in self.settlement_set.all()]
-        return result
+    def get_absolute_coords(self):
+        return Point(x=self.x_pos, z=self.z_pos)
+
+    def distance_to(self, tile):
+        if self.world != tile.world:
+            raise Exception("Can't calculate distance between worlds")
+        return euclidean_distance(self.get_absolute_coords(), tile.get_absolute_coords())
 
     def initialize(self, name_generator):
         for settlement in self.settlement_set.all():
@@ -95,9 +119,6 @@ class Settlement(models.Model):
     population = models.IntegerField()
     x_pos = models.IntegerField()
     z_pos = models.IntegerField()
-
-    def render_for_view(self):
-        return model_to_dict(self)
 
     def size_name(self):
         if self.population < 10:
@@ -124,6 +145,17 @@ class Settlement(models.Model):
 
     def conscriptable_npcs_male_only(self):
         return self.npc_set.filter(able=True, age_months__gte=16*12, unit__isnull=True, male=True)
+
+    def get_absolute_coords(self):
+        return Point(
+            x=self.tile.x_pos * 100 + self.x_pos,
+            z=self.tile.z_pos * 100 + self.z_pos,
+        )
+
+    def distance_to(self, settlement):
+        if self.tile.world != settlement.tile.world:
+            raise Exception("Can't calculate distance between worlds")
+        return euclidean_distance(self.get_absolute_coords(), settlement.get_absolute_coords())
 
     def initialize(self, name_generator):
         residences = self.building_set.filter(type=Building.RESIDENCE).all()
@@ -227,13 +259,31 @@ class Character(models.Model):
     oath_sworn_to = models.ForeignKey('organization.Organization', null=True, blank=True)
     owner_user = models.ForeignKey(User)
     cash = models.IntegerField(default=0)
-
-    # def get_absolute_url(self):
-    #    return reverse('users:profile', args=[str(self.steam_id)])
+    hours_in_turn_left = models.IntegerField(default=15*24)
+    travel_destination = models.ForeignKey(Settlement, null=True, blank=True, related_name='travellers_heading')
 
     @property
     def activation_url(self):
         return reverse('world:activate_character', kwargs={'char_id': self.id})
+
+    def travel_time(self, target_settlement):
+        distance = self.location.distance_to(target_settlement)
+        if self.location.tile.type == Tile.MOUNTAIN or target_settlement.tile.type == Tile.MOUNTAIN:
+            distance *= 2
+        days = distance / 100 * 2
+        return math.ceil(days * 24)
+
+    def check_travelability(self, target_settlement):
+        if target_settlement == self.location:
+            return "You can't travel to {} as you are already there.".format(target_settlement)
+        if target_settlement.tile.distance_to(self.location.tile) > 1.5:
+            return "You can only travel to contiguous regions."
+        if self.travel_destination is not None and self.travel_destination != target_settlement:
+            return "You cant travel to {} because you are already travelling to {}.".format(
+                target_settlement,
+                self.travel_destination
+            )
+        return None
 
     def __str__(self):
         return self.name

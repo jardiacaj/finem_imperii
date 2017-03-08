@@ -1,11 +1,18 @@
 from django import template
 
+from world.turn import turn_to_date
+
 register = template.Library()
 
 
 @register.filter
 def subtract(value, arg):
     return value - arg
+
+
+@register.filter
+def nice_turn(value):
+    return turn_to_date(value)
 
 
 @register.filter

@@ -8,7 +8,9 @@ from django.core.urlresolvers import reverse
 from django.db import models, transaction
 from django.contrib.auth.models import User
 
+from messaging.models import CharacterNotification
 from name_generator.name_generator import NameGenerator
+from world.templatetags.extra_filters import nice_hours
 from world.turn import TurnProcessor, turn_to_date
 
 Point = namedtuple('Point', ['x', 'z'])
@@ -284,6 +286,24 @@ class Character(models.Model):
                 self.travel_destination
             )
         return None
+
+    def perform_travel(self, destination):
+        travel_time = self.travel_time(destination)
+        self.location = destination
+        self.hours_in_turn_left -= travel_time
+        self.save()
+        return "After {} of travel you have reached {}.".format(nice_hours(travel_time), destination)
+
+    def add_notification(self, category, content):
+        CharacterNotification.objects.create(
+            character=self,
+            content=content,
+            category=category,
+            creation_turn=self.world.current_turn
+        )
+
+    def unread_notifications(self):
+        return self.characternotification_set.filter(read=False).all()
 
     def __str__(self):
         return self.name

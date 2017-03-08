@@ -1,0 +1,17 @@
+{% extends "base/base.html" %}
+
+{% load extra_filters %}
+
+{% block content %}
+
+    <h1 class="page-header">Notifications</h1>
+
+    {% for notification in request.hero.characternotification_set.all reversed %}
+        {% ifchanged %}
+            <h4>{{ notification.creation_turn|nice_turn }}</h4>
+        {% endifchanged %}
+
+        <p>{{ notification.content }}</p>
+    {% endfor %}
+
+{% endblock %}

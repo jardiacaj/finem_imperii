@@ -6,5 +6,6 @@ urlpatterns = [
     url(r'^', include('base.urls', namespace='base'), name='base'),
     url(r'^', include('account.urls', namespace='account'), name='account'),
     url(r'^', include('world.urls', namespace='world'), name='world'),
+    url(r'^', include('messaging.urls', namespace='messaging'), name='messaging'),
     url(r'^battle/', include('battle.urls', namespace='battle'), name='battle'),
 ]

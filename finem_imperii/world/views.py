@@ -188,10 +188,8 @@ class TravelView(View):
 
         if request.hero.location.tile == target_settlement.tile and travel_time <= request.hero.hours_in_turn_left:
             # travel instantly
-            request.hero.location = target_settlement
-            request.hero.hours_in_turn_left -= travel_time
-            request.hero.save()
-            messages.success(request, "You are now in {}".format(target_settlement), extra_tags="success")
+            message = request.hero.perform_travel(target_settlement)
+            messages.success(request, message, extra_tags="success")
             return redirect('world:travel')
         else:
             messages.success(request, "You you will reach {} when the turn ends.".format(target_settlement), extra_tags="success")

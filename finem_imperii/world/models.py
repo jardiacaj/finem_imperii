@@ -206,6 +206,7 @@ class Settlement(models.Model):
                 able=able,
                 age_months=age_months,
                 residence=residences[i % residences.count()],
+                origin=self,
                 location=self,
                 workplace=workplace if able else None,
                 unit=None
@@ -245,6 +246,7 @@ class NPC(models.Model):
     male = models.BooleanField()
     able = models.BooleanField()
     age_months = models.IntegerField()
+    origin = models.ForeignKey(Settlement, related_name='offspring')
     residence = models.ForeignKey(Building, null=True, blank=True, related_name='resident')
     location = models.ForeignKey(Settlement, null=True, blank=True)
     workplace = models.ForeignKey(Building, null=True, blank=True, related_name='worker')

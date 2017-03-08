@@ -4,7 +4,7 @@
 
     <h1 class="page-header">Hi {{ user.username|capfirst }}</h1>
 
-    <div class="col-md-6">
+    <div class="col-md-6 well well-lg">
         {% for message in server_messages %}
             <h2>{{ message.title }}</h2>
             {{ message.html_content|safe }}
@@ -39,18 +39,21 @@
     <div class="col-md-6">
         <h2>Your characters</h2>
         <table class="table table-hover">
-            <thead>
-                <th>Name</th>
-                <th>Location</th>
-                <th>Actions</th>
-            </thead>
-
             <tbody>
                 {% for character in user.character_set.all %}
                     <tr>
-                        <td>{{ character.name }}</td>
-                        <td>{{ character.location }}</td>
-                        <td><a href="{{ character.activation_url }}" class="btn btn-primary">Enter</a></td>
+                        <td style="vertical-align: middle">
+                            {{ character.name }}
+                            {% if character.unread_notifications %}
+                                <span class="badge">{{ character.unread_notifications|length }}</span>
+                            {% endif %}
+                        </td>
+                        <td style="vertical-align: middle">
+                            {{ character.location }}
+                        </td>
+                        <td style="vertical-align: middle" class="text-right">
+                            <a href="{{ character.activation_url }}" class="btn btn-primary">Enter</a>
+                        </td>
                     </tr>
                 {% empty %}
                     <tr><td colspan="100%">You don't have any... yet!</td></tr>

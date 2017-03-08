@@ -1,6 +1,16 @@
 from django.db import models
 
 
+class ServerMOTD(models.Model):
+    class Meta:
+        ordering = ['display_order']
+
+    title = models.TextField()
+    html_content = models.TextField()
+    display_order = models.SmallIntegerField()
+    draft = models.BooleanField(default=True)
+
+
 class CharacterNotification(models.Model):
     class Meta:
         ordering = ['creation_time']

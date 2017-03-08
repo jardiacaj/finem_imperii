@@ -5,6 +5,9 @@ from django.contrib.auth.models import User
 from django.http.response import HttpResponseNotFound
 from django.shortcuts import redirect, render, get_object_or_404
 
+from messaging.models import ServerMOTD
+
+
 def register_view(request):
     if request.user.is_authenticated():
         return redirect('base:home')
@@ -71,5 +74,7 @@ def logout_view(request):
 
 @login_required
 def home(request):
-    context = {'characters': request.user.character_set.all()}
+    context = {
+        'server_messages': ServerMOTD.objects.all() if request.user.is_staff else ServerMOTD.objects.filter(draft=False)
+    }
     return render(request, 'account/home.html', context=context)

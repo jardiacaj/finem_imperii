@@ -58,7 +58,15 @@
                     <tbody>
                         {% for unit in request.hero.worldunit_set.all %}
                             <tr>
-                                <td>{{ unit }}</td>
+                                <td>
+                                    <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
+                                    {{ unit }}
+                                </td>
+                                <td>
+                                    {{ unit.descriptor }}
+                                    <br>
+                                    {{ unit.status|capfirst }}
+                                </td>
                             </tr>
                         {% empty %}
                             <tr><td class="text-center">You own no units.</td></tr>

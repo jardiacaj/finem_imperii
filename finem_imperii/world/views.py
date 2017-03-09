@@ -218,6 +218,15 @@ class RecruitmentView(View):
             except Exception as e:
                 return RecruitmentView.fail_post_with_error(request, str(e))
 
+            if candidates.count() == 0:
+                return RecruitmentView.fail_post_with_error(
+                    request,
+                    "You seem unable to find anyone in {} matching the profile you want".format(request.hero.location)
+                )
+
+            request.hero.hours_in_turn_left -= conscription_time
+            request.hero.save()
+
             unit = WorldUnit.objects.create(
                 owner_character=request.hero,
                 world=request.hero.world,
@@ -236,9 +245,6 @@ class RecruitmentView(View):
             for soldier in soldiers:
                 soldier.unit = unit
                 soldier.save()
-
-            request.hero.hours_in_turn_left -= conscription_time
-            request.hero.save()
 
             messages.success(
                 request,

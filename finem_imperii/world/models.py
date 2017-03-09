@@ -369,3 +369,6 @@ class WorldUnit(models.Model):
 
     def __str__(self):
         return self.name
+
+    def descriptor(self):
+        return "{} {}".format(self.soldier.count(), self.type.capitalize())

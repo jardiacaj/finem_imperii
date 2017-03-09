@@ -60,7 +60,9 @@
                             <tr>
                                 <td>
                                     <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
-                                    {{ unit }}
+                                    <a href="{{ unit.get_absolute_url }}">
+                                        {{ unit }}
+                                    </a>
                                 </td>
                                 <td>
                                     {{ unit.descriptor }}

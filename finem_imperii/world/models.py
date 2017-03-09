@@ -372,3 +372,6 @@ class WorldUnit(models.Model):
 
     def descriptor(self):
         return "{} {}".format(self.soldier.count(), self.type.capitalize())
+
+    def get_absolute_url(self):
+        return reverse('world:unit', kwargs={'unit_id': self.id})

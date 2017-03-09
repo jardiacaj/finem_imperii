@@ -348,3 +348,12 @@ def travel_view_iframe(request, settlement_id=None):
         'target_settlement': target_settlement,
     }
     return render(request, 'world/travel_map_iframe.html', context)
+
+
+@inchar_required
+def unit_view(request, unit_id):
+    unit = get_object_or_404(WorldUnit, id=unit_id)
+    context = {
+        'unit': unit,
+    }
+    return render(request, 'world/view_unit.html', context)

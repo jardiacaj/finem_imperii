@@ -7,6 +7,7 @@ from math import sqrt
 from django.core.urlresolvers import reverse
 from django.db import models, transaction
 from django.contrib.auth.models import User
+from django.db.models.aggregates import Avg
 
 from messaging.models import CharacterNotification
 from name_generator.name_generator import NameGenerator
@@ -375,3 +376,6 @@ class WorldUnit(models.Model):
 
     def get_absolute_url(self):
         return reverse('world:unit', kwargs={'unit_id': self.id})
+
+    def average_fighting_skill(self):
+        return round(self.soldier.all().aggregate(Avg('skill_fighting'))['skill_fighting__avg'])

@@ -17,5 +17,5 @@ urlpatterns = [
     url(r'^world/(?P<world_id>[0-9]+)$', world_view, name='world'),
     url(r'^world_iframe/(?P<world_id>[0-9]+)$', world_view_iframe, name='world_iframe'),
     url(r'^unit/(?P<unit_id>[0-9]+)$', unit_view, name='unit'),
-    url(r'^minimap?$', minimap_view, name='minimap'),
+    url(r'^minimap$', minimap_view, name='minimap'),
 ]

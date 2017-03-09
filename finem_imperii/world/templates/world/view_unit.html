@@ -4,4 +4,37 @@
 
     <h1 class="page-header">{{ unit }}</h1>
 
+    <table class="table table-striped table-hover">
+        <tbody>
+            <tr>
+                <td>Owner</td>
+                <td>{{ unit.owner_character }}</td>
+            </tr>
+            <tr>
+                <td>Soldiers</td>
+                <td>{{ unit.soldier.all|length }}</td>
+            </tr>
+            <tr>
+                <td>Type</td>
+                <td>{{ unit.get_type_display|capfirst }}</td>
+            </tr>
+            <tr>
+                <td>Status</td>
+                <td>{{ unit.get_status_display|capfirst }}</td>
+            </tr>
+            <tr>
+                <td>Location</td>
+                <td>{{ unit.location }} ({{ unit.location.tile }}, {{ unit.location.tile.controlled_by }})</td>
+            </tr>
+            <tr>
+                <td>Recruitment type</td>
+                <td>{{ unit.get_recruitment_type_display|capfirst }}</td>
+            </tr>
+            <tr>
+                <td>Average skill</td>
+                <td>{{ unit.average_fighting_skill }}%</td>
+            </tr>
+        </tbody>
+    </table>
+
 {% endblock %}

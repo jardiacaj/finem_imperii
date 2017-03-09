@@ -121,7 +121,7 @@ class RecruitmentView(View):
     @staticmethod
     def build_population_query(request, prefix):
 
-        candidates = request.hero.location.npc_set.filter(able=True)
+        candidates = request.hero.location.npc_set.filter(able=True, unit=None)
         if request.POST.get('{}men'.format(prefix)) and request.POST.get('{}women'.format(prefix)):
             pass
         elif request.POST.get('{}men'.format(prefix)) and not request.POST.get('{}women'.format(prefix)):
@@ -178,10 +178,11 @@ class RecruitmentView(View):
 
     @transaction.atomic
     def post(self, request, *args, **kwargs):
-        if request.POST.get('recruitment_type') in ('conscription', 'professional'):
-            if request.POST.get('recruitment_type') == 'conscription':
+        recruitment_type = request.POST.get('recruitment_type')
+        if recruitment_type in ('conscription', 'professional'):
+            if recruitment_type == 'conscription':
                 prefix = 'conscript_'
-            elif request.POST.get('recruitment_type') == 'professional':
+            elif recruitment_type == 'professional':
                 prefix = 'professional_'
 
             # get soldier count
@@ -202,7 +203,8 @@ class RecruitmentView(View):
                 )
 
             # check unit type
-            if request.POST.get('{}unit_type'.format(prefix)) not in WorldUnit.get_unit_types(nice=True):
+            unit_type = request.POST.get('{}unit_type'.format(prefix))
+            if unit_type not in WorldUnit.get_unit_types(nice=True):
                 return RecruitmentView.fail_post_with_error(request, "Invalid unit type")
 
             # check payment
@@ -216,9 +218,34 @@ class RecruitmentView(View):
             except Exception as e:
                 return RecruitmentView.fail_post_with_error(request, str(e))
 
+            unit = WorldUnit.objects.create(
+                owner_character=request.hero,
+                world=request.hero.world,
+                location=request.hero.location,
+                name="New unit from {}".format(request.hero.location),
+                recruitment_type=recruitment_type,
+                type=unit_type,
+                status=WorldUnit.NOT_MOBILIZED,
+            )
+
+            if target_soldier_count < candidates.count():
+                soldiers = random.sample(list(candidates), target_soldier_count)
+            else:
+                soldiers = list(candidates)
+
+            for soldier in soldiers:
+                soldier.unit = unit
+                soldier.save()
+
             request.hero.hours_in_turn_left -= conscription_time
             request.hero.save()
 
+            messages.success(
+                request,
+                "You formed a new unit of {} called {}".format(len(soldiers), unit.name),
+                "success"
+            )
+            return redirect('world:recriut')
 
         else:
             pass

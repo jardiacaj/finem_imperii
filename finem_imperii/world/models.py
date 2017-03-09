@@ -316,11 +316,11 @@ class Character(models.Model):
 
 
 class WorldUnit(models.Model):
-    CONSCRIPTED = 'conscripted'
+    CONSCRIPTION = 'conscription'
     PROFESSIONAL = 'professional'
     MERCENARY = 'mercenary'
     RECTRUITMENT_CHOICES = (
-        (CONSCRIPTED, CONSCRIPTED),
+        (CONSCRIPTION, CONSCRIPTION),
         (PROFESSIONAL, PROFESSIONAL),
         (MERCENARY, MERCENARY),
     )
@@ -342,12 +342,26 @@ class WorldUnit(models.Model):
         (RAM, RAM),
     )
 
-    owner_character = models.ForeignKey(Character)
+    NOT_MOBILIZED = 'not mobilized'
+    TRAINING = 'training'
+    STANDING = 'standing'
+    FOLLOWING = 'following'
+    CUSTOMER_SEARCH = 'customer search'
+    STATUS_CHOICES = (
+        (NOT_MOBILIZED, NOT_MOBILIZED),
+        (TRAINING, TRAINING),
+        (STANDING, STANDING),
+        (FOLLOWING, FOLLOWING),
+        (CUSTOMER_SEARCH, CUSTOMER_SEARCH),
+    )
+
+    owner_character = models.ForeignKey(Character, blank=True, null=True)
     world = models.ForeignKey(World)
-    region = models.ForeignKey(Tile)
+    location = models.ForeignKey(Settlement)
     name = models.CharField(max_length=100)
     recruitment_type = models.CharField(max_length=30, choices=RECTRUITMENT_CHOICES)
     type = models.CharField(max_length=30, choices=TYPE_CHOICES)
+    status = models.CharField(max_length=30, choices=STATUS_CHOICES)
 
     @staticmethod
     def get_unit_types(nice=False):

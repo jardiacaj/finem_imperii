@@ -251,7 +251,7 @@ class RecruitmentView(View):
                 "You formed a new unit of {} called {}".format(len(soldiers), unit.name),
                 "success"
             )
-            return redirect('world:recriut')
+            return redirect('world:recruit')
 
         else:
             pass
@@ -357,3 +357,12 @@ def unit_view(request, unit_id):
         'unit': unit,
     }
     return render(request, 'world/view_unit.html', context)
+
+
+@inchar_required
+def unit_rename(request, unit_id):
+    unit = get_object_or_404(WorldUnit, id=unit_id, owner_character=request.hero)
+    if request.POST.get('name'):
+        unit.name = request.POST.get('name')
+        unit.save()
+    return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))

@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.db import transaction
+from django.db.models.query_utils import Q
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic.base import View
 
@@ -107,7 +108,7 @@ class RecruitmentView(View):
 
     def get(self, request, *args, **kwargs):
         context = {
-            'unit_types': (unit_type[1] for unit_type in WorldUnit.TYPE_CHOICES)
+            'unit_types': WorldUnit.get_unit_types(nice=True)
         }
         return render(request, self.template_name, context)
 
@@ -116,9 +117,79 @@ class RecruitmentView(View):
         messages.add_message(request, messages.ERROR, message, extra_tags='danger')
         return redirect('world:recruit')
 
+    @staticmethod
+    def build_population_query(request):
+        if request.POST.get('recruitment_type') == 'conscription':
+            prefix = 'conscript_'
+        elif request.POST.get('recruitment_type') == 'professional':
+            prefix = 'professional_'
+
+        candidates = request.hero.location.npc_set.filter(able=True)
+        if request.POST.get('{}men'.format(prefix)) and request.POST.get('{}women'.format(prefix)):
+            pass
+        elif request.POST.get('{}men'.format(prefix)) and not request.POST.get('{}women'.format(prefix)):
+            candidates = candidates.filter(male=True)
+        elif not request.POST.get('{}men'.format(prefix)) and request.POST.get('{}women'.format(prefix)):
+            candidates = candidates.filter(male=False)
+        elif not request.POST.get('{}men'.format(prefix)) and not request.POST.get('{}women'.format(prefix)):
+            raise Exception("You must choose at least one gender.")
+
+        if request.POST.get('{}trained'.format(prefix)) and request.POST.get('{}untrained'.format(prefix)):
+            pass
+        elif request.POST.get('{}trained'.format(prefix)) and not request.POST.get('{}untrained'.format(prefix)):
+            candidates = candidates.filter(trained_soldier=True)
+        elif not request.POST.get('{}trained'.format(prefix)) and request.POST.get('{}untrained'.format(prefix)):
+            candidates = candidates.filter(trained_soldier=False)
+        elif not request.POST.get('{}trained'.format(prefix)) and not request.POST.get('{}untrained'.format(prefix)):
+            raise Exception("You must choose at least one training group.")
+
+        skill_queries = []
+        if request.POST.get('{}skill_high'.format(prefix)):
+            skill_queries.append(Q(skill_fighting__gte=70))
+        if request.POST.get('{}skill_medium'.format(prefix)):
+            skill_queries.append(Q(skill_fighting__gte=35, skill_fighting__lt=70))
+        if request.POST.get('{}skill_low'.format(prefix)):
+            skill_queries.append(Q(skill_fighting__lt=35))
+        if len(skill_queries) == 0:
+            raise Exception("You must choose at least one skill group")
+
+        # See https://stackoverflow.com/questions/852414/how-to-dynamically-compose-an-or-query-filter-in-django
+        query = skill_queries.pop()
+        for item in skill_queries:
+            query |= item
+        candidates.filter(query)
+
+        age_queries = []
+        if request.POST.get('{}age_old'.format(prefix)):
+            age_queries.append(Q(age_months__gte=50*12))
+        if request.POST.get('{}age_middle'.format(prefix)):
+            age_queries.append(Q(age_months__gte=35*12, age_months__lt=50*12))
+        if request.POST.get('{}age_young'.format(prefix)):
+            age_queries.append(Q(age_months__gte=18*12, age_months__lt=35*12))
+        if request.POST.get('{}age_very_young'.format(prefix)):
+            age_queries.append(Q(age_months__gte=12*12, age_months__lt=18*12))
+        if len(skill_queries) == 0:
+            raise Exception("You must choose at least one age group")
+
+        # See https://stackoverflow.com/questions/852414/how-to-dynamically-compose-an-or-query-filter-in-django
+        query = age_queries.pop()
+        for item in age_queries:
+            query |= item
+        candidates.filter(query)
+
+        return candidates
+
     @transaction.atomic
     def post(self, request, *args, **kwargs):
-        pass
+
+        if request.POST.get('recruitment_type') in ('conscription', 'professional'):
+            try:
+                candidates = RecruitmentView.build_population_query(request)
+            except Exception as e:
+                return RecruitmentView.fail_post_with_error(request, str(e))
+            return RecruitmentView.fail_post_with_error(request, "Selected {}".format(candidates.count()))
+        else:
+            pass
 
 
 @login_required

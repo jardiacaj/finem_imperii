@@ -1,5 +1,7 @@
 {% extends "base/base.html" %}
 
+{% load extra_filters %}
+
 {% block content %}
 
     <h1 class="page-header">Recruitment</h1>
@@ -34,15 +36,18 @@
 
         <p>Conscripting soldiers from {{ request.hero.location }}.</p>
 
+        <p>
+            This will take you {{ request.hero.location.base_conscription_cost|nice_hours }} plus one hour for each five
+            soldiers to conscript.
+        </p>
+
         <form class="form-horizontal" role="form" method="post">
             {% csrf_token %}
+            <input type="hidden" name="recruitment_type" value="conscription">
 
             <div class="form-group">
-                <label for="conscript_filter">Candidates</label>
-                <select class="form-control" id="conscript_filter" name="conscript_filter">
-                    <option value="everyone">Able-bodied men and women ({{ request.hero.location.conscriptable_npcs|length }})</option>
-                    <option value="everyone">Able-bodied men ({{ request.hero.location.conscriptable_npcs_male_only|length }})</option>
-                </select>
+                <label for="conscript_count">Max soldier count (unit size)</label>
+                <input class="form-control" id="conscript_count" name="conscript_count" type="number" min="1">
             </div>
 
             <div class="form-group">
@@ -55,8 +60,64 @@
             </div>
 
             <div class="form-group">
-                <label for="conscript_count">Unit size</label>
-                <input class="form-control" id="conscript_count" name="conscript_count" type="number" min="1">
+                <label for="conscript_pay">Payment</label>
+                <select class="form-control" id="conscript_pay" name="conscript_pay">
+                    <option value="2">No pay</option>
+                    <option value="2">Very low pay (1 coin per month)</option>
+                    <option value="2">Low pay (2 coins per month)</option>
+                    <option value="3" selected="selected">Normal pay (3 coins per month)</option>
+                    <option value="4">High pay (4 coins per month)</option>
+                    <option value="5">Higher pay (5 coins per month)</option>
+                    <option value="6">Double pay (6 coins per month)</option>
+                    <option value="9">Triple pay (9 coins per month)</option>
+                </select>
+            </div>
+
+            <h4>Conscripts profile</h4>
+
+            <div class="form-group">
+                <h6>Gender</h6>
+                <input type="checkbox" name="conscript_men" id="conscript_men" checked="checked">
+                <label for="conscript_men">Men</label>
+                <br>
+                <input type="checkbox" name="conscript_women" id="conscript_women">
+                <label for="conscript_women">Women</label>
+            </div>
+
+            <div class="form-group">
+                <h6>Training</h6>
+                <input type="checkbox" name="conscript_trained" id="conscript_trained" checked="checked">
+                <label for="conscript_trained">Trained</label>
+                <br>
+                <input type="checkbox" name="conscript_untrained" id="conscript_untrained" checked="checked">
+                <label for="conscript_untrained">Untrained</label>
+            </div>
+
+            <div class="form-group">
+                <h6>Ability</h6>
+                <input type="checkbox" name="conscript_skill_high" id="conscript_skill_high" checked="checked">
+                <label for="conscript_skill_high">High skill</label>
+                <br>
+                <input type="checkbox" name="conscript_skill_medium" id="conscript_skill_medium" checked="checked">
+                <label for="conscript_skill_medium">Average skill</label>
+                <br>
+                <input type="checkbox" name="conscript_skill_low" id="conscript_skill_low" checked="checked">
+                <label for="conscript_skill_low">Low skill</label>
+            </div>
+
+            <div class="form-group">
+                <h6>Age</h6>
+                <input type="checkbox" name="conscript_age_old" id="conscript_age_old">
+                <label for="conscript_age_old">Old age</label>
+                <br>
+                <input type="checkbox" name="conscript_age_middle" id="conscript_age_middle" checked="checked">
+                <label for="conscript_age_middle">Middle age</label>
+                <br>
+                <input type="checkbox" name="conscript_age_young" id="conscript_age_young" checked="checked">
+                <label for="conscript_age_young">Young age</label>
+                <br>
+                <input type="checkbox" name="conscript_age_very_young" id="conscript_age_very_young">
+                <label for="conscript_age_very_young">Very young age</label>
             </div>
 
             <div class="form-group text-center">
@@ -69,6 +130,7 @@
         <h4>Professional unit</h4>
         <form class="form-horizontal" role="form" method="post">
             {% csrf_token %}
+            <input type="hidden" name="recruitment_type" value="professional">
 
         </form>
     </div>
@@ -77,6 +139,7 @@
         <h4>Mercenaries</h4>
         <form class="form-horizontal" role="form" method="post">
             {% csrf_token %}
+            <input type="hidden" name="recruitment_type" value="mercenaries">
 
         </form>
     </div>

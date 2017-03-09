@@ -142,11 +142,8 @@ class Settlement(models.Model):
     def __str__(self):
         return self.name
 
-    def conscriptable_npcs(self):
-        return self.npc_set.filter(able=True, age_months__gte=16*12, unit__isnull=True)
-
-    def conscriptable_npcs_male_only(self):
-        return self.npc_set.filter(able=True, age_months__gte=16*12, unit__isnull=True, male=True)
+    def base_conscription_cost(self):
+        return math.ceil(math.log10(self.population) * 12)
 
     def get_absolute_coords(self):
         return Point(
@@ -174,17 +171,17 @@ class Settlement(models.Model):
 
             over_sixty = (random.getrandbits(4) == 0)
             if over_sixty:
-                age_months = random.randrange(60 * 12, 90 * 12)
+                age_months = random.randint(60 * 12, 90 * 12)
                 able = random.getrandbits(1)
             else:
-                age_months = random.randrange(0, 60 * 12)
+                age_months = random.randint(0, 60 * 12)
                 able = (random.getrandbits(7) != 0)
 
             if able:
                 assigned_workers += 1
                 if assigned_workers < self.population / 4 or total_other_workplaces == 0:  # we assign 75% of population to fields
                     # we do a weighted assignment
-                    pos = random.randrange(total_field_workplaces)
+                    pos = random.randint(0, total_field_workplaces)
                     cumulative = 0
                     for field in fields:
                         cumulative += field.max_employment()
@@ -192,7 +189,7 @@ class Settlement(models.Model):
                             break
                     workplace = field
                 else:
-                    pos = random.randrange(total_other_workplaces)
+                    pos = random.randint(0, total_other_workplaces)
                     cumulative = 0
                     for other_workplace in other_workplaces:
                         cumulative += other_workplace.max_employment()
@@ -209,7 +206,9 @@ class Settlement(models.Model):
                 origin=self,
                 location=self,
                 workplace=workplace if able else None,
-                unit=None
+                unit=None,
+                trained_soldier=(random.getrandbits(4) == 0),
+                skill_fighting=random.randint(0, 80)
             )
 
 
@@ -251,6 +250,8 @@ class NPC(models.Model):
     location = models.ForeignKey(Settlement, null=True, blank=True)
     workplace = models.ForeignKey(Building, null=True, blank=True, related_name='worker')
     unit = models.ForeignKey('WorldUnit', null=True, blank=True, related_name='soldier')
+    trained_soldier = models.BooleanField(default=None)
+    skill_fighting = models.IntegerField()
 
     def __str__(self):
         return self.name
@@ -344,6 +345,10 @@ class WorldUnit(models.Model):
     name = models.CharField(max_length=100)
     recruitment_type = models.CharField(max_length=30, choices=RECTRUITMENT_CHOICES)
     type = models.CharField(max_length=30, choices=TYPE_CHOICES)
+
+    @staticmethod
+    def get_unit_types(nice=False):
+        return (unit_type[1 if nice else 0] for unit_type in WorldUnit.TYPE_CHOICES)
 
     def __str__(self):
         return self.name

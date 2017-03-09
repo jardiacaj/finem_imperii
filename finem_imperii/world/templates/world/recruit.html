@@ -51,8 +51,8 @@
             </div>
 
             <div class="form-group">
-                <label for="conscript_type">Unit type</label>
-                <select class="form-control" id="conscript_filter" name="conscript_filter">
+                <label for="conscript_unit_type">Unit type</label>
+                <select class="form-control" id="conscript_unit_type" name="conscript_unit_type">
                     {% for type in unit_types %}
                         <option value="{{ type }}">{{ type|capfirst }}</option>
                     {% endfor %}
@@ -69,7 +69,6 @@
                     <option value="4">High pay (4 coins per month)</option>
                     <option value="5">Higher pay (5 coins per month)</option>
                     <option value="6">Double pay (6 coins per month)</option>
-                    <option value="9">Triple pay (9 coins per month)</option>
                 </select>
             </div>
 

@@ -15,6 +15,7 @@ from name_generator.name_generator import NameGenerator
 from organization.models import Organization
 from world.models import Character, World, Settlement, Tile, WorldUnit
 from world.renderer import render_world_for_view
+from world.templatetags.extra_filters import nice_hours
 
 
 def world_view(request, world_id):
@@ -118,11 +119,7 @@ class RecruitmentView(View):
         return redirect('world:recruit')
 
     @staticmethod
-    def build_population_query(request):
-        if request.POST.get('recruitment_type') == 'conscription':
-            prefix = 'conscript_'
-        elif request.POST.get('recruitment_type') == 'professional':
-            prefix = 'professional_'
+    def build_population_query(request, prefix):
 
         candidates = request.hero.location.npc_set.filter(able=True)
         if request.POST.get('{}men'.format(prefix)) and request.POST.get('{}women'.format(prefix)):
@@ -181,13 +178,48 @@ class RecruitmentView(View):
 
     @transaction.atomic
     def post(self, request, *args, **kwargs):
-
         if request.POST.get('recruitment_type') in ('conscription', 'professional'):
+            if request.POST.get('recruitment_type') == 'conscription':
+                prefix = 'conscript_'
+            elif request.POST.get('recruitment_type') == 'professional':
+                prefix = 'professional_'
+
+            # get soldier count
             try:
-                candidates = RecruitmentView.build_population_query(request)
+                target_soldier_count = int(request.POST.get('{}count'.format(prefix)))
+                if not target_soldier_count > 0:
+                    raise Exception
+            except:
+                return RecruitmentView.fail_post_with_error(request, "Invalid number of soldiers.")
+
+            # calculate time
+            conscription_time = request.hero.location.conscription_time(target_soldier_count)
+
+            if request.hero.hours_in_turn_left < conscription_time:
+                return RecruitmentView.fail_post_with_error(
+                    request,
+                    "You would need {} to do this, but you don't have that much time left in this turn.".format(nice_hours(conscription_time))
+                )
+
+            # check unit type
+            if request.POST.get('{}unit_type'.format(prefix)) not in WorldUnit.get_unit_types(nice=True):
+                return RecruitmentView.fail_post_with_error(request, "Invalid unit type")
+
+            # check payment
+            pay = int(request.POST.get('{}pay'.format(prefix)))
+            if pay not in range(1, 7):
+                return RecruitmentView.fail_post_with_error(request, "Invalid payment")
+
+            # get candidates
+            try:
+                candidates = RecruitmentView.build_population_query(request, prefix)
             except Exception as e:
                 return RecruitmentView.fail_post_with_error(request, str(e))
-            return RecruitmentView.fail_post_with_error(request, "Selected {}".format(candidates.count()))
+
+            request.hero.hours_in_turn_left -= conscription_time
+            request.hero.save()
+
+
         else:
             pass
 

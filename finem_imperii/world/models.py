@@ -455,3 +455,5 @@ class WorldUnit(models.Model):
                 raise WorldUnitStatusChangeException("Cannot mobilize {} the same turn it has been demobilized".format(self))
         if new_status == WorldUnit.FOLLOWING and self.owner_character.location != self.location:
             raise WorldUnitStatusChangeException("A unit can only follow you if you are in the same location.")
+        self.status = new_status
+        self.save()

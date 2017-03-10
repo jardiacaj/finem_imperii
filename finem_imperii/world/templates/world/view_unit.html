@@ -127,89 +127,154 @@
         </div>
     </div>
 
-    <div class="col-sm-6 col-md-3 well">
-        <canvas id="gender_chart"></canvas>
-        <script>
-            var ctx = $('#gender_chart');
-            var data = {
-                labels: ["Female", "Male",],
-                datasets: [
-                    {
-                        data: [222, 33],
-                        backgroundColor: ["#6AFF68", "#FAFF74", ],
-                        hoverBackgroundColor: ["#6AFF68",  "#FAFF74", ]
-                    }]
-            };
-            var my_gender_chart = new Chart(ctx,{type: 'pie', data: data, options: {}});
-        </script>
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">Gender</div>
+            <div class="panel-body">
+                <canvas id="gender_chart"></canvas>
+                <script>
+                    var ctx = $('#gender_chart');
+                    var data = {
+                        labels: [
+                            {% for key,value in unit.soldier.gender_distribution.items %}
+                                "{{ key|capfirst }}",
+                            {% endfor %}
+                        ],
+                        datasets: [
+                            {
+                                data: [
+                                    {% for key,value in unit.soldier.gender_distribution.items %}
+                                        {{ value }},
+                                    {% endfor %}
+                                ],
+                                backgroundColor: ["#6AFF68", "#FAFF74", ],
+                                hoverBackgroundColor: ["#6AFF68",  "#FAFF74", ]
+                            }]
+                    };
+                    var my_gender_chart = new Chart(ctx,{type: 'pie', data: data, options: {}});
+                </script>
+            </div>
+        </div>
     </div>
 
-    <div class="col-sm-6 col-md-3 well">
-        <canvas id="training_chart"></canvas>
-        <script>
-            var ctx = $('#training_chart');
-            var data = {
-                labels: ["High skill", "Average skill", "Low skill"],
-                datasets: [
-                    {
-                        data: [222, 33, 12],
-                        backgroundColor: ["#FF5654", "#6AFF68", "#FAFF74"],
-                        hoverBackgroundColor: ["#FF5654", "#6AFF68", "#FAFF74"],
-                    }]
-            };
-            var my_gender_chart = new Chart(ctx,{type: 'pie', data: data, options: {}});
-        </script>
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">Gender</div>
+            <div class="panel-body">
+                <canvas id="skill_chart"></canvas>
+                <script>
+                    var ctx = $('#skill_chart');
+                    var data = {
+                        labels: [
+                            {% for key,value in unit.soldier.skill_distribution.items %}
+                                "{{ key|capfirst }}",
+                            {% endfor %}
+                        ],
+                        datasets: [
+                            {
+                                data: [
+                                    {% for key,value in unit.soldier.skill_distribution.items %}
+                                        {{ value }},
+                                    {% endfor %}
+                                ],
+                                backgroundColor: ["#FF5654", "#FAFF74", "#6AFF68"],
+                                hoverBackgroundColor: ["#FF5654", "#FAFF74", "#6AFF68"],
+                            }]
+                    };
+                    var my_skill_chart = new Chart(ctx,{type: 'pie', data: data, options: {}});
+                </script>
+            </div>
+        </div>
     </div>
 
-    <div class="col-md-3 well">
-        <canvas id="age_chart"></canvas>
-        <script>
-            var ctx = $('#age_chart');
-            var data = {
-                labels: ["Very young", "Young", "Middle", "Old"],
-                datasets: [
-                    {
-                        data: [222, 33, 12, 31],
-                        backgroundColor: ["#6AFF68", "#FF5654", "#6AFF68", "#FAFF74"],
-                        hoverBackgroundColor: ["#6AFF68", "#FF5654", "#6AFF68", "#FAFF74"],
-                    }]
-            };
-            var my_gender_chart = new Chart(ctx,{type: 'pie', data: data, options: {}});
-        </script>
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">Gender</div>
+            <div class="panel-body">
+                <canvas id="age_chart"></canvas>
+                <script>
+                    var ctx = $('#age_chart');
+                    var data = {
+                        labels: [
+                            {% for key,value in unit.soldier.age_distribution.items %}
+                                "{{ key|capfirst }}",
+                            {% endfor %}
+                        ],
+                        datasets: [
+                            {
+                                data: [
+                                    {% for key,value in unit.soldier.age_distribution.items %}
+                                        {{ value }},
+                                    {% endfor %}
+                                ],
+                                backgroundColor: ["#FF5654", "#FAFF74", "#6AFF68", "#FAFF74", "#6AFF68"],
+                                hoverBackgroundColor: ["#FF5654", "#FAFF74", "#6AFF68", "#FAFF74", "#6AFF68"],
+                            }]
+                    };
+                    var my_age_chart = new Chart(ctx,{type: 'pie', data: data, options: {}});
+                </script>
+            </div>
+        </div>
     </div>
 
-    <div class="col-md-3 well">
-        <canvas id="professionality_chart"></canvas>
-        <script>
-            var ctx = $('#professionality_chart');
-            var data = {
-                labels: ["Professional", "Non-professional"],
-                datasets: [
-                    {
-                        data: [222, 33],
-                        backgroundColor: ["#6AFF68", "#FF5654"],
-                        hoverBackgroundColor: ["#6AFF68", "#FF5654"],
-                    }]
-            };
-            var my_gender_chart = new Chart(ctx,{type: 'pie', data: data, options: {}});
-        </script>
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">Gender</div>
+            <div class="panel-body">
+                <canvas id="professionality_chart"></canvas>
+                <script>
+                    var ctx = $('#professionality_chart');
+                    var data = {
+                        labels: [
+                            {% for key,value in unit.soldier.professionality_distribution.items %}
+                                "{{ key|capfirst }}",
+                            {% endfor %}
+                        ],
+                        datasets: [
+                            {
+                                data: [
+                                    {% for key,value in unit.soldier.professionality_distribution.items %}
+                                        {{ value }},
+                                    {% endfor %}
+                                ],
+                                backgroundColor: ["#FF5654", "#6AFF68", ],
+                                hoverBackgroundColor: ["#FF5654",  "#6AFF68", ]
+                            }]
+                    };
+                    var my_professionality_chart = new Chart(ctx,{type: 'pie', data: data, options: {}});
+                </script>
+            </div>
+        </div>
     </div>
 
-    <div class="col-md-3 well">
-        <canvas id="origin_chart"></canvas>
-        <script>
-            var ctx = $('#origin_chart');
-            var data = {
-                labels: ["Valley", "Iadar"],
-                datasets: [
-                    {
-                        data: [222, 33],
-                        backgroundColor: ["#6AFF68", "#FF5654"],
-                        hoverBackgroundColor: ["#6AFF68", "#FF5654"],
-                    }]
-            };
-            var my_gender_chart = new Chart(ctx,{type: 'pie', data: data, options: {}});
-        </script>
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">Gender</div>
+            <div class="panel-body">
+                <canvas id="origin_chart"></canvas>
+                <script>
+                    var ctx = $('#origin_chart');
+                    var data = {
+                        labels: [
+                            {% for key,value in unit.soldier.origin_distribution.items %}
+                                "{{ key|capfirst }}",
+                            {% endfor %}
+                        ],
+                        datasets: [
+                            {
+                                data: [
+                                    {% for key,value in unit.soldier.origin_distribution.items %}
+                                        {{ value }},
+                                    {% endfor %}
+                                ],
+                                backgroundColor: ["#FF5654", "#6AFF68", ],
+                                hoverBackgroundColor: ["#FF5654",  "#6AFF68", ]
+                            }]
+                    };
+                    var my_origin_chart = new Chart(ctx,{type: 'pie', data: data, options: {}});
+                </script>
+            </div>
+        </div>
     </div>
 
 {% endblock %}

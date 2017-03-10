@@ -13,7 +13,7 @@ from battle.models import Battle
 from decorators import inchar_required
 from name_generator.name_generator import NameGenerator
 from organization.models import Organization
-from world.models import Character, World, Settlement, Tile, WorldUnit, WorldUnitStatusChangeException
+from world.models import Character, World, Settlement, Tile, WorldUnit, WorldUnitStatusChangeException, NPC
 from world.renderer import render_world_for_view
 from world.templatetags.extra_filters import nice_hours
 
@@ -142,11 +142,11 @@ class RecruitmentView(View):
 
         skill_queries = []
         if request.POST.get('{}skill_high'.format(prefix)):
-            skill_queries.append(Q(skill_fighting__gte=70))
+            skill_queries.append(Q(skill_fighting__gte=NPC.TOP_SKILL_LIMIT))
         if request.POST.get('{}skill_medium'.format(prefix)):
-            skill_queries.append(Q(skill_fighting__gte=35, skill_fighting__lt=70))
+            skill_queries.append(Q(skill_fighting__gte=NPC.MEDIUM_SKILL_LIMIT, skill_fighting__lt=NPC.TOP_SKILL_LIMIT))
         if request.POST.get('{}skill_low'.format(prefix)):
-            skill_queries.append(Q(skill_fighting__lt=35))
+            skill_queries.append(Q(skill_fighting__lt=NPC.MEDIUM_SKILL_LIMIT))
         if len(skill_queries) == 0:
             raise Exception("You must choose at least one skill group")
 
@@ -158,13 +158,13 @@ class RecruitmentView(View):
 
         age_queries = []
         if request.POST.get('{}age_old'.format(prefix)):
-            age_queries.append(Q(age_months__gte=50*12))
+            age_queries.append(Q(age_months__gte=NPC.OLD_AGE_LIMIT))
         if request.POST.get('{}age_middle'.format(prefix)):
-            age_queries.append(Q(age_months__gte=35*12, age_months__lt=50*12))
+            age_queries.append(Q(age_months__gte=NPC.MIDDLE_AGE_LIMIT, age_months__lt=NPC.OLD_AGE_LIMIT))
         if request.POST.get('{}age_young'.format(prefix)):
-            age_queries.append(Q(age_months__gte=18*12, age_months__lt=35*12))
+            age_queries.append(Q(age_months__gte=NPC.YOUNG_AGE_LIMIT, age_months__lt=NPC.MIDDLE_AGE_LIMIT))
         if request.POST.get('{}age_very_young'.format(prefix)):
-            age_queries.append(Q(age_months__gte=12*12, age_months__lt=18*12))
+            age_queries.append(Q(age_months__gte=NPC.VERY_YOUNG_AGE_LIMIT, age_months__lt=NPC.YOUNG_AGE_LIMIT))
         if len(skill_queries) == 0:
             raise Exception("You must choose at least one age group")
 
@@ -357,6 +357,7 @@ def unit_view(request, unit_id):
     unit = get_object_or_404(WorldUnit, id=unit_id)
     context = {
         'unit': unit,
+        'origins': unit.soldier.origin_distribution()
     }
     return render(request, 'world/view_unit.html', context)
 

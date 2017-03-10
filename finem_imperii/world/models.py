@@ -1,13 +1,13 @@
 import random
 
 import math
-from collections import namedtuple
+from collections import namedtuple, defaultdict
 from math import sqrt
 
 from django.core.urlresolvers import reverse
 from django.db import models, transaction
 from django.contrib.auth.models import User
-from django.db.models.aggregates import Avg
+from django.db.models.aggregates import Avg, Count
 
 from messaging.models import CharacterNotification
 from name_generator.name_generator import NameGenerator
@@ -211,7 +211,7 @@ class Settlement(models.Model):
                 location=self,
                 workplace=workplace if able else None,
                 unit=None,
-                trained_soldier=(random.getrandbits(4) == 0),
+                trained_soldier=(random.getrandbits(4) == 0) if s >= NPC.VERY_YOUNG_AGE_LIMIT else False,
                 skill_fighting=random.randint(0, 80)
             )
 
@@ -244,7 +244,55 @@ class Building(models.Model):
             return math.ceil(self.quantity / 2)
 
 
+class NPCManager(models.Manager):
+    def gender_distribution(self):
+        return {
+            'female': self.get_queryset().filter(male=False).count(),
+            'male': self.get_queryset().filter(male=True).count()
+        }
+
+    def skill_distribution(self):
+        return {
+            'high skill': self.get_queryset().filter(skill_fighting__gte=NPC.TOP_SKILL_LIMIT).count(),
+            'medium skill': self.get_queryset().filter(skill_fighting__gte=NPC.MEDIUM_SKILL_LIMIT, skill_fighting__lt=NPC.TOP_SKILL_LIMIT).count(),
+            'low skill': self.get_queryset().filter(skill_fighting__lt=NPC.MEDIUM_SKILL_LIMIT).count(),
+        }
+
+    def age_distribution(self):
+        return {
+            'too young': self.get_queryset().filter(age_months__lt=NPC.VERY_YOUNG_AGE_LIMIT).count(),
+            'very young': self.get_queryset().filter(age_months__gte=NPC.VERY_YOUNG_AGE_LIMIT, age_months__lt=NPC.YOUNG_AGE_LIMIT).count(),
+            'young': self.get_queryset().filter(age_months__gte=NPC.YOUNG_AGE_LIMIT, age_months__lt=NPC.MIDDLE_AGE_LIMIT).count(),
+            'middle age': self.get_queryset().filter(age_months__gte=NPC.MIDDLE_AGE_LIMIT, age_months__lt=NPC.OLD_AGE_LIMIT).count(),
+            'old': self.get_queryset().filter(age_months__gte=NPC.OLD_AGE_LIMIT).count(),
+        }
+
+    def professionality_distribution(self):
+        return {
+            'professional': self.get_queryset().filter(trained_soldier=True).count(),
+            'non-professional': self.get_queryset().filter(trained_soldier=False).count()
+        }
+
+    def origin_distribution(self):
+        result = {}
+        for npc in self.get_queryset().all():
+            result[npc.origin.name] = result.get(npc.origin.name, 0) + 1
+        return result
+
+
 class NPC(models.Model):
+    class Meta:
+        base_manager_name = 'stats_manager'
+    stats_manager = NPCManager()
+
+    TOP_SKILL_LIMIT = 70
+    MEDIUM_SKILL_LIMIT = 35
+
+    OLD_AGE_LIMIT = 50*12
+    MIDDLE_AGE_LIMIT = 35*12
+    YOUNG_AGE_LIMIT = 18*12
+    VERY_YOUNG_AGE_LIMIT = 12*12
+
     name = models.CharField(max_length=100)
     male = models.BooleanField()
     able = models.BooleanField()

@@ -13,7 +13,7 @@ from battle.models import Battle
 from decorators import inchar_required
 from name_generator.name_generator import NameGenerator
 from organization.models import Organization
-from world.models import Character, World, Settlement, Tile, WorldUnit
+from world.models import Character, World, Settlement, Tile, WorldUnit, WorldUnitStatusChangeException
 from world.renderer import render_world_for_view
 from world.templatetags.extra_filters import nice_hours
 
@@ -235,6 +235,8 @@ class RecruitmentView(View):
                 recruitment_type=recruitment_type,
                 type=unit_type,
                 status=WorldUnit.NOT_MOBILIZED,
+                mobilization_status_since=request.hero.world.current_turn,
+                current_status_since=request.hero.world.current_turn,
             )
 
             if target_soldier_count < candidates.count():
@@ -365,4 +367,37 @@ def unit_rename(request, unit_id):
     if request.POST.get('name'):
         unit.name = request.POST.get('name')
         unit.save()
+    return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
+
+
+class UnitStatusChangeView(View):
+    template_name = 'world/travel.html'
+
+    def get(self, request, unit_id, new_status):
+        return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
+
+    def post(self, request, unit_id, new_status):
+        unit = get_object_or_404(WorldUnit, id=unit_id, owner_character=request.hero)
+        try:
+            unit.change_status(new_status)
+        except WorldUnitStatusChangeException as e:
+            messages.error(request, str(e), "danger")
+        return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
+
+
+@inchar_required
+def unit_disband(request, unit_id):
+    unit = get_object_or_404(WorldUnit, id=unit_id, owner_character=request.hero)
+    return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
+
+
+@inchar_required
+def unit_merge(request, unit_id):
+    unit = get_object_or_404(WorldUnit, id=unit_id, owner_character=request.hero)
+    return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
+
+
+@inchar_required
+def unit_transfer(request, unit_id):
+    unit = get_object_or_404(WorldUnit, id=unit_id, owner_character=request.hero)
     return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))

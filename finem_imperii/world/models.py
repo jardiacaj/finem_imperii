@@ -316,6 +316,10 @@ class Character(models.Model):
         return self.name
 
 
+class WorldUnitStatusChangeException(Exception):
+    pass
+
+
 class WorldUnit(models.Model):
     CONSCRIPTION = 'conscription'
     PROFESSIONAL = 'professional'
@@ -363,10 +367,16 @@ class WorldUnit(models.Model):
     recruitment_type = models.CharField(max_length=30, choices=RECTRUITMENT_CHOICES)
     type = models.CharField(max_length=30, choices=TYPE_CHOICES)
     status = models.CharField(max_length=30, choices=STATUS_CHOICES)
+    mobilization_status_since = models.IntegerField()
+    current_status_since = models.IntegerField()
 
     @staticmethod
     def get_unit_types(nice=False):
         return (unit_type[1 if nice else 0] for unit_type in WorldUnit.TYPE_CHOICES)
+
+    @staticmethod
+    def get_unit_states(nice=False):
+        return (state[1 if nice else 0] for state in WorldUnit.STATUS_CHOICES)
 
     def __str__(self):
         return self.name
@@ -379,3 +389,21 @@ class WorldUnit(models.Model):
 
     def average_fighting_skill(self):
         return round(self.soldier.all().aggregate(Avg('skill_fighting'))['skill_fighting__avg'])
+
+    def change_status(self, new_status):
+        if new_status not in WorldUnit.get_unit_states():
+            raise Exception("Invalid unit status {}".format(new_status))
+        if self.status == WorldUnit.CUSTOMER_SEARCH:
+            raise Exception("Mercenaries can't change_status()")
+        if new_status == WorldUnit.CUSTOMER_SEARCH:
+            raise Exception("Can't switch to searching customer status")
+        if self.status == new_status:
+            raise WorldUnitStatusChangeException("The unit is already {}".format(self.get_status_display()))
+        if new_status == WorldUnit.NOT_MOBILIZED:
+            if self.mobilization_status_since == self.world.current_turn:
+                raise WorldUnitStatusChangeException("Cannot demobilize {} the same turn it has been mobilized".format(self))
+        if new_status != WorldUnit.NOT_MOBILIZED and self.status == WorldUnit.NOT_MOBILIZED:
+            if self.mobilization_status_since == self.world.current_turn:
+                raise WorldUnitStatusChangeException("Cannot mobilize {} the same turn it has been demobilized".format(self))
+        if new_status == WorldUnit.FOLLOWING and self.owner_character.location != self.location:
+            raise WorldUnitStatusChangeException("A unit can only follow you if you are in the same location.")

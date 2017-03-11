@@ -88,7 +88,15 @@
                     </tr>
                     <tr>
                         <td>Location</td>
-                        <td>{{ unit.location }} ({{ unit.location.tile }}, {{ unit.location.tile.controlled_by }})</td>
+                        <td>
+                            {{ unit.location }} ({{ unit.location.tile }},
+                            {% if unit.location.tile.controlled_by %}
+                                <a href="{{ unit.location.tile.controlled_by.get_absolute_url }}">{{ unit.location.tile.controlled_by }}</a>
+                            {% else %}
+                                barbaric
+                            {% endif %}
+                            )
+                        </td>
                     </tr>
                     <tr>
                         <td>Recruitment type</td>

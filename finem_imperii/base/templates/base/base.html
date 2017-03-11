@@ -8,13 +8,6 @@
         {% if request.hero %}
             <div class="col-xs-12 col-md-3 well">
                 <p class="text-center">
-                    {% if request.hero.oath_sworn_to %}
-                        Sworn oath to <a href="{{ request.hero.oath_sworn_to.get_absolute_url }}">{{ request.hero.oath_sworn_to }}</a>
-                    {% else %}
-                        No allegiance sworn.
-                    {% endif %}
-                </p>
-                <p class="text-center">
                     It's {{ request.hero.world.get_current_date }}
                 </p>
                 <p class="text-center">
@@ -28,10 +21,12 @@
                         style="height: 20vw; min-height: 200px; width: 100%; padding: 0; border: 0;"
                         src="{% url 'world:minimap' %}"
                 ></iframe>
-                <p>
+                <p class="text-center">
                     {{ request.hero.location.tile }} is
                     {% if request.hero.location.tile.controlled_by %}
-                         part of {{ request.hero.location.tile.controlled_by }}
+                         part of <a href="{{ request.hero.location.tile.controlled_by.get_absolute_url }}">
+                            {{ request.hero.location.tile.controlled_by }}
+                        </a>
                     {% else %}
                         a barbaric region
                     {% endif %}in
@@ -73,6 +68,12 @@
 
                 <h5>Your position</h5>
                 <ul>
+                    {% if request.hero.oath_sworn_to %}
+                        <li>Sworn oath to <a href="{{ request.hero.oath_sworn_to.get_absolute_url }}">{{ request.hero.oath_sworn_to }}</a></li>
+                    {% else %}
+                        <li>No allegiance sworn.</li>
+                    {% endif %}
+
                     {% for organization in request.hero.organization_set.all %}
                         <li>{% if not organization.is_position %}Member of{% endif %}
                             <a href="{{ organization.get_absolute_url }}">{{ organization }}</a>

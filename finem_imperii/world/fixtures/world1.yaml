@@ -10,79 +10,124 @@
   fields:
     world_id: 1
     name: "Kingdom of Cardell"
-    type: "Kingdom"
     description: "It's a kingdom with a missing description"
     is_position: false
     inherit_capabilities: true
-    parent_id: null
+    owner_id: null
     leader_id: 2
+    owner_and_leader_locked: false
     violence_monopoly: true
     decision_taking: autocratic
+    membership_type: character
+    election_period_months: 0
 - model: organization.Organization
   pk: 2
   fields:
     world_id: 1
     name: "King of Cardell"
-    type: "King"
     description: "It's a king without description"
     is_position: true
     inherit_capabilities: false
-    parent_id: 1
+    owner_id: null
     leader_id: null
+    owner_and_leader_locked: false
     violence_monopoly: false
     decision_taking: autocratic
+    membership_type: character
+    election_period_months: 0
 - model: organization.Organization
   pk: 3
   fields:
     world_id: 1
     name: "Federated States of Central Emortuus"
-    type: "Federation"
     description: "It's a federation without description"
     is_position: false
     inherit_capabilities: false
-    parent_id: null
+    owner_id: null
     leader_id: 4
-    violence_monopoly: true
+    owner_and_leader_locked: false
+    violence_monopoly: false
     decision_taking: democratic
+    membership_type: organization
+    election_period_months: 0
+    organization_members:
+      - 5
+      - 7
 - model: organization.Organization
   pk: 4
   fields:
     world_id: 1
     name: "President of the Federated States of Central Emortuus"
-    type: "Presidency"
     description: "It's a president without description"
     is_position: true
     inherit_capabilities: false
-    parent_id: 3
+    owner_id: null
     leader_id: null
+    owner_and_leader_locked: false
     violence_monopoly: false
     decision_taking: autocratic
+    membership_type: character
+    election_period_months: 0
 - model: organization.Organization
   pk: 5
   fields:
     world_id: 1
     name: "Knarkt commonwealth"
-    type: "Federated State"
     description: "It's a federated state without description"
     is_position: false
     inherit_capabilities: false
-    parent_id: 3
-    leader_id: null
-    violence_monopoly: false
+    owner_id: null
+    leader_id: 6
+    owner_and_leader_locked: false
+    violence_monopoly: true
     decision_taking: democratic
+    membership_type: character
+    election_period_months: 0
 - model: organization.Organization
   pk: 6
   fields:
     world_id: 1
+    name: "Knarkt Lord"
+    description: "Lord of Knarkt"
+    is_position: true
+    inherit_capabilities: false
+    owner_id: null
+    leader_id: null
+    owner_and_leader_locked: false
+    violence_monopoly: false
+    decision_taking: autocratic
+    membership_type: character
+    election_period_months: 0
+- model: organization.Organization
+  pk: 7
+  fields:
+    world_id: 1
     name: "Casmir"
-    type: "Casmir Free State"
     description: "Federated State"
     is_position: false
     inherit_capabilities: false
-    parent_id: 3
-    leader_id: null
-    violence_monopoly: false
+    owner_id: null
+    leader_id: 8
+    owner_and_leader_locked: false
+    violence_monopoly: true
     decision_taking: democratic
+    membership_type: character
+    election_period_months: 0
+- model: organization.Organization
+  pk: 8
+  fields:
+    world_id: 1
+    name: "Casmir Thain"
+    description: "Thain of Casmir"
+    is_position: true
+    inherit_capabilities: false
+    owner_id: null
+    leader_id: null
+    owner_and_leader_locked: false
+    violence_monopoly: false
+    decision_taking: autocratic
+    membership_type: character
+    election_period_months: 0
 
 - model: world.Region
   pk: 1

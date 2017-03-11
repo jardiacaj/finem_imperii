@@ -14,19 +14,32 @@ class Organization(models.Model):
         (DISTRIBUTED, DISTRIBUTED),
     )
 
+    CHARACTER = 'character'
+    ORGANIZATION = 'organization'
+    MEMBERSHIP_TYPE_CHOICES = (
+        (CHARACTER, CHARACTER),
+        (ORGANIZATION, ORGANIZATION),
+    )
+
     world = models.ForeignKey('world.World')
     name = models.CharField(max_length=100)
-    type = models.CharField(max_length=100)
     description = models.TextField()
     is_position = models.BooleanField()
     inherit_capabilities = models.BooleanField(
         help_text="If true, capabilities of parents and leader apply to this organization too"
     )
-    parent = models.ForeignKey('Organization', null=True, blank=True, related_name='children')
+    owner = models.ForeignKey('Organization', null=True, blank=True, related_name='children')
     leader = models.ForeignKey('Organization', null=True, blank=True, related_name='leaded_organizations')
+    owner_and_leader_locked = models.BooleanField(
+        help_text="If set, this organization will have always the same leader as it's owner."
+    )
     violence_monopoly = models.BooleanField(default=False)
     decision_taking = models.CharField(max_length=15, choices=DECISION_TAKING_CHOICES)
-    members = models.ManyToManyField('world.Character')
+    membership_type = models.CharField(max_length=15, choices=MEMBERSHIP_TYPE_CHOICES)
+    character_members = models.ManyToManyField('world.Character')
+    organization_members = models.ManyToManyField('Organization')
+    election_period_months = models.IntegerField(default=0)
+    last_election = models.IntegerField(default=0)
 
     def get_all_descendants(self, including_self=False):
         descendants = list(self.children.all())
@@ -37,7 +50,7 @@ class Organization(models.Model):
         return descendants
 
     def get_membership_including_descendants(self):
-        members = list(self.members.all())
+        members = list(self.character_members.all())
         for child in self.children.all():
             members += child.get_membership_including_descendants()
         return members

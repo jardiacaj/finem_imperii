@@ -1,6 +1,5 @@
 from django.conf.urls import url
 
-from account.views import login_view, logout_view, register_view, home
 from messaging.views import clear_notifications, notification_list
 
 urlpatterns = [

@@ -99,7 +99,7 @@ class CharacterCreationView(View):
         )
 
         if state:
-            state.members.add(character)
+            state.character_members.add(character)
 
         return redirect(character.activation_url)
 

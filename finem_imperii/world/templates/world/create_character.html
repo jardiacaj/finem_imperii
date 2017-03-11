@@ -13,36 +13,57 @@
             <div class="form-group">
                 <h2>Choose your State</h2>
                 {% for state in world.get_violence_monopolies.all %}
-                    <h4>
-                        <input type="radio" name="state_id" value="{{ state.id }}"> {{ state }}
-                    </h4>
-                    <p>{{ state.description }}</p>
-                    <p>{{ state.get_membership_including_descendants|length }} members</p>
-                    <p>{{ state.get_all_controlled_tiles|length }} regions</p>
-                    <p>
-                        {% if state.leader %}
-                            Leader: {{ state.leader }}
-                        {% else %}
-                            Fully horizontal State.
-                        {% endif %}
-                    </p>
+                    <div class="col-md-6">
+                        <div class="well">
+                            <label class="btn btn-primary">
+                                <h4>
+                                    <input type="radio" name="state_id" value="{{ state.id }}"> {{ state }}
+                                </h4>
+                            </label>
+                            <p>{{ state.description }}</p>
+                            <p>{{ state.get_membership_including_descendants|length }} members</p>
+                            <p>{{ state.get_all_controlled_tiles|length }} regions</p>
+                            <p>
+                                {% if state.leader %}
+                                    Leader: {{ state.leader }}
+                                {% else %}
+                                    Fully horizontal State.
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
                 {% endfor %}
-                <h4><input type="radio" name="state_id" value="0"> Stateless</h4>
-                <p>For experienced players only!</p>
+                <div class="col-md-6">
+                    <div class="well">
+                        <label class="btn btn-primary">
+                            <h4>
+                                <input type="radio" name="state_id" value="0"> Stateless
+                            </h4>
+                        </label>
+                        <p>
+                            This option is recommended to experienced players only!
+                        </p>
+                    </div>
+                </div>
             </div>
 
             <div class="form-group">
                 <h2>Choose your profile</h2>
-                <h4><input type="radio" name="profile" value="commander"> Commander</h4>
-                <p>Lorem</p>
-                <h4><input type="radio" name="profile" value="fighter"> Fighter</h4>
-                <p>Lorem</p>
-                <h4><input type="radio" name="profile" value="trader"> Trader</h4>
-                <p>Lorem</p>
-                <h4><input type="radio" name="profile" value="spy"> Spy</h4>
-                <p>Lorem</p>
-                <h4><input type="radio" name="profile" value="bureaucrat"> Bureaucrat</h4>
-                <p>Lorem</p>
+                <label class="btn btn-primary">
+                    <input type="radio" name="profile" value="commander"> Commander
+                </label>
+                <label class="btn btn-primary">
+                    <input type="radio" name="profile" value="fighter"> Fighter
+                </label>
+                <label class="btn btn-primary">
+                    <input type="radio" name="profile" value="trader"> Trader
+                </label>
+                <label class="btn btn-primary">
+                    <input type="radio" name="profile" value="spy"> Spy
+                </label>
+                <label class="btn btn-primary">
+                    <input type="radio" name="profile" value="bureaucrat"> Bureaucrat
+                </label>
             </div>
 
             <div class="form-group form-inline">

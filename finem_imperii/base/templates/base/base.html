@@ -78,8 +78,6 @@
                         <li>{% if not organization.is_position %}Member of{% endif %}
                             <a href="{{ organization.get_absolute_url }}">{{ organization }}</a>
                         </li>
-                    {% empty %}
-                        <li>No political positions</li>
                     {% endfor %}
                 </ul>
             </div>

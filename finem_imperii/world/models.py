@@ -211,7 +211,7 @@ class Settlement(models.Model):
                 location=self,
                 workplace=workplace if able else None,
                 unit=None,
-                trained_soldier=(random.getrandbits(4) == 0) if s >= NPC.VERY_YOUNG_AGE_LIMIT else False,
+                trained_soldier=(random.getrandbits(4) == 0) if age_months >= NPC.VERY_YOUNG_AGE_LIMIT else False,
                 skill_fighting=random.randint(0, 80)
             )
 
@@ -284,6 +284,7 @@ class NPC(models.Model):
     class Meta:
         base_manager_name = 'stats_manager'
     stats_manager = NPCManager()
+    objects = models.Manager()
 
     TOP_SKILL_LIMIT = 70
     MEDIUM_SKILL_LIMIT = 35

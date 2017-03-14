@@ -99,14 +99,11 @@ class PolicyDocument(models.Model):
     organization = models.ForeignKey(Organization)
     parent = models.ForeignKey('PolicyDocument', related_name='children', null=True, blank=True)
     public = models.BooleanField(default=False)
-    active = models.ForeignKey('PolicyDocumentVersion', null=True, blank=True)
     title = models.TextField(max_length=100)
+    body = models.TextField()
 
     def __str__(self):
         return self.title
 
-
-class PolicyDocumentVersion(models.Model):
-    document = models.ForeignKey(PolicyDocument)
-    body = models.TextField()
-    proposal = models.BooleanField()
+    def get_absolute_url(self):
+        return reverse('organization:document', kwargs={'document_id': self.id})

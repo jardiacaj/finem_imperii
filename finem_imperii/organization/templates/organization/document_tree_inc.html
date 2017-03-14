@@ -1,5 +1,5 @@
 <li>
-    {{ document.title }}
+    <a href="{{ document.get_absolute_url }}">{{ document.title }}</a>
     <ul>
         {% for child in document.children.all %}
             {% if child.public or show_private %}

@@ -1,0 +1,14 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+
+    <h1 class="page-header">{{ document.title }}</h1>
+    
+    <p>
+        Back to <a href="{% url 'organization:documents' document.organization_id %}">
+        {{ document.organization }} documents</a>
+    </p>
+
+    <pre>{{ document.body }}</pre>
+
+{% endblock %}

@@ -91,11 +91,13 @@
 
             {% if organization.policydocument_set.all %}
                 <h4>Documents</h4>
-                {% for document in organization.policydocument_set.all %}
-                    {% if not document.parent %}{% if document.public or hero_is_member %}
-                        {% include 'organization/document_tree_inc.html' with document=document show_private=hero_is_member %}
-                    {% endif %}{% endif %}
-                {% endfor %}
+                <ul>
+                    {% for document in organization.policydocument_set.all %}
+                        {% if not document.parent %}{% if document.public or hero_is_member %}
+                            {% include 'organization/document_tree_inc.html' with document=document show_private=hero_is_member %}
+                        {% endif %}{% endif %}
+                    {% endfor %}
+                </ul>
             {% endif %}
             <a class="btn btn-default" href="{% url 'organization:documents' organization.id %}">Documents</a>
         </div>

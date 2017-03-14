@@ -87,23 +87,35 @@
             <h4>Actions</h4>
             dissolve
             craete sub
+            leave / step out
+
+            {% if organization.policydocument_set.all %}
+                <h4>Documents</h4>
+                {% for document in organization.policydocument_set.all %}
+                    {% if not document.parent and document.public %}
+                        {% include 'organization/document_tree_inc.html' with document=document %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
         </div>
 
         <div class="col-sm-12">
-            <h4>Regions</h4>
-            <ul>
-                {% for tile in organization.get_all_controlled_tiles %}
-                    <li>
-                        <a href="{{ tile.get_asbolute_url }}">{{ tile }}</a>
-                        {% if tile.controlled_by != organization %}
-                            (controlled by <a href="{{ tile.controlled_by.get_absolute_url }}">
-                            {{ tile.controlled_by }}</a>
-                        {% endif %}
-                    </li>
-                {% empty %}
-                    <li>None</li>
-                {% endfor %}
-            </ul>
+            {% if organization.get_all_controlled_tiles %}
+                <h4>Regions</h4>
+                <ul>
+                    {% for tile in organization.get_all_controlled_tiles %}
+                        <li>
+                            <a href="{{ tile.get_asbolute_url }}">{{ tile }}</a>
+                            {% if tile.controlled_by != organization %}
+                                (controlled by <a href="{{ tile.controlled_by.get_absolute_url }}">
+                                {{ tile.controlled_by }}</a>
+                            {% endif %}
+                        </li>
+                    {% empty %}
+                        <li>None</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
 
             <h4>Powers</h4>
             <ul>

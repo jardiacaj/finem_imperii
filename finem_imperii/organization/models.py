@@ -89,12 +89,16 @@ class OrganizationDecision(models.Model):
 
 class PolicyDocument(models.Model):
     organization = models.ForeignKey(Organization)
-    parent = models.ForeignKey('PolicyDocument')
+    parent = models.ForeignKey('PolicyDocument', related_name='children', null=True, blank=True)
     public = models.BooleanField(default=False)
+    active = models.ForeignKey('PolicyDocumentVersion', null=True, blank=True)
+    title = models.TextField(max_length=100)
+
+    def __str__(self):
+        return self.title
 
 
 class PolicyDocumentVersion(models.Model):
     document = models.ForeignKey(PolicyDocument)
-    title = models.TextField()
     body = models.TextField()
     proposal = models.BooleanField()

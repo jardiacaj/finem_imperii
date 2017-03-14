@@ -29,7 +29,7 @@ class Organization(models.Model):
     inherit_capabilities = models.BooleanField(
         help_text="If true, capabilities of parents and leader apply to this organization too"
     )
-    owner = models.ForeignKey('Organization', null=True, blank=True, related_name='children')
+    owner = models.ForeignKey('Organization', null=True, blank=True, related_name='owned_organizations')
     leader = models.ForeignKey('Organization', null=True, blank=True, related_name='leaded_organizations')
     owner_and_leader_locked = models.BooleanField(
         help_text="If set, this organization will have always the same leader as it's owner."

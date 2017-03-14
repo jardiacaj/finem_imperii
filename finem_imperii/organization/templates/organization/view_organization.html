@@ -9,13 +9,83 @@
             <table class="table table-striped table-hover">
                 <tbody>
                     <tr>
-                        <td>Name</td>
-                        <td>{{ organization.name }}</td>
+                        <td></td>
+                        <td>
+                            {{ organization.name }}
+                            {% if organization.violence_monopoly %}
+                                <br><b>Sovereign entity</b>
+                            {% endif %}
+                            {% if organization.owner %}
+                                <br>Owned by <a href="{{ organization.owner.get_absolute_url }}">
+                                    {{ organization.owner }}
+                                </a>
+                            {% endif %}
+                            {% if organization.leader %}
+                                <br>Leaded by <a href="{{ organization.leader.get_absolute_url }}">
+                                    {{ organization.leader }}
+                                </a>
+                            {% endif %}
+                        </td>
                     </tr>
                     <tr>
                         <td>Description</td>
                         <td>{{ organization.description }}</td>
                     </tr>
+                    <tr>
+                        {% if organization.is_position %}
+                            <td>Position ocuppied by</td>
+                        {% else %}
+                            <td>Members</td>
+                        {% endif %}
+                        <td>
+                            {% if organization.membership_type == 'character' and organization.character_members.all %}
+                                {% for char_member in organization.character_members.all %}
+                                    <a href="{{ char_member.get_absolute_url }}">
+                                        {{ char_member }}
+                                    </a>
+                                    {% if not forloop.last %},{% endif %}
+                                {% endfor %}
+                            {% elif organization.membership_type == 'organization' and organization.organization_members.all %}
+                                {% for org_member in organization.organization_members.all %}
+                                    <a href="{{ org_member.get_absolute_url }}">
+                                        {{ org_member }}
+                                    </a>
+                                    {% if not forloop.last %},{% endif %}
+                                {% endfor %}
+                            {% else %}
+                                Vacant
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                    {% if organization.leaded_organizations.all %}
+                        <tr>
+                            <td>Leader of</td>
+                            <td>
+                                {% for leaded_orga in organization.leaded_organizations.all %}
+                                    <a href="{{ leaded_orga.get_absolute_url }}">
+                                        {{ leaded_orga }}
+                                    </a>
+                                    {% if not forloop.last %},{% endif %}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% endif %}
+
+                    {% if organization.owned_organizations.all %}
+                        <tr>
+                            <td>Owner of</td>
+                            <td>
+                                {% for owned_orga in organization.owned_organizations.all %}
+                                    <a href="{{ owned_orga.get_absolute_url }}">
+                                        {{ owned_orga }}
+                                    </a>
+                                    {% if not forloop.last %},{% endif %}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% endif %}
+
                 </tbody>
             </table>
         </div>

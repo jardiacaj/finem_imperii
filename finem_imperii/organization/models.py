@@ -43,7 +43,7 @@ class Organization(models.Model):
     last_election = models.IntegerField(default=0)
 
     def get_all_descendants(self, including_self=False):
-        descendants = list(self.children.all())
+        descendants = list(self.owned_organizations.all())
         if including_self:
             descendants.append(self)
         for child in descendants:
@@ -52,7 +52,7 @@ class Organization(models.Model):
 
     def get_membership_including_descendants(self):
         members = list(self.character_members.all())
-        for child in self.children.all():
+        for child in self.owned_organizations.all():
             members += child.get_membership_including_descendants()
         return members
 
@@ -67,19 +67,20 @@ class Organization(models.Model):
 
 
 class Capability(models.Model):
-    ARREST_ORDER = 'arrest_order'
     BAN = 'ban'
     POLICY_DOCUMENT = 'policy'
     CONSCRIPT = 'conscript'
 
     TYPE_CHOICES = (
-        (ARREST_ORDER, 'ordering arrests'),
         (BAN, 'banning'),
         (POLICY_DOCUMENT, 'writing policy and law'),
+        (CONSCRIPT, 'conscripting trops'),
     )
 
     organization = models.ForeignKey(Organization)
     type = models.CharField(max_length=15, choices=TYPE_CHOICES)
+    applying_to = models.ForeignKey(Organization, related_name='capabilities_to_this')
+    stemming_from = models.ForeignKey('Capability', null=True, blank=True, related_name='transfers')
 
 
 class OrganizationDecision(models.Model):
@@ -96,5 +97,4 @@ class PolicyDocumentVersion(models.Model):
     document = models.ForeignKey(PolicyDocument)
     title = models.TextField()
     body = models.TextField()
-    draft = models.BooleanField()
     proposal = models.BooleanField()

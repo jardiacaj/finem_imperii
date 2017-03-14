@@ -35,6 +35,22 @@
     decision_taking: autocratic
     membership_type: character
     election_period_months: 0
+- model: organization.Capability
+  fields:
+    organization_id: 2
+    type: 'ban'
+    applying_to: 1
+- model: organization.Capability
+  fields:
+    organization_id: 2
+    type: 'policy'
+    applying_to: 1
+- model: organization.Capability
+  fields:
+    organization_id: 2
+    type: 'conscript'
+    applying_to: 1
+
 - model: organization.Organization
   pk: 3
   fields:

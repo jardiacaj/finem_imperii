@@ -13,7 +13,7 @@
                         <td>
                             {{ organization.name }}
                             {% if organization.violence_monopoly %}
-                                <br><b>Sovereign entity</b>
+                                <br><b>Sovereign</b>
                             {% endif %}
                             {% if organization.owner %}
                                 <br>Owned by <a href="{{ organization.owner.get_absolute_url }}">
@@ -25,6 +25,29 @@
                                     {{ organization.leader }}
                                 </a>
                             {% endif %}
+
+
+
+                            {% if organization.leaded_organizations.all %}
+                                <br>Leader of
+                                {% for leaded_orga in organization.leaded_organizations.all %}
+                                    <a href="{{ leaded_orga.get_absolute_url }}">
+                                        {{ leaded_orga }}
+                                    </a>
+                                    {% if not forloop.last %},{% endif %}
+                                {% endfor %}
+                            {% endif %}
+
+                            {% if organization.owned_organizations.all %}
+                                <br>Owner of
+                                    {% for owned_orga in organization.owned_organizations.all %}
+                                        <a href="{{ owned_orga.get_absolute_url }}">
+                                            {{ owned_orga }}
+                                        </a>
+                                        {% if not forloop.last %},{% endif %}
+                                    {% endfor %}
+                            {% endif %}
+
                         </td>
                     </tr>
                     <tr>
@@ -33,23 +56,21 @@
                     </tr>
                     <tr>
                         {% if organization.is_position %}
-                            <td>Position ocuppied by</td>
+                            <td>Position ocuppied by ({{ organization.membership_type }})</td>
                         {% else %}
-                            <td>Members</td>
+                            <td>Members ({{ organization.membership_type }})</td>
                         {% endif %}
                         <td>
                             {% if organization.membership_type == 'character' and organization.character_members.all %}
                                 {% for char_member in organization.character_members.all %}
                                     <a href="{{ char_member.get_absolute_url }}">
-                                        {{ char_member }}
-                                    </a>
+                                        {{ char_member }}</a>
                                     {% if not forloop.last %},{% endif %}
                                 {% endfor %}
                             {% elif organization.membership_type == 'organization' and organization.organization_members.all %}
                                 {% for org_member in organization.organization_members.all %}
                                     <a href="{{ org_member.get_absolute_url }}">
-                                        {{ org_member }}
-                                    </a>
+                                        {{ org_member }}</a>
                                     {% if not forloop.last %},{% endif %}
                                 {% endfor %}
                             {% else %}
@@ -58,41 +79,65 @@
                         </td>
                     </tr>
 
-                    {% if organization.leaded_organizations.all %}
-                        <tr>
-                            <td>Leader of</td>
-                            <td>
-                                {% for leaded_orga in organization.leaded_organizations.all %}
-                                    <a href="{{ leaded_orga.get_absolute_url }}">
-                                        {{ leaded_orga }}
-                                    </a>
-                                    {% if not forloop.last %},{% endif %}
-                                {% endfor %}
-                            </td>
-                        </tr>
-                    {% endif %}
-
-                    {% if organization.owned_organizations.all %}
-                        <tr>
-                            <td>Owner of</td>
-                            <td>
-                                {% for owned_orga in organization.owned_organizations.all %}
-                                    <a href="{{ owned_orga.get_absolute_url }}">
-                                        {{ owned_orga }}
-                                    </a>
-                                    {% if not forloop.last %},{% endif %}
-                                {% endfor %}
-                            </td>
-                        </tr>
-                    {% endif %}
-
                 </tbody>
             </table>
         </div>
 
         <div class="col-sm-3">
             <h4>Actions</h4>
+            dissolve
+            craete sub
         </div>
+
+        <div class="col-sm-12">
+            <h4>Regions</h4>
+            <ul>
+                {% for tile in organization.get_all_controlled_tiles %}
+                    <li>
+                        <a href="{{ tile.get_asbolute_url }}">{{ tile }}</a>
+                        {% if tile.controlled_by != organization %}
+                            (controlled by <a href="{{ tile.controlled_by.get_absolute_url }}">
+                            {{ tile.controlled_by }}</a>
+                        {% endif %}
+                    </li>
+                {% empty %}
+                    <li>None</li>
+                {% endfor %}
+            </ul>
+
+            <h4>Powers</h4>
+            <ul>
+                {% for capability in organization.capability_set.all %}
+                    <li>
+                        <b>{{ capability.get_type_display|capfirst }}</b>
+                        in <a href="{{ capability.applying_to.get_absolute_url }}">{{ capability.applying_to }}</a>
+                        {% if capability.stemming_from %}
+                            (delegated by <a href="{{ capability.stemming_from.organization.get_absolute_url }}">
+                            {{ capability.stemming_from.organization }}</a>
+                        {% endif %}
+                    </li>
+                {% empty %}
+                    <li>None</li>
+                {% endfor %}
+            </ul>
+
+            <h4>Powers</h4>
+            <ul>
+                {% for capability in organization.capabilities_to_this.all %}
+                    <li>
+                        <a href="{{ capability.organization.get_absolute_url }}">{{ capability.organization }}</a>
+                        can <b>{{ capability.get_type_display }}</b>
+                        {% if capability.stemming_from %}
+                            (delegated by <a href="{{ capability.stemming_from.organization.get_absolute_url }}">
+                            {{ capability.stemming_from.organization }}</a>
+                        {% endif %}
+                    </li>
+                {% empty %}
+                    <li>None</li>
+                {% endfor %}
+            </ul>
+        </div>
+
     </div>
 
 

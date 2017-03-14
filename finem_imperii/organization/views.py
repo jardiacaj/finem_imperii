@@ -9,5 +9,16 @@ def organization_view(request, organization_id):
     organization = get_object_or_404(Organization, id=organization_id)
     context = {
         'organization': organization,
+        'hero_is_member': organization.character_is_member(request.hero),
     }
     return render(request, 'organization/view_organization.html', context)
+
+
+@inchar_required
+def documents_view(request, organization_id):
+    organization = get_object_or_404(Organization, id=organization_id)
+    context = {
+        'organization': organization,
+        'hero_is_member': organization.character_is_member(request.hero),
+    }
+    return render(request, 'organization/view_documents.html', context)

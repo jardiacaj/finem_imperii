@@ -2,8 +2,8 @@
     {{ document.title }}
     <ul>
         {% for child in document.children.all %}
-            {% if child.public %}
-                {% include 'organization/document_tree_inc.html' with document=child %}
+            {% if child.public or show_private %}
+                {% include 'organization/document_tree_inc.html' with document=child show_public=show_private%}
             {% endif %}
         {% endfor %}
     </ul>

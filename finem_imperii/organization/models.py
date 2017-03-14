@@ -56,6 +56,14 @@ class Organization(models.Model):
             members += child.get_membership_including_descendants()
         return members
 
+    def character_is_member(self, character):
+        if character in self.character_members.all():
+            return True
+        for member_organization in self.organization_members.all():
+            if character in member_organization.member_set.all():
+                return True
+        return False
+
     def get_all_controlled_tiles(self):
         return Tile.objects.filter(controlled_by__in=self.get_all_descendants(including_self=True)).all()
 

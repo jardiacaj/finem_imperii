@@ -90,9 +90,9 @@ class Capability(models.Model):
     CONSCRIPT = 'conscript'
 
     TYPE_CHOICES = (
-        (BAN, 'banning'),
-        (POLICY_DOCUMENT, 'writing policy and law'),
-        (CONSCRIPT, 'conscripting trops'),
+        (BAN, 'ban'),
+        (POLICY_DOCUMENT, 'write policy and law'),
+        (CONSCRIPT, 'conscript trops'),
     )
 
     organization = models.ForeignKey(Organization)

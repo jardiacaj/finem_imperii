@@ -133,7 +133,7 @@
                         in <a href="{{ capability.applying_to.get_absolute_url }}">{{ capability.applying_to }}</a>
                         {% if capability.stemming_from %}
                             (delegated by <a href="{{ capability.stemming_from.organization.get_absolute_url }}">
-                            {{ capability.stemming_from.organization }}</a>
+                            {{ capability.stemming_from.organization }}</a>)
                         {% endif %}
                     </li>
                 {% empty %}
@@ -149,7 +149,7 @@
                         can <b>{{ capability.get_type_display }}</b>
                         {% if capability.stemming_from %}
                             (delegated by <a href="{{ capability.stemming_from.organization.get_absolute_url }}">
-                            {{ capability.stemming_from.organization }}</a>
+                            {{ capability.stemming_from.organization }}</a>)
                         {% endif %}
                     </li>
                 {% empty %}

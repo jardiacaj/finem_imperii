@@ -105,6 +105,12 @@
     decision_taking: democratic
     membership_type: character
     election_period_months: 0
+- model: organization.Capability
+  fields:
+    organization_id: 5
+    type: 'conscript'
+    applying_to: 5
+
 - model: organization.Organization
   pk: 6
   fields:
@@ -120,6 +126,17 @@
     decision_taking: autocratic
     membership_type: character
     election_period_months: 0
+- model: organization.Capability
+  fields:
+    organization_id: 6
+    type: 'ban'
+    applying_to: 5
+- model: organization.Capability
+  fields:
+    organization_id: 6
+    type: 'policy'
+    applying_to: 5
+
 - model: organization.Organization
   pk: 7
   fields:
@@ -135,6 +152,22 @@
     decision_taking: democratic
     membership_type: character
     election_period_months: 0
+- model: organization.Capability
+  fields:
+    organization_id: 7
+    type: 'ban'
+    applying_to: 7
+- model: organization.Capability
+  fields:
+    organization_id: 7
+    type: 'policy'
+    applying_to: 7
+- model: organization.Capability
+  fields:
+    organization_id: 7
+    type: 'conscript'
+    applying_to: 7
+
 - model: organization.Organization
   pk: 8
   fields:
@@ -779,7 +812,7 @@
     name: Casmir
     world_id: 1
     region_id: 6
-    controlled_by: 6
+    controlled_by: 7
     x_pos: 1
     z_pos: 1
     y_pos: 0.25
@@ -1380,3 +1413,124 @@
     quantity: 1
     settlement_id: 4
 
+
+
+
+- model: world.Settlement
+  pk: 6
+  fields:
+    name: Shaax
+    tile_id: 54
+    population: 2666
+    x_pos: 29
+    z_pos: 31
+- model: world.Building
+  fields:
+    type: residence
+    level: 1
+    quantity: 250
+    settlement_id: 6
+- model: world.Building
+  fields:
+    type: prison
+    level: 1
+    settlement_id: 6
+- model: world.Building
+  fields:
+    type: grain field
+    level: 1
+    quantity: 13330
+    settlement_id: 6
+- model: world.Building
+  fields:
+    type: granary
+    level: 2
+    quantity: 1
+    settlement_id: 6
+
+- model: world.Settlement
+  pk: 7
+  fields:
+    name: Fynkah
+    tile_id: 54
+    population: 812
+    x_pos: 61
+    z_pos: 50
+- model: world.Building
+  fields:
+    type: residence
+    level: 1
+    quantity: 90
+    settlement_id: 7
+- model: world.Building
+  fields:
+    type: grain field
+    level: 1
+    quantity: 3248
+    settlement_id: 7
+- model: world.Building
+  fields:
+    type: granary
+    level: 2
+    quantity: 1
+    settlement_id: 7
+
+
+- model: world.Settlement
+  pk: 8
+  fields:
+    name: Dipak
+    tile_id: 55
+    population: 5300
+    x_pos: 33
+    z_pos: 8
+- model: world.Building
+  fields:
+    type: residence
+    level: 1
+    quantity: 444
+    settlement_id: 8
+- model: world.Building
+  fields:
+    type: prison
+    level: 2
+    settlement_id: 8
+- model: world.Building
+  fields:
+    type: grain field
+    level: 1
+    quantity: 42400
+    settlement_id: 8
+- model: world.Building
+  fields:
+    type: granary
+    level: 2
+    quantity: 1
+    settlement_id: 8
+
+- model: world.Settlement
+  pk: 9
+  fields:
+    name: Kalyana
+    tile_id: 55
+    population: 2100
+    x_pos: 40
+    z_pos: 53
+- model: world.Building
+  fields:
+    type: residence
+    level: 1
+    quantity: 175
+    settlement_id: 9
+- model: world.Building
+  fields:
+    type: grain field
+    level: 1
+    quantity: 31500
+    settlement_id: 9
+- model: world.Building
+  fields:
+    type: granary
+    level: 1
+    quantity: 1
+    settlement_id: 9

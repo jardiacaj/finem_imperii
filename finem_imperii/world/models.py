@@ -233,11 +233,12 @@ class Building(models.Model):
         (PRISON, PRISON),
     )
 
-    level = models.SmallIntegerField(default=1)
+    level = models.SmallIntegerField(default=1, help_text="Go from 1 to 5")
     type = models.CharField(max_length=15, choices=TYPE_CHOICES)
     quantity = models.IntegerField(default=1)
     settlement = models.ForeignKey(Settlement)
-    owner = models.ForeignKey('organization.Organization', null=True, blank=True)
+    owner = models.ForeignKey('organization.Organization', null=True, blank=True,
+                              help_text="NULL means 'owned by local population'")
 
     def max_employment(self):
         if self.type:

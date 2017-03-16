@@ -56,6 +56,16 @@ class Organization(models.Model):
             members += child.get_membership_including_descendants()
         return members
 
+    def character_can_use_capabilities(self, character):
+        if character in self.character_members.all():
+            return True
+        for member_organization in self.organization_members.all():
+            if member_organization.leader and member_organization.leader.is_position and character in member_organization.organization_members.all():
+                return True
+            if member_organization.is_position and character in member_organization.organization_members.all():
+                return True
+        return False
+
     def character_is_member(self, character):
         if character in self.character_members.all():
             return True
@@ -63,13 +73,6 @@ class Organization(models.Model):
             if character in member_organization.member_set.all():
                 return True
         return False
-
-    def character_has_capability(self, character, capability):
-        return character in self.characters_with_capability(capability)
-
-    def characters_with_capability(self, capability):
-        result = []
-        capabilities = Capability.objects.filter(applying_to=self, type=capability)
 
     def get_all_controlled_tiles(self):
         return Tile.objects.filter(controlled_by__in=self.get_all_descendants(including_self=True)).all()
@@ -97,6 +100,9 @@ class Capability(models.Model):
     applying_to = models.ForeignKey(Organization, related_name='capabilities_to_this')
     stemming_from = models.ForeignKey('Capability', null=True, blank=True, related_name='transfers')
 
+    def get_absolute_url(self):
+        return reverse('organization:capability', kwargs={'capability_id': self.id})
+
 
 class OrganizationDecision(models.Model):
     pass
@@ -108,6 +114,7 @@ class PolicyDocument(models.Model):
     public = models.BooleanField(default=False)
     title = models.TextField(max_length=100)
     body = models.TextField()
+    last_modified_turn = models.IntegerField()
 
     def __str__(self):
         return self.title

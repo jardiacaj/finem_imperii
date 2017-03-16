@@ -120,11 +120,17 @@
                 </ul>
             {% endif %}
 
-            <h4>Powers</h4>
+            <h4>Powers owned</h4>
             <ul>
                 {% for capability in organization.capability_set.all %}
                     <li>
-                        <b>{{ capability.get_type_display|capfirst }}</b>
+                        {% if can_use_capabilities %}
+                            <a href="{{ capability.get_absolute_url }}" class="btn btn-primary btn-sm">
+                                {{ capability.get_type_display|capfirst }}
+                            </a>
+                        {% else %}
+                            <b>{{ capability.get_type_display|capfirst }}</b>
+                        {% endif %}
                         in <a href="{{ capability.applying_to.get_absolute_url }}">{{ capability.applying_to }}</a>
                         {% if capability.stemming_from %}
                             (delegated by <a href="{{ capability.stemming_from.organization.get_absolute_url }}">
@@ -136,7 +142,7 @@
                 {% endfor %}
             </ul>
 
-            <h4>Powers</h4>
+            <h4>Powers applying</h4>
             <ul>
                 {% for capability in organization.capabilities_to_this.all %}
                     <li>

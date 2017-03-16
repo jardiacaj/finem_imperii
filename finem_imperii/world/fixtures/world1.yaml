@@ -50,6 +50,12 @@
     organization_id: 2
     type: 'conscript'
     applying_to: 1
+- model: organization.Capability
+  fields:
+    organization_id: 1
+    stemming_from: 2
+    type: 'conscript'
+    applying_to: 1
 
 - model: organization.Organization
   pk: 3

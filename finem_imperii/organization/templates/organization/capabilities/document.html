@@ -1,0 +1,47 @@
+<p>
+    You have been granted the power to write policy and law in {{ capability.applying_to }}.
+</p>
+<p>
+    This means that you may create, update and delete its policy documents.
+</p>
+
+<form class="form-horizontal" method="post">
+    <fieldset>
+        {% csrf_token %}
+
+        {% if new_document %}
+            <legend>New document</legend>
+        {% else %}
+            <legend>Edit document</legend>
+        {% endif %}
+
+        <div class="form-group">
+            <label for="title" class="col-lg-2 control-label">Title</label>
+            <div class="col-lg-10">
+                <input class="form-control" id="title" placeholder="Document title" type="text" value="{{ document.title }}">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="checkbox col-lg-10 col-lg-offset-2">
+                <label>
+                    <input type="checkbox" {% if document.public %}checked="checked"{% endif %}> Public document
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="content" class="col-lg-2 control-label">Body</label>
+            <div class="col-lg-10">
+                <textarea class="form-control" rows="20" id="content" placeholder="Document body">{{ document.body }}</textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-lg-10 col-lg-offset-2">
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+
+    </fieldset>
+</form>

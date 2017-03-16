@@ -1,0 +1,19 @@
+<p>
+    You have been granted the power to write policy and law in {{ capability.applying_to }}.
+</p>
+<p>
+    This means that you may create, update and delete its policy documents.
+</p>
+
+<h4>Document list</h4>
+<ul>
+    {% for document in capability.applying_to.policydocument_set.all %}
+        <li><a href="{% url 'organization:document_capability' capability.id document.id %}">{{ document.title }}</a></li>
+    {% empty %}
+        <li>Currently no documents exist.</li>
+    {% endfor %}
+</ul>
+
+<p>
+    <a class="btn btn-primary" href="{% url 'organization:document_capability' capability.id %}">Create new document</a>
+</p>

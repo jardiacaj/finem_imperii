@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls.base import reverse
 
 from decorators import inchar_required
-from organization.models import Organization, PolicyDocument
+from organization.models import Organization, PolicyDocument, Capability
 
 
 @inchar_required
@@ -22,6 +22,7 @@ def organization_documents_list(request, organization_id):
     context = {
         'organization': organization,
         'hero_is_member': organization.character_is_member(request.hero),
+        'hero_has_document_cap': organization.character_has_capability(request.hero, Capability.POLICY_DOCUMENT)
     }
     return render(request, 'organization/view_documents.html', context)
 

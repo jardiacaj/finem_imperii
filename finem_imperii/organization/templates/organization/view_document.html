@@ -9,6 +9,12 @@
         {{ document.organization }} documents</a>
     </p>
 
+    {% if document.parent %}
+        <p>
+            Parent: <a href="{{ document.parent.get_absolute_url }}">{{ document.parent }}</a>
+        </p>
+    {% endif %}
+
     <pre>{{ document.body }}</pre>
 
 {% endblock %}

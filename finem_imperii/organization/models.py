@@ -64,6 +64,13 @@ class Organization(models.Model):
                 return True
         return False
 
+    def character_has_capability(self, character, capability):
+        return character in self.characters_with_capability(capability)
+
+    def characters_with_capability(self, capability):
+        result = []
+        capabilities = Capability.objects.filter(applying_to=self, type=capability)
+
     def get_all_controlled_tiles(self):
         return Tile.objects.filter(controlled_by__in=self.get_all_descendants(including_self=True)).all()
 

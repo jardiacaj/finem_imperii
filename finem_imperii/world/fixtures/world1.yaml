@@ -17,7 +17,7 @@
     leader_id: 2
     owner_and_leader_locked: false
     violence_monopoly: true
-    decision_taking: autocratic
+    decision_taking: distributed
     membership_type: character
     election_period_months: 0
 - model: organization.Organization
@@ -32,7 +32,7 @@
     leader_id: null
     owner_and_leader_locked: false
     violence_monopoly: false
-    decision_taking: autocratic
+    decision_taking: distributed
     membership_type: character
     election_period_months: 0
 - model: organization.Capability
@@ -87,7 +87,7 @@
     leader_id: null
     owner_and_leader_locked: false
     violence_monopoly: false
-    decision_taking: autocratic
+    decision_taking: distributed
     membership_type: character
     election_period_months: 0
 - model: organization.Organization
@@ -123,7 +123,7 @@
     leader_id: null
     owner_and_leader_locked: false
     violence_monopoly: false
-    decision_taking: autocratic
+    decision_taking: distributed
     membership_type: character
     election_period_months: 0
 - model: organization.Capability
@@ -180,7 +180,7 @@
     leader_id: null
     owner_and_leader_locked: false
     violence_monopoly: false
-    decision_taking: autocratic
+    decision_taking: distributed
     membership_type: character
     election_period_months: 0
 

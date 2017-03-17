@@ -1,17 +1,17 @@
+import json
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls.base import reverse
 
-from world.models import Tile
+from world.models import Tile, Character
 
 
 class Organization(models.Model):
     DEMOCRATIC = 'democratic'  # decisions are voted among members
-    AUTOCRATIC = 'autocratic'  # decisions are taken by leader
     DISTRIBUTED = 'distributed'  # decisions can be taken by each member
     DECISION_TAKING_CHOICES = (
         (DEMOCRATIC, DEMOCRATIC),
-        (AUTOCRATIC, AUTOCRATIC),
         (DISTRIBUTED, DISTRIBUTED),
     )
 
@@ -103,9 +103,55 @@ class Capability(models.Model):
     def get_absolute_url(self):
         return reverse('organization:capability', kwargs={'capability_id': self.id})
 
+    def create_proposal(self, character, proposal_dict):
+        proposal = CapabilityProposal.objects.create(
+            proposing_character=character,
+            capability=self,
+            proposal_json=json.dumps(proposal_dict),
+            vote_end_turn=self.organization.world.current_turn + 2,
+        )
+        if self.organization.is_position or self.organization.decision_taking == Organization.DISTRIBUTED:
+            proposal.execute()
+        else:
+            proposal.issue_vote(character, CapabilityVote.YEA)
 
-class OrganizationDecision(models.Model):
-    pass
+
+class CapabilityProposal(models.Model):
+    proposing_character = models.ForeignKey(Character)
+    capability = models.ForeignKey(Capability)
+    proposal_json = models.TextField()
+    vote_end_turn = models.IntegerField()
+    executed = models.BooleanField(default=False)
+    closed = models.BooleanField(default=False)
+
+    def execute(self):
+        pass
+
+    def issue_vote(self, character, vote):
+        CapabilityVote.objects.create(
+            proposal=self,
+            voter=character,
+            vote=vote
+        )
+        self.execute_if_enough_votes()
+
+    def execute_if_enough_votes(self):
+        pass
+
+
+class CapabilityVote(models.Model):
+    YEA = 'yea'
+    NAY = 'nay'
+    INVALID = 'invalid'
+    VOTE_CHOICES = (
+        (YEA, YEA),
+        (NAY, NAY),
+        (INVALID, INVALID),
+    )
+
+    proposal = models.ForeignKey(CapabilityProposal)
+    voter = models.ForeignKey(Character)
+    vote = models.CharField(max_length=10, choices=VOTE_CHOICES)
 
 
 class PolicyDocument(models.Model):

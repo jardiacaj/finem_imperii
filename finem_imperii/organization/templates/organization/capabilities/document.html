@@ -18,7 +18,7 @@
         <div class="form-group">
             <label for="title" class="col-lg-2 control-label">Title</label>
             <div class="col-lg-10">
-                <input class="form-control" id="title" placeholder="Document title" type="text" value="{{ document.title }}">
+                <input class="form-control" id="title" placeholder="Document title" type="text" value="{{ document.title }}" maxlength="100">
             </div>
         </div>
 
@@ -33,7 +33,7 @@
         <div class="form-group">
             <label for="content" class="col-lg-2 control-label">Body</label>
             <div class="col-lg-10">
-                <textarea class="form-control" rows="20" id="content" placeholder="Document body">{{ document.body }}</textarea>
+                <textarea class="form-control" rows="20" id="content" placeholder="Document body" maxlength="10000">{{ document.body }}</textarea>
             </div>
         </div>
 

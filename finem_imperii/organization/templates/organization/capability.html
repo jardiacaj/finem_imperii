@@ -5,8 +5,14 @@
     <h1 class="page-header">{{ capability.get_type_display|capfirst }}</h1>
 
     <p class="alert alert-info">
-        You are doing this to <a href="{{ capability.applying_to.get_absolute_url }}">{{ capability.applying_to }}</a>
-        as <a href="{{ capability.organization.get_absolute_url }}">{{ capability.organization }}</a>.
+        {% if capability.applying_to == capability.organization %}
+            This power applies to <a href="{{ capability.applying_to.get_absolute_url }}">
+            {{ capability.applying_to }}</a>.
+        {% else %}
+            This power applies to <a href="{{ capability.applying_to.get_absolute_url }}">
+            {{ capability.applying_to }}</a>
+            as <a href="{{ capability.organization.get_absolute_url }}">{{ capability.organization }}</a>.
+        {% endif %}
 
         {% if capability.stemming_from %}
             <br>
@@ -14,7 +20,8 @@
             {{ capability.stemming_from.organization }}</a>.
         {% endif %}
 
-        {% if not capability.organization.is_position %}
+
+        {% if not capability.organization.is_position and not capability.is_passive %}
             {% if capability.organization.decision_taking == 'democratic' %}
                 <p>
                     <b>Please note:</b> because {{ capability.organization }} is organized democratically, using these
@@ -27,5 +34,14 @@
     </p>
 
     {% include subtemplate %}
+
+    <hr>
+    <h4>Delegation</h4>
+    <p>
+        You may also delegate this power.
+    </p>
+    <p>
+        Take back delegation.
+    </p>
 
 {% endblock %}

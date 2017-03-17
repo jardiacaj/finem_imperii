@@ -74,6 +74,9 @@ class Organization(models.Model):
                 return True
         return False
 
+    def get_open_proposals(self):
+        return CapabilityProposal.objects.filter(capability__applying_to=self, closed=False)
+
     def get_all_controlled_tiles(self):
         return Tile.objects.filter(controlled_by__in=self.get_all_descendants(including_self=True)).all()
 
@@ -114,6 +117,9 @@ class Capability(models.Model):
             proposal.execute()
         else:
             proposal.issue_vote(character, CapabilityVote.YEA)
+
+    def is_passive(self):
+        return self.type in (self.CONSCRIPT, )
 
 
 class CapabilityProposal(models.Model):

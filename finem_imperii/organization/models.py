@@ -80,6 +80,9 @@ class Organization(models.Model):
     def get_all_controlled_tiles(self):
         return Tile.objects.filter(controlled_by__in=self.get_all_descendants(including_self=True)).all()
 
+    def external_capabilities_to_this(self):
+        return self.capabilities_to_this.exclude(organization=self)
+
     def __str__(self):
         return self.name
 

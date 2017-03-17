@@ -148,7 +148,9 @@
                         {% else %}
                             <b>{{ capability.get_type_display|capfirst }}</b>
                         {% endif %}
-                        in <a href="{{ capability.applying_to.get_absolute_url }}">{{ capability.applying_to }}</a>
+                        {% if capability.applying_to != organization %}
+                            in <a href="{{ capability.applying_to.get_absolute_url }}">{{ capability.applying_to }}</a>
+                        {% endif %}
                         {% if capability.stemming_from %}
                             (delegated by <a href="{{ capability.stemming_from.organization.get_absolute_url }}">
                             {{ capability.stemming_from.organization }}</a>)
@@ -159,9 +161,9 @@
                 {% endfor %}
             </ul>
 
-            <h4>Powers applying</h4>
+            <h4>Externally applying powers</h4>
             <ul>
-                {% for capability in organization.capabilities_to_this.all %}
+                {% for capability in organization.external_capabilities_to_this.all %}
                     <li>
                         <a href="{{ capability.organization.get_absolute_url }}">{{ capability.organization }}</a>
                         can <b>{{ capability.get_type_display }}</b>
@@ -175,7 +177,6 @@
                 {% endfor %}
             </ul>
         </div>
-
     </div>
 
 

@@ -11,7 +11,7 @@
         {% if capability.stemming_from %}
             <br>
             This capability has been delegated by <a href="{{ capability.stemming_from.get_absolute_url }}">
-            {{ capability.stemming_from }}</a>.
+            {{ capability.stemming_from.organization }}</a>.
         {% endif %}
 
         {% if not capability.organization.is_position %}

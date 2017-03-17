@@ -18,14 +18,24 @@
         <div class="form-group">
             <label for="title" class="col-lg-2 control-label">Title</label>
             <div class="col-lg-10">
-                <input class="form-control" id="title" placeholder="Document title" type="text" value="{{ document.title }}" maxlength="100">
+                <input class="form-control"
+                       id="title"
+                       name="title"
+                       placeholder="Document title"
+                       type="text"
+                       value="{{ document.title }}"
+                       maxlength="100"
+                >
             </div>
         </div>
 
         <div class="form-group">
             <div class="checkbox col-lg-10 col-lg-offset-2">
                 <label>
-                    <input type="checkbox" {% if document.public %}checked="checked"{% endif %}> Public document
+                    <input type="checkbox"
+                           name="public"
+                           {% if document.public %}checked="checked"{% endif %}
+                    > Public document
                 </label>
             </div>
         </div>
@@ -33,15 +43,42 @@
         <div class="form-group">
             <label for="content" class="col-lg-2 control-label">Body</label>
             <div class="col-lg-10">
-                <textarea class="form-control" rows="20" id="content" placeholder="Document body" maxlength="10000">{{ document.body }}</textarea>
+                <textarea class="form-control"
+                          name="body"
+                          rows="20"
+                          id="content"
+                          placeholder="Document body"
+                          maxlength="10000"
+                >{{ document.body }}</textarea>
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-lg-10 col-lg-offset-2">
-                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="submit" class="btn btn-primary">
+                    {% if new_document %}Create{% else %}Update{% endif %}
+                </button>
             </div>
         </div>
 
     </fieldset>
 </form>
+
+{% if not new_document %}
+    <form class="form-horizontal" method="post">
+        <fieldset>
+            {% csrf_token %}
+            <input type="hidden" name="delete" value="1">
+
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-2">
+                    <button type="submit"
+                            class="btn btn-danger"
+                            onclick="return confirm('Are you sure you want to DELETE this document?')"
+                    >Delete</button>
+                </div>
+            </div>
+
+        </fieldset>
+    </form>
+{% endif %}

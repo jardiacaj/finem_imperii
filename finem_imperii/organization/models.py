@@ -125,7 +125,26 @@ class CapabilityProposal(models.Model):
     closed = models.BooleanField(default=False)
 
     def execute(self):
-        pass
+        proposal = json.loads(self.proposal_json)
+        if self.capability.type == Capability.POLICY_DOCUMENT:
+            if proposal['new']:
+                document = PolicyDocument(organization=self.capability.applying_to)
+            else:
+                document = PolicyDocument.objects.get(id=proposal['document_id'])
+
+            if proposal['delete']:
+                document.delete()
+            else:
+                document.title = proposal['title']
+                document.body = proposal['body']
+                document.public = 'public' in proposal.keys()
+                document.last_modified_turn = self.capability.organization.world.current_turn
+                document.save()
+        else:
+            raise Exception("Executing ")
+        self.executed = True
+        self.closed = True
+        self.save()
 
     def issue_vote(self, character, vote):
         CapabilityVote.objects.create(

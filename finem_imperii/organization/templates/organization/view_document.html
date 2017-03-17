@@ -1,12 +1,14 @@
 {% extends "base/base.html" %}
 
+{% load extra_filters %}
+
 {% block content %}
 
     <h1 class="page-header">{{ document.title }}</h1>
     
     <p>
-        Back to <a href="{% url 'organization:documents' document.organization_id %}">
-        {{ document.organization }} documents</a>
+        Back to <a href="{{ document.organization.get_absolute_url }}">
+        {{ document.organization }}</a>
     </p>
 
     {% if document.parent %}
@@ -16,5 +18,13 @@
     {% endif %}
 
     <pre>{{ document.body }}</pre>
+
+    <p>
+        {% if document.public %}Public{% else %}Private{% endif %} document.
+    </p>
+
+    <p>
+        Last edited {{ document.last_modified_turn|nice_turn }}.
+    </p>
 
 {% endblock %}

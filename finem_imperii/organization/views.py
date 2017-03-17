@@ -55,6 +55,10 @@ class DocumentCapabilityView(View):
             messages.error(request, "You cannot do that", "danger")
             return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
 
+        if 'delete' in request.POST.keys() and document_id is None:
+            messages.error(request, "You cannot do that", "danger")
+            return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
+
     def get(self, request, capability_id, document_id=None):
         check_result = self.check(request, capability_id, document_id)
         if check_result is not None:
@@ -91,6 +95,7 @@ class DocumentCapabilityView(View):
         proposal = {
             'new': new_document,
             'document_id': document_id,
+            'delete': 'delete' in request.POST.keys(),
             'title': request.POST.get('title'),
             'body': request.POST.get('body'),
             'public': request.POST.get('public'),

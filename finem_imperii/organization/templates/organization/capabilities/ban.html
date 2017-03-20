@@ -1,0 +1,16 @@
+<p>
+    You have been granted the power to ban members of {{ capability.applying_to }}.
+</p>
+
+{% for member in capability.applying_to.character_members.all %}
+    <form class="" role="form" method="post" action="{% url 'organization:banning_capability' capability.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="character_to_ban_id" value="{{ member.id }}">
+        <span class="form-group form-inline">
+            {{ member }}
+            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Ban</button>
+        </span>
+    </form>
+{% empty %}
+    <p>No members</p>
+{% endfor %}

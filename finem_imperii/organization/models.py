@@ -149,8 +149,17 @@ class CapabilityProposal(models.Model):
                 document.public = 'public' in proposal.keys()
                 document.last_modified_turn = self.capability.organization.world.current_turn
                 document.save()
+
+        elif self.capability.type == Capability.BAN:
+            character_to_ban = Character.objects.get(id=proposal['character_id'])
+            self.capability.applying_to.character_members.remove(character_to_ban)
+
+            leader_organization = self.capability.applying_to.leader
+            if leader_organization and character_to_ban in leader_organization.character_members.all():
+                leader_organization.character_members.remove(character_to_ban)
+
         else:
-            raise Exception("Executing ")
+            raise Exception("Executing unknown capability type '{}'".format(self.capability.type))
         self.executed = True
         self.closed = True
         self.save()

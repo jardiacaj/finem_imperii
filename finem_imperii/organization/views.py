@@ -1,10 +1,12 @@
+import json
+
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls.base import reverse
 from django.views.generic.base import View
 
 from decorators import inchar_required
-from organization.models import Organization, PolicyDocument, Capability
+from organization.models import Organization, PolicyDocument, Capability, CapabilityProposal, CapabilityVote
 from world.models import Character
 
 
@@ -134,6 +136,63 @@ class DocumentCapabilityView(View):
             'body': request.POST.get('body'),
             'public': request.POST.get('public'),
         }
+
+        capability.create_proposal(request.hero, proposal)
+
+        if capability.organization.decision_taking == Organization.DEMOCRATIC:
+            messages.success(request, "A vote has been started regarding your action", "success")
+        else:
+            messages.success(request, "Done!", "success")
+        return redirect(capability.organization.get_absolute_url())
+
+
+class ProposalView(View):
+    def check(self, request, proposal_id):
+        proposal = get_object_or_404(CapabilityProposal, id=proposal_id)
+        if not proposal.capability.organization.character_is_member(request.hero):
+            messages.error(request, "You cannot do that", "danger")
+            return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
+
+    def get(self, request, proposal_id):
+        check_result = self.check(request, proposal_id)
+        if check_result is not None:
+            return check_result
+
+        proposal = get_object_or_404(CapabilityProposal, id=proposal_id)
+        try:
+            heros_vote = proposal.capabilityvote_set.get(voter=request.hero)
+        except CapabilityVote.DoesNotExist:
+            heros_vote = None
+
+        context = {
+            'proposal': proposal,
+            'heros_vote': heros_vote,
+            'subtemplate': 'organization/proposals/{}.html'.format(proposal.capability.type),
+        }
+
+        proposal_content = json.loads(proposal.proposal_json)
+        if proposal.capability.type == Capability.POLICY_DOCUMENT:
+            pass
+        elif proposal.capability.type == Capability.BAN:
+            context['character_to_ban'] = Character.objects.get(id=proposal_content['character_id'])
+
+        return render(request, 'organization/proposal.html', context)
+
+    def post(self, request, proposal_id):
+        check_result = self.check(request, proposal_id)
+        if check_result is not None:
+            return check_result
+
+        proposal = get_object_or_404(CapabilityProposal, id=proposal_id)
+
+        return  # TODO
+
+        character_to_ban = get_object_or_404(Character, id=request.POST.get('character_to_ban_id'))
+        if character_to_ban not in capability.applying_to.character_members.all():
+            messages.error(request, "You cannot do that", "danger")
+            return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
+
+        proposal = {'character_id': character_to_ban.id}
 
         capability.create_proposal(request.hero, proposal)
 

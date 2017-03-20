@@ -1,0 +1,28 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+
+    <h1>Action proposal vote</h1>
+
+    {% include subtemplate %}
+
+    {% if heros_vote %}
+    {% else %}
+        <p>
+            You may vote:
+        </p>
+
+        <form class="" role="form" method="post">
+            {% csrf_token %}
+            <span class="form-group form-inline">
+                <button type="submit" class="btn btn-success btn-lg" name="vote" value="yea" onclick="return confirm('Are you sure?')">YEA</button>
+                <button type="submit" class="btn btn-default btn-lg" name="vote" value="invalid" onclick="return confirm('Are you sure?')">INVALID</button>
+                <button type="submit" class="btn btn-danger btn-lg" name="vote" value="nay" onclick="return confirm('Are you sure?')">NAY</button>
+            </span>
+        </form>
+    {% endif %}
+
+    <h4>Already voted:</h4>
+    
+
+{% endblock %}

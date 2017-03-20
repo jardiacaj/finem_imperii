@@ -2,11 +2,12 @@ from django.conf.urls import url
 
 from decorators import inchar_required
 from organization.views import organization_view, document_view, capability_view, \
-    DocumentCapabilityView, BanningCapabilityView
+    DocumentCapabilityView, BanningCapabilityView, ProposalView
 
 urlpatterns = [
     url(r'^(?P<organization_id>[0-9]+)$', organization_view, name='view'),
     url(r'^document/(?P<document_id>[0-9]+)$', document_view, name='document'),
+    url(r'^proposal/(?P<proposal_id>[0-9]+)$', inchar_required(ProposalView.as_view()), name='proposal'),
     url(r'^capability/(?P<capability_id>[0-9]+)$', capability_view, name='capability'),
     url(r'^capability/(?P<capability_id>[0-9]+)/ban$',
         inchar_required(BanningCapabilityView.as_view()), name='banning_capability'),

@@ -117,64 +117,66 @@ Allocated: ~5 days
  - World map rendering. (1,5 days) (finished)
  - Travelling. (1 day) (finished)
  - World population. (1/2 day) (finished)
- - Recruitment. (1,5 days)
- - Notifications. (1/2 day)
- - PAC1. (1/2 day)
+ - Recruitment. (1,5 days) (finished)
+ - Notifications. (1/2 day) (finished)
+ - PAC1. (1/2 day) (finished)
 
 Allocated: ~5 days
 
 ## Week 3
 
- - Messaging. (1 day)
- - Organizations. (1 day)
- - Elections. (1 day) 
- - Secession and rebellion. (1 day)
+ - Organizations part 1. (3 day) (finished)
 
-Allocated: 4 days
+Allocated: 3 days
 
 ## Week 4
 
- - Conquest. (1 day)
- - CI and Dockerization (1 day)
- - Battle rework. (1 day)
+ - Organizations part 2. (1 day)
+ - Elections. (1 day)
+ - Secession and rebellion. (1 day)
 
 Allocated: 3 days (vacation!)
 
 ## Week 5
 
- - Battle rendering. (1,5 days)
- - Battle orders. (2 days)
- - Sieges. (1 day)
+ - Messaging. (1 day)
+ - Conquest. (1 day)
+ - CI and Dockerization (1 day)
+ - Diplomacy. (1 day)
 
-Allocated: 4,5 days
+Allocated: 4 days
  
 ## Week 6
 
- - Diplomacy. (1 day)
- - Barbarians. (2 days)
- - Building production (1 day)
- - Test environment setup (1/2 day)
+ - Battle rework. (1 day)
+ - Battle rendering. (1,5 days)
+ - Battle orders. (2 days)
 
 Allocated: 4,5 days
 
 ## Week 7 
 
- - Trade (1,5 days)
- - Taxation (1 day)
- - PAC2 (1/2 day)
+ - Sieges. (1 day)
+ - Barbarians. (2 days)
  
 Allocated: 3 days (vacation!)
  
 ## Week 8 
  
- - Closed alpha release (1 day)
- - Game start/tutorial (2 days)
+ - Building production (1 day)
+ - Test environment setup (1/2 day)
+ - Trade (1,5 days)
 
 Allocated: 3 days (vacation!)
 
 ## Week 9
 
-Buffer for unplanned issues.
+ - Taxation (1 day)
+ - PAC2 (1/2 day)
+ - Closed alpha release (1 day)
+ - Game start/tutorial (2 days)
+
+Allocated: 4,5 days
 
 ## Week 10
 

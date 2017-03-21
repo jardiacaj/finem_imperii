@@ -23,14 +23,19 @@ class Organization(models.Model):
         (ORGANIZATION, ORGANIZATION),
     )
 
+    INHERITED = 'inherited'
+    ELECTED = 'elected'
+    POSITION_TYPE_CHOICES = (
+        (INHERITED, INHERITED),
+        (ELECTED, ELECTED),
+    )
+
     world = models.ForeignKey('world.World')
     name = models.CharField(max_length=100)
     color = models.CharField(max_length=6, default="FFFFFF", help_text="Format: RRGGBB (hex)")
     description = models.TextField()
     is_position = models.BooleanField()
-    inherit_capabilities = models.BooleanField(
-        help_text="If true, capabilities of parents and leader apply to this organization too"
-    )
+    position_type = models.CharField(max_length=15, choices=POSITION_TYPE_CHOICES, blank=True, default='')
     owner = models.ForeignKey('Organization', null=True, blank=True, related_name='owned_organizations')
     leader = models.ForeignKey('Organization', null=True, blank=True, related_name='leaded_organizations')
     owner_and_leader_locked = models.BooleanField(

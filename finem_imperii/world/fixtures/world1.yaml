@@ -13,7 +13,7 @@
     color: "8F00CC"
     description: "It's a kingdom with a missing description"
     is_position: false
-    inherit_capabilities: true
+    position_type: inherited
     owner_id: null
     leader_id: 2
     owner_and_leader_locked: false
@@ -29,7 +29,6 @@
     color: "B300FF"
     description: "It's a king without description"
     is_position: true
-    inherit_capabilities: false
     owner_id: null
     leader_id: null
     owner_and_leader_locked: false
@@ -97,7 +96,6 @@
     color: "008691"
     description: "It's a federation without description"
     is_position: false
-    inherit_capabilities: false
     owner_id: null
     leader_id: 4
     owner_and_leader_locked: false
@@ -116,7 +114,7 @@
     color: "008691"
     description: "It's a president without description"
     is_position: true
-    inherit_capabilities: false
+    position_type: elected
     owner_id: null
     leader_id: null
     owner_and_leader_locked: false
@@ -132,7 +130,6 @@
     color: "CE0004"
     description: "It's a federated state without description"
     is_position: false
-    inherit_capabilities: false
     owner_id: null
     leader_id: 6
     owner_and_leader_locked: false
@@ -184,7 +181,7 @@
     color: "A70004"
     description: "Lord of Knarkt"
     is_position: true
-    inherit_capabilities: false
+    position_type: inherited
     owner_id: null
     leader_id: null
     owner_and_leader_locked: false
@@ -226,7 +223,6 @@
     color: "928439"
     description: "Federated State"
     is_position: false
-    inherit_capabilities: false
     owner_id: null
     leader_id: 8
     owner_and_leader_locked: false
@@ -288,14 +284,14 @@
     color: "928439"
     description: "Thain of Casmir"
     is_position: true
-    inherit_capabilities: false
+    position_type: elected
     owner_id: null
     leader_id: null
     owner_and_leader_locked: false
     violence_monopoly: false
     decision_taking: distributed
     membership_type: character
-    election_period_months: 0
+    election_period_months: 25
 
 - model: world.Region
   pk: 1

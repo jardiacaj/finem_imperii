@@ -185,19 +185,20 @@ class ProposalView(View):
 
         proposal = get_object_or_404(CapabilityProposal, id=proposal_id)
 
-        return  # TODO
-
-        character_to_ban = get_object_or_404(Character, id=request.POST.get('character_to_ban_id'))
-        if character_to_ban not in capability.applying_to.character_members.all():
-            messages.error(request, "You cannot do that", "danger")
+        if proposal.closed:
+            messages.error(request, "Voting closed", "danger")
             return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
 
-        proposal = {'character_id': character_to_ban.id}
+        issued_vote = request.POST.get('vote')
+        if issued_vote not in dict(CapabilityVote.VOTE_CHOICES).keys():
+            messages.error(request, "Invalid vote", "danger")
+            return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
 
-        capability.create_proposal(request.hero, proposal)
+        proposal.issue_vote(request.hero, issued_vote)
 
-        if capability.organization.decision_taking == Organization.DEMOCRATIC:
-            messages.success(request, "A vote has been started regarding your action", "success")
-        else:
-            messages.success(request, "Done!", "success")
-        return redirect(capability.organization.get_absolute_url())
+        messages.success(request, "Your vote has been issued.", "success")
+
+        if proposal.executed:
+            messages.info(request, "Your vote has triggered the decision.", "info")
+
+        return redirect(proposal.get_absolute_url())

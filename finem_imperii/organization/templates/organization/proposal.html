@@ -19,7 +19,12 @@
                     <span class="label label-danger">NAY</span>
                 {% endif %}
             </h4>
-        {% else %}
+            {% if proposal.executed %}
+                <p class="small">
+                    This proposal has already been accepted.
+                </p>
+            {% endif %}
+        {% elif not proposal.closed %}
             <h4>Cast your vote</h4>
             <form class="" role="form" method="post">
                 {% csrf_token %}
@@ -29,7 +34,20 @@
                     <button type="submit" class="btn btn-danger btn-lg" name="vote" value="nay" onclick="return confirm('Are you sure?')">NAY</button>
                 </span>
             </form>
+            {% if proposal.executed %}
+                <p class="small">
+                    This proposal has already been accepted because a majority voted for it. You may still issue your
+                    vote.
+                </p>
+            {% endif %}
         {% endif %}
+
+        {% if proposal.closed and proposal.executed %}
+            <h4>This proposal did not pass.</h4>
+        {% elif proposal.closed and not proposal.executed %}
+            <h4>This proposal did not pass.</h4>
+        {% endif %}
+
     </div>
 
     <h4>Casted votes</h4>

@@ -198,7 +198,4 @@ class ProposalView(View):
 
         messages.success(request, "Your vote has been issued.", "success")
 
-        if proposal.executed:
-            messages.info(request, "Your vote has triggered the decision.", "info")
-
         return redirect(proposal.get_absolute_url())

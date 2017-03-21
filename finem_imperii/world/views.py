@@ -1,4 +1,3 @@
-import json
 import random
 
 from django.contrib import messages
@@ -13,7 +12,7 @@ from battle.models import Battle
 from decorators import inchar_required
 from name_generator.name_generator import NameGenerator
 from organization.models import Organization
-from world.models import Character, World, Settlement, Tile, WorldUnit, WorldUnitStatusChangeException, NPC
+from world.models import Character, World, Settlement, WorldUnit, WorldUnitStatusChangeException, NPC
 from world.renderer import render_world_for_view
 from world.templatetags.extra_filters import nice_hours
 
@@ -91,7 +90,8 @@ class CharacterCreationView(View):
             name=name + ' ' + surname,
             world=world,
             location=random.choice(
-                Settlement.objects.filter(tile__controlled_by=state) if state is not None else Settlement.objects.filter(tile__world=world)
+                Settlement.objects.filter(tile__controlled_by=state) if state is not None
+                else Settlement.objects.filter(tile__world=world)
             ),
             oath_sworn_to=None if state is None else state if state.leader is None else state.leader,
             owner_user=request.user,
@@ -199,7 +199,9 @@ class RecruitmentView(View):
             if request.hero.hours_in_turn_left < conscription_time:
                 return RecruitmentView.fail_post_with_error(
                     request,
-                    "You would need {} to do this, but you don't have that much time left in this turn.".format(nice_hours(conscription_time))
+                    "You would need {} to do this, but you don't have that much time left in this turn.".format(
+                        nice_hours(conscription_time)
+                    )
                 )
 
             # check unit type
@@ -330,7 +332,11 @@ class TravelView(View):
             messages.success(request, message, extra_tags="success")
             return redirect('world:travel')
         else:
-            messages.success(request, "You you will reach {} when the turn ends.".format(target_settlement), extra_tags="success")
+            messages.success(
+                request,
+                "You you will reach {} when the turn ends.".format(target_settlement),
+                extra_tags="success"
+            )
             request.hero.travel_destination = target_settlement
             request.hero.save()
             return redirect('world:travel')

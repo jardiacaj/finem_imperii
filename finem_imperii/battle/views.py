@@ -1,13 +1,10 @@
 import json
 
-from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.forms.models import model_to_dict
 from django.http.response import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 
-from battle.models import Battle, BattleTurn, BattleUnit, BattleUnitInTurn, BattleObject, BattleObjectInTurn, Order, \
-    OrderListElement, BattleCharacter
+from battle.models import Battle, BattleUnit, Order, OrderListElement, BattleCharacter
 from decorators import inchar_required
 
 

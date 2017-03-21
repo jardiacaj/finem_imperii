@@ -1,13 +1,13 @@
 import random
 
 import math
-from collections import namedtuple, defaultdict
+from collections import namedtuple
 from math import sqrt
 
 from django.core.urlresolvers import reverse
 from django.db import models, transaction
 from django.contrib.auth.models import User
-from django.db.models.aggregates import Avg, Count
+from django.db.models.aggregates import Avg
 
 from messaging.models import CharacterNotification
 from name_generator.name_generator import NameGenerator
@@ -183,7 +183,9 @@ class Settlement(models.Model):
 
             if able:
                 assigned_workers += 1
-                if assigned_workers < self.population / 4 or total_other_workplaces == 0:  # we assign 75% of population to fields
+
+                # we assign 75% of population to fields
+                if assigned_workers < self.population / 4 or total_other_workplaces == 0:
                     # we do a weighted assignment
                     pos = random.randint(0, total_field_workplaces)
                     cumulative = 0
@@ -255,16 +257,28 @@ class NPCManager(models.Manager):
     def skill_distribution(self):
         return {
             'high skill': self.get_queryset().filter(skill_fighting__gte=NPC.TOP_SKILL_LIMIT).count(),
-            'medium skill': self.get_queryset().filter(skill_fighting__gte=NPC.MEDIUM_SKILL_LIMIT, skill_fighting__lt=NPC.TOP_SKILL_LIMIT).count(),
+            'medium skill': self.get_queryset().filter(
+                skill_fighting__gte=NPC.MEDIUM_SKILL_LIMIT,
+                skill_fighting__lt=NPC.TOP_SKILL_LIMIT
+            ).count(),
             'low skill': self.get_queryset().filter(skill_fighting__lt=NPC.MEDIUM_SKILL_LIMIT).count(),
         }
 
     def age_distribution(self):
         return {
             'too young': self.get_queryset().filter(age_months__lt=NPC.VERY_YOUNG_AGE_LIMIT).count(),
-            'very young': self.get_queryset().filter(age_months__gte=NPC.VERY_YOUNG_AGE_LIMIT, age_months__lt=NPC.YOUNG_AGE_LIMIT).count(),
-            'young': self.get_queryset().filter(age_months__gte=NPC.YOUNG_AGE_LIMIT, age_months__lt=NPC.MIDDLE_AGE_LIMIT).count(),
-            'middle age': self.get_queryset().filter(age_months__gte=NPC.MIDDLE_AGE_LIMIT, age_months__lt=NPC.OLD_AGE_LIMIT).count(),
+            'very young': self.get_queryset().filter(
+                age_months__gte=NPC.VERY_YOUNG_AGE_LIMIT,
+                age_months__lt=NPC.YOUNG_AGE_LIMIT
+            ).count(),
+            'young': self.get_queryset().filter(
+                age_months__gte=NPC.YOUNG_AGE_LIMIT,
+                age_months__lt=NPC.MIDDLE_AGE_LIMIT
+            ).count(),
+            'middle age': self.get_queryset().filter(
+                age_months__gte=NPC.MIDDLE_AGE_LIMIT,
+                age_months__lt=NPC.OLD_AGE_LIMIT
+            ).count(),
             'old': self.get_queryset().filter(age_months__gte=NPC.OLD_AGE_LIMIT).count(),
         }
 
@@ -451,10 +465,14 @@ class WorldUnit(models.Model):
             raise WorldUnitStatusChangeException("The unit is already {}".format(self.get_status_display()))
         if new_status == WorldUnit.NOT_MOBILIZED:
             if self.mobilization_status_since == self.world.current_turn:
-                raise WorldUnitStatusChangeException("Cannot demobilize {} the same turn it has been mobilized".format(self))
+                raise WorldUnitStatusChangeException(
+                    "Cannot demobilize {} the same turn it has been mobilized".format(self)
+                )
         if new_status != WorldUnit.NOT_MOBILIZED and self.status == WorldUnit.NOT_MOBILIZED:
             if self.mobilization_status_since == self.world.current_turn:
-                raise WorldUnitStatusChangeException("Cannot mobilize {} the same turn it has been demobilized".format(self))
+                raise WorldUnitStatusChangeException(
+                    "Cannot mobilize {} the same turn it has been demobilized".format(self)
+                )
         if new_status == WorldUnit.FOLLOWING and self.owner_character.location != self.location:
             raise WorldUnitStatusChangeException("A unit can only follow you if you are in the same location.")
         self.status = new_status

@@ -24,8 +24,7 @@
                 <p class="text-center">
                     {{ request.hero.location.tile }} is
                     {% if request.hero.location.tile.controlled_by %}
-                         part of {{ request.hero.location.tile.controlled_by.get_html_link|safe }}
-                        </a>
+                        part of {{ request.hero.location.tile.controlled_by.get_html_link|safe }}
                     {% else %}
                         a barbaric region
                     {% endif %}in

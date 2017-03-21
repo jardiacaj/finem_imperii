@@ -16,16 +16,14 @@
                     <div class="col-md-6">
                         <div class="well">
                             <label class="btn btn-primary">
-                                <h4>
-                                    <input type="radio" name="state_id" value="{{ state.id }}"> {{ state }}
-                                </h4>
+                                <input type="radio" name="state_id" value="{{ state.id }}"> {{ state.get_html_name|safe }}
                             </label>
                             <p>{{ state.description }}</p>
                             <p>{{ state.get_membership_including_descendants|length }} members</p>
                             <p>{{ state.get_all_controlled_tiles|length }} regions</p>
                             <p>
                                 {% if state.leader %}
-                                    Leader: {{ state.leader }}
+                                    Leader: {{ state.leader.get_html_name|safe }}
                                 {% else %}
                                     Fully horizontal State.
                                 {% endif %}
@@ -35,10 +33,8 @@
                 {% endfor %}
                 <div class="col-md-6">
                     <div class="well">
-                        <label class="btn btn-primary">
-                            <h4>
-                                <input type="radio" name="state_id" value="0"> Stateless
-                            </h4>
+                        <label class="btn btn-default">
+                            <input type="radio" name="state_id" value="0"> Stateless
                         </label>
                         <p>
                             This option is recommended to experienced players only!

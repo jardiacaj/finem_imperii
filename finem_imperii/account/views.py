@@ -2,8 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.http.response import HttpResponseNotFound
-from django.shortcuts import redirect, render, get_object_or_404
+from django.shortcuts import redirect, render
 
 from messaging.models import ServerMOTD
 
@@ -18,11 +17,21 @@ def register_view(request):
         password2 = request.POST.get('password2')
 
         if User.objects.filter(email=email).exists():
-            messages.add_message(request, messages.ERROR, "An account with this email address already exists", extra_tags="danger")
+            messages.add_message(
+                request,
+                messages.ERROR,
+                "An account with this email address already exists",
+                extra_tags="danger"
+            )
             return redirect('base:register')
 
         if User.objects.filter(username=username).exists():
-            messages.add_message(request, messages.ERROR, "An account with this username already exists", extra_tags="danger")
+            messages.add_message(
+                request,
+                messages.ERROR,
+                "An account with this username already exists",
+                extra_tags="danger"
+            )
             return redirect('base:register')
 
         if password != password2:
@@ -56,7 +65,12 @@ def login_view(request):
                 messages.add_message(request, messages.ERROR, "You account is disabled.", extra_tags='danger')
                 return redirect('account:login')
         else:
-            messages.add_message(request, messages.ERROR, "Your username and/or your password is incorrect.", extra_tags='warning')
+            messages.add_message(
+                request,
+                messages.ERROR,
+                "Your username and/or your password is incorrect.",
+                extra_tags='warning'
+            )
             return redirect('account:login')
     else:
         if request.user.is_authenticated():

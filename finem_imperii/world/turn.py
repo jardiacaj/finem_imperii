@@ -5,8 +5,10 @@ from messaging.models import CharacterNotification
 months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November',
           'December']
 
+
 def turn_to_date(turn):
     return "{} {} I.E.".format(months[turn % 12], turn//12 + 815)
+
 
 class TurnProcessor:
     def __init__(self, world):
@@ -29,7 +31,7 @@ class TurnProcessor:
             travel_check = character.check_travelability(character.travel_destination)
             if travel_check is not None:
                 pass
-                #TODO add notification!
+                # TODO add notification!
             else:
                 message = character.perform_travel(character.travel_destination)
                 character.travel_destination = None

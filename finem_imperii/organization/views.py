@@ -130,7 +130,7 @@ class DocumentCapabilityView(View):
 
         proposal = {
             'new': new_document,
-            'document_id': document_id,
+            'document_id': document.id,
             'delete': 'delete' in request.POST.keys(),
             'title': request.POST.get('title'),
             'body': request.POST.get('body'),

@@ -23,12 +23,18 @@ class Battle(models.Model):
         for char in self.battlecharacter_set.all():
             for battle_unit in char.battleunit_set.all():
                 unit_data = {
-                    'turn_data': [model_to_dict(battle_unit_in_turn) for battle_unit_in_turn in battle_unit.battleunitinturn_set.all()]
+                    'turn_data': [
+                        model_to_dict(battle_unit_in_turn)
+                        for battle_unit_in_turn in battle_unit.battleunitinturn_set.all()
+                    ]
                 }
                 result['unit_data'].append(unit_data)
         for battle_object in self.battleobject_set.all():
             object_data = {
-                'turn_data': [model_to_dict(battle_object_in_turn) for battle_object_in_turn in battle_object.battleobjectinturn_set.all()]
+                'turn_data': [
+                    model_to_dict(battle_object_in_turn)
+                    for battle_object_in_turn in battle_object.battleobjectinturn_set.all()
+                ]
             }
             result['object_data'].append(object_data)
         return result
@@ -211,49 +217,49 @@ class BattleUnitInTurn(models.Model):
         closed_set = set()
         open_set = set()
         open_set.add((self.coordinates()))
-        cameFrom = {}
-        gScore = {}
-        gScore[self.coordinates()] = 0
-        fScore = {}
-        fScore[self.coordinates()] = self.euclidean_distance(self.coordinates(), goal)
+        came_from = {}
+        g_score = {}
+        g_score[self.coordinates()] = 0
+        f_score = {}
+        f_score[self.coordinates()] = self.euclidean_distance(self.coordinates(), goal)
 
         while open_set:
             minel = None
             for el in open_set:
-                if minel is None or fScore[el] < fScore[minel]:
+                if minel is None or f_score[el] < f_score[minel]:
                     minel = el
             current = minel
             open_set.remove(minel)
 
             if current == goal:
                 # RECONSTRUCT
-                #print("REACHED GOAL, backtracing")
+                # print("REACHED GOAL, backtracing")
                 total_path = [current]
-                while current in cameFrom.keys():
-                    current = cameFrom[current]
+                while current in came_from.keys():
+                    current = came_from[current]
                     total_path.append(current)
-                    #print("Backtrace {}".format(current))
+                    # print("Backtrace {}".format(current))
                 total_path.reverse()
                 return total_path
 
             closed_set.add(current)
             for neighbor in self.coordinate_neighbours(current):
                 if neighbor in closed_set:
-                    #print("Already closed: {}".format(neighbor))
+                    # print("Already closed: {}".format(neighbor))
                     continue
-                tentative_gScore = gScore[current] + self.euclidean_distance(current, neighbor)
-                #print("Considering {} with score {}".format(neighbor, tentative_gScore))
+                tentative_g_score = g_score[current] + self.euclidean_distance(current, neighbor)
+                # print("Considering {} with score {}".format(neighbor, tentative_g_score))
                 if neighbor not in open_set:
-                    #print("Adding to open set")
+                    # print("Adding to open set")
                     open_set.add(neighbor)
-                elif tentative_gScore >= gScore[neighbor]:
-                    #print("Better value in gScore map")
+                elif tentative_g_score >= g_score[neighbor]:
+                    # print("Better value in g_score map")
                     continue
 
-                #print("Found better path")
-                cameFrom[neighbor] = current
-                gScore[neighbor] = tentative_gScore
-                fScore[neighbor] = gScore[neighbor] + self.euclidean_distance(neighbor, goal)
+                # print("Found better path")
+                came_from[neighbor] = current
+                g_score[neighbor] = tentative_g_score
+                f_score[neighbor] = g_score[neighbor] + self.euclidean_distance(neighbor, goal)
         return None
 
 

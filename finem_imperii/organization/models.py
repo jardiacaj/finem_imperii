@@ -62,7 +62,11 @@ class Organization(models.Model):
         if character in self.character_members.all():
             return True
         for member_organization in self.organization_members.all():
-            if member_organization.leader and member_organization.leader.is_position and character in member_organization.organization_members.all():
+            if (
+                            member_organization.leader and
+                            member_organization.leader.is_position and
+                            character in member_organization.organization_members.all()
+            ):
                 return True
             if member_organization.is_position and character in member_organization.organization_members.all():
                 return True

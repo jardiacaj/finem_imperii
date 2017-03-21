@@ -85,9 +85,13 @@ function MapRenderer(world_data) {
 
     zis.render_settlement = function (settlement) {
         var region = zis.regions[settlement.tile];
+        var organization = zis.organizations[region.controlled_by];
         var radius = Math.log10(settlement.population) * 0.02;
         var settlement_geometry = new THREE.CylinderGeometry( radius, radius, 0.01, 16 );
-        var cylinder = new THREE.Mesh( settlement_geometry, zis.settlement_material );
+        if (organization !== undefined)
+            var cylinder = new THREE.Mesh( settlement_geometry, organization.settlement_material );
+        else
+            var cylinder = new THREE.Mesh( settlement_geometry, zis.settlement_material_barbarian );
         cylinder.position.x = (region.x_pos - 1) - 0.5 + settlement.x_pos/100;
         cylinder.position.z = (region.z_pos - 1) - 0.5 + settlement.z_pos/100;
         cylinder.position.y = region.y_pos + 0.51;
@@ -255,6 +259,7 @@ function MapRenderer(world_data) {
 
     zis.regions = world_data.regions;
     zis.settlements = world_data.settlements;
+    zis.organizations = world_data.organizations;
 
     zis.travel_line_material = new THREE.LineBasicMaterial({color: 0x801919, linewidth: 3});
     zis.region_geometry = new THREE.CubeGeometry(1, 1, 1);
@@ -267,7 +272,7 @@ function MapRenderer(world_data) {
         "mountain": new THREE.MeshLambertMaterial({color: 0x837D71, shading: THREE.SmoothShading}),
     };
     zis.settlement_material_highlighted = new THREE.MeshBasicMaterial( {color: 0xFFFFFF} );
-    zis.settlement_material = new THREE.MeshBasicMaterial( {color: 0x000000} );
+    zis.settlement_material_barbarian = new THREE.MeshBasicMaterial( {color: 0x000000} );
 
     zis.picked_region = undefined;
     zis.picked_settlement = undefined;
@@ -293,13 +298,18 @@ function MapRenderer(world_data) {
     $(document).on('mousemove', zis.mouse_move_listener);
     $(document).on('click', zis.mouse_click_listener_notifier);
 
+    for (var organization_id in zis.organizations) {
+        var organization = zis.organizations[organization_id];
+        organization.settlement_material = new THREE.MeshBasicMaterial( {color: parseInt(organization.color, 16)} );
+    }
+
     for (var region_id in zis.regions)  {
-        var region = world_data.regions[region_id];
+        var region = zis.regions[region_id];
         zis.render_region(region);
     }
 
     for (var settlement_id in zis.settlements)  {
-        var settlement = world_data.settlements[settlement_id];
+        var settlement = zis.settlements[settlement_id];
         zis.render_settlement(settlement);
     }
 

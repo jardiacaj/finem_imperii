@@ -172,8 +172,24 @@ class CapabilityProposal(models.Model):
         )
         self.execute_if_enough_votes()
 
+    def delete_disallowed_votes(self):
+        for vote in self.capabilityvote_set.all():
+            if not self.capability.organization.character_is_member(vote.voter):
+                vote.delete()
+
     def execute_if_enough_votes(self):
-        pass
+        self.delete_disallowed_votes()
+        possible_votes = self.votes_possible()
+        if self.votes_yea().count() > possible_votes / 2:
+            self.execute()
+
+    def votes_possible(self):
+        return self.capability.organization.character_members.count()
+
+    def execute_if_majority(self):
+        self.delete_disallowed_votes()
+        if self.votes_yea().count() > self.votes_nay().count():
+            self.execute()
 
     def votes_yea(self):
         return self.capabilityvote_set.filter(vote=CapabilityVote.YEA)

@@ -1,5 +1,7 @@
 {% extends "base/base.html" %}
 
+{% load extra_filters %}
+
 {% block content %}
 
     <h1>Action proposal vote</h1>
@@ -19,11 +21,6 @@
                     <span class="label label-danger">NAY</span>
                 {% endif %}
             </h4>
-            {% if proposal.executed %}
-                <p class="small">
-                    This proposal has already been accepted.
-                </p>
-            {% endif %}
         {% elif not proposal.closed %}
             <h4>Cast your vote</h4>
             <form class="" role="form" method="post">
@@ -43,14 +40,25 @@
         {% endif %}
 
         {% if proposal.closed and proposal.executed %}
-            <h4>This proposal did not pass.</h4>
+            <h4>This proposal did pass.</h4>
         {% elif proposal.closed and not proposal.executed %}
             <h4>This proposal did not pass.</h4>
+        {% endif %}
+
+        {% if not proposal.closed %}
+            <p>
+                Voting is allowed until {{ proposal.vote_end_turn|nice_turn }}
+                ({{ proposal.vote_end_turn|subtract:proposal.capability.organization.world.current_turn }} turns left).
+            </p>
         {% endif %}
 
     </div>
 
     <h4>Casted votes</h4>
+
+    {% if not proposal.closed %}
+        <p>{{ proposal.votes_possible }} votes can be casted</p>
+    {% endif %}
 
     <div class="col-md-4">
         <div class="panel panel-success">

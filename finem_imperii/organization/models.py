@@ -175,6 +175,15 @@ class CapabilityProposal(models.Model):
     def execute_if_enough_votes(self):
         pass
 
+    def votes_yea(self):
+        return self.capabilityvote_set.filter(vote=CapabilityVote.YEA)
+
+    def votes_nay(self):
+        return self.capabilityvote_set.filter(vote=CapabilityVote.NAY)
+
+    def votes_invalid(self):
+        return self.capabilityvote_set.filter(vote=CapabilityVote.INVALID)
+
     def get_absolute_url(self):
         return reverse('organization:proposal', kwargs={'proposal_id': self.id})
 

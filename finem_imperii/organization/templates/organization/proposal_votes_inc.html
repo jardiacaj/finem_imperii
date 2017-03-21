@@ -1,0 +1,10 @@
+<ul>
+    {% for vote in votes.all %}
+        <li>
+            {{ vote.voter }}
+            {% if vote.voter == proposal.proposing_character %}(proposer){% endif %}
+        </li>
+    {% empty %}
+        <li>None yet</li>
+    {% endfor %}
+</ul>

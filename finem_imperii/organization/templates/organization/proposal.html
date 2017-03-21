@@ -6,23 +6,65 @@
 
     {% include subtemplate %}
 
-    {% if heros_vote %}
-    {% else %}
-        <p>
-            You may vote:
-        </p>
+    <div class="row text-center">
 
-        <form class="" role="form" method="post">
-            {% csrf_token %}
-            <span class="form-group form-inline">
-                <button type="submit" class="btn btn-success btn-lg" name="vote" value="yea" onclick="return confirm('Are you sure?')">YEA</button>
-                <button type="submit" class="btn btn-default btn-lg" name="vote" value="invalid" onclick="return confirm('Are you sure?')">INVALID</button>
-                <button type="submit" class="btn btn-danger btn-lg" name="vote" value="nay" onclick="return confirm('Are you sure?')">NAY</button>
-            </span>
-        </form>
-    {% endif %}
+        {% if heros_vote %}
+            <h4>
+                You voted
+                {% if heros_vote.vote == 'yea' %}
+                    <span class="label label-success">YEA</span>
+                {% elif heros_vote.vote == 'invalid' %}
+                    <span class="label label-default">INVALID</span>
+                {% elif heros_vote.vote == 'nay' %}
+                    <span class="label label-danger">NAY</span>
+                {% endif %}
+            </h4>
+        {% else %}
+            <h4>Cast your vote</h4>
+            <form class="" role="form" method="post">
+                {% csrf_token %}
+                <span class="form-group form-inline">
+                    <button type="submit" class="btn btn-success btn-lg" name="vote" value="yea" onclick="return confirm('Are you sure?')">YEA</button>
+                    <button type="submit" class="btn btn-default btn-lg" name="vote" value="invalid" onclick="return confirm('Are you sure?')">INVALID</button>
+                    <button type="submit" class="btn btn-danger btn-lg" name="vote" value="nay" onclick="return confirm('Are you sure?')">NAY</button>
+                </span>
+            </form>
+        {% endif %}
+    </div>
 
-    <h4>Already voted:</h4>
-    
+    <h4>Casted votes</h4>
+
+    <div class="col-md-4">
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ proposal.votes_yea.count }} YEA</h3>
+            </div>
+            <div class="panel-body">
+                {% include 'organization/proposal_votes_inc.html' with proposal=proposal votes=proposal.votes_yea %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ proposal.votes_invalid.count }} INVALID</h3>
+            </div>
+            <div class="panel-body">
+                {% include 'organization/proposal_votes_inc.html' with proposal=proposal votes=proposal.votes_invalid %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="panel panel-danger">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ proposal.votes_nay.count }} NAY</h3>
+            </div>
+            <div class="panel-body">
+                {% include 'organization/proposal_votes_inc.html' with proposal=proposal votes=proposal.votes_nay %}
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

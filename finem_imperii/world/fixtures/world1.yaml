@@ -10,6 +10,7 @@
   fields:
     world_id: 1
     name: "Kingdom of Cardell"
+    color: "8F00CC"
     description: "It's a kingdom with a missing description"
     is_position: false
     inherit_capabilities: true
@@ -25,6 +26,7 @@
   fields:
     world_id: 1
     name: "King of Cardell"
+    color: "B300FF"
     description: "It's a king without description"
     is_position: true
     inherit_capabilities: false
@@ -92,6 +94,7 @@
   fields:
     world_id: 1
     name: "Federated States of Central Emortuus"
+    color: "008691"
     description: "It's a federation without description"
     is_position: false
     inherit_capabilities: false
@@ -110,6 +113,7 @@
   fields:
     world_id: 1
     name: "President of the Federated States of Central Emortuus"
+    color: "008691"
     description: "It's a president without description"
     is_position: true
     inherit_capabilities: false
@@ -125,6 +129,7 @@
   fields:
     world_id: 1
     name: "Knarkt commonwealth"
+    color: "CE0004"
     description: "It's a federated state without description"
     is_position: false
     inherit_capabilities: false
@@ -176,6 +181,7 @@
   fields:
     world_id: 1
     name: "Knarkt Lord"
+    color: "A70004"
     description: "Lord of Knarkt"
     is_position: true
     inherit_capabilities: false
@@ -217,6 +223,7 @@
   fields:
     world_id: 1
     name: "Casmir"
+    color: "928439"
     description: "Federated State"
     is_position: false
     inherit_capabilities: false
@@ -278,6 +285,7 @@
   fields:
     world_id: 1
     name: "Casmir Thain"
+    color: "928439"
     description: "Thain of Casmir"
     is_position: true
     inherit_capabilities: false

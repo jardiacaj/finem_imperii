@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    <h1 class="page-header">{{ organization }}</h1>
+    <h1 class="page-header">{{ organization.get_html_name|safe }}</h1>
 
     <div class="row">
         <div class="col-sm-9">
@@ -16,14 +16,10 @@
                                 <br><b>Sovereign <span class="glyphicon glyphicon-tower" aria-hidden="true"></span></b>
                             {% endif %}
                             {% if organization.owner %}
-                                <br>Owned by <a href="{{ organization.owner.get_absolute_url }}">
-                                    {{ organization.owner }}
-                                </a>
+                                <br>Owned by {{ organization.owner.get_html_link|safe }}
                             {% endif %}
                             {% if organization.leader %}
-                                <br>Leaded by <a href="{{ organization.leader.get_absolute_url }}">
-                                    {{ organization.leader }}
-                                </a>
+                                <br>Leaded by {{ organization.leader.get_html_link|safe }}
                             {% endif %}
 
 
@@ -31,9 +27,7 @@
                             {% if organization.leaded_organizations.all %}
                                 <br>Leader of
                                 {% for leaded_orga in organization.leaded_organizations.all %}
-                                    <a href="{{ leaded_orga.get_absolute_url }}">
-                                        {{ leaded_orga }}
-                                    </a>
+                                    {{ leaded_orga.get_html_link|safe }}
                                     {% if not forloop.last %},{% endif %}
                                 {% endfor %}
                             {% endif %}
@@ -41,9 +35,7 @@
                             {% if organization.owned_organizations.all %}
                                 <br>Owner of
                                     {% for owned_orga in organization.owned_organizations.all %}
-                                        <a href="{{ owned_orga.get_absolute_url }}">
-                                            {{ owned_orga }}
-                                        </a>
+                                        {{ owned_orga.get_html_link|safe }}
                                         {% if not forloop.last %},{% endif %}
                                     {% endfor %}
                             {% endif %}

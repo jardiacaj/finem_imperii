@@ -3,6 +3,7 @@ import json
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls.base import reverse
+from django.utils.html import escape
 
 from world.models import Tile, Character
 
@@ -24,6 +25,7 @@ class Organization(models.Model):
 
     world = models.ForeignKey('world.World')
     name = models.CharField(max_length=100)
+    color = models.CharField(max_length=6, default="FFFFFF", help_text="Format: RRGGBB (hex)")
     description = models.TextField()
     is_position = models.BooleanField()
     inherit_capabilities = models.BooleanField(
@@ -74,6 +76,13 @@ class Organization(models.Model):
                 return True
         return False
 
+    def is_part_of_violence_monopoly(self):
+        return (
+            True if self.violence_monopoly
+            else False if not self.owner
+            else self.owner.is_part_of_violence_monopoly()
+        )
+
     def get_open_proposals(self):
         return CapabilityProposal.objects.filter(capability__applying_to=self, closed=False)
 
@@ -88,6 +97,28 @@ class Organization(models.Model):
 
     def get_absolute_url(self):
         return reverse('organization:view', kwargs={'organization_id': self.id})
+
+    def get_html_name(self):
+        if self.violence_monopoly:
+            template = '<span style="color: #{color}">◼</span>{name}<span style="color: #{color}">◼</span>'
+        elif self.leaded_organizations.filter(violence_monopoly=True).exists():
+            template = '<span style="color: #{color}">◢</span>{name}<span style="color: #{color}">◣</span>'
+        elif self.is_part_of_violence_monopoly():
+            template = '<span style="color: #{color}">▼</span>{name}<span style="color: #{color}">▼</span>'
+        elif self.leaded_organizations.exists():
+            template = '<span style="color: #{color}">◮</span>{name}<span style="color: #{color}">◭</span>'
+        elif not self.owner:
+            template = '<span style="color: #{color}">◨</span>{name}<span style="color: #{color}">◧</span>'
+        else:
+            template = '<span style="color: #{color}">◞</span>{name}<span style="color: #{color}">◟</span>'
+
+        return template.format(
+            name=escape(self.name),
+            color=escape(self.color)
+        )
+
+    def get_html_link(self):
+        return '<a href="{}">{}</a>'.format(self.get_absolute_url(), self.get_html_name())
 
 
 class Capability(models.Model):

@@ -56,6 +56,36 @@
     stemming_from: 2
     type: 'conscript'
     applying_to: 1
+- model: organization.Capability
+  fields:
+    organization_id: 2
+    type: 'diplomacy'
+    applying_to: 1
+- model: organization.Capability
+  fields:
+    organization_id: 2
+    type: 'dissolve'
+    applying_to: 1
+- model: organization.Capability
+  fields:
+    organization_id: 2
+    type: 'suborganizations'
+    applying_to: 1
+- model: organization.Capability
+  fields:
+    organization_id: 2
+    type: 'secede'
+    applying_to: 1
+- model: organization.Capability
+  fields:
+    organization_id: 2
+    type: 'memberships'
+    applying_to: 1
+- model: organization.Capability
+  fields:
+    organization_id: 2
+    type: 'heir'
+    applying_to: 1
 
 - model: organization.Organization
   pk: 3
@@ -110,6 +140,36 @@
     organization_id: 5
     type: 'conscript'
     applying_to: 5
+- model: organization.Capability
+  fields:
+    organization_id: 5
+    type: 'ban'
+    applying_to: 5
+- model: organization.Capability
+  fields:
+    organization_id: 5
+    type: 'policy'
+    applying_to: 5
+- model: organization.Capability
+  fields:
+    organization_id: 5
+    type: 'dissolve'
+    applying_to: 5
+- model: organization.Capability
+  fields:
+    organization_id: 5
+    type: 'secede'
+    applying_to: 5
+- model: organization.Capability
+  fields:
+    organization_id: 5
+    type: 'memberships'
+    applying_to: 5
+- model: organization.Capability
+  fields:
+    organization_id: 5
+    type: 'heir'
+    applying_to: 6
 
 - model: organization.Organization
   pk: 6
@@ -135,6 +195,21 @@
   fields:
     organization_id: 6
     type: 'policy'
+    applying_to: 5
+- model: organization.Capability
+  fields:
+    organization_id: 6
+    type: 'diplomacy'
+    applying_to: 5
+- model: organization.Capability
+  fields:
+    organization_id: 6
+    type: 'suborganizations'
+    applying_to: 5
+- model: organization.Capability
+  fields:
+    organization_id: 6
+    type: 'memberships'
     applying_to: 5
 
 - model: organization.Organization
@@ -167,6 +242,36 @@
     organization_id: 7
     type: 'conscript'
     applying_to: 7
+- model: organization.Capability
+  fields:
+    organization_id: 7
+    type: 'diplomacy'
+    applying_to: 7
+- model: organization.Capability
+  fields:
+    organization_id: 7
+    type: 'dissolve'
+    applying_to: 7
+- model: organization.Capability
+  fields:
+    organization_id: 7
+    type: 'suborganizations'
+    applying_to: 7
+- model: organization.Capability
+  fields:
+    organization_id: 7
+    type: 'secede'
+    applying_to: 7
+- model: organization.Capability
+  fields:
+    organization_id: 7
+    type: 'memberships'
+    applying_to: 7
+- model: organization.Capability
+  fields:
+    organization_id: 7
+    type: 'elect'
+    applying_to: 8
 
 - model: organization.Organization
   pk: 8

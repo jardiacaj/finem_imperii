@@ -85,9 +85,13 @@
 
         <div class="col-sm-3">
             <h4>Actions</h4>
-            dissolve
-            craete sub
-            leave / step out
+            {% if hero_is_member %}
+                LEAVE / STEP OUT
+            {% else %}
+                {% if not organization.is_position and organization.membership_type == 'character' %}
+                    REQUEST TO JOIN
+                {% endif %}
+            {% endif %}
 
             {% if organization.policydocument_set.all %}
                 <h4>Documents</h4>

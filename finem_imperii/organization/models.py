@@ -94,11 +94,25 @@ class Capability(models.Model):
     BAN = 'ban'
     POLICY_DOCUMENT = 'policy'
     CONSCRIPT = 'conscript'
+    DIPLOMACY = 'diplomacy'
+    DISSOLVE = 'dissolve'
+    MANAGE_SUBORGANIZATIONS = 'suborganizations'
+    SECEDE = 'secede'
+    MEMBERSHIPS = 'memberships'
+    HEIR = 'heir'
+    ELECT = 'elect'
 
     TYPE_CHOICES = (
         (BAN, 'ban'),
         (POLICY_DOCUMENT, 'write policy and law'),
-        (CONSCRIPT, 'conscript trops'),
+        (DIPLOMACY, 'diplomacy'),
+        (CONSCRIPT, 'conscript troops'),
+        (DISSOLVE, 'dissolve'),
+        (MANAGE_SUBORGANIZATIONS, 'manage subordinate organizations'),
+        (SECEDE, 'secede'),
+        (MEMBERSHIPS, 'memberships'),
+        (HEIR, 'set heir'),
+        (ELECT, 'elect'),
     )
 
     organization = models.ForeignKey(Organization)

@@ -1,4 +1,18 @@
 <blockquote>
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-  <small>Someone famous in <cite title="Source Title">Source Title</cite></small>
+    <p>
+        {{ proposal.proposing_character }} proposes to
+        {% if proposal_content.new %}
+            create a new document.
+        {% elif proposal_content.delete %}
+            delete the document <a href="{{ document.get_absolute_url }}">{{ document }}</a>.
+        {% else %}
+            edit the document <a href="{{ document.get_absolute_url }}">{{ document }}</a>.
+        {% endif %}
+    </p>
 </blockquote>
+
+{% if not proposal_content.delete %}
+    <h4>{{ proposal_content.title }}</h4>
+    <p>{% if proposal_content.public %}Public{% else %}Private{% endif %} document.</p>
+    <pre style="white-space: pre-wrap;">{{ proposal_content.body }}</pre>
+{% endif %}

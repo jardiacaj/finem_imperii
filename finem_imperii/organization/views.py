@@ -159,6 +159,8 @@ class ProposalView(View):
             return check_result
 
         proposal = get_object_or_404(CapabilityProposal, id=proposal_id)
+        proposal_content = json.loads(proposal.proposal_json)
+
         try:
             heros_vote = proposal.capabilityvote_set.get(voter=request.hero)
         except CapabilityVote.DoesNotExist:
@@ -166,13 +168,17 @@ class ProposalView(View):
 
         context = {
             'proposal': proposal,
+            'proposal_content': proposal_content,
             'heros_vote': heros_vote,
             'subtemplate': 'organization/proposals/{}.html'.format(proposal.capability.type),
         }
 
-        proposal_content = json.loads(proposal.proposal_json)
         if proposal.capability.type == Capability.POLICY_DOCUMENT:
-            pass
+            try:
+                context['document'] = PolicyDocument.objects.get(id=proposal_content['document_id'])
+            except PolicyDocument.DoesNotExist:
+                context['document'] = None
+
         elif proposal.capability.type == Capability.BAN:
             context['character_to_ban'] = Character.objects.get(id=proposal_content['character_id'])
 

@@ -7,7 +7,6 @@ By Joan Ardiaca Jové.
 1. Game idea
 2. Conceptualization
 3. Development
-4. Roadmap
 
 ---
 

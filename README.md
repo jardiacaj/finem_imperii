@@ -9,19 +9,19 @@ You can find more information in the [documentation][1].
 ## Documentation index
 
 Basic
- - [Concept][https://github.com/jardiacaj/finem_imperii/blob/master/docs/1-concept.md]
- - [Roadmap][https://github.com/jardiacaj/finem_imperii/blob/master/docs/2-roadmap.md]
+ - [Concept](https://github.com/jardiacaj/finem_imperii/blob/master/docs/1-concept.md)
+ - [Roadmap](https://github.com/jardiacaj/finem_imperii/blob/master/docs/2-roadmap.md)
 
  Game design
- - [World][https://github.com/jardiacaj/finem_imperii/blob/master/docs/3-world.md]
- - [Characters][https://github.com/jardiacaj/finem_imperii/blob/master/docs/3-characters.md]
- - [Organizations][https://github.com/jardiacaj/finem_imperii/blob/master/docs/3-organizations.md]
- - [Travel][https://github.com/jardiacaj/finem_imperii/blob/master/docs/3-travel.md]
- - [Units][https://github.com/jardiacaj/finem_imperii/blob/master/docs/3-units.md]
- - [Buildings][https://github.com/jardiacaj/finem_imperii/blob/master/docs/3-buildings.md]
+ - [World](https://github.com/jardiacaj/finem_imperii/blob/master/docs/3-world.md)
+ - [Characters](https://github.com/jardiacaj/finem_imperii/blob/master/docs/3-characters.md)
+ - [Organizations](https://github.com/jardiacaj/finem_imperii/blob/master/docs/3-organizations.md)
+ - [Travel](https://github.com/jardiacaj/finem_imperii/blob/master/docs/3-travel.md)
+ - [Units](https://github.com/jardiacaj/finem_imperii/blob/master/docs/3-units.md)
+ - [Buildings](https://github.com/jardiacaj/finem_imperii/blob/master/docs/3-buildings.md)
 
  Technical
- - [Rendering][https://github.com/jardiacaj/finem_imperii/blob/master/docs/4-rendering.md]
+ - [Rendering](https://github.com/jardiacaj/finem_imperii/blob/master/docs/4-rendering.md)
 
 
 [1]: https://github.com/jardiacaj/finem_imperii/tree/master/docs

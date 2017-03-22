@@ -5,12 +5,11 @@ from collections import namedtuple
 from math import sqrt
 
 from django.core.urlresolvers import reverse
-from django.db import models, transaction
+from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.aggregates import Avg
 
 from messaging.models import CharacterNotification
-from name_generator.name_generator import NameGenerator
 from world.templatetags.extra_filters import nice_hours
 from world.turn import TurnProcessor, turn_to_date
 
@@ -39,16 +38,6 @@ class World(models.Model):
 
     def get_absolute_url(self):
         return reverse('world:world', kwargs={'world_id': self.id})
-
-    @transaction.atomic
-    def initialize(self):
-        if self.initialized:
-            raise Exception("World {} already initialized!".format(self))
-        name_generator = NameGenerator()
-        for tile in self.tile_set.all():
-            tile.initialize(name_generator)
-        self.initialized = True
-        self.save()
 
     def pass_turn(self):
         self.blocked_for_turn = True
@@ -111,10 +100,6 @@ class Tile(models.Model):
             raise Exception("Can't calculate distance between worlds")
         return euclidean_distance(self.get_absolute_coords(), tile.get_absolute_coords())
 
-    def initialize(self, name_generator):
-        for settlement in self.settlement_set.all():
-            settlement.initialize(name_generator)
-
 
 class Settlement(models.Model):
     name = models.CharField(max_length=100)
@@ -159,63 +144,6 @@ class Settlement(models.Model):
         if self.tile.world != settlement.tile.world:
             raise Exception("Can't calculate distance between worlds")
         return euclidean_distance(self.get_absolute_coords(), settlement.get_absolute_coords())
-
-    def initialize(self, name_generator):
-        residences = self.building_set.filter(type=Building.RESIDENCE).all()
-        fields = self.building_set.filter(type=Building.GRAIN_FIELD).all()
-        total_field_workplaces = sum(field.max_employment() for field in fields)
-        other_workplaces = self.building_set.exclude(type__in=(Building.RESIDENCE, Building.GRAIN_FIELD)).all()
-        total_other_workplaces = sum(j.max_employment() for j in other_workplaces)
-
-        assigned_workers = 0
-
-        for i in range(self.population):
-            male = random.getrandbits(1)
-            name = name_generator.generate_name(male)
-
-            over_sixty = (random.getrandbits(4) == 0)
-            if over_sixty:
-                age_months = random.randint(60 * 12, 90 * 12)
-                able = random.getrandbits(1)
-            else:
-                age_months = random.randint(0, 60 * 12)
-                able = (random.getrandbits(7) != 0)
-
-            if able:
-                assigned_workers += 1
-
-                # we assign 75% of population to fields
-                if assigned_workers < self.population / 4 or total_other_workplaces == 0:
-                    # we do a weighted assignment
-                    pos = random.randint(0, total_field_workplaces)
-                    cumulative = 0
-                    for field in fields:
-                        cumulative += field.max_employment()
-                        if pos < cumulative:
-                            break
-                    workplace = field
-                else:
-                    pos = random.randint(0, total_other_workplaces)
-                    cumulative = 0
-                    for other_workplace in other_workplaces:
-                        cumulative += other_workplace.max_employment()
-                        if pos < cumulative:
-                            break
-                    workplace = other_workplace
-
-            NPC.objects.create(
-                name=name,
-                male=male,
-                able=able,
-                age_months=age_months,
-                residence=residences[i % residences.count()],
-                origin=self,
-                location=self,
-                workplace=workplace if able else None,
-                unit=None,
-                trained_soldier=(random.getrandbits(4) == 0) if age_months >= NPC.VERY_YOUNG_AGE_LIMIT else False,
-                skill_fighting=random.randint(0, 80)
-            )
 
 
 class Building(models.Model):

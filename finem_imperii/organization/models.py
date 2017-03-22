@@ -48,6 +48,7 @@ class Organization(models.Model):
     organization_members = models.ManyToManyField('Organization')
     election_period_months = models.IntegerField(default=0)
     last_election = models.IntegerField(default=0)
+    next_election = models.IntegerField(default=0)
     heir_first = models.ForeignKey(Character, blank=True, null=True, related_name='first_heir_to')
     heir_second = models.ForeignKey(Character, blank=True, null=True, related_name='second_heir_to')
 

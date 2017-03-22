@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from world.initialization import WorldInitializer
 from world.models import Region, Tile, Settlement, Building, NPC, Character, WorldUnit, World
 
 admin.site.register(Region)
@@ -13,7 +14,8 @@ admin.site.register(WorldUnit)
 
 def initialize_world(modeladmin, request, queryset):
     for world in queryset.all():
-        world.initialize()
+        initializer = WorldInitializer(world)
+        initializer.initialize()
 initialize_world.short_description = "Initialize world"
 
 

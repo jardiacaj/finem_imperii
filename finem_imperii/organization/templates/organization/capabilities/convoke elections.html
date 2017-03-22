@@ -1,0 +1,51 @@
+<p>
+    You have been granted the power to convoke elections for the position of {{ capability.applying_to }}.
+</p>
+
+
+{% if capability.applying_to.current_election %}
+    <p>
+        You can't currently convoke elections because there is an
+        <a href="{{ capability.applying_to.current_election.get_absolute_url }}">election already in progress</a>.
+    </p>
+{% else %}
+    <form
+            class="form-horizontal"
+            method="post"
+            action="{% url 'organization:election_convoke_capability' capability.id %}"
+    >
+        <fieldset>
+            {% csrf_token %}
+
+            <legend>Convoke</legend>
+
+            <div class="form-group">
+                <label for="months_to_election" class="col-lg-2 control-label">
+                    Months until election
+                </label>
+                <div class="col-lg-10">
+                    <input class="form-control"
+                           id="months_to_election"
+                           name="months_to_election"
+                           type="number"
+                           min="6"
+                           max="18"
+                           value="12"
+                    >
+                    <span class="help-block">
+                        The elections will take place this many months (6 to 18) from the time they are convoked.
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-2">
+                    <button type="submit" class="btn btn-primary">
+                        Convoke
+                    </button>
+                </div>
+            </div>
+
+        </fieldset>
+    </form>
+{% endif %}

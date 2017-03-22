@@ -275,6 +275,16 @@
     organization_id: 7
     type: 'elect'
     applying_to: 8
+- model: organization.Capability
+  fields:
+    organization_id: 7
+    type: 'candidacy'
+    applying_to: 8
+- model: organization.Capability
+  fields:
+    organization_id: 7
+    type: 'convoke elections'
+    applying_to: 8
 
 - model: organization.Organization
   pk: 8

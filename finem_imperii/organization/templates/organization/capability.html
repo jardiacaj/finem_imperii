@@ -20,18 +20,18 @@
             {{ capability.stemming_from.organization }}</a>.
         {% endif %}
 
-
-        {% if not capability.organization.is_position and not capability.is_passive %}
-            {% if capability.organization.decision_taking == 'democratic' %}
-                <p>
-                    <b>Please note:</b> because {{ capability.organization }} is organized democratically, using these
-                    powers won't immediately take effect. Instead, a proposal will be created that will have to be voted
-                    by the members of {{ capability.organization }}.
-                </p>
-            {% elif capability.organization.decision_taking == 'distributed' %}
-            {% endif %}
-        {% endif %}
     </p>
+
+    {% if not capability.organization.is_position and not capability.is_passive %}
+        {% if capability.organization.decision_taking == 'democratic' %}
+            <p class="alert alert-info">
+                <b>Please note:</b> because {{ capability.organization }} is organized democratically, using these
+                powers won't immediately take effect. Instead, a proposal will be created that will have to be voted
+                by the members of {{ capability.organization }}.
+            </p>
+        {% elif capability.organization.decision_taking == 'distributed' %}
+        {% endif %}
+    {% endif %}
 
     {% include subtemplate %}
 

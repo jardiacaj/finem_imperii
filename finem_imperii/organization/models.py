@@ -47,7 +47,8 @@ class Organization(models.Model):
     character_members = models.ManyToManyField('world.Character')
     organization_members = models.ManyToManyField('Organization')
     election_period_months = models.IntegerField(default=0)
-    last_election = models.IntegerField(default=0)
+    current_election = models.ForeignKey('PositionElection', blank=True, null=True, related_name='+')
+    last_election = models.ForeignKey('PositionElection', blank=True, null=True, related_name='+')
     heir_first = models.ForeignKey(Character, blank=True, null=True, related_name='first_heir_to')
     heir_second = models.ForeignKey(Character, blank=True, null=True, related_name='second_heir_to')
 
@@ -117,13 +118,15 @@ class Organization(models.Model):
         return list(self.character_members.all())[0]
 
     @transaction.atomic
-    def convoke_elections(self):
+    def convoke_elections(self, months_to_election=6):
         if not self.is_position:
             raise Exception("Elections only work for positions")
         election = PositionElection.objects.create(
             position=self,
-            turn=self.world.current_turn + 6
+            turn=self.world.current_turn + months_to_election
         )
+        self.current_election = election
+        self.save()
         if self.get_position_ocuppier() is not None:
             PositionCandidate.objects.create(
                 election=election,
@@ -264,6 +267,11 @@ class CapabilityProposal(models.Model):
             leader_organization = self.capability.applying_to.leader
             if leader_organization and character_to_ban in leader_organization.character_members.all():
                 leader_organization.character_members.remove(character_to_ban)
+
+        elif self.capability.type == Capability.CONVOKE_ELECTIONS:
+            if self.capability.applying_to.current_election is None:
+                months_to_election = proposal['months_to_election']
+                self.capability.applying_to.convoke_elections(months_to_election)
 
         else:
             raise Exception("Executing unknown capability type '{}'".format(self.capability.type))

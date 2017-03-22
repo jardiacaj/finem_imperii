@@ -51,6 +51,32 @@ def capability_view(request, capability_id):
     return render(request, 'organization/capability.html', context)
 
 
+@inchar_required
+def election_convoke_view(request, capability_id):
+    capability = get_object_or_404(Capability, id=capability_id)
+    if not capability.organization.character_can_use_capabilities(request.hero):
+        messages.error(request, "You cannot do that", "danger")
+        return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
+
+    if request.method != 'POST':
+        return redirect(capability.get_absolute_url())
+
+    months_to_election = int(request.POST.get('months_to_election'))
+    if not 6 <= months_to_election <= 16:
+        messages.error(request, "The time period must be between 6 and 18 months", "danger")
+        return redirect(capability.get_absolute_url())
+
+    proposal = {'months_to_election': months_to_election}
+
+    capability.create_proposal(request.hero, proposal)
+
+    if capability.organization.decision_taking == Organization.DEMOCRATIC:
+        messages.success(request, "A vote has been started regarding your action", "success")
+    else:
+        messages.success(request, "Done!", "success")
+    return redirect(capability.organization.get_absolute_url())
+
+
 class BanningCapabilityView(View):
     def check(self, request, capability_id):
         capability = get_object_or_404(Capability, id=capability_id, type=Capability.BAN)

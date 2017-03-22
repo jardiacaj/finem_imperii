@@ -275,6 +275,7 @@ class CapabilityProposal(models.Model):
 
         else:
             raise Exception("Executing unknown capability type '{}'".format(self.capability.type))
+
         self.executed = True
         self.closed = True
         self.save()

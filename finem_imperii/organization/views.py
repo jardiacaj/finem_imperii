@@ -3,6 +3,7 @@ import json
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls.base import reverse
+from django.views.decorators.http import require_POST
 from django.views.generic.base import View
 
 from decorators import inchar_required
@@ -19,6 +20,23 @@ def organization_view(request, organization_id):
         'can_use_capabilities': organization.character_can_use_capabilities(request.hero),
     }
     return render(request, 'organization/view_organization.html', context)
+
+
+def capability_required_decorator(func):
+    def inner(*args, **kwargs):
+        def fail_the_request(*args, **kwargs):
+            messages.error(args[0], "You cannot do that", "danger")
+            return redirect(args[0].META.get('HTTP_REFERER', reverse('world:character_home')))
+        capability_id = kwargs.get('capability_id')
+        if capability_id is None:
+            capability_id = args[0].GET.get('capability_id')
+        if capability_id is None:
+            capability_id = args[0].POST.get('capability_id')
+        capability = get_object_or_404(Capability, id=capability_id)
+        if not capability.organization.character_can_use_capabilities(args[0].hero):
+            return fail_the_request(*args, **kwargs)
+        return func(*args, **kwargs)
+    return inner
 
 
 @inchar_required
@@ -38,6 +56,7 @@ def document_view(request, document_id):
 
 
 @inchar_required
+@capability_required_decorator
 def capability_view(request, capability_id):
     capability = get_object_or_404(Capability, id=capability_id)
     if not capability.organization.character_can_use_capabilities(request.hero):
@@ -51,15 +70,11 @@ def capability_view(request, capability_id):
     return render(request, 'organization/capability.html', context)
 
 
+@require_POST
 @inchar_required
+@capability_required_decorator
 def election_convoke_view(request, capability_id):
     capability = get_object_or_404(Capability, id=capability_id)
-    if not capability.organization.character_can_use_capabilities(request.hero):
-        messages.error(request, "You cannot do that", "danger")
-        return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
-
-    if request.method != 'POST':
-        return redirect(capability.get_absolute_url())
 
     months_to_election = int(request.POST.get('months_to_election'))
     if not 6 <= months_to_election <= 16:
@@ -77,55 +92,30 @@ def election_convoke_view(request, capability_id):
     return redirect(capability.organization.get_absolute_url())
 
 
-class BanningCapabilityView(View):
-    def check(self, request, capability_id):
-        capability = get_object_or_404(Capability, id=capability_id, type=Capability.BAN)
-        if not capability.organization.character_can_use_capabilities(request.hero):
-            messages.error(request, "You cannot do that", "danger")
-            return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
+@require_POST
+@inchar_required
+@capability_required_decorator
+def banning_view(request, capability_id):
+    capability = get_object_or_404(Capability, id=capability_id, type=Capability.BAN)
 
-    def get(self, request, capability_id):
+    character_to_ban = get_object_or_404(Character, id=request.POST.get('character_to_ban_id'))
+    if character_to_ban not in capability.applying_to.character_members.all():
         messages.error(request, "You cannot do that", "danger")
         return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
 
-    def post(self, request, capability_id):
-        check_result = self.check(request, capability_id)
-        if check_result is not None:
-            return check_result
-        capability = get_object_or_404(Capability, id=capability_id, type=Capability.BAN)
+    proposal = {'character_id': character_to_ban.id}
 
-        character_to_ban = get_object_or_404(Character, id=request.POST.get('character_to_ban_id'))
-        if character_to_ban not in capability.applying_to.character_members.all():
-            messages.error(request, "You cannot do that", "danger")
-            return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
+    capability.create_proposal(request.hero, proposal)
 
-        proposal = {'character_id': character_to_ban.id}
-
-        capability.create_proposal(request.hero, proposal)
-
-        if capability.organization.decision_taking == Organization.DEMOCRATIC:
-            messages.success(request, "A vote has been started regarding your action", "success")
-        else:
-            messages.success(request, "Done!", "success")
-        return redirect(capability.organization.get_absolute_url())
+    if capability.organization.decision_taking == Organization.DEMOCRATIC:
+        messages.success(request, "A vote has been started regarding your action", "success")
+    else:
+        messages.success(request, "Done!", "success")
+    return redirect(capability.organization.get_absolute_url())
 
 
 class DocumentCapabilityView(View):
-    def check(self, request, capability_id, document_id):
-        capability = get_object_or_404(Capability, id=capability_id, type=Capability.POLICY_DOCUMENT)
-        if not capability.organization.character_can_use_capabilities(request.hero):
-            messages.error(request, "You cannot do that", "danger")
-            return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
-
-        if 'delete' in request.POST.keys() and document_id is None:
-            messages.error(request, "You cannot do that", "danger")
-            return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
-
     def get(self, request, capability_id, document_id=None):
-        check_result = self.check(request, capability_id, document_id)
-        if check_result is not None:
-            return check_result
-
         capability = get_object_or_404(Capability, id=capability_id, type=Capability.POLICY_DOCUMENT)
         if document_id is None:
             document = PolicyDocument(organization=capability.applying_to)
@@ -143,9 +133,9 @@ class DocumentCapabilityView(View):
         return render(request, 'organization/capability.html', context)
 
     def post(self, request, capability_id, document_id=None):
-        check_result = self.check(request, capability_id, document_id)
-        if check_result is not None:
-            return check_result
+        if 'delete' in request.POST.keys() and document_id is None:
+            messages.error(request, "You cannot do that", "danger")
+            return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
 
         capability = get_object_or_404(Capability, id=capability_id, type=Capability.POLICY_DOCUMENT)
         if document_id is None:

@@ -67,6 +67,13 @@ def capability_view(request, capability_id):
         'capability': capability,
         'subtemplate': 'organization/capabilities/{}.html'.format(capability.type),
     }
+
+    if capability.type == Capability.CANDIDACY:
+        if capability.applying_to.current_election:
+            context['heros_candidacy'] = capability.applying_to.current_election.positioncandidate_set.filter()
+        else:
+            context['heros_candidacy'] = None
+
     return render(request, 'organization/capability.html', context)
 
 

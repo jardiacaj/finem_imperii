@@ -1,0 +1,60 @@
+<p>
+    You have been granted the power to present yourself as a candidate to {{ capability.applying_to }}.
+</p>
+<p>
+    This means that you are able to participate as a candidate in the elections and, eventually, be able to ocuppy the
+    position of {{ capability.applying_to }}.
+</p>
+
+<form class="form-horizontal" method="post">
+    <fieldset>
+        {% csrf_token %}
+
+        {% if heros_candidacy %}
+            <legend>Edit candidacy</legend>
+        {% else %}
+            <legend>Present candidacy</legend>
+        {% endif %}
+
+        <div class="form-group">
+            <label for="description" class="col-lg-2 control-label">Your candidacy text</label>
+            <div class="col-lg-10">
+                <textarea class="form-control"
+                          name="description"
+                          rows="20"
+                          id="description"
+                          placeholder="Why should others vote for you?"
+                          maxlength="10000"
+                >{% if heros_candidacy %}{{ heros_candidacy.description }}{% endif %}</textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-lg-10 col-lg-offset-2">
+                <button type="submit" class="btn btn-primary">
+                    {% if heros_candidacy %}Update{% else %}Create{% endif %}
+                </button>
+            </div>
+        </div>
+
+    </fieldset>
+</form>
+
+{% if heros_candidacy %}
+    <form class="form-horizontal" method="post">
+        <fieldset>
+            {% csrf_token %}
+            <input type="hidden" name="delete" value="1">
+
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-2">
+                    <button type="submit"
+                            class="btn btn-danger"
+                            onclick="return confirm('Are you sure you want to retire your candidacy?')"
+                    >Retire candidacy</button>
+                </div>
+            </div>
+
+        </fieldset>
+    </form>
+{% endif %}

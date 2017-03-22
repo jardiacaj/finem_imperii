@@ -171,12 +171,20 @@ class PositionElection(models.Model):
 
 
 class PositionCandidate(models.Model):
-    election = models.ForeignKey(Organization)
+    class Meta:
+        unique_together = (
+            ("election", "candidate"),
+        )
+    election = models.ForeignKey(PositionElection)
     candidate = models.ForeignKey(Character)
     description = models.TextField()
 
 
 class PositionElectionVote(models.Model):
+    class Meta:
+        unique_together = (
+            ("election", "voter"),
+        )
     election = models.ForeignKey(PositionElection)
     voter = models.ForeignKey(Character)
     candidate = models.ForeignKey(PositionCandidate, blank=True, null=True)

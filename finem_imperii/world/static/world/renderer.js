@@ -86,7 +86,7 @@ function MapRenderer(world_data) {
     zis.render_settlement = function (settlement) {
         var region = zis.regions[settlement.tile];
         var organization = zis.organizations[region.controlled_by];
-        var radius = Math.log10(settlement.population) * 0.02;
+        var radius = Math.sqrt(settlement.population) * 0.001;
         var settlement_geometry = new THREE.CylinderGeometry( radius, radius, 0.01, 16 );
         if (organization !== undefined)
             var cylinder = new THREE.Mesh( settlement_geometry, organization.settlement_material );

@@ -79,6 +79,14 @@ class Organization(models.Model):
                 return True
         return False
 
+    def organizations_character_can_apply_capabilities_to_this_with(self, character, capability_type):
+        result = []
+        capabilities = Capability.objects.filter(applying_to=self, type=capability_type)
+        for capability in capabilities:
+            if capability.organization.character_is_member(character):
+                result.append(capability.organization)
+        return result
+
     def character_is_member(self, character):
         if character in self.character_members.all():
             return True

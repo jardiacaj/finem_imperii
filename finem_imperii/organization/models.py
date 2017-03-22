@@ -1,6 +1,6 @@
 import json
 
-from django.db import models
+from django.db import models, transaction
 from django.contrib.auth.models import User
 from django.urls.base import reverse
 from django.utils.html import escape
@@ -48,7 +48,6 @@ class Organization(models.Model):
     organization_members = models.ManyToManyField('Organization')
     election_period_months = models.IntegerField(default=0)
     last_election = models.IntegerField(default=0)
-    next_election = models.IntegerField(default=0)
     heir_first = models.ForeignKey(Character, blank=True, null=True, related_name='first_heir_to')
     heir_second = models.ForeignKey(Character, blank=True, null=True, related_name='second_heir_to')
 
@@ -112,6 +111,26 @@ class Organization(models.Model):
     def external_capabilities_to_this(self):
         return self.capabilities_to_this.exclude(organization=self)
 
+    def get_position_ocuppier(self):
+        if not self.is_position or not self.character_members.exists():
+            return None
+        return list(self.character_members.all())[0]
+
+    @transaction.atomic
+    def convoke_elections(self):
+        if not self.is_position:
+            raise Exception("Elections only work for positions")
+        election = PositionElection.objects.create(
+            position=self,
+            turn=self.world.current_turn + 6
+        )
+        if self.get_position_ocuppier() is not None:
+            PositionCandidate.objects.create(
+                election=election,
+                candidate=self.get_position_ocuppier(),
+                description="Auto-generated candidacy for incumbent character."
+            )
+
     def __str__(self):
         return self.name
 
@@ -141,6 +160,25 @@ class Organization(models.Model):
         return '<a href="{}">{}</a>'.format(self.get_absolute_url(), self.get_html_name())
 
 
+class PositionElection(models.Model):
+    position = models.ForeignKey(Organization)
+    turn = models.IntegerField()
+    closed = models.BooleanField(default=False)
+    winner = models.ForeignKey('PositionCandidate', blank=True, null=True)
+
+
+class PositionCandidate(models.Model):
+    election = models.ForeignKey(Organization)
+    candidate = models.ForeignKey(Character)
+    description = models.TextField()
+
+
+class PositionElectionVote(models.Model):
+    election = models.ForeignKey(PositionElection)
+    voter = models.ForeignKey(Character)
+    candidate = models.ForeignKey(PositionCandidate, blank=True, null=True)
+
+
 class Capability(models.Model):
     BAN = 'ban'
     POLICY_DOCUMENT = 'policy'
@@ -152,6 +190,8 @@ class Capability(models.Model):
     MEMBERSHIPS = 'memberships'
     HEIR = 'heir'
     ELECT = 'elect'
+    CANDIDACY = 'candidacy'
+    CONVOKE_ELECTIONS = 'convoke elections'
 
     TYPE_CHOICES = (
         (BAN, 'ban'),
@@ -164,10 +204,12 @@ class Capability(models.Model):
         (MEMBERSHIPS, 'memberships'),
         (HEIR, 'set heir'),
         (ELECT, 'elect'),
+        (CANDIDACY, 'present candidacy'),
+        (CONVOKE_ELECTIONS, 'convoke elections'),
     )
 
     organization = models.ForeignKey(Organization)
-    type = models.CharField(max_length=15, choices=TYPE_CHOICES)
+    type = models.CharField(max_length=20, choices=TYPE_CHOICES)
     applying_to = models.ForeignKey(Organization, related_name='capabilities_to_this')
     stemming_from = models.ForeignKey('Capability', null=True, blank=True, related_name='transfers')
 

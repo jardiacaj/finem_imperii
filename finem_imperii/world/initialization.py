@@ -31,7 +31,7 @@ class WorldInitializer:
 
     def initialize_organization(self, organization):
         if organization.position_type == Organization.ELECTED and not organization.character_members.exists():
-            organization.next_election = self.world.current_turn + 3
+            organization.convoke_elections()
 
     def initialize_tile(self, tile):
         logging.info("Initializing tile {}".format(tile))

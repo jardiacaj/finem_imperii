@@ -180,6 +180,34 @@ class PositionElection(models.Model):
     def can_present_candidacy(self):
         return self.position.world.current_turn <= self.last_turn_to_present_candidacy()
 
+    @transaction.atomic
+    def resolve(self):
+        max_votes = 0
+        winners = []
+        for candidacy in self.open_candidacies().all():
+            votes = candidacy.positionelectionvote_set.count()
+            if votes > max_votes:
+                max_votes = votes
+                winners = []
+            if votes == max_votes:
+                winners.append(candidacy)
+
+        if len(winners) != 1:
+            self.position.convoke_elections()
+        else:
+            winner = winners[0]
+            self.winner = winner
+            self.position.character_members.all().delete()
+            self.position.character_members.add(winner.candidate)
+
+        self.position.last_election = self
+        self.position.save()
+        self.closed = True
+        self.save()
+
+    def get_absolute_url(self):
+        pass
+
 
 class PositionCandidacy(models.Model):
     class Meta:

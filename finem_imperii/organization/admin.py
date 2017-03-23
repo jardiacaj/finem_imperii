@@ -1,7 +1,24 @@
 from django.contrib import admin
-from django.apps import apps
 
-app = apps.get_app_config('organization')
+from organization.models import Organization, PositionElection, PositionCandidacy, PositionElectionVote, Capability, \
+    CapabilityProposal, CapabilityVote, PolicyDocument
 
-for model_name, model in app.models.items():
-    admin.site.register(model)
+admin.site.register(PositionElection)
+admin.site.register(PositionCandidacy)
+admin.site.register(PositionElectionVote)
+admin.site.register(Capability)
+admin.site.register(CapabilityProposal)
+admin.site.register(CapabilityVote)
+admin.site.register(PolicyDocument)
+
+
+def resolve_organization_election(modeladmin, request, queryset):
+    for organization in queryset.all():
+        if organization.current_election:
+            organization.current_election.resolve()
+resolve_organization_election.short_description = "Resolve current election"
+
+
+@admin.register(Organization)
+class WorldAdmin(admin.ModelAdmin):
+    actions = [resolve_organization_election, ]

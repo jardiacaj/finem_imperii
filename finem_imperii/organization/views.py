@@ -124,7 +124,7 @@ def elect_view(request, capability_id):
 @inchar_required
 @capability_required_decorator
 def election_convoke_view(request, capability_id):
-    capability = get_object_or_404(Capability, id=capability_id)
+    capability = get_object_or_404(Capability, id=capability_id, type=Capability.CONVOKE_ELECTIONS)
 
     months_to_election = int(request.POST.get('months_to_election'))
     if not 6 <= months_to_election <= 16:
@@ -146,7 +146,7 @@ def election_convoke_view(request, capability_id):
 @inchar_required
 @capability_required_decorator
 def candidacy_view(request, capability_id):
-    capability = get_object_or_404(Capability, id=capability_id)
+    capability = get_object_or_404(Capability, id=capability_id, type=Capability.CANDIDACY)
 
     election = capability.applying_to.current_election
     if not election:

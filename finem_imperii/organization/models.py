@@ -141,21 +141,23 @@ class Organization(models.Model):
         return reverse('organization:view', kwargs={'organization_id': self.id})
 
     def get_html_name(self):
+        template = '{name}<span style="color: #{color}" class="glyphicon glyphicon-{icon}" aria-hidden="true"></span>'
         if self.violence_monopoly:
-            template = '<span style="color: #{color}">◼</span>{name}<span style="color: #{color}">◼</span>'
+            icon = "tower"
         elif self.leaded_organizations.filter(violence_monopoly=True).exists():
-            template = '<span style="color: #{color}">◢</span>{name}<span style="color: #{color}">◣</span>'
+            icon = "king"
         elif self.is_part_of_violence_monopoly():
-            template = '<span style="color: #{color}">▼</span>{name}<span style="color: #{color}">▼</span>'
+            icon = "knight"
         elif self.leaded_organizations.exists():
-            template = '<span style="color: #{color}">◮</span>{name}<span style="color: #{color}">◭</span>'
+            icon = "menu-up"
         elif not self.owner:
-            template = '<span style="color: #{color}">◨</span>{name}<span style="color: #{color}">◧</span>'
+            icon = "triangle-top"
         else:
-            template = '<span style="color: #{color}">◞</span>{name}<span style="color: #{color}">◟</span>'
+            icon = "option-vertical"
 
         return template.format(
             name=escape(self.name),
+            icon=icon,
             color=escape(self.color)
         )
 

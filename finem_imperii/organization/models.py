@@ -128,7 +128,7 @@ class Organization(models.Model):
         self.current_election = election
         self.save()
         if self.get_position_ocuppier() is not None:
-            PositionCandidate.objects.create(
+            PositionCandidacy.objects.create(
                 election=election,
                 candidate=self.get_position_ocuppier(),
                 description="Auto-generated candidacy for incumbent character."
@@ -169,10 +169,10 @@ class PositionElection(models.Model):
     position = models.ForeignKey(Organization)
     turn = models.IntegerField()
     closed = models.BooleanField(default=False)
-    winner = models.ForeignKey('PositionCandidate', blank=True, null=True)
+    winner = models.ForeignKey('PositionCandidacy', blank=True, null=True)
 
 
-class PositionCandidate(models.Model):
+class PositionCandidacy(models.Model):
     class Meta:
         unique_together = (
             ("election", "candidate"),
@@ -189,7 +189,7 @@ class PositionElectionVote(models.Model):
         )
     election = models.ForeignKey(PositionElection)
     voter = models.ForeignKey(Character)
-    candidate = models.ForeignKey(PositionCandidate, blank=True, null=True)
+    candidacy = models.ForeignKey(PositionCandidacy, blank=True, null=True)
 
 
 class Capability(models.Model):

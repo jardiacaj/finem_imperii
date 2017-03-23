@@ -8,7 +8,7 @@ from django.views.generic.base import View
 
 from decorators import inchar_required
 from organization.models import Organization, PolicyDocument, Capability, CapabilityProposal, CapabilityVote, \
-    PositionCandidate
+    PositionCandidacy, PositionElectionVote
 from world.models import Character
 
 
@@ -73,11 +73,51 @@ def capability_view(request, capability_id):
         context['heros_candidacy'] = None
         if capability.applying_to.current_election:
             try:
-                context['heros_candidacy'] = capability.applying_to.current_election.positioncandidate_set.get(candidate=request.hero)
-            except PositionCandidate.DoesNotExist:
+                context['heros_candidacy'] = capability.applying_to.current_election.positioncandidacy_set.get(candidate=request.hero)
+            except PositionCandidacy.DoesNotExist:
+                pass
+
+    if capability.type == Capability.ELECT:
+        context['heros_vote'] = None
+        if capability.applying_to.current_election:
+            try:
+                context['heros_vote'] = capability.applying_to.current_election.positionelectionvote_set.get(voter=request.hero)
+            except PositionElectionVote.DoesNotExist:
                 pass
 
     return render(request, 'organization/capability.html', context)
+
+
+@require_POST
+@inchar_required
+@capability_required_decorator
+def elect_view(request, capability_id):
+    capability = get_object_or_404(Capability, id=capability_id, type=Capability.ELECT)
+
+    election = capability.applying_to.current_election
+
+    if not election:
+        messages.error(request, "There is no election in progress for {}".format(capability.applying_to), "danger")
+        return redirect(capability.get_absolute_url())
+
+    if capability.applying_to.current_election.positionelectionvote_set.filter(voter=request.hero).exists():
+        messages.error(request, "You already issued a vote before.".format(capability.applying_to), "danger")
+        return redirect(capability.get_absolute_url())
+
+    try:
+        candidacy = PositionCandidacy.objects.get(id=int(request.POST.get('candidacy_id')), election=election)
+    except PositionCandidacy.DoesNotExist:
+        messages.error(request, "That is not a valid candidacy to vote for.", "danger")
+        return redirect(capability.get_absolute_url())
+
+    PositionElectionVote.objects.create(
+        election=election,
+        voter=request.hero,
+        candidacy=candidacy
+    )
+
+    messages.success(request, "You have issued your vote for {}".format(candidacy.candidate), "success")
+    return redirect(capability.get_absolute_url())
 
 
 @require_POST
@@ -116,7 +156,7 @@ def candidacy_view(request, capability_id):
     description = request.POST.get('description')
     delete = request.POST.get('delete')
 
-    candidacy, new = PositionCandidate.objects.get_or_create(
+    candidacy, new = PositionCandidacy.objects.get_or_create(
         election=election,
         candidate=request.hero
     )

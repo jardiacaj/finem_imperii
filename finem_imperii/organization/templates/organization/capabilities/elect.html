@@ -1,0 +1,52 @@
+<p>
+    You have been granted to vote for the position {{ capability.applying_to }}.
+</p>
+
+{% if not capability.applying_to.current_election %}
+
+    <p>
+        You can't vote in this moment as there is no election currently in progress.
+    </p>
+
+{% else %}
+    {% if heros_vote %}
+        <p class="alert alert-success">
+            You issued your vote to {{ heros_vote.candidacy.candidate }}
+        </p>
+    {% endif %}
+
+    {% for candidacy in capability.applying_to.current_election.positioncandidacy_set.all %}
+
+
+        <form class="" role="form" method="post" action="{% url 'organization:elect_capability' capability.id %}">
+            {% csrf_token %}
+            <input type="hidden" name="candidacy_id" value="{{ candidacy.id }}">
+            <div class="panel {% if heros_vote.candidacy == candidacy %}panel-success{% else %}panel-default{% endif %}">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{ candidacy.candidate }}</h3>
+                </div>
+
+                <div class="panel-body">
+                    <pre style="white-space: pre-wrap;">{{ candidacy.description }}</pre>
+
+                    {% if not heros_vote %}
+                        <span class="form-group form-inline">
+                            <button
+                                    type="submit"
+                                    class="btn btn-primary btn-sm"
+                                    onclick="return confirm('Are you sure?')"
+                            >
+                                Vote {{ candidacy.candidate }}
+                            </button>
+                        </span>
+                    {% elif heros_vote.candidacy == candidacy %}
+                        <p>You voted for this candidate.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+    {% empty %}
+        <p class="alert alert-warning">No candidates thus far!</p>
+    {% endfor %}
+
+{% endif %}

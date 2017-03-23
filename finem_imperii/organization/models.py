@@ -92,7 +92,7 @@ class Organization(models.Model):
         if character in self.character_members.all():
             return True
         for member_organization in self.organization_members.all():
-            if character in member_organization.member_set.all():
+            if member_organization.character_is_member(character):
                 return True
         return False
 
@@ -112,7 +112,7 @@ class Organization(models.Model):
     def external_capabilities_to_this(self):
         return self.capabilities_to_this.exclude(organization=self)
 
-    def get_position_ocuppier(self):
+    def get_position_occupier(self):
         if not self.is_position or not self.character_members.exists():
             return None
         return list(self.character_members.all())[0]
@@ -127,10 +127,10 @@ class Organization(models.Model):
         )
         self.current_election = election
         self.save()
-        if self.get_position_ocuppier() is not None:
+        if self.get_position_occupier() is not None:
             PositionCandidacy.objects.create(
                 election=election,
-                candidate=self.get_position_ocuppier(),
+                candidate=self.get_position_occupier(),
                 description="Auto-generated candidacy for incumbent character."
             )
 

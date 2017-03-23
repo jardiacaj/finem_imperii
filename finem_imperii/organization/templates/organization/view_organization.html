@@ -2,178 +2,165 @@
 
 {% block content %}
 
-    <h1 class="page-header">{{ organization.get_html_name|safe }}</h1>
+    <h1 class="page-header">
+        {{ organization.get_html_name|safe }}
+
+        {% if organization.get_position_occupier %}
+            <small>{{ organization.get_position_occupier }}</small>
+        {% endif %}
+    </h1>
 
     <div class="row">
-        <div class="col-sm-9">
-            <table class="table table-striped table-hover">
-                <tbody>
-                    <tr>
-                        <td></td>
-                        <td>
-                            {{ organization.name }}
-                            {% if organization.violence_monopoly %}
-                                <br><b>Sovereign <span class="glyphicon glyphicon-tower" aria-hidden="true"></span></b>
-                            {% endif %}
-                            {% if organization.owner %}
-                                <br>Owned by {{ organization.owner.get_html_link|safe }}
-                            {% endif %}
-                            {% if organization.leader %}
-                                <br>Leaded by {{ organization.leader.get_html_link|safe }}
-                            {% endif %}
-
-
-
-                            {% if organization.leaded_organizations.all %}
-                                <br>Leader of
-                                {% for leaded_orga in organization.leaded_organizations.all %}
-                                    {{ leaded_orga.get_html_link|safe }}
-                                    {% if not forloop.last %},{% endif %}
-                                {% endfor %}
-                            {% endif %}
-
-                            {% if organization.owned_organizations.all %}
-                                <br>Owner of
-                                    {% for owned_orga in organization.owned_organizations.all %}
-                                        {{ owned_orga.get_html_link|safe }}
-                                        {% if not forloop.last %},{% endif %}
-                                    {% endfor %}
-                            {% endif %}
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Description</td>
-                        <td>{{ organization.description }}</td>
-                    </tr>
-                    <tr>
-                        {% if organization.is_position %}
-                            <td>Position ocuppied by ({{ organization.membership_type }})</td>
-                        {% else %}
-                            <td>Members ({{ organization.membership_type }})</td>
-                        {% endif %}
-                        <td>
-                            {% if organization.membership_type == 'character' and organization.character_members.all %}
-                                {% for char_member in organization.character_members.all %}
-                                    <a href="{{ char_member.get_absolute_url }}">
-                                        {{ char_member }}</a>
-                                    {% if not forloop.last %},{% endif %}
-                                {% endfor %}
-                            {% elif organization.membership_type == 'organization' and organization.organization_members.all %}
-                                {% for org_member in organization.organization_members.all %}
-                                    <a href="{{ org_member.get_absolute_url }}">
-                                        {{ org_member }}</a>
-                                    {% if not forloop.last %},{% endif %}
-                                {% endfor %}
-                            {% else %}
-                                Vacant
-                            {% endif %}
-                        </td>
-                    </tr>
-
-                </tbody>
-            </table>
+        <div class="col-md-6">
+            {{ organization.description }}
         </div>
-
-        <div class="col-sm-3">
-            <h4>Actions</h4>
-            {% if hero_is_member %}
-                LEAVE / STEP OUT
-            {% else %}
-                {% if not organization.is_position and organization.membership_type == 'character' %}
-                    REQUEST TO JOIN
-                {% endif %}
+        <div class="col-md-6 lead">
+            {{ organization.name }}
+            {% if organization.violence_monopoly %}
+                <br><b>Sovereign <span class="glyphicon glyphicon-tower" aria-hidden="true"></span></b>
             {% endif %}
-
-            {% if organization.policydocument_set.all %}
-                <h4>Documents</h4>
-                <ul>
-                    {% for document in organization.policydocument_set.all %}
-                        {% if not document.parent %}{% if document.public or hero_is_member %}
-                            {% include 'organization/document_tree_inc.html' with document=document show_private=hero_is_member %}
-                        {% endif %}{% endif %}
-                    {% endfor %}
-                </ul>
+            {% if organization.owner %}
+                <br>Owned by {{ organization.owner.get_html_link|safe }}
             {% endif %}
-        </div>
-
-        <div class="col-sm-12">
-            {% if organization.get_all_controlled_tiles %}
-                <h4>Controlled regions</h4>
-                <ul>
-                    {% for tile in organization.get_all_controlled_tiles %}
-                        <li>
-                            <a href="{{ tile.get_asbolute_url }}">{{ tile }}</a>
-                            {% if tile.controlled_by != organization %}
-                                (controlled by <a href="{{ tile.controlled_by.get_absolute_url }}">
-                                {{ tile.controlled_by }}</a>
-                            {% endif %}
-                        </li>
-                    {% empty %}
-                        <li>None</li>
-                    {% endfor %}
-                </ul>
+            {% if organization.leader %}
+                <br>Leaded by {{ organization.leader.get_html_link|safe }}
             {% endif %}
-
-            {% if organization.decision_taking == 'democratic' and hero_is_member %}
-                <h4>Proposals to vote</h4>
-                <ul>
-                    {% for proposal in organization.get_open_proposals.all %}
-                        <li>
-                            {{ proposal.capability.get_type_display|capfirst }} proposal by
-                            {{ proposal.proposing_character }}
-                            <a href="{{ proposal.get_absolute_url }}" class="btn btn-sm btn-primary">Open</a>
-                        </li>
-                    {% empty %}
-                        <li>Nothing to vote currently.</li>
-                    {% endfor %}
-                </ul>
-                <p>
-                    See closed proposals.
-                </p>
-            {% endif %}
-
-            <h4>Powers owned</h4>
-            <ul>
-                {% for capability in organization.capability_set.all %}
-                    <li>
-                        {% if can_use_capabilities %}
-                            <a href="{{ capability.get_absolute_url }}" class="btn btn-primary btn-sm">
-                                {{ capability.get_type_display|capfirst }}
-                            </a>
-                        {% else %}
-                            <b>{{ capability.get_type_display|capfirst }}</b>
-                        {% endif %}
-                        {% if capability.applying_to != organization %}
-                            in <a href="{{ capability.applying_to.get_absolute_url }}">{{ capability.applying_to }}</a>
-                        {% endif %}
-                        {% if capability.stemming_from %}
-                            (delegated by <a href="{{ capability.stemming_from.organization.get_absolute_url }}">
-                            {{ capability.stemming_from.organization }}</a>)
-                        {% endif %}
-                    </li>
-                {% empty %}
-                    <li>None</li>
+            {% if organization.leaded_organizations.all %}
+                <br>Leader of
+                {% for leaded_orga in organization.leaded_organizations.all %}
+                    {{ leaded_orga.get_html_link|safe }}
+                    {% if not forloop.last %},{% endif %}
                 {% endfor %}
-            </ul>
-
-            <h4>Externally applying powers</h4>
-            <ul>
-                {% for capability in organization.external_capabilities_to_this.all %}
-                    <li>
-                        <a href="{{ capability.organization.get_absolute_url }}">{{ capability.organization }}</a>
-                        can <b>{{ capability.get_type_display }}</b>
-                        {% if capability.stemming_from %}
-                            (delegated by <a href="{{ capability.stemming_from.organization.get_absolute_url }}">
-                            {{ capability.stemming_from.organization }}</a>)
-                        {% endif %}
-                    </li>
-                {% empty %}
-                    <li>None</li>
-                {% endfor %}
-            </ul>
+            {% endif %}
+            {% if organization.owned_organizations.all %}
+                <br>Owner of
+                    {% for owned_orga in organization.owned_organizations.all %}
+                        {{ owned_orga.get_html_link|safe }}
+                        {% if not forloop.last %},{% endif %}
+                    {% endfor %}
+            {% endif %}
         </div>
     </div>
 
+    <hr>
+
+    <div class="col-md-6">
+        {% if organization.get_all_controlled_tiles %}
+            <h4>Controlled regions</h4>
+            <ul>
+                {% for tile in organization.get_all_controlled_tiles %}
+                    <li>
+                        <a href="{{ tile.get_asbolute_url }}">{{ tile }}</a>
+                        {% if tile.controlled_by != organization %}
+                            (controlled by <a href="{{ tile.controlled_by.get_absolute_url }}">
+                            {{ tile.controlled_by }}</a>
+                        {% endif %}
+                    </li>
+                {% empty %}
+                    <li>None</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% if organization.policydocument_set.all %}
+            <h4>Documents</h4>
+            <ul>
+                {% for document in organization.policydocument_set.all %}
+                    {% if not document.parent %}{% if document.public or hero_is_member %}
+                        {% include 'organization/document_tree_inc.html' with document=document show_private=hero_is_member %}
+                    {% endif %}{% endif %}
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% if not organization.is_position %}
+            <h4>Members ({{ organization.membership_type }})</h4>
+            <ul>
+                {% if organization.membership_type == 'character' %}
+                    {% for char_member in organization.character_members.all %}
+                        <li><a href="{{ char_member.get_absolute_url }}">{{ char_member }}</a></li>
+                    {% empty %}
+                        <li>None</li>
+                    {% endfor %}
+                {% elif organization.membership_type == 'organization' %}
+                    {% for org_member in organization.organization_members.all %}
+                        <li>{{ org_member.get_html_link|safe }}</li>
+                    {% empty %}
+                        <li>None</li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        {% endif %}
+
+        <h4>Externally applying powers</h4>
+        <ul>
+            {% for capability in organization.external_capabilities_to_this.all %}
+                <li>
+                    <a href="{{ capability.organization.get_absolute_url }}">{{ capability.organization }}</a>
+                    can <b>{{ capability.get_type_display }}</b>
+                    {% if capability.stemming_from %}
+                        (delegated by <a href="{{ capability.stemming_from.organization.get_absolute_url }}">
+                        {{ capability.stemming_from.organization }}</a>)
+                    {% endif %}
+                </li>
+            {% empty %}
+                <li>None</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+
+    <div class="col-md-6">
+        <h4>Actions</h4>
+        {% if hero_is_member %}
+            LEAVE / STEP OUT
+        {% else %}
+            {% if not organization.is_position and organization.membership_type == 'character' %}
+                REQUEST TO JOIN
+            {% endif %}
+        {% endif %}
+
+        {% if organization.decision_taking == 'democratic' and hero_is_member %}
+            <h4>Open proposals</h4>
+            <ul>
+                {% for proposal in organization.get_open_proposals.all %}
+                    <li>
+                        {{ proposal.capability.get_type_display|capfirst }} proposal by
+                        {{ proposal.proposing_character }}
+                        <a href="{{ proposal.get_absolute_url }}" class="btn btn-sm btn-primary">Open</a>
+                    </li>
+                {% empty %}
+                    <li>Currently nothing to vote.</li>
+                {% endfor %}
+            </ul>
+            <p>
+                See closed proposals.
+            </p>
+        {% endif %}
+
+        <h4>Powers owned</h4>
+        <ul>
+            {% for capability in organization.capability_set.all %}
+                <li>
+                    {% if can_use_capabilities %}
+                        <a href="{{ capability.get_absolute_url }}" class="btn btn-primary btn-sm">
+                            {{ capability.get_type_display|capfirst }}
+                        </a>
+                    {% else %}
+                        <b>{{ capability.get_type_display|capfirst }}</b>
+                    {% endif %}
+                    {% if capability.applying_to != organization %}
+                        in <a href="{{ capability.applying_to.get_absolute_url }}">{{ capability.applying_to }}</a>
+                    {% endif %}
+                    {% if capability.stemming_from %}
+                        (delegated by <a href="{{ capability.stemming_from.organization.get_absolute_url }}">
+                        {{ capability.stemming_from.organization }}</a>)
+                    {% endif %}
+                </li>
+            {% empty %}
+                <li>None</li>
+            {% endfor %}
+        </ul>
+    </div>
 
 {% endblock %}

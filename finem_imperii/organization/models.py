@@ -171,6 +171,15 @@ class PositionElection(models.Model):
     closed = models.BooleanField(default=False)
     winner = models.ForeignKey('PositionCandidacy', blank=True, null=True)
 
+    def open_candidacies(self):
+        return self.positioncandidacy_set.filter(retired=False)
+
+    def last_turn_to_present_candidacy(self):
+        return self.turn - 3
+
+    def can_present_candidacy(self):
+        return self.position.world.current_turn <= self.last_turn_to_present_candidacy()
+
 
 class PositionCandidacy(models.Model):
     class Meta:
@@ -180,6 +189,7 @@ class PositionCandidacy(models.Model):
     election = models.ForeignKey(PositionElection)
     candidate = models.ForeignKey(Character)
     description = models.TextField()
+    retired = models.BooleanField(default=False)
 
 
 class PositionElectionVote(models.Model):

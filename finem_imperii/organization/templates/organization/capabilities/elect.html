@@ -9,9 +9,10 @@
     </p>
 
 {% else %}
-    {% if heros_vote %}
-        <p class="alert alert-success">
-            You issued your vote to {{ heros_vote.candidacy.candidate }}
+    {% if capability.applying_to.current_election.can_present_candidacy %}
+        <p class="alert alert-warning">
+            Please note that up to two months before the election, new candidates may present themselves and existing
+            candidates may retire.
         </p>
     {% endif %}
 
@@ -21,15 +22,23 @@
         <form class="" role="form" method="post" action="{% url 'organization:elect_capability' capability.id %}">
             {% csrf_token %}
             <input type="hidden" name="candidacy_id" value="{{ candidacy.id }}">
-            <div class="panel {% if heros_vote.candidacy == candidacy %}panel-success{% else %}panel-default{% endif %}">
+            <div class="panel
+                        {% if candidacy.retired %}panel-default
+                        {% elif heros_vote.candidacy == candidacy %}panel-success
+                        {% else %}panel-primary{% endif %}">
                 <div class="panel-heading">
-                    <h3 class="panel-title">{{ candidacy.candidate }}</h3>
+                    <h3 class="panel-title">
+                        {{ candidacy.candidate }}
+                        {% if candidacy.retired %}(candidate retired)
+                        {% elif heros_vote.candidacy == candidacy %}(you voted this)
+                        {% endif %}
+                    </h3>
                 </div>
 
                 <div class="panel-body">
                     <pre style="white-space: pre-wrap;">{{ candidacy.description }}</pre>
 
-                    {% if not heros_vote %}
+                    {% if not heros_vote and not candidacy.retired %}
                         <span class="form-group form-inline">
                             <button
                                     type="submit"

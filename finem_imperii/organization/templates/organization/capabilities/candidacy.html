@@ -2,11 +2,23 @@
     You have been granted the power to present yourself as a candidate to {{ capability.applying_to }}.
 </p>
 <p>
-    This means that you are able to participate as a candidate in the elections and, eventually, be able to ocuppy the
-    position of {{ capability.applying_to }}.
+    This means that you are able to participate as a candidate in the elections and, eventually, be able to occupy the
+    position of {{ capability.applying_to }}. Candidacies can be presented up to three months before the elections.
 </p>
 
-{% if capability.applying_to.current_election %}
+{% if not capability.applying_to.current_election %}
+    <p>
+        You can't present your candidacy in this moment as there is no election currently in progress.
+    </p>
+{% elif not capability.applying_to.current_election.can_present_candidacy %}
+    <p>
+        The period to present candidacies is over.
+    </p>
+{% elif heros_candidacy and heros_candidacy.retired %}
+    <p>
+        You retired your candidacy in these elections.
+    </p>
+{% else %}
     <form class="form-horizontal" method="post" action="{% url 'organization:candidacy_capability' capability.id %}">
         <fieldset>
             {% csrf_token %}
@@ -45,13 +57,13 @@
         <form class="form-horizontal" method="post" action="{% url 'organization:candidacy_capability' capability.id %}">
             <fieldset>
                 {% csrf_token %}
-                <input type="hidden" name="delete" value="1">
+                <input type="hidden" name="retire" value="1">
 
                 <div class="form-group">
                     <div class="col-lg-10 col-lg-offset-2">
                         <button type="submit"
                                 class="btn btn-danger"
-                                onclick="return confirm('Are you sure you want to retire your candidacy?')"
+                                onclick="return confirm('Are you sure you want to retire your candidacy? You will not be able to undo this.')"
                         >Retire candidacy</button>
                     </div>
                 </div>
@@ -60,8 +72,4 @@
         </form>
     {% endif %}
 
-{% else %}
-    <p>
-        You can't present your candidacy in this moment as there is no election currently in progress.
-    </p>
 {% endif %}

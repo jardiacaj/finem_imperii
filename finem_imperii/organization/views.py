@@ -105,7 +105,11 @@ def elect_view(request, capability_id):
         return redirect(capability.get_absolute_url())
 
     try:
-        candidacy = PositionCandidacy.objects.get(id=int(request.POST.get('candidacy_id')), election=election)
+        candidacy = PositionCandidacy.objects.get(
+            id=int(request.POST.get('candidacy_id')),
+            election=election,
+            retired=False
+        )
     except PositionCandidacy.DoesNotExist:
         messages.error(request, "That is not a valid candidacy to vote for.", "danger")
         return redirect(capability.get_absolute_url())
@@ -154,23 +158,23 @@ def candidacy_view(request, capability_id):
         return redirect(capability.get_absolute_url())
 
     description = request.POST.get('description')
-    delete = request.POST.get('delete')
+    retire = request.POST.get('retire')
 
     candidacy, new = PositionCandidacy.objects.get_or_create(
         election=election,
         candidate=request.hero
     )
 
-    if delete:
-        candidacy.delete()
-        messages.success(request, "Your candidacy has been deleted.", "success")
+    if retire:
+        candidacy.retired = True
+        messages.success(request, "Your candidacy has been retired.", "success")
     else:
         candidacy.description = description
-        candidacy.save()
         if new:
             messages.success(request, "Your candidacy has been created.", "success")
         else:
             messages.success(request, "Your candidacy has been updated.", "success")
+    candidacy.save()
 
     return redirect(capability.get_absolute_url())
 

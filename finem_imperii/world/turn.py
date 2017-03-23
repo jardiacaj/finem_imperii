@@ -18,9 +18,15 @@ class TurnProcessor:
     def do_turn(self):
         self.do_travels()
         self.restore_hours()
+        self.do_elections()
 
         self.world.current_turn += 1
         self.world.save()
+
+    def do_elections(self):
+        for organization in self.world.organization_set.all():
+            if organization.current_election and organization.current_election.turn == self.world.current_turn:
+                organization.current_election.resolve()
 
     def do_travels(self):
         for character in self.world.character_set.all():

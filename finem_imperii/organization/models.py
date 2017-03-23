@@ -195,10 +195,11 @@ class PositionElection(models.Model):
         if len(winners) != 1:
             self.position.convoke_elections()
         else:
-            winner = winners[0]
-            self.winner = winner
-            self.position.character_members.all().delete()
-            self.position.character_members.add(winner.candidate)
+            winning_candidacy = winners[0]
+            winning_candidate = winning_candidacy.candidate
+            self.winner = winning_candidacy
+            self.position.character_members.remove(self.position.character_members.all())
+            self.position.character_members.add(winning_candidate)
 
         self.position.last_election = self
         self.position.save()
@@ -206,7 +207,7 @@ class PositionElection(models.Model):
         self.save()
 
     def get_absolute_url(self):
-        pass
+        return reverse('organization:election', kwargs={'election_id': self.id})
 
 
 class PositionCandidacy(models.Model):

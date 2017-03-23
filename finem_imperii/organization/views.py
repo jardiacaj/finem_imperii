@@ -7,7 +7,8 @@ from django.views.decorators.http import require_POST
 from django.views.generic.base import View
 
 from decorators import inchar_required
-from organization.models import Organization, PolicyDocument, Capability, CapabilityProposal, CapabilityVote
+from organization.models import Organization, PolicyDocument, Capability, CapabilityProposal, CapabilityVote, \
+    PositionCandidate
 from world.models import Character
 
 
@@ -69,10 +70,12 @@ def capability_view(request, capability_id):
     }
 
     if capability.type == Capability.CANDIDACY:
+        context['heros_candidacy'] = None
         if capability.applying_to.current_election:
-            context['heros_candidacy'] = capability.applying_to.current_election.positioncandidate_set.filter()
-        else:
-            context['heros_candidacy'] = None
+            try:
+                context['heros_candidacy'] = capability.applying_to.current_election.positioncandidate_set.get(candidate=request.hero)
+            except PositionCandidate.DoesNotExist:
+                pass
 
     return render(request, 'organization/capability.html', context)
 
@@ -97,6 +100,39 @@ def election_convoke_view(request, capability_id):
     else:
         messages.success(request, "Done!", "success")
     return redirect(capability.organization.get_absolute_url())
+
+
+@require_POST
+@inchar_required
+@capability_required_decorator
+def candidacy_view(request, capability_id):
+    capability = get_object_or_404(Capability, id=capability_id)
+
+    election = capability.applying_to.current_election
+    if not election:
+        messages.error(request, "There is currently no election in progress!", "danger")
+        return redirect(capability.get_absolute_url())
+
+    description = request.POST.get('description')
+    delete = request.POST.get('delete')
+
+    candidacy, new = PositionCandidate.objects.get_or_create(
+        election=election,
+        candidate=request.hero
+    )
+
+    if delete:
+        candidacy.delete()
+        messages.success(request, "Your candidacy has been deleted.", "success")
+    else:
+        candidacy.description = description
+        candidacy.save()
+        if new:
+            messages.success(request, "Your candidacy has been created.", "success")
+        else:
+            messages.success(request, "Your candidacy has been updated.", "success")
+
+    return redirect(capability.get_absolute_url())
 
 
 @require_POST

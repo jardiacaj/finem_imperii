@@ -16,6 +16,7 @@ Basic
  - [World](https://github.com/jardiacaj/finem_imperii/blob/master/docs/3-world.md)
  - [Characters](https://github.com/jardiacaj/finem_imperii/blob/master/docs/3-characters.md)
  - [Organizations](https://github.com/jardiacaj/finem_imperii/blob/master/docs/3-organizations.md)
+ - [Elections](https://github.com/jardiacaj/finem_imperii/blob/master/docs/3-elections.md)
  - [Travel](https://github.com/jardiacaj/finem_imperii/blob/master/docs/3-travel.md)
  - [Units](https://github.com/jardiacaj/finem_imperii/blob/master/docs/3-units.md)
  - [Buildings](https://github.com/jardiacaj/finem_imperii/blob/master/docs/3-buildings.md)

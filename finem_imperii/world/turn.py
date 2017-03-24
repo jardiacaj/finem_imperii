@@ -28,6 +28,15 @@ class TurnProcessor:
             if organization.current_election and organization.current_election.turn == self.world.current_turn:
                 organization.current_election.resolve()
 
+        for organization in self.world.organization_set.all():
+            if organization.election_period_months and not organization.current_election and not organization.last_election:
+                organization.convoke_elections(12)
+            elif organization.election_period_months and not organization.current_election and organization.last_election:
+                turns_since_last_election = self.world.current_turn - organization.last_election.turn
+                turns_to_next_election = organization.election_period_months - turns_since_last_election
+                if turns_to_next_election < 12:
+                    organization.convoke_elections(12)
+
     def do_travels(self):
         for character in self.world.character_set.all():
 

@@ -1,0 +1,25 @@
+{% extends "base/base.html" %}
+
+{% load extra_filters %}
+
+{% block content %}
+
+    <h1 class="page-header">Elections for {{ organization.get_html_link|safe }}</h1>
+
+    <ul>
+        {% for election in organization.positionelection_set.all %}
+            <li>
+                <a href="{{ election.get_absolute_url }}">{{ election }}</a>
+                {% if election.winner %}
+                    won by {{ election.winner.candidate }}
+                {% endif %}
+                {% if not election.closed %}
+                    <span class="label label-success">In progress</span>
+                {% endif %}
+            </li>
+        {% empty %}
+            <li>None</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

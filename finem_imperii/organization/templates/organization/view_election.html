@@ -1,0 +1,162 @@
+{% extends "base/base.html" %}
+
+{% load extra_filters %}
+
+{% block content %}
+
+    <h1 class="page-header">Election to {{ election.position.get_html_link|safe }}</h1>
+
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <p class="alert lead {% if not election.closed %}alert-success{% else %}alert-default{% endif %}">
+                Election of {{ election.turn|nice_turn }}.
+
+                {% if election.closed %}
+                    <br>
+                    Passed election.
+                    <br>
+                    {% if election.winner %}
+                        Won by {{ election.winner.candidate }}.
+                    {% else %}
+                        This election has not been won by anyone.
+                    {% endif %}
+                {% else %}
+                    <br>
+                    This election is in progress.
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+    {% if election.closed %}
+        <h4>Results</h4>
+        <div class="row" style="display: flex; align-items: center;">
+            <div class="col-md-4">
+                <table class="table table-striped">
+                    <thead>
+                        <tr><td>Candidate</td><td>Votes</td></tr>
+                    </thead>
+                    <tbody>
+                        {% for candidacy in election.get_results %}
+                            <tr>
+                                <td>{{ candidacy.candidate }}</td>
+                                <td>{{ candidacy.positionelectionvote_set.count }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr><td>No candidates!</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-md-4">
+                <canvas id="bar_chart"></canvas>
+                <script>
+                    var ctx = $('#bar_chart');
+                    var data = {
+                        labels: [
+                            {% for candidacy in election.get_results %}
+                                "{{ candidacy.candidate }}",
+                            {% endfor %}
+                        ],
+                        datasets: [
+                            {
+                                data: [
+                                    {% for candidacy in election.get_results %}
+                                        {{ candidacy.positionelectionvote_set.count }},
+                                    {% endfor %}
+                                ],
+                                backgroundColor: ["#FF5654", "#6AFF68", ],
+                                hoverBackgroundColor: ["#FF5654",  "#6AFF68", ]
+                            }]
+                    };
+                    var my_bar_chart = new Chart(
+                        ctx,
+                        {
+                            type: 'bar',
+                            data: data,
+                            options: {
+                                legend: {
+                                    display: false
+                                },
+                                scales: {
+                                    yAxes: [
+                                        {
+                                            type: "linear",
+                                            ticks: {
+                                                min: 0,
+                                                stepSize: 1
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    );
+                </script>
+            </div>
+
+            <div class="col-md-4">
+                <canvas id="doughnut_chart"></canvas>
+                <script>
+                    var ctx = $('#doughnut_chart');
+                    var data = {
+                        labels: [
+                            {% for candidacy in election.get_results %}
+                                "{{ candidacy.candidate }}",
+                            {% endfor %}
+                        ],
+                        datasets: [
+                            {
+                                data: [
+                                    {% for candidacy in election.get_results %}
+                                        {{ candidacy.positionelectionvote_set.count }},
+                                    {% endfor %}
+                                ],
+                                backgroundColor: ["#FF5654", "#6AFF68", ],
+                                hoverBackgroundColor: ["#FF5654",  "#6AFF68", ]
+                            }]
+                    };
+                    var my_doughnut_chart = new Chart(
+                        ctx,
+                        {
+                            type: 'doughnut',
+                            data: data,
+                            options: {
+                                legend: {
+                                    display: false
+                                },
+                                rotation: Math.PI,
+                                circumference: Math.PI
+                            }
+                        }
+                    );
+                </script>
+            </div>
+        </div>
+
+    {% endif %}
+
+    <h4>Candidates</h4>
+
+    {% for candidacy in election.open_candidacies.all %}
+
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {{ candidacy.candidate }}
+                    </h3>
+                </div>
+
+                <div class="panel-body">
+                    <pre style="white-space: pre-wrap;">{{ candidacy.description }}</pre>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p class="alert alert-warning col-md-6 col-md-offset-3">No candidates thus far!</p>
+    {% endfor %}
+
+
+{% endblock %}

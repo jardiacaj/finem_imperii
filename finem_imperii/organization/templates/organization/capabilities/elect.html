@@ -18,42 +18,46 @@
 
     {% for candidacy in capability.applying_to.current_election.positioncandidacy_set.all %}
 
+        <div class="col-md-6">
+            <form class="" role="form" method="post" action="{% url 'organization:elect_capability' capability.id %}">
+                {% csrf_token %}
+                <input type="hidden" name="candidacy_id" value="{{ candidacy.id }}">
+                <div class="panel
+                            {% if candidacy.retired %}panel-default
+                            {% elif heros_vote.candidacy == candidacy %}panel-success
+                            {% else %}panel-primary{% endif %}">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            {{ candidacy.candidate }}
+                            {% if candidacy.candidate == capability.applying_to.get_position_occupier %}
+                                - {{ capability.applying_to.get_html_link|safe }}
+                            {% endif %}
+                            {% if candidacy.retired %}(candidate retired)
+                            {% elif heros_vote.candidacy == candidacy %}(you voted this)
+                            {% endif %}
+                        </h3>
+                    </div>
 
-        <form class="" role="form" method="post" action="{% url 'organization:elect_capability' capability.id %}">
-            {% csrf_token %}
-            <input type="hidden" name="candidacy_id" value="{{ candidacy.id }}">
-            <div class="panel
-                        {% if candidacy.retired %}panel-default
-                        {% elif heros_vote.candidacy == candidacy %}panel-success
-                        {% else %}panel-primary{% endif %}">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
-                        {{ candidacy.candidate }}
-                        {% if candidacy.retired %}(candidate retired)
-                        {% elif heros_vote.candidacy == candidacy %}(you voted this)
+                    <div class="panel-body">
+                        <pre style="white-space: pre-wrap;">{{ candidacy.description }}</pre>
+
+                        {% if not heros_vote and not candidacy.retired %}
+                            <span class="form-group form-inline">
+                                <button
+                                        type="submit"
+                                        class="btn btn-primary btn-sm"
+                                        onclick="return confirm('Are you sure?')"
+                                >
+                                    Vote {{ candidacy.candidate }}
+                                </button>
+                            </span>
+                        {% elif heros_vote.candidacy == candidacy %}
+                            <p>You voted for this candidate.</p>
                         {% endif %}
-                    </h3>
+                    </div>
                 </div>
-
-                <div class="panel-body">
-                    <pre style="white-space: pre-wrap;">{{ candidacy.description }}</pre>
-
-                    {% if not heros_vote and not candidacy.retired %}
-                        <span class="form-group form-inline">
-                            <button
-                                    type="submit"
-                                    class="btn btn-primary btn-sm"
-                                    onclick="return confirm('Are you sure?')"
-                            >
-                                Vote {{ candidacy.candidate }}
-                            </button>
-                        </span>
-                    {% elif heros_vote.candidacy == candidacy %}
-                        <p>You voted for this candidate.</p>
-                    {% endif %}
-                </div>
-            </div>
-        </form>
+            </form>
+        </div>
     {% empty %}
         <p class="alert alert-warning">No candidates thus far!</p>
     {% endfor %}

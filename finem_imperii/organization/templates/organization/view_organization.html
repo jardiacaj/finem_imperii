@@ -62,6 +62,17 @@
             </ul>
         {% endif %}
 
+        {% if organization.current_election or organization.last_election %}
+            <h4>Elections</h4>
+            {% if organization.current_election %}
+                <a href="{{ organization.current_election.get_absolute_url }}">View current election</a>
+            {% else %}
+                <a href="{{ organization.last_election.get_absolute_url }}">View last election</a>
+            {% endif %}
+            <br>
+            <a href="{% url 'organization:election_list' organization.id %}">View past elections</a>
+        {% endif %}
+
         {% if organization.policydocument_set.all %}
             <h4>Documents</h4>
             <ul>

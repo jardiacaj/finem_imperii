@@ -2,10 +2,12 @@ import json
 
 from django.db import models, transaction
 from django.contrib.auth.models import User
+from django.db.models.aggregates import Count
 from django.urls.base import reverse
 from django.utils.html import escape
 
 from world.models import Tile, Character
+from world.templatetags.extra_filters import nice_turn
 
 
 class Organization(models.Model):
@@ -104,7 +106,7 @@ class Organization(models.Model):
         )
 
     def get_open_proposals(self):
-        return CapabilityProposal.objects.filter(capability__applying_to=self, closed=False)
+        return CapabilityProposal.objects.filter(capability__organization=self, closed=False)
 
     def get_all_controlled_tiles(self):
         return Tile.objects.filter(controlled_by__in=self.get_all_descendants(including_self=True)).all()
@@ -198,16 +200,27 @@ class PositionElection(models.Model):
             winning_candidacy = winners[0]
             winning_candidate = winning_candidacy.candidate
             self.winner = winning_candidacy
-            self.position.character_members.remove(self.position.character_members.all())
+            self.position.character_members.remove(self.position.get_position_occupier())
             self.position.character_members.add(winning_candidate)
 
         self.position.last_election = self
+        self.position.current_election = None
         self.position.save()
         self.closed = True
         self.save()
 
+    def get_results(self):
+        return self.positioncandidacy_set.all().annotate(num_votes=Count('positionelectionvote'))\
+            .order_by('-num_votes')
+
     def get_absolute_url(self):
         return reverse('organization:election', kwargs={'election_id': self.id})
+
+    def __str__(self):
+        return "{} election for {}".format(
+            nice_turn(self.turn),
+            self.position
+        )
 
 
 class PositionCandidacy(models.Model):

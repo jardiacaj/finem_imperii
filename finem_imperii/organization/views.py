@@ -8,7 +8,7 @@ from django.views.generic.base import View
 
 from decorators import inchar_required
 from organization.models import Organization, PolicyDocument, Capability, CapabilityProposal, CapabilityVote, \
-    PositionCandidacy, PositionElectionVote
+    PositionCandidacy, PositionElectionVote, PositionElection
 from world.models import Character
 
 
@@ -38,6 +38,26 @@ def capability_required_decorator(func):
             return fail_the_request(*args, **kwargs)
         return func(*args, **kwargs)
     return inner
+
+
+@inchar_required
+def election_list_view(request, organization_id):
+    organization = get_object_or_404(Organization, id=organization_id)
+
+    context = {
+        'organization': organization,
+    }
+    return render(request, 'organization/election_list.html', context)
+
+
+@inchar_required
+def election_view(request, election_id):
+    election = get_object_or_404(PositionElection, id=election_id)
+
+    context = {
+        'election': election,
+    }
+    return render(request, 'organization/view_election.html', context)
 
 
 @inchar_required

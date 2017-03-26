@@ -47,24 +47,24 @@ Allocated: 3 days
 
 ## Week 4
 
- - Organizations part 2. (1 day)
- - Elections. (1 day)
- - Secession and rebellion. (1 day)
+ - Organizations part 2. (1 day) (finished)
+ - Elections. (1 day) (finished)
+ - Diplomacy. (1 day)
 
 Allocated: 3 days (vacation!)
 
 ## Week 5
 
  - Messaging. (1 day)
- - Conquest. (1 day)
  - CI and Dockerization (1 day)
- - Diplomacy. (1 day)
+ - Secession and rebellion. (1 day)
+ - Battle rework. (1 day)
 
 Allocated: 4 days
  
 ## Week 6
 
- - Battle rework. (1 day)
+ - Conquest. (1 day)
  - Battle rendering. (1,5 days)
  - Battle orders. (2 days)
 
@@ -74,8 +74,9 @@ Allocated: 4,5 days
 
  - Sieges. (1 day)
  - Barbarians. (2 days)
+ - PAC2 (1/2 day)
  
-Allocated: 3 days (vacation!)
+Allocated: 3,5 days (vacation!)
  
 ## Week 8 
  
@@ -88,11 +89,10 @@ Allocated: 3 days (vacation!)
 ## Week 9
 
  - Taxation (1 day)
- - PAC2 (1/2 day)
  - Closed alpha release (1 day)
  - Game start/tutorial (2 days)
 
-Allocated: 4,5 days
+Allocated: 4 days
 
 ## Week 10
 

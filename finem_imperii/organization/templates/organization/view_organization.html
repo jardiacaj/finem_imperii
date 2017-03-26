@@ -103,6 +103,15 @@
             </ul>
         {% endif %}
 
+        {% if relationships.exists %}
+            <h4>Relationships</h4>
+            <ul>
+                {% for relationship in relationships.all %}
+                    <li>{{ relationship.get_relationship_html|safe }} {{ relationship.to_organization.get_html_link|safe }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
         <h4>Externally applying powers</h4>
         <ul>
             {% for capability in organization.external_capabilities_to_this.all %}

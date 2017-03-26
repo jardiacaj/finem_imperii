@@ -1,0 +1,46 @@
+<p>
+    You have been granted the power to conduct diplomacy as {{ capability.applying_to }}.
+</p>
+
+{% if capability.applying_to.violence_monopoly %}
+    <h4>State relationships</h4>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <td>State</td>
+                <td>Current</td>
+                <td>Proposals</td>
+                <td>Actions</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for state in states %}
+                <tr>
+                    <td>{{ state.get_html_link|safe }}</td>
+                    <td>{{ state.relationship_out.get_relationship_html|safe }}</td>
+                    <td>
+                        {% if state.relationship_in.is_proposal %}
+                            Received: {{ state.relationship_in.get_desired_relationship_html|safe }}
+                        {% endif %}
+
+                        {% if state.relationship_out.is_proposal %}
+                            Sent: {{ state.relationship_out.get_desired_relationship_html|safe }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a
+                                href="{% url 'organization:diplomacy_capability' capability.id state.id %}"
+                                class="btn btn-sm btn-primary"
+                        >
+                            Conduct diplomacy
+                        </a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td>No other states</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+{% endif %}

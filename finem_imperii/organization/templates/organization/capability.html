@@ -33,15 +33,19 @@
         {% endif %}
     {% endif %}
 
-    {% include subtemplate %}
+    <div class="row">
+        {% include subtemplate %}
+    </div>
 
-    <hr>
-    <h4>Delegation</h4>
-    <p>
-        You may also delegate this power.
-    </p>
-    <p>
-        Take back delegation.
-    </p>
+    <div class="row">
+        <hr>
+        <h4>Delegation</h4>
+        <p>
+            You may also delegate this power.
+        </p>
+        <p>
+            Take back delegation.
+        </p>
+    </div>
 
 {% endblock %}

@@ -119,6 +119,12 @@ class Organization(models.Model):
             return None
         return list(self.character_members.all())[0]
 
+    def get_relationship_to(self, organization):
+        return OrganizationRelationship.objects.get_or_create(from_organization=self, to_organization=organization)[0]
+
+    def get_relationship_from(self, organization):
+        return organization.get_relationship_to(self)
+
     @transaction.atomic
     def convoke_elections(self, months_to_election=6):
         if not self.is_position:
@@ -261,12 +267,12 @@ class Capability(models.Model):
     TYPE_CHOICES = (
         (BAN, 'ban'),
         (POLICY_DOCUMENT, 'write policy and law'),
-        (DIPLOMACY, 'diplomacy'),
+        (DIPLOMACY, 'conduct diplomacy'),
         (CONSCRIPT, 'conscript troops'),
         (DISSOLVE, 'dissolve'),
         (MANAGE_SUBORGANIZATIONS, 'manage subordinate organizations'),
         (SECEDE, 'secede'),
-        (MEMBERSHIPS, 'memberships'),
+        (MEMBERSHIPS, 'manage memberships'),
         (HEIR, 'set heir'),
         (ELECT, 'elect'),
         (CANDIDACY, 'present candidacy'),
@@ -308,23 +314,29 @@ class CapabilityProposal(models.Model):
     def execute(self):
         proposal = json.loads(self.proposal_json)
         if self.capability.type == Capability.POLICY_DOCUMENT:
-            if proposal['new']:
-                document = PolicyDocument(organization=self.capability.applying_to)
-            else:
-                document = PolicyDocument.objects.get(id=proposal['document_id'])
+            try:
+                if proposal['new']:
+                    document = PolicyDocument(organization=self.capability.applying_to)
+                else:
+                    document = PolicyDocument.objects.get(id=proposal['document_id'])
 
-            if proposal['delete']:
-                document.delete()
-            else:
-                document.title = proposal['title']
-                document.body = proposal['body']
-                document.public = 'public' in proposal.keys()
-                document.last_modified_turn = self.capability.organization.world.current_turn
-                document.save()
+                if proposal['delete']:
+                    document.delete()
+                else:
+                    document.title = proposal['title']
+                    document.body = proposal['body']
+                    document.public = 'public' in proposal.keys()
+                    document.last_modified_turn = self.capability.organization.world.current_turn
+                    document.save()
+            except PolicyDocument.DoesNotExist:
+                pass
 
         elif self.capability.type == Capability.BAN:
-            character_to_ban = Character.objects.get(id=proposal['character_id'])
-            self.capability.applying_to.character_members.remove(character_to_ban)
+            try:
+                character_to_ban = Character.objects.get(id=proposal['character_id'])
+                self.capability.applying_to.character_members.remove(character_to_ban)
+            except Character.DoesNotExist:
+                pass
 
             leader_organization = self.capability.applying_to.leader
             if leader_organization and character_to_ban in leader_organization.character_members.all():
@@ -335,8 +347,32 @@ class CapabilityProposal(models.Model):
                 months_to_election = proposal['months_to_election']
                 self.capability.applying_to.convoke_elections(months_to_election)
 
+        elif self.capability.type == Capability.DIPLOMACY:
+            try:
+                target_organization = Organization.objects.get(id=proposal['target_organization_id'])
+                target_relationship = proposal['target_relationship']
+                changing_relationship = self.capability.applying_to.get_relationship_to(target_organization)
+                reverse_relationship = changing_relationship.reverse_relation()
+                action_type = proposal['type']
+                if action_type == 'propose':
+                    changing_relationship.desire(target_relationship)
+                elif action_type == 'accept':
+                    if reverse_relationship.desired_relationship == target_relationship:
+                        changing_relationship.set_relationship(target_relationship)
+                elif action_type == 'take back':
+                    if changing_relationship.desired_relationship == target_relationship:
+                        changing_relationship.desired_relationship = None
+                        changing_relationship.save()
+                elif action_type == 'refuse':
+                    if reverse_relationship.desired_relationship == target_relationship:
+                        reverse_relationship.desired_relationship = None
+                        reverse_relationship.save()
+
+            except Organization.DoesNotExist:
+                pass
+
         else:
-            raise Exception("Executing unknown capability type '{}'".format(self.capability.type))
+            raise Exception("Executing unknown capability action_type '{}'".format(self.capability.type))
 
         self.executed = True
         self.closed = True
@@ -410,3 +446,98 @@ class PolicyDocument(models.Model):
 
     def get_absolute_url(self):
         return reverse('organization:document', kwargs={'document_id': self.id})
+
+
+class OrganizationRelationship(models.Model):
+    class Meta:
+        unique_together = (
+            ("from_organization", "to_organization"),
+        )
+
+    PEACE = 'peace'
+    WAR = 'war'
+    BANNED = 'banned'
+    FRIENDSHIP = 'friendship'
+    DEFENSIVE_ALLIANCE = 'defensive alliance'
+    ALLIANCE = 'alliance'
+    RELATIONSHIP_CHOICES = (
+        (PEACE, PEACE),
+        (WAR, WAR),
+        (BANNED, BANNED),
+        (FRIENDSHIP, FRIENDSHIP),
+        (DEFENSIVE_ALLIANCE, DEFENSIVE_ALLIANCE),
+        (ALLIANCE, ALLIANCE),
+    )
+
+    RELATIONSHIP_LEVEL = {
+        WAR: 0,
+        BANNED: 0,
+        PEACE: 1,
+        FRIENDSHIP: 2,
+        DEFENSIVE_ALLIANCE: 3,
+        ALLIANCE: 5
+    }
+
+    from_organization = models.ForeignKey(Organization, related_name='relationships_stemming')
+    to_organization = models.ForeignKey(Organization, related_name='relationships_receiving')
+    relationship = models.CharField(max_length=20, choices=RELATIONSHIP_CHOICES, default=PEACE)
+    desired_relationship = models.CharField(max_length=20, choices=RELATIONSHIP_CHOICES, blank=True, null=True)
+
+    def reverse_relation(self):
+        return self.to_organization.get_relationship_to(self.from_organization)
+
+    @staticmethod
+    def _get_badge_type(relationship):
+        if relationship in (OrganizationRelationship.WAR, OrganizationRelationship.BANNED):
+            return 'danger'
+        elif relationship == OrganizationRelationship.FRIENDSHIP:
+            return 'success'
+        elif relationship in (OrganizationRelationship.DEFENSIVE_ALLIANCE, OrganizationRelationship.ALLIANCE):
+            return 'info'
+        else:
+            return 'default'
+
+    @staticmethod
+    def _format_relationship(relationship, relationship_name):
+        template = '<span class="label label-{badge_type}">{name}</span>'
+        return template.format(
+            name=relationship_name.capitalize(),
+            badge_type=OrganizationRelationship._get_badge_type(relationship)
+        )
+
+    def get_relationship_html(self):
+        return OrganizationRelationship._format_relationship(self.relationship, self.get_relationship_display())
+
+    def get_desired_relationship_html(self):
+        if self.desired_relationship is None:
+            return OrganizationRelationship._format_relationship(
+                'default',
+                'None'
+            )
+        else:
+            return OrganizationRelationship._format_relationship(
+                self.desired_relationship,
+                self.get_desired_relationship_display()
+            )
+
+    def is_proposal(self):
+        return self.desired_relationship and self.desired_relationship != self.relationship
+
+    @transaction.atomic
+    def desire(self, target_relationship):
+        if self.RELATIONSHIP_LEVEL[target_relationship] < self.RELATIONSHIP_LEVEL[self.relationship]:
+            self.set_relationship(target_relationship)
+        else:
+            self.desired_relationship = target_relationship
+            self.save()
+
+    @transaction.atomic
+    def set_relationship(self, target_relationship):
+        self.relationship = target_relationship
+        self.save()
+        reverse_relation = self.reverse_relation()
+        reverse_relation.relationship = target_relationship
+        reverse_relation.save()
+
+    def __str__(self):
+        return "Relationship {} to {}".format(self.from_organization, self.to_organization)

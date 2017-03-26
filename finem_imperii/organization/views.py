@@ -1,6 +1,7 @@
 import json
 
 from django.contrib import messages
+from django.db import transaction
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls.base import reverse
 from django.views.decorators.http import require_POST
@@ -8,7 +9,7 @@ from django.views.generic.base import View
 
 from decorators import inchar_required
 from organization.models import Organization, PolicyDocument, Capability, CapabilityProposal, CapabilityVote, \
-    PositionCandidacy, PositionElectionVote, PositionElection
+    PositionCandidacy, PositionElectionVote, PositionElection, OrganizationRelationship
 from world.models import Character
 
 
@@ -104,6 +105,16 @@ def capability_view(request, capability_id):
                 context['heros_vote'] = capability.applying_to.current_election.positionelectionvote_set.get(voter=request.hero)
             except PositionElectionVote.DoesNotExist:
                 pass
+
+    if capability.type == Capability.DIPLOMACY:
+        if capability.applying_to.violence_monopoly:
+            context['states'] = []
+            for state in capability.applying_to.world.get_violence_monopolies():
+                if state == capability.applying_to:
+                    continue
+                state.relationship_out = state.get_relationship_from(capability.applying_to)
+                state.relationship_in = state.get_relationship_to(capability.applying_to)
+                context['states'].append(state)
 
     return render(request, 'organization/capability.html', context)
 
@@ -269,6 +280,67 @@ class DocumentCapabilityView(View):
         return redirect(capability.organization.get_absolute_url())
 
 
+class DiplomacyCapabilityView(View):
+    def get(self, request, capability_id, target_organization_id):
+        capability = get_object_or_404(Capability, id=capability_id, type=Capability.DIPLOMACY)
+        target_organization = get_object_or_404(Organization, id=target_organization_id)
+
+        context = {
+            'capability': capability,
+            'target_organization': target_organization,
+            'relationship_out': capability.applying_to.get_relationship_to(target_organization),
+            'relationship_in': capability.applying_to.get_relationship_from(target_organization),
+            'subtemplate': 'organization/capabilities/diplomacy_target.html',
+        }
+        return render(request, 'organization/capability.html', context)
+
+    @transaction.atomic
+    def post(self, request, capability_id, target_organization_id):
+        capability = get_object_or_404(Capability, id=capability_id, type=Capability.DIPLOMACY)
+        target_organization = get_object_or_404(Organization, id=target_organization_id)
+
+        target_relationship = request.POST.get('target_relationship')
+
+        if target_relationship in ("accept", "refuse"):
+            if not target_organization.get_relationship_to(capability.applying_to).is_proposal():
+                messages.error(request, "You cannot do that (1)", "danger")
+                return redirect(reverse('organization:diplomacy_capability', kwargs={'capability_id': capability_id, 'target_organization_id': target_organization_id}))
+            proposal = {
+                'type': target_relationship,
+                'target_organization_id': target_organization.id,
+                'target_relationship': target_organization.get_relationship_to(capability.applying_to).desired_relationship
+            }
+        elif target_relationship == "take back":
+            if not capability.applying_to.get_relationship_to(target_organization).is_proposal():
+                messages.error(request, "You cannot do that (2)", "danger")
+                return redirect(reverse('organization:diplomacy_capability', kwargs={'capability_id': capability_id, 'target_organization_id': target_organization_id}))
+            proposal = {
+                'type': target_relationship,
+                'target_organization_id': target_organization.id,
+                'target_relationship': capability.applying_to.get_relationship_to(target_organization).desired_relationship
+            }
+        else:
+            if capability.applying_to.get_relationship_to(target_organization).is_proposal():
+                messages.error(request, "You cannot do that", "danger")
+                return redirect(reverse('organization:diplomacy_capability', kwargs={'capability_id': capability_id, 'target_organization_id': target_organization_id}))
+            if target_relationship not in [choice[0] for choice in OrganizationRelationship.RELATIONSHIP_CHOICES]:
+                messages.error(request, "You cannot do that (3)", "danger")
+                return redirect(reverse('organization:diplomacy_capability', kwargs={'capability_id': capability_id, 'target_organization_id': target_organization_id}))
+            proposal = {
+                'type': 'propose',
+                'target_organization_id': target_organization.id,
+                'target_relationship': target_relationship
+            }
+
+        capability.create_proposal(request.hero, proposal)
+
+        if capability.organization.decision_taking == Organization.DEMOCRATIC:
+            messages.success(request, "A vote has been started regarding your action", "success")
+        else:
+            messages.success(request, "Done!", "success")
+        return redirect(reverse('organization:diplomacy_capability', kwargs={'capability_id': capability_id, 'target_organization_id': target_organization_id}))
+
+
 class ProposalView(View):
     def check(self, request, proposal_id):
         proposal = get_object_or_404(CapabilityProposal, id=proposal_id)
@@ -304,6 +376,10 @@ class ProposalView(View):
 
         elif proposal.capability.type == Capability.BAN:
             context['character_to_ban'] = Character.objects.get(id=proposal_content['character_id'])
+
+        elif proposal.capability.type == Capability.DIPLOMACY:
+            context['target_organization'] = Organization.objects.get(id=proposal_content['target_organization_id'])
+            context['target_relationship_html'] = OrganizationRelationship(relationship=proposal_content['target_relationship']).get_relationship_html()
 
         return render(request, 'organization/proposal.html', context)
 

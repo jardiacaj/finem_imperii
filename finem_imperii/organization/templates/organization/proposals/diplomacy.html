@@ -1,0 +1,17 @@
+<blockquote>
+    <p>
+        {{ proposal.proposing_character }} wants to
+
+        {% if porposal.type == 'take back' %}
+            take back the proposal of
+        {% elif porposal.type == 'accept' %}
+            accept to the proposal of
+        {% elif porposal.type == 'refuse' %}
+            refuse to the proposal of
+        {% elif porposal.type == 'propose' %}
+            propose
+        {% endif %}
+
+        <b>{{ target_relationship_html|safe }} with {{ target_organization.get_html_link|safe }}</b>.
+    </p>
+</blockquote>

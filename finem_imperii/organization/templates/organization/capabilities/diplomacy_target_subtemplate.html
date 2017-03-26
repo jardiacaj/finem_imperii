@@ -1,0 +1,9 @@
+<form class="" role="form" method="post" action="{% url 'organization:diplomacy_capability' capability.id target_organization.id %}">
+    {% csrf_token %}
+    <input type="hidden" name="target_relationship" value="{{ target_relationship }}">
+    <span class="form-group form-inline">
+        <button type="submit" class="btn btn-{{ button_type }} btn-sm" onclick="return confirm('Are you sure?')">
+            {{ button_text }}
+        </button>
+    </span>
+</form>

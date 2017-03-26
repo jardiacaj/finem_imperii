@@ -7,7 +7,6 @@
         <option name="settingsModule" value="finem_imperii/settings.py" />
         <option name="manageScript" value="manage.py" />
         <option name="environment" value="&lt;map/&gt;" />
-        <option name="commandsToSkip" value="" />
       </configuration>
     </facet>
   </component>
@@ -24,6 +23,7 @@
     <option name="TEMPLATE_FOLDERS">
       <list>
         <option value="$MODULE_DIR$/base/templates" />
+        <option value="$MODULE_DIR$/base/templates/base" />
       </list>
     </option>
   </component>

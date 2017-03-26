@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from organization.models import Organization, PositionElection, PositionCandidacy, PositionElectionVote, Capability, \
-    CapabilityProposal, CapabilityVote, PolicyDocument
+    CapabilityProposal, CapabilityVote, PolicyDocument, OrganizationRelationship
 
 admin.site.register(PositionElection)
 admin.site.register(PositionCandidacy)
@@ -10,6 +10,7 @@ admin.site.register(Capability)
 admin.site.register(CapabilityProposal)
 admin.site.register(CapabilityVote)
 admin.site.register(PolicyDocument)
+admin.site.register(OrganizationRelationship)
 
 
 def resolve_organization_election(modeladmin, request, queryset):

@@ -1,6 +1,6 @@
 from django.db import transaction
 
-from messaging.models import CharacterNotification
+from messaging.models import CharacterMessage
 
 months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November',
           'December']
@@ -51,7 +51,7 @@ class TurnProcessor:
                 message = character.perform_travel(character.travel_destination)
                 character.travel_destination = None
                 character.save()
-                character.add_notification(CharacterNotification.TRAVEL, message)
+                character.add_notification(CharacterMessage.TRAVEL, message)
 
     def restore_hours(self):
         for character in self.world.character_set.all():

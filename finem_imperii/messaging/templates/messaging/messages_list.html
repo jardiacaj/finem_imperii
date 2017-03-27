@@ -6,12 +6,12 @@
 
     <h1 class="page-header">Notifications</h1>
 
-    {% for notification in request.hero.characternotification_set.all reversed %}
+    {% for receiver in request.hero.messagereceiver_set.all reversed %}
         {% ifchanged %}
-            <h4>{{ notification.creation_turn|nice_turn }}</h4>
+            <h4>{{ receiver.message.creation_turn|nice_turn }}</h4>
         {% endifchanged %}
 
-        <p>{{ notification.content }}</p>
+        <p>{{ receiver.message.content }}</p>
     {% endfor %}
 
 {% endblock %}

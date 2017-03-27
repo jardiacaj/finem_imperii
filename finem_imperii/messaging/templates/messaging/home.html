@@ -1,0 +1,28 @@
+{% extends "base/base.html" %}
+
+{% load extra_filters %}
+
+{% block content %}
+
+    <h1 class="page-header">Messages</h1>
+
+    <div class="col-lg-6">
+        <h3>Unread messages ({{ request.hero.unread_messages.count }})</h3>
+
+        {% for message in request.hero.unread_messages.all reversed %}
+            {% ifchanged %}
+                <h4>{{ message.creation_turn|nice_turn }}</h4>
+            {% endifchanged %}
+
+            <p>{{ message.content }}</p>
+        {% empty %}
+            <p>
+                No new messages.
+            </p>
+        {% endfor %}
+    </div>
+
+    <div class="col-lg-6">
+        <h3>Write message</h3>
+    </div>
+{% endblock %}

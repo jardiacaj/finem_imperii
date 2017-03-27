@@ -6,15 +6,15 @@ from decorators import inchar_required
 
 @inchar_required
 def home(request):
-    pass
+    return render(request, 'messaging/home.html')
 
 
 @inchar_required
-def clear_notifications(request):
-    request.hero.unread_notifications().all().update(read=True)
+def mark_all_read(request):
+    request.hero.unread_messages().all().update(read=True)
     return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
 
 
 @inchar_required
-def notification_list(request):
-    return render(request, 'messaging/notification_list.html')
+def messages_list(request):
+    return render(request, 'messaging/messages_list.html')

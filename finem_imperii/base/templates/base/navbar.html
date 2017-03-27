@@ -45,49 +45,36 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                 Messages
-                                <span class="badge">{{ request.hero.unread_messages|length }}</span>
-                                <span class="caret"></span>
-                            </a>
-
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="{% url 'messaging:home' %}" class="text-center">Messaging</a></li>
-                            </ul>
-                        </li>
-
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                Notifications
-                                {% if request.hero.unread_notifications.exists %}
-                                    <span class="badge">{{ request.hero.unread_notifications.count }}</span>
+                                {% if request.hero.unread_messages.exists %}
+                                    <span class="badge">{{ request.hero.unread_messages.count }}</span>
                                 {% endif %}
                                 <span class="caret"></span>
                             </a>
 
                             <ul class="dropdown-menu" role="menu">
-                                <li class="text-center">
-                                    <a href="{% url 'messaging:notification_list' %}">View all notifications</a>
-                                </li>
+                                <li class="text-center"><a href="{% url 'messaging:home' %}">Messaging</a></li>
 
-                                <li role="separator" class="divider"></li>
-
-                                {% for notification in request.hero.unread_notifications.all %}
-                                    <li>
-                                        <p class="h6 navbar-text">{{ notification.creation_turn|nice_turn }}</p>
-                                        <p class="navbar-text">{{ notification.content }}</p>
-                                    </li>
-
-                                    <li role="separator" class="divider"></li>
-
-                                    {% if forloop.last %}
+                                {% for message in request.hero.unread_messages.all %}
+                                    {% if forloop.first %}
                                         <li class="text-center">
-                                            <a href="{% url 'messaging:clear_notifications'%}">Mark all as read</a>
+                                            <a href="{% url 'messaging:mark_all_read'%}">Mark all as read</a>
                                         </li>
+                                        <li class="divider"></li>
                                     {% endif %}
 
-                                {% empty %}
-                                    <li><p class="navbar-text">No unread notifications</p></li>
-                                {% endfor %}
+                                    <li>
+                                        <a href="{% url 'messaging:home' %}">
+                                            {% if message.sender %}
+                                                Message from {{ message.sender }}
+                                            {% else %}
+                                                {{ message.category|capfirst }} notification
+                                            {% endif %}
+                                        </a>
+                                    </li>
 
+                                {% empty %}
+                                    <li><p class="navbar-text">No unread messages</p></li>
+                                {% endfor %}
                             </ul>
                         </li>
                     {% endif %}

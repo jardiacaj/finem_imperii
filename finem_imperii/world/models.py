@@ -5,11 +5,11 @@ from collections import namedtuple
 from math import sqrt
 
 from django.core.urlresolvers import reverse
-from django.db import models
+from django.db import models, transaction
 from django.contrib.auth.models import User
 from django.db.models.aggregates import Avg
 
-from messaging.models import CharacterNotification
+from messaging.models import CharacterMessage, MessageReceiver
 from world.templatetags.extra_filters import nice_hours
 from world.turn import TurnProcessor, turn_to_date
 
@@ -293,19 +293,20 @@ class Character(models.Model):
         self.save()
         return "After {} of travel you have reached {}.".format(nice_hours(travel_time), destination)
 
+    @transaction.atomic
     def add_notification(self, category, content):
-        CharacterNotification.objects.create(
-            character=self,
+        message = CharacterMessage.objects.create(
             content=content,
             category=category,
             creation_turn=self.world.current_turn
         )
-
-    def unread_notifications(self):
-        return self.characternotification_set.filter(read=False)
+        MessageReceiver.objects.create(
+            message=message,
+            character=self
+        )
 
     def unread_messages(self):
-        return self.messagereceiver_set.filter(read=False)
+        return CharacterMessage.objects.filter(messagereceiver__character=self, messagereceiver__read=False)
 
     def __str__(self):
         return self.name

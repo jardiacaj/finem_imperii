@@ -11,7 +11,7 @@ class ServerMOTD(models.Model):
     draft = models.BooleanField(default=True)
 
 
-class CharacterNotification(models.Model):
+class CharacterMessage(models.Model):
     class Meta:
         ordering = ['creation_time']
 
@@ -20,28 +20,21 @@ class CharacterNotification(models.Model):
         (TRAVEL, TRAVEL),
     )
 
-    character = models.ForeignKey('world.Character')
     content = models.TextField()
-    category = models.CharField(max_length=15)
     creation_time = models.DateTimeField(auto_now_add=True)
     creation_turn = models.IntegerField()
-    read = models.BooleanField(default=False)
-
-
-class Message(models.Model):
-    content = models.TextField()
-    timestamp = models.DateTimeField(auto_now_add=True)
-    turn = models.IntegerField()
-    sender = models.ForeignKey('world.Character', related_name='messages_sent')
+    sender = models.ForeignKey('world.Character', related_name='messages_sent', blank=True, null=True)
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, blank=True, null=True)
+    safe = models.BooleanField(default=False)
 
 
 class MessageReceiverGroup(models.Model):
-    message = models.ForeignKey(Message)
+    message = models.ForeignKey(CharacterMessage)
     organization = models.ForeignKey('organization.Organization')
 
 
 class MessageReceiver(models.Model):
-    message = models.ForeignKey(Message)
+    message = models.ForeignKey(CharacterMessage)
     group = models.ForeignKey(MessageReceiverGroup, blank=True, null=True)
     read = models.BooleanField(default=False)
     character = models.ForeignKey('world.Character')

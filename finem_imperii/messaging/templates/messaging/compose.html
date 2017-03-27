@@ -1,0 +1,23 @@
+{% extends "messaging/base.html" %}
+
+{% block messaging_content %}
+
+    <div class="col-lg-6">
+        <form class="form-horizontal" role="form" method="post">
+            {% csrf_token %}
+            <legend>Recipients</legend>
+
+            <div class="form-group">
+                {% if request.hero.sworn_oath_to %}
+                    <input type="checkbox" name="receiver" id="receiver_region">
+                    <label for="receiver_region">Local region ({{ request.hero.location.tile }})</label>
+                    <br>
+                {% endif %}
+                <input type="checkbox" name="receiver" id="receiver_region">
+                <label for="receiver_region">Local region ({{ request.hero.location.tile }})</label>
+                <br>
+            </div>
+        </form>
+
+    </div>
+{% endblock %}

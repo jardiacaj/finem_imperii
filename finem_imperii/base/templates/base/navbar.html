@@ -52,7 +52,8 @@
                             </a>
 
                             <ul class="dropdown-menu" role="menu">
-                                <li class="text-center"><a href="{% url 'messaging:home' %}">Messaging</a></li>
+                                <li class="text-center"><a href="{% url 'messaging:home' %}">Read messages</a></li>
+                                <li class="text-center"><a href="{% url 'messaging:compose' %}">Write message</a></li>
 
                                 {% for message in request.hero.unread_messages.all %}
                                     {% if forloop.first %}

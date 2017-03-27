@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls.base import reverse
 
 
 class ServerMOTD(models.Model):
@@ -38,3 +39,10 @@ class MessageReceiver(models.Model):
     group = models.ForeignKey(MessageReceiverGroup, blank=True, null=True)
     read = models.BooleanField(default=False)
     character = models.ForeignKey('world.Character')
+    favourite = models.BooleanField(default=False)
+
+    def get_mark_read_url(self):
+        return reverse('messaging:mark_read', kwargs={'receiver_id': self.id})
+
+    def get_mark_favourite_url(self):
+        return reverse('messaging:mark_favourite', kwargs={'receiver_id': self.id})

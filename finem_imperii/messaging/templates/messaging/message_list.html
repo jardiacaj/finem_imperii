@@ -1,0 +1,71 @@
+{% extends "messaging/base.html" %}
+
+{% load extra_filters %}
+
+{% block messaging_content %}
+
+    <div>
+
+        {% for receiver in receiver_list %}
+            {% ifchanged %}
+                <hr>
+                <div class="row">
+                    <h5>
+                        {{ receiver.message.creation_turn|nice_turn }}
+                    </h5>
+                </div>
+            {% endifchanged %}
+
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2">
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <span class="lead">
+                                {% if receiver.message.sender %}
+                                    Message from {{ receiver.message.sender }}
+                                {% else %}
+                                    {{ receiver.message.category|capfirst }}
+                                {% endif %}
+                            </span>
+                            {% if receiver.message.sender %}
+                                <a
+                                        href="{{ receiver.get_mark_read_url }}"
+                                        class="btn btn-sm btn-primary pull-right">
+                                    <span class="glyphicon glyphicon-comment" aria-hidden="true"></span> reply
+                                </a>
+                            {% endif %}
+
+                            <a
+                                    href="{{ receiver.get_mark_read_url }}"
+                                    class="btn btn-sm {% if receiver.read %}btn-success{% else %}btn-default{% endif %} pull-right"
+                            >
+                                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                            </a>
+
+                            <a
+                                    href="{{ receiver.get_mark_favourite_url }}"
+                                    class="btn btn-sm {% if receiver.favourite %}btn-success{% else %}btn-default{% endif %} pull-right">
+                                <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                            </a>
+
+                        </div>
+                        <div class="panel-body">
+                            <p>
+                                <small>{{ receiver.message.creation_time }}</small>
+                            </p>
+                            <p>
+                                {{ receiver.message.content }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>
+                No messages.
+            </p>
+        {% endfor %}
+    </div>
+
+{% endblock %}

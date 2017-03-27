@@ -5,8 +5,13 @@ from decorators import inchar_required
 
 
 @inchar_required
+def home(request):
+    pass
+
+
+@inchar_required
 def clear_notifications(request):
-    request.hero.unread_notifications().update(read=True)
+    request.hero.unread_notifications().all().update(read=True)
     return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
 
 

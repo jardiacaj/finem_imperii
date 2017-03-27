@@ -302,7 +302,10 @@ class Character(models.Model):
         )
 
     def unread_notifications(self):
-        return self.characternotification_set.filter(read=False).all()
+        return self.characternotification_set.filter(read=False)
+
+    def unread_messages(self):
+        return self.messagereceiver_set.filter(read=False)
 
     def __str__(self):
         return self.name

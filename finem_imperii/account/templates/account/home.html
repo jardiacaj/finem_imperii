@@ -44,8 +44,8 @@
                     <tr>
                         <td style="vertical-align: middle">
                             {{ character.name }}
-                            {% if character.unread_notifications %}
-                                <span class="badge">{{ character.unread_notifications|length }}</span>
+                            {% if character.unread_notifications.exists %}
+                                <span class="badge">{{ character.unread_notifications.count }}</span>
                             {% endif %}
                         </td>
                         <td style="vertical-align: middle">

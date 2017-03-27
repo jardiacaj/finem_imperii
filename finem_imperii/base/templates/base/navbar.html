@@ -45,20 +45,20 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                 Messages
-                                <span class="badge">0</span>
+                                <span class="badge">{{ request.hero.unread_messages|length }}</span>
                                 <span class="caret"></span>
                             </a>
 
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="#">You're fired</a></li>
+                                <li><a href="{% url 'messaging:home' %}" class="text-center">Messaging</a></li>
                             </ul>
                         </li>
 
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                 Notifications
-                                {% if request.hero.unread_notifications %}
-                                    <span class="badge">{{ request.hero.unread_notifications|length }}</span>
+                                {% if request.hero.unread_notifications.exists %}
+                                    <span class="badge">{{ request.hero.unread_notifications.count }}</span>
                                 {% endif %}
                                 <span class="caret"></span>
                             </a>
@@ -70,7 +70,7 @@
 
                                 <li role="separator" class="divider"></li>
 
-                                {% for notification in request.hero.unread_notifications %}
+                                {% for notification in request.hero.unread_notifications.all %}
                                     <li>
                                         <p class="h6 navbar-text">{{ notification.creation_turn|nice_turn }}</p>
                                         <p class="navbar-text">{{ notification.content }}</p>

@@ -111,7 +111,7 @@ def unfavourite(request, character_id):
 
 @inchar_required
 def mark_all_read(request):
-    request.hero.unread_messages().all().update(read=True)
+    MessageRecipient.objects.filter(character=request.hero, read=False).update(read=True)
     return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
 
 

@@ -51,6 +51,9 @@ class MessageRecipient(models.Model):
         unique_together = (
             ("message", "character"),
         )
+        index_together = (
+            ("character", "read"),
+        )
 
     message = models.ForeignKey(CharacterMessage)
     group = models.ForeignKey(MessageRecipientGroup, blank=True, null=True)

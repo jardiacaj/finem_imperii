@@ -9,7 +9,7 @@ from django.db import models, transaction
 from django.contrib.auth.models import User
 from django.db.models.aggregates import Avg
 
-from messaging.models import CharacterMessage, MessageReceiver
+from messaging.models import CharacterMessage, MessageRecipient
 from world.templatetags.extra_filters import nice_hours
 from world.turn import TurnProcessor, turn_to_date
 
@@ -301,13 +301,13 @@ class Character(models.Model):
             creation_turn=self.world.current_turn,
             safe=safe
         )
-        MessageReceiver.objects.create(
+        MessageRecipient.objects.create(
             message=message,
             character=self
         )
 
     def unread_messages(self):
-        return CharacterMessage.objects.filter(messagereceiver__character=self, messagereceiver__read=False)
+        return CharacterMessage.objects.filter(messagerecipient__character=self, messagerecipient__read=False)
 
     def __str__(self):
         return self.name

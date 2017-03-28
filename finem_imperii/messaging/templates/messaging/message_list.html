@@ -6,12 +6,12 @@
 
     <div>
 
-        {% for receiver in receiver_list %}
+        {% for recipient in recipient_list %}
             {% ifchanged %}
                 <hr>
                 <div class="row">
                     <h5>
-                        {{ receiver.message.creation_turn|nice_turn }}
+                        {{ recipient.message.creation_turn|nice_turn }}
                     </h5>
                 </div>
             {% endifchanged %}
@@ -22,30 +22,30 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <span class="lead">
-                                {% if receiver.message.sender %}
-                                    Message from {{ receiver.message.sender.get_html_link|safe }}
+                                {% if recipient.message.sender %}
+                                    Message from {{ recipient.message.sender.get_html_link|safe }}
                                 {% else %}
-                                    {{ receiver.message.category|capfirst }}
+                                    {{ recipient.message.category|capfirst }}
                                 {% endif %}
                             </span>
-                            {% if receiver.message.sender %}
+                            {% if recipient.message.sender %}
                                 <a
-                                        href="{{ receiver.get_mark_read_url }}"
+                                        href="{{ recipient.get_mark_read_url }}"
                                         class="btn btn-sm btn-primary pull-right">
                                     <span class="glyphicon glyphicon-comment" aria-hidden="true"></span> reply
                                 </a>
                             {% endif %}
 
                             <a
-                                    href="{{ receiver.get_mark_read_url }}"
-                                    class="btn btn-sm {% if receiver.read %}btn-success{% else %}btn-default{% endif %} pull-right"
+                                    href="{{ recipient.get_mark_read_url }}"
+                                    class="btn btn-sm {% if recipient.read %}btn-success{% else %}btn-default{% endif %} pull-right"
                             >
                                 <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                             </a>
 
                             <a
-                                    href="{{ receiver.get_mark_favourite_url }}"
-                                    class="btn btn-sm {% if receiver.favourite %}btn-success{% else %}btn-default{% endif %} pull-right">
+                                    href="{{ recipient.get_mark_favourite_url }}"
+                                    class="btn btn-sm {% if recipient.favourite %}btn-success{% else %}btn-default{% endif %} pull-right">
                                 <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                             </a>
 
@@ -54,7 +54,7 @@
                             <div class="col-sm-9">
                                 <p class="small">
                                     For
-                                    {% for message_receiver in receiver.message.get_nice_recipient_list %}{% if not forloop.first and forloop.last %} and {% elif not forloop.first %}, {% endif %}{{ message_receiver.get_html_link|safe }}{% if forloop.last %}.{% endif %}
+                                    {% for message_recipient in recipient.message.get_nice_recipient_list %}{% if not forloop.first and forloop.last %} and {% elif not forloop.first %}, {% endif %}{{ message_recipient.get_html_link|safe }}{% if forloop.last %}.{% endif %}
                                     {% empty %}
                                         NOONE?.
                                     {% endfor %}
@@ -62,14 +62,14 @@
                             </div>
                             <div class="col-sm-3">
                                 <p class="small">
-                                    {{ receiver.message.creation_time }}
+                                    {{ recipient.message.creation_time }}
                                 </p>
                             </div>
-                            {% if receiver.message.safe %}
-                                {{ receiver.message.content|safe }}
+                            {% if recipient.message.safe %}
+                                {{ recipient.message.content|safe }}
                             {% else %}
                                 <p>
-                                    <pre style="white-space: pre-wrap;">{{ receiver.message.content }}</pre>
+                                    <pre style="white-space: pre-wrap;">{{ recipient.message.content }}</pre>
                                 </p>
                             {% endif %}
                         </div>

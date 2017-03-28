@@ -30,13 +30,13 @@ class CharacterMessage(models.Model):
 
     def get_nice_recipient_list(self):
         return (
-            [group.organization for group in self.messagereceivergroup_set.all()]
+            [group.organization for group in self.messagerecipientgroup_set.all()]
             +
-            [receiver.character for receiver in self.messagereceiver_set.filter(group=None)]
+            [recipient.character for recipient in self.messagerecipient_set.filter(group=None)]
         )
 
 
-class MessageReceiverGroup(models.Model):
+class MessageRecipientGroup(models.Model):
     class Meta:
         unique_together = (
             ("message", "organization"),
@@ -46,23 +46,23 @@ class MessageReceiverGroup(models.Model):
     organization = models.ForeignKey('organization.Organization')
 
 
-class MessageReceiver(models.Model):
+class MessageRecipient(models.Model):
     class Meta:
         unique_together = (
             ("message", "character"),
         )
 
     message = models.ForeignKey(CharacterMessage)
-    group = models.ForeignKey(MessageReceiverGroup, blank=True, null=True)
+    group = models.ForeignKey(MessageRecipientGroup, blank=True, null=True)
     read = models.BooleanField(default=False)
     character = models.ForeignKey('world.Character')
     favourite = models.BooleanField(default=False)
 
     def get_mark_read_url(self):
-        return reverse('messaging:mark_read', kwargs={'receiver_id': self.id})
+        return reverse('messaging:mark_read', kwargs={'recipient_id': self.id})
 
     def get_mark_favourite_url(self):
-        return reverse('messaging:mark_favourite', kwargs={'receiver_id': self.id})
+        return reverse('messaging:mark_favourite', kwargs={'recipient_id': self.id})
 
 
 class MessageRelationship(models.Model):

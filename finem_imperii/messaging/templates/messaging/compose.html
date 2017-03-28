@@ -21,7 +21,7 @@
         <div class="col-lg-6 col-lg-offset-1">
             {% if target_character %}
                 <legend>Sending to</legend>
-                <input type="hidden" name="receiver" value="character_{{ target_character.id }}">
+                <input type="hidden" name="recipient" value="character_{{ target_character.id }}">
                 <p>
                     {{ target_character.get_html_link|safe }}
                 </p>
@@ -29,34 +29,34 @@
                 <legend>Recipients by geography</legend>
 
                 <div class="form-group">
-                    <input type="checkbox" name="receiver" id="receiver_settlement" value="settlement">
-                    <label for="receiver_settlement">Everyone at {{ request.hero.location }} (local settlement)</label>
+                    <input type="checkbox" name="recipient" id="recipient_settlement" value="settlement">
+                    <label for="recipient_settlement">Everyone at {{ request.hero.location }} (local settlement)</label>
                     <br>
-                    <input type="checkbox" name="receiver" id="receiver_region" value="region">
-                    <label for="receiver_region">Everyone at {{ request.hero.location.tile }} (local region)</label>
+                    <input type="checkbox" name="recipient" id="recipient_region" value="region">
+                    <label for="recipient_region">Everyone at {{ request.hero.location.tile }} (local region)</label>
                 </div>
 
                 <legend>Recipients by politics</legend>
                 <div class="form-group">
                     {% if request.hero.oath_sworn_to %}
-                        <input type="checkbox" name="receiver" id="receiver_liege" value="character_{{ request.hero.oath_sworn_to.get_position_occupier.id }}">
-                        <label for="receiver_liege">Your Liege ({{ request.hero.oath_sworn_to.get_html_link|safe }})</label>
+                        <input type="checkbox" name="recipient" id="recipient_liege" value="character_{{ request.hero.oath_sworn_to.get_position_occupier.id }}">
+                        <label for="recipient_liege">Your Liege ({{ request.hero.oath_sworn_to.get_html_link|safe }})</label>
                         <br>
                     {% endif %}
                     {% for organization in request.hero.organization_set.all %}
                         {% if not organization.is_position %}
-                            <input type="checkbox" name="receiver" id="receiver_organization_{{ organization.id }}" value="organization_{{ organization.id }}">
-                            <label for="receiver_organization_{{ organization.id }}">Everyone in {{ organization.get_html_link|safe }}</label>
+                            <input type="checkbox" name="recipient" id="recipient_organization_{{ organization.id }}" value="organization_{{ organization.id }}">
+                            <label for="recipient_organization_{{ organization.id }}">Everyone in {{ organization.get_html_link|safe }}</label>
                             <br>
 
                             {% if organization.leader %}
-                                <input type="checkbox" name="receiver" id="receiver_organization_{{ organization.leader.id }}" value="organization_{{ organization.leader.id }}">
-                                <label for="receiver_organization_{{ organization.id }}">{{ organization.leader.get_html_link|safe }}, leader of {{ organization.get_html_link|safe }}</label>
+                                <input type="checkbox" name="recipient" id="recipient_organization_{{ organization.leader.id }}" value="organization_{{ organization.leader.id }}">
+                                <label for="recipient_organization_{{ organization.id }}">{{ organization.leader.get_html_link|safe }}, leader of {{ organization.get_html_link|safe }}</label>
                                 <br>
                             {% endif %}
                             {% if organization.owner %}
-                                <input type="checkbox" name="receiver" id="receiver_organization_{{ organization.owner.id }}" value="organization_{{ organization.owner.id }}">
-                                <label for="receiver_organization_{{ organization.id }}">{{ organization.owner.get_html_link|safe }}, owner of {{ organization.get_html_link|safe }}</label>
+                                <input type="checkbox" name="recipient" id="recipient_organization_{{ organization.owner.id }}" value="organization_{{ organization.owner.id }}">
+                                <label for="recipient_organization_{{ organization.id }}">{{ organization.owner.get_html_link|safe }}, owner of {{ organization.get_html_link|safe }}</label>
                                 <br>
                             {% endif %}
 
@@ -67,8 +67,8 @@
                 <legend>Favourited characters</legend>
                 <div class="form-group">
                     {% for relationship in request.hero.messagerelationship_set.all %}
-                        <input type="checkbox" name="receiver" id="receiver_character_{{ relationship.to_character.id }}" value="character_{{ relationship.to_character.id }}">
-                        <label for="receiver_character_{{ relationship.to_character.id }}">{{ relationship.to_character.get_html_link|safe }}</label>
+                        <input type="checkbox" name="recipient" id="recipient_character_{{ relationship.to_character.id }}" value="character_{{ relationship.to_character.id }}">
+                        <label for="recipient_character_{{ relationship.to_character.id }}">{{ relationship.to_character.get_html_link|safe }}</label>
                         <a href="{% url 'messaging:unfavourite_character' relationship.to_character.id %}">
                             <span class="text-danger"><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span></span>
                         </a>

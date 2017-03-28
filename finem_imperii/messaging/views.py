@@ -5,7 +5,7 @@ from django.urls.base import reverse
 from django.views.generic.base import View
 
 from decorators import inchar_required
-from messaging.models import MessageReceiver, MessageRelationship, CharacterMessage, MessageReceiverGroup
+from messaging.models import MessageRecipient, MessageRelationship, CharacterMessage, MessageRecipientGroup
 from organization.models import Organization
 from world.models import Character
 
@@ -14,7 +14,7 @@ from world.models import Character
 def home(request):
     context = {
         'tab': 'new',
-        'receiver_list': request.hero.messagereceiver_set.filter(read=False)
+        'recipient_list': request.hero.messagerecipient_set.filter(read=False)
     }
     return render(request, 'messaging/message_list.html', context)
 
@@ -36,7 +36,7 @@ class ComposeView(View):
     @transaction.atomic
     def post(self, request):
         message_body = request.POST.get('message_body')
-        raw_receivers = request.POST.getlist('receiver')
+        raw_recipients = request.POST.getlist('recipient')
 
         if not message_body:
             messages.error(request, "Please write some message.", "danger")
@@ -46,8 +46,8 @@ class ComposeView(View):
             messages.error(request, "This message is too long.", "danger")
             return self.get(request, prefilled_text=message_body)
 
-        if not raw_receivers:
-            messages.error(request, "You must choose at least one receiver.", "danger")
+        if not raw_recipients:
+            messages.error(request, "You must choose at least one recipient.", "danger")
             return self.get(request, prefilled_text=message_body)
 
         message = CharacterMessage.objects.create(
@@ -60,34 +60,34 @@ class ComposeView(View):
         organization_count = 0
         character_count = 0
 
-        for raw_receiver in raw_receivers:
-            split = raw_receiver.split('_')
+        for raw_recipient in raw_recipients:
+            split = raw_recipient.split('_')
 
             if split[0] == 'settlement':
                 for character in request.hero.location.character_set.all():
                     character_count += 1
-                    MessageReceiver.objects.get_or_create(message=message, character=character)
+                    MessageRecipient.objects.get_or_create(message=message, character=character)
             elif split[0] == 'region':
                 for character in Character.objects.filter(location__tile=request.hero.location.tile):
                     character_count += 1
-                    MessageReceiver.objects.create(message=message, character=character)
+                    MessageRecipient.objects.create(message=message, character=character)
             elif split[0] == 'organization':
                 organization_count += 1
                 organization = get_object_or_404(Organization, id=split[1])
-                group = MessageReceiverGroup.objects.create(message=message, organization=organization)
+                group = MessageRecipientGroup.objects.create(message=message, organization=organization)
                 for character in organization.character_members.all():
-                    MessageReceiver.objects.create(message=message, character=character, group=group)
+                    MessageRecipient.objects.create(message=message, character=character, group=group)
             elif split[0] == 'character':
                 character_count += 1
                 character = get_object_or_404(Character, id=split[1])
-                MessageReceiver.objects.create(message=message, character=character)
+                MessageRecipient.objects.create(message=message, character=character)
             else:
-                messages.error(request, "Invalid receiver.", "danger")
+                messages.error(request, "Invalid recipient.", "danger")
                 return self.get(request, prefilled_text=message_body)
 
         if organization_count > 4 or character_count > 40:
             message.delete()
-            messages.error(request, "Too many receivers.", "danger")
+            messages.error(request, "Too many recipients.", "danger")
             return self.get(request, prefilled_text=message_body)
 
         messages.success(request, "Message sent.", "success")
@@ -116,18 +116,18 @@ def mark_all_read(request):
 
 
 @inchar_required
-def mark_read(request, receiver_id):
-    receiver = get_object_or_404(MessageReceiver, id=receiver_id, character=request.hero)
-    receiver.read = not receiver.read
-    receiver.save()
+def mark_read(request, recipient_id):
+    recipient = get_object_or_404(MessageRecipient, id=recipient_id, character=request.hero)
+    recipient.read = not recipient.read
+    recipient.save()
     return redirect(request.META.get('HTTP_REFERER', reverse('messaging:home')))
 
 
 @inchar_required
-def mark_favourite(request, receiver_id):
-    receiver = get_object_or_404(MessageReceiver, id=receiver_id, character=request.hero)
-    receiver.favourite = not receiver.favourite
-    receiver.save()
+def mark_favourite(request, recipient_id):
+    recipient = get_object_or_404(MessageRecipient, id=recipient_id, character=request.hero)
+    recipient.favourite = not recipient.favourite
+    recipient.save()
     return redirect(request.META.get('HTTP_REFERER', reverse('messaging:home')))
 
 
@@ -135,7 +135,7 @@ def mark_favourite(request, receiver_id):
 def messages_list(request):
     context = {
         'tab': 'all',
-        'receiver_list': request.hero.messagereceiver_set.all()
+        'recipient_list': request.hero.messagerecipient_set.all()
     }
     return render(request, 'messaging/message_list.html', context)
 
@@ -144,7 +144,7 @@ def messages_list(request):
 def favourites_list(request):
     context = {
         'tab': 'favourites',
-        'receiver_list': request.hero.messagereceiver_set.filter(favourite=True)
+        'recipient_list': request.hero.messagerecipient_set.filter(favourite=True)
     }
     return render(request, 'messaging/message_list.html', context)
 

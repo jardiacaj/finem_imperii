@@ -46,3 +46,8 @@ class MessageReceiver(models.Model):
 
     def get_mark_favourite_url(self):
         return reverse('messaging:mark_favourite', kwargs={'receiver_id': self.id})
+
+
+class MessageRelationship(models.Model):
+    from_character = models.ForeignKey('world.Character')
+    to_character = models.ForeignKey('world.Character', related_name='message_relationships_to')

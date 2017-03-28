@@ -18,6 +18,9 @@
         <li role="presentation" {% if tab == 'favourites' %}class="active"{% endif %}>
             <a href="{% url 'messaging:favourites' %}"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> Favourites</a>
         </li>
+        <li role="presentation" {% if tab == 'sent' %}class="active"{% endif %}>
+            <a href="{% url 'messaging:sent' %}"><span class="glyphicon glyphicon-send" aria-hidden="true"></span> Sent</a>
+        </li>
         <li role="presentation" {% if tab == 'all' %}class="active"{% endif %}>
             <a href="{% url 'messaging:messages_list' %}">All</a>
         </li>

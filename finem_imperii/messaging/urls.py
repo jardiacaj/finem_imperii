@@ -1,6 +1,7 @@
 from django.conf.urls import url
 
-from messaging.views import mark_all_read, messages_list, home, compose, mark_read, mark_favourite, favourites_list
+from messaging.views import mark_all_read, messages_list, home, compose, mark_read, mark_favourite, favourites_list, \
+    sent_list
 
 urlpatterns = [
     url(r'^$', home, name='home'),
@@ -9,5 +10,6 @@ urlpatterns = [
     url(r'^read_all$', mark_all_read, name='mark_all_read'),
     url(r'^all$', messages_list, name='messages_list'),
     url(r'^favourites$', favourites_list, name='favourites'),
+    url(r'^sent', sent_list, name='sent'),
     url(r'^compose$', compose, name='compose'),
 ]

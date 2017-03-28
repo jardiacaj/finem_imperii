@@ -60,3 +60,12 @@ def favourites_list(request):
         'receiver_list': request.hero.messagereceiver_set.filter(favourite=True)
     }
     return render(request, 'messaging/message_list.html', context)
+
+
+@inchar_required
+def sent_list(request):
+    context = {
+        'tab': 'sent',
+        'emssage_list': request.hero.messages_sent
+    }
+    return render(request, 'messaging/sent_list.html', context)

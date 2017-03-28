@@ -18,4 +18,4 @@ RUN finem_imperii/manage.py collectstatic --no-input
 # Apache
 RUN cp devops/finem_imperii_vhost.conf /etc/apache2/sites-enabled/000-default.conf
 
-CMD apache2 -f /etc/apache2/apache2.conf -e info
+CMD apache2ctl -D FOREGROUND

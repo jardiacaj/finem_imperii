@@ -1,11 +1,10 @@
-#!/bin/bash
+#!/bin/sh
 
 rm -i finem_imperii/db.sqlite3
 
 set -e
 
-finem_imperii/manage.py migrate
-finem_imperii/manage.py loaddata world1
+$(dirname $0)/db_create.sh
 
 echo "Creating superuser..."
 finem_imperii/manage.py createsuperuser --username admin --email noreply@joanardiaca.net

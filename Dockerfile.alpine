@@ -1,0 +1,23 @@
+FROM alpine:3.5
+MAINTAINER "Joan Ardiaca Jové"
+
+# Base packages
+RUN apk add --no-cache apache2 apache2-mod-wsgi python3
+RUN ln -sf /usr/bin/python3.5 /usr/bin/python
+
+# Code
+RUN mkdir /var/www/finem_imperii
+WORKDIR /var/www/finem_imperii
+ADD . .
+RUN pip3 install -r requirements.txt
+
+# Application
+RUN ./db_create.sh
+RUN finem_imperii/manage.py collectstatic --no-input
+
+# Apache
+RUN rm /etc/apache2/conf.d/languages.conf /etc/apache2/conf.d/userdir.conf
+RUN cp devops/finem_imperii_vhost.conf /etc/apache2/conf.d
+RUN mkdir /run/apache2
+
+CMD httpd -f /etc/apache2/httpd.conf -e info -DFOREGROUND

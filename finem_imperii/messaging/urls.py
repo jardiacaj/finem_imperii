@@ -12,4 +12,7 @@ urlpatterns = [
     url(r'^favourites$', favourites_list, name='favourites'),
     url(r'^sent', sent_list, name='sent'),
     url(r'^compose$', compose, name='compose'),
+    url(r'^compose/character/(?P<character_id>[0-9]+)$', compose, name='compose_character'),
+    url(r'^favourite/character/(?P<character_id>[0-9]+)$', compose, name='favourite_character'),
+    url(r'^unfavourite/character/(?P<character_id>[0-9]+)$', compose, name='unfavourite_character'),
 ]

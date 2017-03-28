@@ -408,3 +408,10 @@ def unit_merge(request, unit_id):
 def unit_transfer(request, unit_id):
     unit = get_object_or_404(WorldUnit, id=unit_id, owner_character=request.hero)
     return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
+
+
+@inchar_required
+def character_view(request, character_id):
+    character = get_object_or_404(Character, id=character_id, world=request.hero.world)
+    context = {'character': character}
+    return render(request, 'world/view_character.html', context=context)

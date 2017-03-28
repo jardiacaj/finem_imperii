@@ -149,7 +149,7 @@ class Organization(models.Model):
         return reverse('organization:view', kwargs={'organization_id': self.id})
 
     def get_html_name(self):
-        template = '{name}<span style="color: #{color}" class="glyphicon glyphicon-{icon}" aria-hidden="true"></span>'
+        template = '{name}<span style="color: #{color}" class="glyphicon glyphicon-{icon}" aria-hidden="true"></span>{suffix}'
         if self.violence_monopoly:
             icon = "tower"
         elif self.leaded_organizations.filter(violence_monopoly=True).exists():
@@ -163,10 +163,17 @@ class Organization(models.Model):
         else:
             icon = "option-vertical"
 
+        occupier = self.get_position_occupier()
+        if occupier:
+            suffix = '<small>{}</small>'.format(occupier.get_html_name())
+        else:
+            suffix = ''
+
         return template.format(
             name=escape(self.name),
             icon=icon,
-            color=escape(self.color)
+            color=escape(self.color),
+            suffix=suffix
         )
 
     def get_html_link(self):

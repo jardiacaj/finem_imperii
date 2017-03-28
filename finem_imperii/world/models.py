@@ -311,6 +311,15 @@ class Character(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('world:character', kwargs={'character_id': self.id})
+
+    def get_html_name(self):
+        return self.name
+
+    def get_html_link(self):
+        return '<a href="{}">{}</a>'.format(self.get_absolute_url(), self.get_html_name())
+
 
 class WorldUnitStatusChangeException(Exception):
     pass

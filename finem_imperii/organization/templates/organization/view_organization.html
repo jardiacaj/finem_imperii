@@ -4,10 +4,6 @@
 
     <h1 class="page-header">
         {{ organization.get_html_name|safe }}
-
-        {% if organization.get_position_occupier %}
-            <small>{{ organization.get_position_occupier }}</small>
-        {% endif %}
     </h1>
 
     <div class="row">
@@ -15,6 +11,9 @@
             {{ organization.description }}
         </div>
         <div class="col-md-6 lead">
+            {% if organization.get_position_occupier %}
+                {{ organization.get_position_occupier.get_html_link|safe }}<br>
+            {% endif %}
             {{ organization.name }}
             {% if organization.violence_monopoly %}
                 <br><b>Sovereign <span class="glyphicon glyphicon-tower" aria-hidden="true"></span></b>

@@ -5,6 +5,11 @@
     <form class="form-horizontal" role="form" method="post" action="{% url 'messaging:compose' %}">
         {% csrf_token %}
         <div class="col-lg-5">
+            {% if reply_to %}
+                <legend>Original message</legend>
+                {% include 'messaging/message_body.html' with message=reply_to.message %}
+            {% endif %}
+
             <legend>Message body</legend>
             <div class="form-group">
                 <textarea class="form-control"
@@ -25,6 +30,15 @@
                 <p>
                     {{ target_character.get_html_link|safe }}
                 </p>
+            {% elif reply_to %}
+                <legend>Sending to</legend>
+                <ul>
+                    {% for recipient in reply_to.message.get_nice_recipient_list %}
+                        <li>{{ recipient.get_html_link|safe }}</li>
+                    {% endfor %}
+                </ul>
+
+                <input type="hidden" name="reply_to" value="{{ reply_to.id }}">
             {% else %}
                 <legend>Recipients by geography</legend>
 

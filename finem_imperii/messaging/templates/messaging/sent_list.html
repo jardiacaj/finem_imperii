@@ -33,13 +33,7 @@
                             <p>
                                 <small>{{ message.creation_time }}</small>
                             </p>
-                            {% if message.safe %}
-                                {{ message.content|safe }}
-                            {% else %}
-                                <p>
-                                    <pre style="white-space: pre-wrap;">{{ message.content }}</pre>
-                                </p>
-                            {% endif %}
+                            {% include 'messaging/message_body.html' with message=message %}
                         </div>
                     </div>
                 </div>

@@ -35,6 +35,13 @@ class CharacterMessage(models.Model):
             [recipient.character for recipient in self.messagerecipient_set.filter(group=None)]
         )
 
+    def get_post_recipient_list(self):
+        return (
+            ["organization_{}".format(group.organization.id) for group in self.messagerecipientgroup_set.all()]
+            +
+            ["organization_{}".format(recipient.character.id) for recipient in self.messagerecipient_set.filter(group=None)]
+        )
+
 
 class MessageRecipientGroup(models.Model):
     class Meta:

@@ -1,0 +1,7 @@
+{% if message.safe %}
+    {{ message.content|safe }}
+{% else %}
+    <p>
+        <pre style="white-space: pre-wrap;">{{ message.content }}</pre>
+    </p>
+{% endif %}

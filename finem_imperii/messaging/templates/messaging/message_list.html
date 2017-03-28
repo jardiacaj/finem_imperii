@@ -30,7 +30,7 @@
                             </span>
                             {% if recipient.message.sender %}
                                 <a
-                                        href="{{ recipient.get_mark_read_url }}"
+                                        href="{% url 'messaging:reply' recipient.id %}"
                                         class="btn btn-sm btn-primary pull-right">
                                     <span class="glyphicon glyphicon-comment" aria-hidden="true"></span> reply
                                 </a>
@@ -65,13 +65,7 @@
                                     {{ recipient.message.creation_time }}
                                 </p>
                             </div>
-                            {% if recipient.message.safe %}
-                                {{ recipient.message.content|safe }}
-                            {% else %}
-                                <p>
-                                    <pre style="white-space: pre-wrap;">{{ recipient.message.content }}</pre>
-                                </p>
-                            {% endif %}
+                            {% include 'messaging/message_body.html' with message=recipient.message %}
                         </div>
                     </div>
                 </div>

@@ -30,11 +30,21 @@ class CharacterMessage(models.Model):
 
 
 class MessageReceiverGroup(models.Model):
+    class Meta:
+        unique_together = (
+            ("message", "organization"),
+        )
+
     message = models.ForeignKey(CharacterMessage)
     organization = models.ForeignKey('organization.Organization')
 
 
 class MessageReceiver(models.Model):
+    class Meta:
+        unique_together = (
+            ("message", "character"),
+        )
+
     message = models.ForeignKey(CharacterMessage)
     group = models.ForeignKey(MessageReceiverGroup, blank=True, null=True)
     read = models.BooleanField(default=False)

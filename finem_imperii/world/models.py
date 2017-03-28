@@ -294,11 +294,12 @@ class Character(models.Model):
         return "After {} of travel you have reached {}.".format(nice_hours(travel_time), destination)
 
     @transaction.atomic
-    def add_notification(self, category, content):
+    def add_notification(self, category, content, safe=False):
         message = CharacterMessage.objects.create(
             content=content,
             category=category,
-            creation_turn=self.world.current_turn
+            creation_turn=self.world.current_turn,
+            safe=safe
         )
         MessageReceiver.objects.create(
             message=message,

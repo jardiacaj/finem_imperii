@@ -55,7 +55,11 @@
                                 <small>{{ receiver.message.creation_time }}</small>
                             </p>
                             <p>
-                                {{ receiver.message.content }}
+                                {% if receiver.message.safe %}
+                                    {{ receiver.message.content|safe }}
+                                {% else %}
+                                    <pre style="white-space: pre-wrap;">{{ receiver.message.content }}</pre>
+                                {% endif %}
                             </p>
                         </div>
                     </div>

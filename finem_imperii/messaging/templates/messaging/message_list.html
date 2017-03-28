@@ -23,7 +23,7 @@
                         <div class="panel-heading">
                             <span class="lead">
                                 {% if receiver.message.sender %}
-                                    Message from {{ receiver.message.sender }}
+                                    Message from {{ receiver.message.sender.get_html_link|safe }}
                                 {% else %}
                                     {{ receiver.message.category|capfirst }}
                                 {% endif %}
@@ -51,16 +51,27 @@
 
                         </div>
                         <div class="panel-body">
-                            <p>
-                                <small>{{ receiver.message.creation_time }}</small>
-                            </p>
-                            <p>
-                                {% if receiver.message.safe %}
-                                    {{ receiver.message.content|safe }}
-                                {% else %}
+                            <div class="col-sm-9">
+                                <p class="small">
+                                    For
+                                    {% for message_receiver in receiver.message.get_nice_recipient_list %}{% if not forloop.first and forloop.last %} and {% elif not forloop.first %}, {% endif %}{{ message_receiver.get_html_link|safe }}{% if forloop.last %}.{% endif %}
+                                    {% empty %}
+                                        NOONE?.
+                                    {% endfor %}
+                                </p>
+                            </div>
+                            <div class="col-sm-3">
+                                <p class="small">
+                                    {{ receiver.message.creation_time }}
+                                </p>
+                            </div>
+                            {% if receiver.message.safe %}
+                                {{ receiver.message.content|safe }}
+                            {% else %}
+                                <p>
                                     <pre style="white-space: pre-wrap;">{{ receiver.message.content }}</pre>
-                                {% endif %}
-                            </p>
+                                </p>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

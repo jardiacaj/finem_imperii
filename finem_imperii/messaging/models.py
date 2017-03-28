@@ -28,6 +28,13 @@ class CharacterMessage(models.Model):
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, blank=True, null=True)
     safe = models.BooleanField(default=False)
 
+    def get_nice_recipient_list(self):
+        return (
+            [group.organization for group in self.messagereceivergroup_set.all()]
+            +
+            [receiver.character for receiver in self.messagereceiver_set.filter(group=None)]
+        )
+
 
 class MessageReceiverGroup(models.Model):
     class Meta:

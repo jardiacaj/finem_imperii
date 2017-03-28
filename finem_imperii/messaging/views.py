@@ -66,7 +66,7 @@ class ComposeView(View):
             if split[0] == 'settlement':
                 for character in request.hero.location.character_set.all():
                     character_count += 1
-                    MessageReceiver.objects.create(message=message, character=character)
+                    MessageReceiver.objects.get_or_create(message=message, character=character)
             elif split[0] == 'region':
                 for character in Character.objects.filter(location__tile=request.hero.location.tile):
                     character_count += 1

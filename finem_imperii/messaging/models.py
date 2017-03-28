@@ -49,5 +49,10 @@ class MessageReceiver(models.Model):
 
 
 class MessageRelationship(models.Model):
+    class Meta:
+        unique_together = (
+            ("from_character", "to_character"),
+        )
+
     from_character = models.ForeignKey('world.Character')
     to_character = models.ForeignKey('world.Character', related_name='message_relationships_to')

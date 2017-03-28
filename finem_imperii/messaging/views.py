@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls.base import reverse
 
 from decorators import inchar_required
-from messaging.models import MessageReceiver
+from messaging.models import MessageReceiver, MessageRelationship
+from world.models import Character
 
 
 @inchar_required
@@ -15,11 +16,32 @@ def home(request):
 
 
 @inchar_required
-def compose(request):
+def compose(request, character_id=None):
+    if character_id:
+        target_character = get_object_or_404(Character, id=character_id, world=request.hero.world)
+    else:
+        target_character = None
+
     context = {
         'tab': 'compose',
+        'target_character': target_character,
     }
     return render(request, 'messaging/compose.html', context)
+
+
+@inchar_required
+def favourite(request, character_id):
+    target_character = get_object_or_404(Character, id=character_id, world=request.hero.world)
+    MessageRelationship.objects.get_or_create(from_character=request.hero, to_character=target_character)
+    return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
+
+
+@inchar_required
+def unfavourite(request, character_id):
+    target_character = get_object_or_404(Character, id=character_id, world=request.hero.world)
+    target_relationship = get_object_or_404(MessageRelationship, from_character=request.hero, to_character=target_character)
+    target_relationship.delete()
+    return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
 
 
 @inchar_required

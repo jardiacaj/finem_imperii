@@ -1,7 +1,7 @@
 from django.conf.urls import url
 
 from messaging.views import mark_all_read, messages_list, home, compose, mark_read, mark_favourite, favourites_list, \
-    sent_list
+    sent_list, favourite, unfavourite
 
 urlpatterns = [
     url(r'^$', home, name='home'),
@@ -13,6 +13,6 @@ urlpatterns = [
     url(r'^sent', sent_list, name='sent'),
     url(r'^compose$', compose, name='compose'),
     url(r'^compose/character/(?P<character_id>[0-9]+)$', compose, name='compose_character'),
-    url(r'^favourite/character/(?P<character_id>[0-9]+)$', compose, name='favourite_character'),
-    url(r'^unfavourite/character/(?P<character_id>[0-9]+)$', compose, name='unfavourite_character'),
+    url(r'^favourite/character/(?P<character_id>[0-9]+)$', favourite, name='favourite_character'),
+    url(r'^unfavourite/character/(?P<character_id>[0-9]+)$', unfavourite, name='unfavourite_character'),
 ]

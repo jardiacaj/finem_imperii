@@ -57,9 +57,15 @@
                 {% endfor %}
             </div>
 
-            <legend>Characters</legend>
+            <legend>Favourited characters</legend>
             <div class="form-group">
                 {% for relationship in request.hero.messagerelationship_set.all %}
+                    <input type="checkbox" name="receiver" id="receiver_character_{{ relationship.to_character.id }}">
+                    <label for="receiver_character_{{ relationship.to_character.id }}">{{ relationship.to_character.get_html_link|safe }}</label>
+                    <a href="{% url 'messaging:unfavourite_character' relationship.to_character.id %}">
+                        <span class="text-danger"><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span></span>
+                    </a>
+                    {% if not forloop.last %}<br>{% endif %}
                 {% empty %}
                     None available. To add characters here, visit a charachter's page.
                 {% endfor %}

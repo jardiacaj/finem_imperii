@@ -3,5 +3,6 @@ set -e
 
 pip3 install coveralls
 apk add --no-cache git
-coverage run --branch --source . /var/www/finem_imperii/finem_imperii/manage.py test
+cd /var/www/finem_imperii/finem_imperii
+coverage run --branch --source . ./manage.py test
 coveralls

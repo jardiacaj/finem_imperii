@@ -1,5 +1,5 @@
 #!/bin/sh
-cd /var/www/fiinem_imperii/finem_imperii
 pip3 install coveralls
-coverage run --branch --source . ./manage.py test
+apk add --no-cache git
+coverage run --branch --source . /var/www/finem_imperii/finem_imperii/manage.py test
 coveralls

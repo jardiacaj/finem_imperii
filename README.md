@@ -1,7 +1,7 @@
-# Finem Imperii
-
 [![Build Status](https://travis-ci.org/jardiacaj/finem_imperii.svg?branch=master)](https://travis-ci.org/jardiacaj/finem_imperii)
 [![Coverage Status](https://coveralls.io/repos/github/jardiacaj/finem_imperii/badge.svg?branch=master)](https://coveralls.io/github/jardiacaj/finem_imperii?branch=master)
+
+# Finem Imperii
 
 Finem Imperii is a web-based role-strategy multiplayer game. Characters are part of a long-lived open persistent world placed in the late middle ages, where they will usually take the role of prominent members of society (e.g. commanders, traders, treasurers, rulers). Cooperation among players is a core part of the game, and is required for most scenarios.
 

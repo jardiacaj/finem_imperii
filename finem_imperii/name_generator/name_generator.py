@@ -2,7 +2,7 @@ import random
 
 
 def load_file(filename):
-    with open(filename) as file:
+    with open('name_generator/data_sources/{}'.format(filename)) as file:
         return [line.strip() for line in file]
 
 
@@ -20,16 +20,16 @@ class NameGenerator:
             return random.sample(name_list, limit)
 
     def get_names(self, limit=None):
-        return self.get_file('name_generator/data_sources/names_both', limit)
+        return self.get_file('names_both', limit)
 
     def get_surnames(self, limit=None):
-        return self.get_file('name_generator/data_sources/surnames', limit)
+        return self.get_file('surnames', limit)
 
     def get_female_names(self, limit=None):
-        return self.get_file('name_generator/data_sources/names_female', limit)
+        return self.get_file('names_female', limit)
 
     def get_male_names(self, limit=None):
-        return self.get_file('name_generator/data_sources/names_male', limit)
+        return self.get_file('names_male', limit)
 
     def generate_name(self, male):
         return (

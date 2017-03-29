@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/jardiacaj/finem_imperii.svg?branch=master)](https://travis-ci.org/jardiacaj/finem_imperii)
 [![Coverage Status](https://coveralls.io/repos/github/jardiacaj/finem_imperii/badge.svg?branch=master)](https://coveralls.io/github/jardiacaj/finem_imperii?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/jardiacaj/finem_imperii/badge.svg?branch=HEAD)](https://coveralls.io/github/jardiacaj/finem_imperii?branch=HEAD)
 
 # Finem Imperii
 

@@ -1,5 +1,7 @@
 # Finem Imperii
 
+[![Build Status](https://travis-ci.org/jardiacaj/finem_imperii.svg?branch=master)](https://travis-ci.org/jardiacaj/finem_imperii)
+
 Finem Imperii is a web-based role-strategy multiplayer game. Characters are part of a long-lived open persistent world placed in the late middle ages, where they will usually take the role of prominent members of society (e.g. commanders, traders, treasurers, rulers). Cooperation among players is a core part of the game, and is required for most scenarios.
 
 Unlike other similar games, the players do not need to log-in frequently or at certain times. Also, the level of deepness and involvement can be variable, and there is no benefit from spending large amounts of time playing. There is no fixed objective in this game, but there are many open possibilities for the players.

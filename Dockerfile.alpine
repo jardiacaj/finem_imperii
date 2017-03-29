@@ -17,10 +17,9 @@ RUN ./db_create.sh
 RUN finem_imperii/manage.py collectstatic --no-input
 
 # Apache
-RUN rm /etc/apache2/conf.d/languages.conf /etc/apache2/conf.d/userdir.conf
-RUN cp devops/finem_imperii_vhost.conf /etc/apache2/conf.d
-RUN cp devops/mod_wsgi.conf /etc/apache2/conf.d
+RUN rm /etc/apache2/conf.d/languages.conf /etc/apache2/conf.d/userdir.conf /etc/apache2/conf.d/info.conf
+RUN cp devops/mod_wsgi.conf devops/finem_imperii_vhost.conf /etc/apache2/conf.d
 RUN cp devops/mod_wsgi.so /usr/lib/apache2/mod_wsgi.so
 RUN mkdir /run/apache2
 
-CMD httpd -f /etc/apache2/httpd.conf -e info -DFOREGROUND
+CMD devops/alpine_entry.sh

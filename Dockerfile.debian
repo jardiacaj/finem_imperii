@@ -12,6 +12,7 @@ ADD . .
 RUN pip install -r requirements.txt
 
 # Application
+RUN rm finem_imperii/db.sqlite3 || true
 RUN ./db_create.sh
 RUN finem_imperii/manage.py collectstatic --no-input
 

@@ -1,0 +1,19 @@
+sudo: required
+
+language: python
+ - "3.6"
+
+services:
+ - docker
+
+install:
+ - docker build -t jardiacaj/finem_imperii .
+
+script:
+ - docker run -it jardiacaj/finem_imperii /var/www/finem_imperii/finem_imperii/manage.py test
+
+after_success:
+ - if [ "$TRAVIS_BRANCH" == "master" ]; then
+   docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+   docker push jardiacaj/finem_imperii;
+   fi

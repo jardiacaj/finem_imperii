@@ -10,7 +10,7 @@ install:
  - docker build -t jardiacaj/finem_imperii .
 
 script:
- - docker run -it jardiacaj/finem_imperii /var/www/finem_imperii/finem_imperii/manage.py test
+ - docker run -e COVERALLS_REPO_TOKEN="$COVERALLS_REPO_TOKEN" -it jardiacaj/finem_imperii /var/www/finem_imperii/devops/alpine_tests.sh
 
 after_success:
  - if [ "$TRAVIS_BRANCH" == "master" ]; then

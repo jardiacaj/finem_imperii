@@ -1,0 +1,26 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Docker Deployment" type="docker-deploy" factoryName="Docker Deployment" singleton="true" server-name="Docker">
+    <deployment type="docker-image">
+      <settings>
+        <option name="JSONFilePath" value="" />
+        <option name="command" value="" />
+        <option name="containerName" value="fi_pycharm" />
+        <option name="entrypoint" value="" />
+        <option name="imageTag" value="fi" />
+        <option name="portBindings">
+          <list>
+            <DockerPortBindingImpl>
+              <option name="containerPort" value="80" />
+              <option name="hostIp" value="127.0.0.1" />
+              <option name="hostPort" value="80" />
+            </DockerPortBindingImpl>
+          </list>
+        </option>
+        <option name="startBrowserSettings">
+          <browser />
+        </option>
+      </settings>
+    </deployment>
+    <method />
+  </configuration>
+</component>

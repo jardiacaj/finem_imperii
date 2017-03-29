@@ -9,6 +9,7 @@ omit =
     *__init__*
     *manage*
     *settings*
+    *apps.py
 
 exclude_lines =
     pragma: no cover

@@ -9,7 +9,7 @@ from messaging.models import ServerMOTD
 
 def register_view(request):
     if request.user.is_authenticated():
-        return redirect('base:home')
+        return redirect('account:home')
     if request.POST:
         username = request.POST.get('username')
         email = request.POST.get('email')
@@ -23,7 +23,7 @@ def register_view(request):
                 "An account with this email address already exists",
                 extra_tags="danger"
             )
-            return redirect('base:register')
+            return redirect('account:register')
 
         if User.objects.filter(username=username).exists():
             messages.add_message(
@@ -32,11 +32,11 @@ def register_view(request):
                 "An account with this username already exists",
                 extra_tags="danger"
             )
-            return redirect('base:register')
+            return redirect('account:register')
 
         if password != password2:
             messages.add_message(request, messages.ERROR, "Your passwords don't match!", extra_tags="danger")
-            return redirect('base:register')
+            return redirect('account:register')
 
         User.objects.create_user(
             username=username,
@@ -60,7 +60,7 @@ def login_view(request):
             if user.is_active:
                 login(request, user)
                 messages.add_message(request, messages.SUCCESS, "Login successful.", extra_tags='success')
-                return redirect('base:home')
+                return redirect('account:home')
             else:
                 messages.add_message(request, messages.ERROR, "You account is disabled.", extra_tags='danger')
                 return redirect('account:login')

@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from organization.models import Organization, Capability
+from organization.models import Organization, Capability, OrganizationRelationship
 from world.models import Character, Tile
 
 
@@ -129,3 +129,13 @@ class TestOrganizationModel(TestCase):
     def test_get_position_occupier2(self):
         organization = Organization.objects.get(name="Small Kingdom")
         self.assertEqual(organization.get_position_occupier(), None)
+
+    def test_get_relationship_to(self):
+        organization1 = Organization.objects.get(name="Small Kingdom")
+        organization2 = Organization.objects.get(name="Small commonwealth")
+        self.assertEqual(organization1.get_relationship_to(organization2).relationship, OrganizationRelationship.PEACE)
+
+    def test_get_relationship_from(self):
+        organization1 = Organization.objects.get(name="Small Kingdom")
+        organization2 = Organization.objects.get(name="Small King")
+        self.assertEqual(organization1.get_relationship_from(organization2).relationship, OrganizationRelationship.PEACE)

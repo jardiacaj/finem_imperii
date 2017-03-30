@@ -36,8 +36,18 @@
   pk: 101
   fields:
     world_id: 2
+    name: "Small Kingdom"
+    color: "8F00CC"
+    description: "It's a small kingdom"
     is_position: false
+    position_type: inherited
+    owner_id: null
+    leader_id: 102
     owner_and_leader_locked: false
+    violence_monopoly: true
+    decision_taking: distributed
+    membership_type: character
+    election_period_months: 0
     character_members:
       - 1
       - 2
@@ -45,7 +55,16 @@
   pk: 102
   fields:
     world_id: 2
+    name: "Small King"
+    color: "B300FF"
+    description: "It's the King of a small kingdom"
     is_position: true
+    owner_id: null
+    leader_id: null
     owner_and_leader_locked: false
+    violence_monopoly: false
+    decision_taking: distributed
+    membership_type: character
+    election_period_months: 0
     character_members:
       - 1

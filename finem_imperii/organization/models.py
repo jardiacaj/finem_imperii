@@ -54,12 +54,12 @@ class Organization(models.Model):
     heir_first = models.ForeignKey(Character, blank=True, null=True, related_name='first_heir_to')
     heir_second = models.ForeignKey(Character, blank=True, null=True, related_name='second_heir_to')
 
-    def get_all_descendants(self, including_self=False):
-        descendants = list(self.owned_organizations.all())
+    def get_descendants_list(self, including_self=False):
+        descendants = list()
         if including_self:
             descendants.append(self)
-        for child in descendants:
-            descendants += child.get_all_descendants()
+        for child in self.owned_organizations.all():
+            descendants += child.get_descendants_list(True)
         return descendants
 
     def get_membership_including_descendants(self):
@@ -109,7 +109,7 @@ class Organization(models.Model):
         return CapabilityProposal.objects.filter(capability__organization=self, closed=False)
 
     def get_all_controlled_tiles(self):
-        return Tile.objects.filter(controlled_by__in=self.get_all_descendants(including_self=True)).all()
+        return Tile.objects.filter(controlled_by__in=self.get_descendants_list(including_self=True)).all()
 
     def external_capabilities_to_this(self):
         return self.capabilities_to_this.exclude(organization=self)

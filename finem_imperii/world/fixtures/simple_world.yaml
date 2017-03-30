@@ -88,6 +88,51 @@
     organization_id: 102
     type: 'heir'
     applying_to: 101
+- model: organization.Organization
+  pk: 109
+  fields:
+    world_id: 2
+    name: "Governor of some forest"
+    color: "008691"
+    description: "Governs some forest"
+    is_position: true
+    owner_id: 101
+    leader_id: null
+    owner_and_leader_locked: false
+    violence_monopoly: false
+    decision_taking: distributed
+    membership_type: character
+    election_period_months: 0
+- model: organization.Organization
+  pk: 110
+  fields:
+    world_id: 2
+    name: "Governor of some plains"
+    color: "008691"
+    description: "Governs some plains"
+    is_position: true
+    owner_id: 101
+    leader_id: null
+    owner_and_leader_locked: false
+    violence_monopoly: false
+    decision_taking: distributed
+    membership_type: character
+    election_period_months: 0
+- model: organization.Organization
+  pk: 111
+  fields:
+    world_id: 2
+    name: "Helper of the governor of some plains"
+    color: "008691"
+    description: "Helps the governor of some plains"
+    is_position: true
+    owner_id: 110
+    leader_id: null
+    owner_and_leader_locked: false
+    violence_monopoly: false
+    decision_taking: distributed
+    membership_type: character
+    election_period_months: 0
 
 - model: organization.Organization
   pk: 103
@@ -335,7 +380,7 @@
     z_pos: -1
     y_pos: 0.05
     type: plains
-    controlled_by: 101
+    controlled_by: 109
 - model: world.Tile
   pk: 103
   fields:
@@ -346,7 +391,7 @@
     z_pos: -1
     y_pos: 0.1
     type: forest
-    controlled_by: 101
+    controlled_by: 110
 
 - model: world.Tile
   pk: 104

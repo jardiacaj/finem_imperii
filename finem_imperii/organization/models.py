@@ -379,6 +379,7 @@ class CapabilityProposal(models.Model):
             vote=vote
         )
         self.execute_if_enough_votes()
+        self.close_if_enough_votes()
 
     def delete_disallowed_votes(self):
         for vote in self.capabilityvote_set.all():
@@ -390,6 +391,13 @@ class CapabilityProposal(models.Model):
         possible_votes = self.votes_possible()
         if self.votes_yea().count() > possible_votes / 2:
             self.execute()
+
+    def close_if_enough_votes(self):
+        self.delete_disallowed_votes()
+        possible_votes = self.votes_possible()
+        if self.votes_nay().count() > possible_votes / 2:
+            self.closed = True
+            self.save()
 
     def votes_possible(self):
         return self.capability.organization.character_members.count()

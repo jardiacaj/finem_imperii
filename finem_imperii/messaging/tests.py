@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls.base import reverse
 
-from messaging.models import CharacterMessage, MessageRecipientGroup, MessageRecipient
+from messaging.models import CharacterMessage, MessageRecipientGroup, MessageRecipient, MessageRelationship
 from organization.models import Organization
 from world.models import Character
 
@@ -400,3 +400,113 @@ class TestCompose(TestCase):
         self.assertTrue(MessageRecipient.objects.filter(character_id=1, group=None, read=False).exists())
         self.assertFalse(MessageRecipient.objects.filter(character_id=1, group=None, read=True).exists())
         self.assertContains(response, message_body)
+
+    def test_message_favourite_unfavourite(self):
+        message_body = 'Nice to meet you, foobar.'
+        response = self.client.post(
+            reverse('messaging:compose'),
+            data={
+                'message_body': message_body,
+                'recipient': ['character_1']
+            },
+            follow=True
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.redirect_chain), 1)
+        self.assertEqual(response.redirect_chain[0][1], 302)
+        self.assertEqual(response.redirect_chain[0][0], reverse('messaging:sent'))
+        self.assertContains(response, message_body)
+        self.assertEqual(CharacterMessage.objects.all().count(), 1)
+        self.assertEqual(MessageRecipientGroup.objects.all().count(), 0)
+        self.assertEqual(MessageRecipient.objects.all().count(), 1)
+        self.assertTrue(MessageRecipient.objects.filter(character_id=1, group=None, favourite=False).exists())
+
+        response = self.client.get(reverse('messaging:favourites'))
+        self.assertNotContains(response, message_body)
+
+        response = self.client.get(
+            reverse('messaging:mark_favourite', kwargs={'recipient_id': 1}),
+            follow=True
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.redirect_chain), 1)
+        self.assertEqual(response.redirect_chain[0][1], 302)
+        self.assertEqual(response.redirect_chain[0][0], reverse('messaging:home'))
+        self.assertTrue(MessageRecipient.objects.filter(character_id=1, group=None, favourite=True).exists())
+        self.assertFalse(MessageRecipient.objects.filter(character_id=1, group=None, favourite=False).exists())
+
+        response = self.client.get(reverse('messaging:favourites'))
+        self.assertContains(response, message_body)
+
+        response = self.client.get(
+            reverse('messaging:mark_favourite', kwargs={'recipient_id': 1}),
+            follow=True
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.redirect_chain), 1)
+        self.assertEqual(response.redirect_chain[0][1], 302)
+        self.assertEqual(response.redirect_chain[0][0], reverse('messaging:home'))
+        self.assertTrue(MessageRecipient.objects.filter(character_id=1, group=None, favourite=False).exists())
+        self.assertFalse(MessageRecipient.objects.filter(character_id=1, group=None, favourite=True).exists())
+        self.assertContains(response, message_body)
+
+        response = self.client.get(reverse('messaging:favourites'))
+        self.assertNotContains(response, message_body)
+
+    def test_character_favourite_unfavourite(self):
+        target_character = Character.objects.get(id=3)
+
+        response = self.client.get(reverse('messaging:compose'))
+        self.assertContains(response, target_character.name, count=1)
+
+        response = self.client.get(
+            reverse('messaging:favourite_character', kwargs={'character_id': target_character.id}),
+            follow=True
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.redirect_chain), 1)
+        self.assertEqual(response.redirect_chain[0][1], 302)
+        self.assertEqual(response.redirect_chain[0][0], reverse('world:character_home'))
+        self.assertTrue(MessageRelationship.objects.filter(from_character_id=1, to_character=target_character).exists())
+
+        response = self.client.get(reverse('messaging:compose'))
+        self.assertContains(response, target_character.name, count=2)
+
+        response = self.client.get(
+            reverse('messaging:favourite_character', kwargs={'character_id': target_character.id}),
+            follow=True
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.redirect_chain), 1)
+        self.assertEqual(response.redirect_chain[0][1], 302)
+        self.assertEqual(response.redirect_chain[0][0], reverse('world:character_home'))
+        self.assertTrue(MessageRelationship.objects.filter(from_character_id=1, to_character=target_character).exists())
+
+        response = self.client.get(reverse('messaging:compose'))
+        self.assertContains(response, target_character.name, count=2)
+
+        response = self.client.get(
+            reverse('messaging:unfavourite_character', kwargs={'character_id': target_character.id}),
+            follow=True
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.redirect_chain), 1)
+        self.assertEqual(response.redirect_chain[0][1], 302)
+        self.assertEqual(response.redirect_chain[0][0], reverse('world:character_home'))
+        self.assertFalse(MessageRelationship.objects.filter(from_character_id=1, to_character=target_character).exists())
+
+        response = self.client.get(reverse('messaging:compose'))
+        self.assertContains(response, target_character.name, count=1)
+
+        response = self.client.get(
+            reverse('messaging:unfavourite_character', kwargs={'character_id': target_character.id}),
+            follow=True
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.redirect_chain), 1)
+        self.assertEqual(response.redirect_chain[0][1], 302)
+        self.assertEqual(response.redirect_chain[0][0], reverse('world:character_home'))
+        self.assertFalse(MessageRelationship.objects.filter(from_character_id=1, to_character=target_character).exists())
+
+        response = self.client.get(reverse('messaging:compose'))
+        self.assertContains(response, target_character.name, count=1)

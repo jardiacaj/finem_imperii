@@ -109,17 +109,23 @@ class ComposeView(View):
 
 
 @inchar_required
-def favourite(request, character_id):
+def favourite_character(request, character_id):
     target_character = get_object_or_404(Character, id=character_id, world=request.hero.world)
-    MessageRelationship.objects.get_or_create(from_character=request.hero, to_character=target_character)
+    created = MessageRelationship.objects.get_or_create(from_character=request.hero, to_character=target_character)[1]
+    if created:
+        messages.success(request, "Character added to contacts", "success")
     return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
 
 
 @inchar_required
-def unfavourite(request, character_id):
+def unfavourite_character(request, character_id):
     target_character = get_object_or_404(Character, id=character_id, world=request.hero.world)
-    target_relationship = get_object_or_404(MessageRelationship, from_character=request.hero, to_character=target_character)
-    target_relationship.delete()
+    try:
+        target_relationship = MessageRelationship.objects.get(from_character=request.hero, to_character=target_character)
+        target_relationship.delete()
+        messages.success(request, "Character removed contacts", "success")
+    except MessageRelationship.DoesNotExist:
+        pass
     return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
 
 

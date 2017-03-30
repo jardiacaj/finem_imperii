@@ -2,7 +2,7 @@ from django.conf.urls import url
 
 from decorators import inchar_required
 from messaging.views import mark_all_read, messages_list, home, mark_read, mark_favourite, favourites_list, \
-    sent_list, favourite, unfavourite, ComposeView, reply
+    sent_list, favourite_character, unfavourite_character, ComposeView, reply
 
 urlpatterns = [
     url(r'^$', home, name='home'),
@@ -15,6 +15,6 @@ urlpatterns = [
     url(r'^compose$', inchar_required(ComposeView.as_view()), name='compose'),
     url(r'^compose/character/(?P<character_id>[0-9]+)$', inchar_required(ComposeView.as_view()), name='compose_character'),
     url(r'^reply/(?P<recipient_id>[0-9]+)$', reply, name='reply'),
-    url(r'^favourite/character/(?P<character_id>[0-9]+)$', favourite, name='favourite_character'),
-    url(r'^unfavourite/character/(?P<character_id>[0-9]+)$', unfavourite, name='unfavourite_character'),
+    url(r'^favourite/character/(?P<character_id>[0-9]+)$', favourite_character, name='favourite_character'),
+    url(r'^unfavourite/character/(?P<character_id>[0-9]+)$', unfavourite_character, name='unfavourite_character'),
 ]

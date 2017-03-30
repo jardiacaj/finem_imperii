@@ -128,7 +128,9 @@
   fields:
     organization_id: 102
     type: 'heir'
-    applying_to: 101
+    applying_to: 102
+
+
 - model: organization.Organization
   pk: 109
   fields:
@@ -425,7 +427,7 @@
     z_pos: -1
     y_pos: 0.05
     type: plains
-    controlled_by: 109
+    controlled_by: 110
 - model: world.Tile
   pk: 103
   fields:
@@ -436,7 +438,7 @@
     z_pos: -1
     y_pos: 0.1
     type: forest
-    controlled_by: 110
+    controlled_by: 109
 
 - model: world.Tile
   pk: 104

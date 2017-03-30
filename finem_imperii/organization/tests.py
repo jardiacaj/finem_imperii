@@ -98,17 +98,27 @@ class TestOrganizationModel(TestCase):
         organization = Organization.objects.get(name="Small Kingdom")
         controlled_tiles = organization.get_all_controlled_tiles()
         self.assertEqual(len(controlled_tiles), 2)
-        self.assertIn(Tile.objects.get(name="Some plains"))
-        self.assertIn(Tile.objects.get(name="Some forest"))
+        self.assertIn(Tile.objects.get(name="Some plains"), controlled_tiles)
+        self.assertIn(Tile.objects.get(name="Some forest"), controlled_tiles)
 
-    def test_get_all_controlled_tiles(self):
+    def test_get_all_controlled_tiles2(self):
         organization = Organization.objects.get(name="Governor of some plains")
         controlled_tiles = organization.get_all_controlled_tiles()
         self.assertEqual(len(controlled_tiles), 1)
-        self.assertIn(Tile.objects.get(name="Some plains"))
+        self.assertIn(Tile.objects.get(name="Some plains"), controlled_tiles)
 
-    def test_get_all_controlled_tiles(self):
+    def test_get_all_controlled_tiles3(self):
         organization = Organization.objects.get(name="Helper of the governor of some plains")
         controlled_tiles = organization.get_all_controlled_tiles()
         self.assertEqual(len(controlled_tiles), 0)
 
+    def test_external_capabilities_to_this(self):
+        organization = Organization.objects.get(name="Small King")
+        external_capabilities = organization.external_capabilities_to_this()
+        self.assertEqual(len(external_capabilities), 0)
+
+    def test_external_capabilities_to_this(self):
+        organization = Organization.objects.get(name="Small Kingdom")
+        external_capabilities = organization.external_capabilities_to_this()
+        self.assertEqual(len(external_capabilities), 8)
+        self.assertTrue(external_capabilities.filter(type=Capability.BAN, organization__name="Small King").exists())

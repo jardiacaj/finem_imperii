@@ -87,7 +87,7 @@
   fields:
     organization_id: 2
     type: 'heir'
-    applying_to: 1
+    applying_to: 2
 
 - model: organization.Organization
   pk: 3

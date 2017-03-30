@@ -4,7 +4,7 @@ from django.urls.base import reverse
 
 
 class HomepageTestCase(TestCase):
-    fixtures = ['simple_world', 'simple_world_life']
+    fixtures = ['simple_world']
 
     def test_homepage_unauthenticated(self):
         response = self.client.get(reverse('base:home'))

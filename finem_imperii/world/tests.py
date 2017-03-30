@@ -5,7 +5,7 @@ from django.urls.base import reverse
 
 
 class TestHome(TestCase):
-    fixtures = ['simple_world', 'simple_world_life']
+    fixtures = ['simple_world']
 
     def setUp(self):
         self.client.post(

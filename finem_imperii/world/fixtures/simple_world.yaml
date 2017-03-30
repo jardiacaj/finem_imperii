@@ -1,3 +1,39 @@
+- model: auth.User
+  pk: 1
+  fields:
+    username: alice
+    email: alice@localhost
+    # password is "test"
+    password: 'pbkdf2_sha256$10000$vkRy7QauoLLj$ry+3xm3YX+YrSXbri8s3EcXDIrx5ceM+xQjtpLdw2oE='
+
+
+- model: world.Character
+  pk: 1
+  fields:
+    name: King
+    world_id: 2
+    location_id: 1001
+    oath_sworn_to_id: 102
+    owner_user_id: 1
+
+- model: world.Character
+  pk: 2
+  fields:
+    name: Kingdom Member
+    world_id: 2
+    location_id: 1001
+    oath_sworn_to_id: 102
+    owner_user_id: 1
+
+- model: world.Character
+  pk: 3
+  fields:
+    name: Stateless char
+    world_id: 2
+    location_id: 1008
+    owner_user_id: 1
+
+
 - model: world.World
   pk: 2
   fields:
@@ -21,6 +57,9 @@
     decision_taking: distributed
     membership_type: character
     election_period_months: 0
+    character_members:
+      - 1
+      - 2
 - model: organization.Organization
   pk: 102
   fields:
@@ -36,6 +75,8 @@
     decision_taking: distributed
     membership_type: character
     election_period_months: 0
+    character_members:
+      - 1
 - model: organization.Capability
   fields:
     organization_id: 102

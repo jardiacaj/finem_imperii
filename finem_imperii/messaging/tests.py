@@ -9,7 +9,7 @@ from world.models import Character
 
 
 class TestMessageModel(TestCase):
-    fixtures = ['simple_world', 'simple_world_life']
+    fixtures = ['simple_world']
 
     def test_get_nice_and_post_recipients(self):
         message = CharacterMessage.objects.create(creation_turn=0)
@@ -45,7 +45,7 @@ class TestMessageModel(TestCase):
 
 
 class TestCompose(TestCase):
-    fixtures = ['simple_world', 'simple_world_life']
+    fixtures = ['simple_world']
 
     def setUp(self):
         self.client.post(

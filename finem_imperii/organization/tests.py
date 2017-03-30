@@ -4,7 +4,7 @@ from organization.models import Organization
 
 
 class TestOrganizationModel(TestCase):
-    fixtures = ["simple_world", "simple_world_life"]
+    fixtures = ["simple_world"]
 
     def test_get_descendants_excluding_self(self):
         kingdom = Organization.objects.get(name="Small Kingdom")

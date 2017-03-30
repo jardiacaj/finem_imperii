@@ -61,9 +61,6 @@ def login_view(request):
                 login(request, user)
                 messages.add_message(request, messages.SUCCESS, "Login successful.", extra_tags='success')
                 return redirect('account:home')
-            else:
-                messages.add_message(request, messages.ERROR, "You account is disabled.", extra_tags='danger')
-                return redirect('account:login')
         else:
             messages.add_message(
                 request,

@@ -194,6 +194,17 @@ class TestLogin(TestCase):
         response = self.client.get(reverse('account:home'))
         self.assertEqual(response.status_code, 200)
 
+    def test_register_view_while_logged_in(self):
+        response = self.client.post(
+            reverse('account:login'),
+            {'username': 'Alice', 'password': 'supasecret'},
+            follow=True
+        )
+        response = self.client.get(reverse('account:register'), follow=True)
+        self.assertEqual(response.redirect_chain[0][1], 302)
+        self.assertTrue(response.redirect_chain[0][0].startswith(reverse('account:home')))
+        self.assertEqual(response.status_code, 200)
+
     def test_logout(self):
         response = self.client.post(
             reverse('account:login'),

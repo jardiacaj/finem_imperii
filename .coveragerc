@@ -10,6 +10,7 @@ omit =
     *manage*
     *settings*
     *apps.py
+    *admin.py
 
 exclude_lines =
     pragma: no cover

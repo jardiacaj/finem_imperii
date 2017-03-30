@@ -10,4 +10,4 @@ install:
  - docker build -t jardiacaj/finem_imperii .
 
 script:
- - docker run -e COVERALLS_REPO_TOKEN="$COVERALLS_REPO_TOKEN" -it jardiacaj/finem_imperii /var/www/finem_imperii/devops/alpine_tests.sh
+ - docker run -e COVERALLS_REPO_TOKEN="$COVERALLS_REPO_TOKEN" jardiacaj/finem_imperii /var/www/finem_imperii/devops/alpine_tests.sh

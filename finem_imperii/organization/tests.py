@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from organization.models import Organization, Capability, OrganizationRelationship
+from organization.models import Organization, Capability, OrganizationRelationship, PositionElection, PositionCandidacy
 from world.models import Character, Tile
 
 
@@ -139,3 +139,22 @@ class TestOrganizationModel(TestCase):
         organization1 = Organization.objects.get(name="Small Kingdom")
         organization2 = Organization.objects.get(name="Small King")
         self.assertEqual(organization1.get_relationship_from(organization2).relationship, OrganizationRelationship.PEACE)
+
+    def test_convoke_elections(self):
+        democracy = Organization.objects.get(name="Small Democracy")
+        president = democracy.leader
+        president.convoke_elections()
+        self.assertEqual(PositionElection.objects.count(), 1)
+        election = PositionElection.objects.get(id=1)
+        self.assertEqual(election.position, president)
+        self.assertEqual(election.turn, 6)
+        self.assertEqual(election.closed, False)
+        self.assertEqual(election.winner, None)
+        self.assertEqual(election.open_candidacies().count(), 1)
+        self.assertEqual(election.last_turn_to_present_candidacy(), 3)
+        self.assertEqual(election.can_present_candidacy(), True)
+        self.assertEqual(election.get_results().count(), 1)
+        candidacy = PositionCandidacy.objects.get(id=1)
+        self.assertEqual(candidacy.election, election)
+        self.assertEqual(candidacy.candidate, president.get_position_occupier())
+        self.assertEqual(candidacy.retired, False)

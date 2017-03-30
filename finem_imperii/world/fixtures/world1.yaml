@@ -47,6 +47,7 @@
     type: 'policy'
     applying_to: 1
 - model: organization.Capability
+  pk: 1
   fields:
     organization_id: 2
     type: 'conscript'
@@ -54,7 +55,7 @@
 - model: organization.Capability
   fields:
     organization_id: 1
-    stemming_from: 2
+    stemming_from: 1
     type: 'conscript'
     applying_to: 1
 - model: organization.Capability

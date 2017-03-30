@@ -1,3 +1,6 @@
 from django.test import TestCase
 
-# Create your tests here.
+
+class TestMessageModel(TestCase):
+    def test_get_nice_recipients(self):
+        pass

@@ -1,0 +1,682 @@
+- model: world.World
+  pk: 2
+  fields:
+    name: Parvus
+    description: A small test world
+    initialized: false
+
+- model: organization.Organization
+  pk: 101
+  fields:
+    world_id: 2
+    name: "Small Kingdom"
+    color: "8F00CC"
+    description: "It's a small kingdom"
+    is_position: false
+    position_type: inherited
+    owner_id: null
+    leader_id: 102
+    owner_and_leader_locked: false
+    violence_monopoly: true
+    decision_taking: distributed
+    membership_type: character
+    election_period_months: 0
+- model: organization.Organization
+  pk: 102
+  fields:
+    world_id: 2
+    name: "Small King"
+    color: "B300FF"
+    description: "It's the King of a small kingdom"
+    is_position: true
+    owner_id: null
+    leader_id: null
+    owner_and_leader_locked: false
+    violence_monopoly: false
+    decision_taking: distributed
+    membership_type: character
+    election_period_months: 0
+- model: organization.Capability
+  fields:
+    organization_id: 102
+    type: 'ban'
+    applying_to: 101
+- model: organization.Capability
+  fields:
+    organization_id: 102
+    type: 'policy'
+    applying_to: 101
+- model: organization.Capability
+  pk: 101
+  fields:
+    organization_id: 102
+    type: 'conscript'
+    applying_to: 101
+- model: organization.Capability
+  fields:
+    organization_id: 101
+    stemming_from: 101
+    type: 'conscript'
+    applying_to: 101
+- model: organization.Capability
+  fields:
+    organization_id: 102
+    type: 'diplomacy'
+    applying_to: 101
+- model: organization.Capability
+  fields:
+    organization_id: 102
+    type: 'dissolve'
+    applying_to: 101
+- model: organization.Capability
+  fields:
+    organization_id: 102
+    type: 'suborganizations'
+    applying_to: 101
+- model: organization.Capability
+  fields:
+    organization_id: 102
+    type: 'secede'
+    applying_to: 101
+- model: organization.Capability
+  fields:
+    organization_id: 102
+    type: 'memberships'
+    applying_to: 101
+- model: organization.Capability
+  fields:
+    organization_id: 102
+    type: 'heir'
+    applying_to: 101
+
+- model: organization.Organization
+  pk: 103
+  fields:
+    world_id: 2
+    name: "Small Federation"
+    color: "008691"
+    description: "It's a small federation"
+    is_position: false
+    owner_id: null
+    leader_id: 104
+    owner_and_leader_locked: false
+    violence_monopoly: false
+    decision_taking: democratic
+    membership_type: organization
+    election_period_months: 0
+    organization_members:
+      - 105
+      - 107
+- model: organization.Organization
+  pk: 104
+  fields:
+    world_id: 2
+    name: "President of the Small Federation"
+    color: "008691"
+    description: "It's the president of the small federation"
+    is_position: true
+    position_type: elected
+    owner_id: null
+    leader_id: null
+    owner_and_leader_locked: false
+    violence_monopoly: false
+    decision_taking: distributed
+    membership_type: character
+    election_period_months: 0
+- model: organization.Organization
+  pk: 105
+  fields:
+    world_id: 2
+    name: "Small commonwealth"
+    color: "CE0004"
+    description: "A small federated state"
+    is_position: false
+    owner_id: null
+    leader_id: 106
+    owner_and_leader_locked: false
+    violence_monopoly: true
+    decision_taking: democratic
+    membership_type: character
+    election_period_months: 0
+- model: organization.Capability
+  fields:
+    organization_id: 105
+    type: 'conscript'
+    applying_to: 105
+- model: organization.Capability
+  fields:
+    organization_id: 105
+    type: 'ban'
+    applying_to: 105
+- model: organization.Capability
+  fields:
+    organization_id: 105
+    type: 'policy'
+    applying_to: 105
+- model: organization.Capability
+  fields:
+    organization_id: 105
+    type: 'dissolve'
+    applying_to: 105
+- model: organization.Capability
+  fields:
+    organization_id: 105
+    type: 'secede'
+    applying_to: 105
+- model: organization.Capability
+  fields:
+    organization_id: 105
+    type: 'memberships'
+    applying_to: 105
+- model: organization.Capability
+  fields:
+    organization_id: 105
+    type: 'heir'
+    applying_to: 106
+
+- model: organization.Organization
+  pk: 106
+  fields:
+    world_id: 2
+    name: "Commonwealth Lord"
+    color: "A70004"
+    description: "Leader of the small commonwealth"
+    is_position: true
+    position_type: inherited
+    owner_id: null
+    leader_id: null
+    owner_and_leader_locked: false
+    violence_monopoly: false
+    decision_taking: distributed
+    membership_type: character
+    election_period_months: 0
+- model: organization.Capability
+  fields:
+    organization_id: 106
+    type: 'ban'
+    applying_to: 105
+- model: organization.Capability
+  fields:
+    organization_id: 106
+    type: 'policy'
+    applying_to: 105
+- model: organization.Capability
+  fields:
+    organization_id: 106
+    type: 'diplomacy'
+    applying_to: 105
+- model: organization.Capability
+  fields:
+    organization_id: 106
+    type: 'suborganizations'
+    applying_to: 105
+- model: organization.Capability
+  fields:
+    organization_id: 106
+    type: 'memberships'
+    applying_to: 105
+
+- model: organization.Organization
+  pk: 107
+  fields:
+    world_id: 2
+    name: "Small Democracy"
+    color: "928439"
+    description: "Small federated democracy"
+    is_position: false
+    owner_id: null
+    leader_id: 108
+    owner_and_leader_locked: false
+    violence_monopoly: true
+    decision_taking: democratic
+    membership_type: character
+    election_period_months: 0
+- model: organization.Capability
+  fields:
+    organization_id: 107
+    type: 'ban'
+    applying_to: 107
+- model: organization.Capability
+  fields:
+    organization_id: 107
+    type: 'policy'
+    applying_to: 107
+- model: organization.Capability
+  fields:
+    organization_id: 107
+    type: 'conscript'
+    applying_to: 107
+- model: organization.Capability
+  fields:
+    organization_id: 107
+    type: 'diplomacy'
+    applying_to: 107
+- model: organization.Capability
+  fields:
+    organization_id: 107
+    type: 'dissolve'
+    applying_to: 107
+- model: organization.Capability
+  fields:
+    organization_id: 107
+    type: 'suborganizations'
+    applying_to: 107
+- model: organization.Capability
+  fields:
+    organization_id: 107
+    type: 'secede'
+    applying_to: 107
+- model: organization.Capability
+  fields:
+    organization_id: 107
+    type: 'memberships'
+    applying_to: 107
+- model: organization.Capability
+  fields:
+    organization_id: 107
+    type: 'elect'
+    applying_to: 108
+- model: organization.Capability
+  fields:
+    organization_id: 107
+    type: 'candidacy'
+    applying_to: 108
+- model: organization.Capability
+  fields:
+    organization_id: 107
+    type: 'convoke elections'
+    applying_to: 108
+
+- model: organization.Organization
+  pk: 108
+  fields:
+    world_id: 2
+    name: "Democracy leader"
+    color: "928439"
+    description: "Leader of the small democracy"
+    is_position: true
+    position_type: elected
+    owner_id: null
+    leader_id: null
+    owner_and_leader_locked: false
+    violence_monopoly: false
+    decision_taking: distributed
+    membership_type: character
+    election_period_months: 25
+
+- model: world.Region
+  pk: 101
+  fields:
+    world_id: 2
+    name: Region One
+- model: world.Region
+  pk: 102
+  fields:
+    world_id: 2
+    name: Region Two
+
+- model: world.Tile
+  pk: 101
+  fields:
+    name: Some ocean
+    world_id: 2
+    region_id: 101
+    x_pos: -1
+    z_pos: -1
+    y_pos: 0
+    type: deepsea
+- model: world.Tile
+  pk: 102
+  fields:
+    name: Some plains
+    world_id: 2
+    region_id: 101
+    x_pos: 0
+    z_pos: -1
+    y_pos: 0.05
+    type: plains
+    controlled_by: 101
+- model: world.Tile
+  pk: 103
+  fields:
+    name: Some forest
+    world_id: 2
+    region_id: 101
+    x_pos: 1
+    z_pos: -1
+    y_pos: 0.1
+    type: forest
+    controlled_by: 101
+
+- model: world.Tile
+  pk: 104
+  fields:
+    name: Some shore
+    world_id: 2
+    region_id: 101
+    x_pos: -1
+    z_pos: 0
+    y_pos: 0.1
+    type: shore
+- model: world.Tile
+  pk: 105
+  fields:
+    name: Some mountains
+    world_id: 2
+    region_id: 101
+    x_pos: 0
+    z_pos: 0
+    y_pos: 0.25
+    type: mountain
+    controlled_by: 105
+- model: world.Tile
+  pk: 106
+  fields:
+    name: More plains
+    world_id: 2
+    region_id: 102
+    x_pos: 1
+    z_pos: 0
+    y_pos: 0.1
+    type: plains
+    controlled_by: 107
+
+- model: world.Tile
+  pk: 107
+  fields:
+    name: More forest
+    world_id: 2
+    region_id: 102
+    x_pos: -1
+    z_pos: 1
+    y_pos: 0.15
+    type: forest
+- model: world.Tile
+  pk: 108
+  fields:
+    name: More mountains
+    world_id: 2
+    region_id: 102
+    x_pos: 0
+    z_pos: 1
+    y_pos: 0.2
+    type: mountain
+- model: world.Tile
+  pk: 109
+  fields:
+    name: More sea
+    world_id: 2
+    region_id: 102
+    x_pos: 1
+    z_pos: 1
+    y_pos: 0
+    type: deepsea
+
+
+- model: world.Settlement
+  pk: 1001
+  fields:
+    name: Small Iadar
+    tile_id: 102
+    population: 355
+    x_pos: 14
+    z_pos: 5
+- model: world.Building
+  fields:
+    type: residence
+    level: 2
+    quantity: 50
+    settlement_id: 1001
+- model: world.Building
+  fields:
+    type: grain field
+    level: 2
+    quantity: 2378
+    settlement_id: 1001
+
+
+- model: world.Settlement
+  pk: 1002
+  fields:
+    name: Small Diorynnhavn
+    tile_id: 103
+    population: 4010
+    x_pos: 5
+    z_pos: 60
+- model: world.Building
+  fields:
+    type: residence
+    level: 2
+    quantity: 300
+    settlement_id: 1002
+- model: world.Building
+  fields:
+    type: residence
+    level: 1
+    quantity: 270
+    settlement_id: 1002
+- model: world.Building
+  fields:
+    type: grain field
+    level: 2
+    quantity: 2819
+    settlement_id: 1002
+- model: world.Building
+  fields:
+    type: granary
+    level: 2
+    quantity: 1
+    settlement_id: 1002
+
+- model: world.Settlement
+  pk: 1003
+  fields:
+    name: Small Diorynn
+    tile_id: 105
+    population: 1300
+    x_pos: 43
+    z_pos: 73
+- model: world.Building
+  fields:
+    type: residence
+    level: 2
+    quantity: 200
+    settlement_id: 1003
+- model: world.Building
+  fields:
+    type: prison
+    level: 1
+    settlement_id: 1003
+- model: world.Building
+  fields:
+    type: grain field
+    level: 2
+    quantity: 17310
+    settlement_id: 1003
+- model: world.Building
+  fields:
+    type: granary
+    level: 2
+    quantity: 1
+    settlement_id: 1003
+
+- model: world.Settlement
+  pk: 1004
+  fields:
+    name: Small Upcreek
+    tile_id: 105
+    population: 1600
+    x_pos: 43
+    z_pos: 40
+- model: world.Building
+  fields:
+    type: residence
+    level: 2
+    quantity: 200
+    settlement_id: 1004
+- model: world.Building
+  fields:
+    type: prison
+    level: 2
+    settlement_id: 1004
+- model: world.Building
+  fields:
+    type: grain field
+    level: 2
+    quantity: 21737
+    settlement_id: 1004
+- model: world.Building
+  fields:
+    type: granary
+    level: 2
+    quantity: 1
+    settlement_id: 1004
+
+- model: world.Settlement
+  pk: 1005
+  fields:
+    name: Small Valley
+    tile_id: 106
+    population: 900
+    x_pos: 15
+    z_pos: 73
+- model: world.Building
+  fields:
+    type: residence
+    level: 2
+    quantity: 80
+    settlement_id: 1005
+- model: world.Building
+  fields:
+    type: grain field
+    level: 2
+    quantity: 3110
+    settlement_id: 1005
+- model: world.Building
+  fields:
+    type: granary
+    level: 2
+    quantity: 1
+    settlement_id: 1004
+
+
+
+
+- model: world.Settlement
+  pk: 1006
+  fields:
+    name: Small Shaax
+    tile_id: 107
+    population: 2666
+    x_pos: 29
+    z_pos: 31
+- model: world.Building
+  fields:
+    type: residence
+    level: 1
+    quantity: 250
+    settlement_id: 1006
+- model: world.Building
+  fields:
+    type: prison
+    level: 1
+    settlement_id: 1006
+- model: world.Building
+  fields:
+    type: grain field
+    level: 1
+    quantity: 13330
+    settlement_id: 1006
+- model: world.Building
+  fields:
+    type: granary
+    level: 2
+    quantity: 1
+    settlement_id: 1006
+
+- model: world.Settlement
+  pk: 1007
+  fields:
+    name: Small Fynkah
+    tile_id: 108
+    population: 812
+    x_pos: 61
+    z_pos: 50
+- model: world.Building
+  fields:
+    type: residence
+    level: 1
+    quantity: 90
+    settlement_id: 1007
+- model: world.Building
+  fields:
+    type: grain field
+    level: 1
+    quantity: 3248
+    settlement_id: 1007
+- model: world.Building
+  fields:
+    type: granary
+    level: 2
+    quantity: 1
+    settlement_id: 1007
+
+
+- model: world.Settlement
+  pk: 1008
+  fields:
+    name: Small Dipak
+    tile_id: 102
+    population: 5300
+    x_pos: 33
+    z_pos: 8
+- model: world.Building
+  fields:
+    type: residence
+    level: 1
+    quantity: 444
+    settlement_id: 1008
+- model: world.Building
+  fields:
+    type: prison
+    level: 2
+    settlement_id: 1008
+- model: world.Building
+  fields:
+    type: grain field
+    level: 1
+    quantity: 42400
+    settlement_id: 1008
+- model: world.Building
+  fields:
+    type: granary
+    level: 2
+    quantity: 1
+    settlement_id: 1008
+
+- model: world.Settlement
+  pk: 1009
+  fields:
+    name: Small Kalyana
+    tile_id: 103
+    population: 2100
+    x_pos: 40
+    z_pos: 53
+- model: world.Building
+  fields:
+    type: residence
+    level: 1
+    quantity: 175
+    settlement_id: 1009
+- model: world.Building
+  fields:
+    type: grain field
+    level: 1
+    quantity: 31500
+    settlement_id: 1009
+- model: world.Building
+  fields:
+    type: granary
+    level: 1
+    quantity: 1
+    settlement_id: 1009

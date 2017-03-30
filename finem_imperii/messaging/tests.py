@@ -319,3 +319,84 @@ class TestCompose(TestCase):
         self.assertEqual(CharacterMessage.objects.all().count(), 1)
         self.assertEqual(MessageRecipientGroup.objects.all().count(), 0)
         self.assertEqual(MessageRecipient.objects.all().count(), 1)
+
+    def test_mark_all_as_read(self):
+        message_body = 'Nice to meet you, foobar.'
+        response = self.client.post(
+            reverse('messaging:compose'),
+            data={
+                'message_body': message_body,
+                'recipient': ['character_1']
+            },
+            follow=True
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.redirect_chain), 1)
+        self.assertEqual(response.redirect_chain[0][1], 302)
+        self.assertEqual(response.redirect_chain[0][0], reverse('messaging:sent'))
+        self.assertContains(response, message_body)
+        self.assertEqual(CharacterMessage.objects.all().count(), 1)
+        self.assertEqual(MessageRecipientGroup.objects.all().count(), 0)
+        self.assertEqual(MessageRecipient.objects.all().count(), 1)
+        self.assertTrue(MessageRecipient.objects.filter(character_id=1, group=None, read=False).exists())
+
+        response = self.client.get(
+            reverse('messaging:mark_all_read'),
+            follow=True
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.redirect_chain), 1)
+        self.assertEqual(response.redirect_chain[0][1], 302)
+        self.assertEqual(response.redirect_chain[0][0], reverse('world:character_home'))
+        self.assertTrue(MessageRecipient.objects.filter(character_id=1, group=None, read=True).exists())
+        self.assertFalse(MessageRecipient.objects.filter(character_id=1, group=None, read=False).exists())
+
+    def test_mark_as_read(self):
+        message_body = 'Nice to meet you, foobar.'
+        response = self.client.post(
+            reverse('messaging:compose'),
+            data={
+                'message_body': message_body,
+                'recipient': ['character_1']
+            },
+            follow=True
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.redirect_chain), 1)
+        self.assertEqual(response.redirect_chain[0][1], 302)
+        self.assertEqual(response.redirect_chain[0][0], reverse('messaging:sent'))
+        self.assertContains(response, message_body)
+        self.assertEqual(CharacterMessage.objects.all().count(), 1)
+        self.assertEqual(MessageRecipientGroup.objects.all().count(), 0)
+        self.assertEqual(MessageRecipient.objects.all().count(), 1)
+        self.assertTrue(MessageRecipient.objects.filter(character_id=1, group=None, read=False).exists())
+
+        response = self.client.get(
+            reverse('messaging:mark_read', kwargs={'recipient_id': 1}),
+            follow=True
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.redirect_chain), 1)
+        self.assertEqual(response.redirect_chain[0][1], 302)
+        self.assertEqual(response.redirect_chain[0][0], reverse('messaging:home'))
+        self.assertTrue(MessageRecipient.objects.filter(character_id=1, group=None, read=True).exists())
+        self.assertFalse(MessageRecipient.objects.filter(character_id=1, group=None, read=False).exists())
+        self.assertNotContains(response, message_body)
+
+        response = self.client.get(reverse('messaging:messages_list'))
+        self.assertContains(response, message_body)
+
+        response = self.client.get(reverse('messaging:sent'))
+        self.assertContains(response, message_body)
+
+        response = self.client.get(
+            reverse('messaging:mark_read', kwargs={'recipient_id': 1}),
+            follow=True
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.redirect_chain), 1)
+        self.assertEqual(response.redirect_chain[0][1], 302)
+        self.assertEqual(response.redirect_chain[0][0], reverse('messaging:home'))
+        self.assertTrue(MessageRecipient.objects.filter(character_id=1, group=None, read=False).exists())
+        self.assertFalse(MessageRecipient.objects.filter(character_id=1, group=None, read=True).exists())
+        self.assertContains(response, message_body)

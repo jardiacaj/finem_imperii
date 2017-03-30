@@ -84,11 +84,13 @@ class Organization(models.Model):
         return character in self.character_members.all()
 
     def is_part_of_violence_monopoly(self):
-        return (
-            True if self.violence_monopoly
-            else False if not self.owner
-            else self.owner.is_part_of_violence_monopoly()
-        )
+        if self.violence_monopoly:
+            return True
+        if self.leaded_organizations.filter(violence_monopoly=True):
+            return True
+        if self.owner:
+            return self.owner.is_part_of_violence_monopoly()
+        return False
 
     def get_open_proposals(self):
         return CapabilityProposal.objects.filter(capability__organization=self, closed=False)

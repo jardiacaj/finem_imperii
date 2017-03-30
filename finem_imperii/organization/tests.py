@@ -70,3 +70,26 @@ class TestOrganizationModel(TestCase):
         self.assertTrue(kingdom.character_is_member(king))
         self.assertTrue(kingdom.character_is_member(other_guy))
 
+    def test_is_part_of_violence_monopoly(self):
+        kingdom = Organization.objects.get(name="Small Kingdom")
+        self.assertTrue(kingdom.is_part_of_violence_monopoly())
+
+    def test_is_part_of_violence_monopoly2(self):
+        kingdom = Organization.objects.get(name="Small King")
+        self.assertTrue(kingdom.is_part_of_violence_monopoly())
+
+    def test_is_part_of_violence_monopoly3(self):
+        kingdom = Organization.objects.get(name="Governor of some plains")
+        self.assertTrue(kingdom.is_part_of_violence_monopoly())
+
+    def test_is_part_of_violence_monopoly4(self):
+        kingdom = Organization.objects.get(name="Helper of the governor of some plains")
+        self.assertTrue(kingdom.is_part_of_violence_monopoly())
+
+    def test_is_part_of_violence_monopoly5(self):
+        kingdom = Organization.objects.get(name="Small Federation")
+        self.assertFalse(kingdom.is_part_of_violence_monopoly())
+
+    def test_is_part_of_violence_monopoly6(self):
+        kingdom = Organization.objects.get(name="President of the Small Federation")
+        self.assertFalse(kingdom.is_part_of_violence_monopoly())

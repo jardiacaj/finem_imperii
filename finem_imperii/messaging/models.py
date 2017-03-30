@@ -39,7 +39,7 @@ class CharacterMessage(models.Model):
         return (
             ["organization_{}".format(group.organization.id) for group in self.messagerecipientgroup_set.all()]
             +
-            ["organization_{}".format(recipient.character.id) for recipient in self.messagerecipient_set.filter(group=None)]
+            ["character_{}".format(recipient.character.id) for recipient in self.messagerecipient_set.filter(group=None)]
         )
 
 

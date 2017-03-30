@@ -1,0 +1,49 @@
+- model: auth.User
+  pk: 1
+  fields:
+    username: alice
+    email: alice@localhost
+
+- model: world.Character
+  pk: 1
+  fields:
+    name: King
+    world_id: 2
+    location_id: 1001
+    oath_sworn_to_id: 102
+    owner_user_id: 1
+
+- model: world.Character
+  pk: 2
+  fields:
+    name: Kingdom Member
+    world_id: 2
+    location_id: 1001
+    oath_sworn_to_id: 102
+    owner_user_id: 1
+
+- model: world.Character
+  pk: 3
+  fields:
+    name: Stateless char
+    world_id: 2
+    location_id: 1001
+    owner_user_id: 1
+
+- model: organization.Organization
+  pk: 101
+  fields:
+    world_id: 2
+    is_position: false
+    owner_and_leader_locked: false
+    character_members:
+      - 1
+      - 2
+- model: organization.Organization
+  pk: 102
+  fields:
+    world_id: 2
+    is_position: true
+    owner_and_leader_locked: false
+    character_members:
+      - 1

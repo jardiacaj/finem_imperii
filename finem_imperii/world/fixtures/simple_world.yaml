@@ -144,6 +144,8 @@
     decision_taking: distributed
     membership_type: character
     election_period_months: 0
+    character_members:
+      - 1
 - model: organization.Organization
   pk: 110
   fields:
@@ -159,6 +161,8 @@
     decision_taking: distributed
     membership_type: character
     election_period_months: 0
+    character_members:
+      - 2
 - model: organization.Organization
   pk: 111
   fields:

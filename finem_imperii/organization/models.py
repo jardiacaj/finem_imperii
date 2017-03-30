@@ -63,9 +63,9 @@ class Organization(models.Model):
         return descendants
 
     def get_membership_including_descendants(self):
-        members = list(self.character_members.all())
+        members = set(self.character_members.all())
         for child in self.owned_organizations.all():
-            members += child.get_membership_including_descendants()
+            members |= child.get_membership_including_descendants()
         return members
 
     def character_can_use_capabilities(self, character):

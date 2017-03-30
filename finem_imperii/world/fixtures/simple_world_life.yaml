@@ -29,7 +29,7 @@
   fields:
     name: Stateless char
     world_id: 2
-    location_id: 1001
+    location_id: 1008
     owner_user_id: 1
 
 - model: organization.Organization

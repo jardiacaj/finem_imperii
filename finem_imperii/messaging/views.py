@@ -79,22 +79,23 @@ class ComposeView(View):
                 if split[0] == 'settlement':
                     for character in request.hero.location.character_set.all():
                         character_count += 1
-                        MessageRecipient.objects.get_or_create(message=message, character=character)
+                        message.add_recipient(character)
                 elif split[0] == 'region':
                     for character in Character.objects.filter(location__tile=request.hero.location.tile):
                         character_count += 1
-                        MessageRecipient.objects.create(message=message, character=character)
+                        message.add_recipient(character)
                 elif split[0] == 'organization':
                     organization_count += 1
                     organization = get_object_or_404(Organization, id=split[1])
                     group = MessageRecipientGroup.objects.create(message=message, organization=organization)
                     for character in organization.character_members.all():
-                        MessageRecipient.objects.create(message=message, character=character, group=group)
+                        message.add_recipient(character, group)
                 elif split[0] == 'character':
                     character_count += 1
                     character = get_object_or_404(Character, id=split[1])
-                    MessageRecipient.objects.create(message=message, character=character)
+                    message.add_recipient(character)
                 else:
+                    message.delete()
                     messages.error(request, "Invalid recipient.", "danger")
                     return self.get(request, prefilled_text=message_body)
 

@@ -28,6 +28,15 @@ class CharacterMessage(models.Model):
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, blank=True, null=True)
     safe = models.BooleanField(default=False)
 
+    def add_recipient(self, character, group=None):
+        try:
+            recipient = MessageRecipient.objects.get(message=self, character=character)
+            if recipient.group and not group:
+                recipient.group = None
+                recipient.save()
+        except MessageRecipient.DoesNotExist:
+            MessageRecipient.objects.create(message=self, character=character, group=group)
+
     def get_nice_recipient_list(self):
         return (
             [group.organization for group in self.messagerecipientgroup_set.all()]

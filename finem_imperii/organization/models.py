@@ -71,22 +71,12 @@ class Organization(models.Model):
     def character_can_use_capabilities(self, character):
         if character in self.character_members.all():
             return True
-        for member_organization in self.organization_members.all():
-            if (
-                            member_organization.leader and
-                            member_organization.leader.is_position and
-                            character in member_organization.organization_members.all()
-            ):
-                return True
-            if member_organization.is_position and character in member_organization.organization_members.all():
-                return True
-        return False
 
     def organizations_character_can_apply_capabilities_to_this_with(self, character, capability_type):
         result = []
         capabilities = Capability.objects.filter(applying_to=self, type=capability_type)
         for capability in capabilities:
-            if capability.organization.character_is_member(character):
+            if capability.organization.character_can_use_capabilities(character):
                 result.append(capability.organization)
         return result
 

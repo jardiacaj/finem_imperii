@@ -78,12 +78,12 @@
                     {% endfor %}
                 </div>
 
-                <legend>Favourited characters</legend>
+                <legend>Personal contacts</legend>
                 <div class="form-group">
                     {% for relationship in request.hero.messagerelationship_set.all %}
                         <input type="checkbox" name="recipient" id="recipient_character_{{ relationship.to_character.id }}" value="character_{{ relationship.to_character.id }}">
                         <label for="recipient_character_{{ relationship.to_character.id }}">{{ relationship.to_character.get_html_link|safe }}</label>
-                        <a href="{% url 'messaging:unfavourite_character' relationship.to_character.id %}">
+                        <a href="{% url 'messaging:remove_contact' relationship.to_character.id %}">
                             <span class="text-danger"><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span></span>
                         </a>
                         {% if not forloop.last %}<br>{% endif %}

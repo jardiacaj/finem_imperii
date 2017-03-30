@@ -109,7 +109,7 @@ class ComposeView(View):
 
 
 @inchar_required
-def favourite_character(request, character_id):
+def add_contact(request, character_id):
     target_character = get_object_or_404(Character, id=character_id, world=request.hero.world)
     created = MessageRelationship.objects.get_or_create(from_character=request.hero, to_character=target_character)[1]
     if created:
@@ -118,7 +118,7 @@ def favourite_character(request, character_id):
 
 
 @inchar_required
-def unfavourite_character(request, character_id):
+def remove_contact(request, character_id):
     target_character = get_object_or_404(Character, id=character_id, world=request.hero.world)
     try:
         target_relationship = MessageRelationship.objects.get(from_character=request.hero, to_character=target_character)

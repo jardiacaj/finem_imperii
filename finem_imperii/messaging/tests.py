@@ -453,14 +453,14 @@ class TestCompose(TestCase):
         response = self.client.get(reverse('messaging:favourites'))
         self.assertNotContains(response, message_body)
 
-    def test_character_favourite_unfavourite(self):
+    def test_add_and_remove_contact(self):
         target_character = Character.objects.get(id=3)
 
         response = self.client.get(reverse('messaging:compose'))
         self.assertContains(response, target_character.name, count=1)
 
         response = self.client.get(
-            reverse('messaging:favourite_character', kwargs={'character_id': target_character.id}),
+            reverse('messaging:add_contact', kwargs={'character_id': target_character.id}),
             follow=True
         )
         self.assertEqual(response.status_code, 200)
@@ -473,7 +473,7 @@ class TestCompose(TestCase):
         self.assertContains(response, target_character.name, count=2)
 
         response = self.client.get(
-            reverse('messaging:favourite_character', kwargs={'character_id': target_character.id}),
+            reverse('messaging:add_contact', kwargs={'character_id': target_character.id}),
             follow=True
         )
         self.assertEqual(response.status_code, 200)
@@ -486,7 +486,7 @@ class TestCompose(TestCase):
         self.assertContains(response, target_character.name, count=2)
 
         response = self.client.get(
-            reverse('messaging:unfavourite_character', kwargs={'character_id': target_character.id}),
+            reverse('messaging:remove_contact', kwargs={'character_id': target_character.id}),
             follow=True
         )
         self.assertEqual(response.status_code, 200)
@@ -499,7 +499,7 @@ class TestCompose(TestCase):
         self.assertContains(response, target_character.name, count=1)
 
         response = self.client.get(
-            reverse('messaging:unfavourite_character', kwargs={'character_id': target_character.id}),
+            reverse('messaging:remove_contact', kwargs={'character_id': target_character.id}),
             follow=True
         )
         self.assertEqual(response.status_code, 200)

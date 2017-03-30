@@ -5,7 +5,7 @@
     <h1 class="page-header">{{ character.get_html_name|safe }}</h1>
 
     <a href="{% url 'messaging:compose_character' character.id %}" class="btn btn-primary">Send message</a>
-    <a href="{% url 'messaging:favourite_character' character.id %}" class="btn btn-primary">Favourite</a>
-    <a href="{% url 'messaging:unfavourite_character' character.id %}" class="btn btn-primary">Unfavourite</a>
+    <a href="{% url 'messaging:add_contact' character.id %}" class="btn btn-primary">Add to contacts</a>
+    <a href="{% url 'messaging:remove_contact' character.id %}" class="btn btn-primary">Remove from contacts</a>
 
 {% endblock %}

@@ -158,3 +158,11 @@ class TestOrganizationModel(TestCase):
         self.assertEqual(candidacy.election, election)
         self.assertEqual(candidacy.candidate, president.get_position_occupier())
         self.assertEqual(candidacy.retired, False)
+
+    def test_get_html_name(self):
+        for organization in Organization.objects.all():
+            html_name = organization.get_html_name()
+            self.assertIn(organization.name, html_name)
+            self.assertIn(organization.color, html_name)
+            if organization.get_position_occupier():
+                self.assertIn(organization.get_position_occupier().name, html_name)

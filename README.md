@@ -2,6 +2,10 @@
 [![Coverage Status](https://coveralls.io/repos/github/jardiacaj/finem_imperii/badge.svg?branch=master)](https://coveralls.io/github/jardiacaj/finem_imperii?branch=master)
 [![Coverage Status](https://coveralls.io/repos/github/jardiacaj/finem_imperii/badge.svg?branch=HEAD)](https://coveralls.io/github/jardiacaj/finem_imperii?branch=HEAD)
 
+[![Code Climate](https://codeclimate.com/github/jardiacaj/finem_imperii/badges/gpa.svg)](https://codeclimate.com/github/jardiacaj/finem_imperii)
+[![Test Coverage](https://codeclimate.com/github/jardiacaj/finem_imperii/badges/coverage.svg)](https://codeclimate.com/github/jardiacaj/finem_imperii/coverage)
+[![Issue Count](https://codeclimate.com/github/jardiacaj/finem_imperii/badges/issue_count.svg)](https://codeclimate.com/github/jardiacaj/finem_imperii)
+
 # Finem Imperii
 
 Finem Imperii is a web-based role-strategy multiplayer game. Characters are part of a long-lived open persistent world placed in the late middle ages, where they will usually take the role of prominent members of society (e.g. commanders, traders, treasurers, rulers). Cooperation among players is a core part of the game, and is required for most scenarios.

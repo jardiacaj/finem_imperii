@@ -11,9 +11,3 @@ install:
 
 script:
  - docker run -e COVERALLS_REPO_TOKEN="$COVERALLS_REPO_TOKEN" -it jardiacaj/finem_imperii /var/www/finem_imperii/devops/alpine_tests.sh
-
-after_success:
- - if [ "$TRAVIS_BRANCH" == "master" ]; then
-   docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-   docker push jardiacaj/finem_imperii;
-   fi

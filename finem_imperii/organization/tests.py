@@ -61,3 +61,12 @@ class TestOrganizationModel(TestCase):
         self.assertEqual(len(result), 2)
         self.assertIn(king_position, result)
         self.assertIn(kingdom, result)
+
+    def test_character_is_member(self):
+        king = Character.objects.get(id=1)
+        other_guy = Character.objects.get(id=2)
+        kingdom = Organization.objects.get(name="Small Kingdom")
+
+        self.assertTrue(kingdom.character_is_member(king))
+        self.assertTrue(kingdom.character_is_member(other_guy))
+

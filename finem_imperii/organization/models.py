@@ -81,12 +81,7 @@ class Organization(models.Model):
         return result
 
     def character_is_member(self, character):
-        if character in self.character_members.all():
-            return True
-        for member_organization in self.organization_members.all():
-            if member_organization.character_is_member(character):
-                return True
-        return False
+        return character in self.character_members.all()
 
     def is_part_of_violence_monopoly(self):
         return (

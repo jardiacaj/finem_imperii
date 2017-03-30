@@ -3,6 +3,8 @@
   fields:
     username: alice
     email: alice@localhost
+    # password is "test"
+    password: 'pbkdf2_sha256$10000$vkRy7QauoLLj$ry+3xm3YX+YrSXbri8s3EcXDIrx5ceM+xQjtpLdw2oE='
 
 - model: world.Character
   pk: 1

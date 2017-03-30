@@ -18,7 +18,6 @@ class TestOrganizationModel(TestCase):
     def test_get_descendants_including_self(self):
         kingdom = Organization.objects.get(name="Governor of some plains")
         descendants = kingdom.get_descendants_list(including_self=True)
-        print(descendants)
         self.assertEqual(len(descendants), 2)
         self.assertIn(Organization.objects.get(name="Governor of some plains"), descendants)
         self.assertIn(Organization.objects.get(name="Helper of the governor of some plains"), descendants)
@@ -117,8 +116,16 @@ class TestOrganizationModel(TestCase):
         external_capabilities = organization.external_capabilities_to_this()
         self.assertEqual(len(external_capabilities), 0)
 
-    def test_external_capabilities_to_this(self):
+    def test_external_capabilities_to_this2(self):
         organization = Organization.objects.get(name="Small Kingdom")
         external_capabilities = organization.external_capabilities_to_this()
         self.assertEqual(len(external_capabilities), 8)
         self.assertTrue(external_capabilities.filter(type=Capability.BAN, organization__name="Small King").exists())
+
+    def test_get_position_occupier(self):
+        organization = Organization.objects.get(name="Small King")
+        self.assertEqual(organization.get_position_occupier().id, 1)
+
+    def test_get_position_occupier2(self):
+        organization = Organization.objects.get(name="Small Kingdom")
+        self.assertEqual(organization.get_position_occupier(), None)

@@ -3,7 +3,8 @@ from django.conf.urls import url
 from decorators import inchar_required
 from organization.views import organization_view, document_view, capability_view, \
     DocumentCapabilityView, ProposalView, election_convoke_view, capability_required_decorator, \
-    banning_view, candidacy_view, elect_view, election_view, election_list_view, DiplomacyCapabilityView
+    banning_view, candidacy_view, elect_view, election_view, election_list_view, DiplomacyCapabilityView, \
+    MilitaryStanceCapabilityView
 
 urlpatterns = [
     url(r'^(?P<organization_id>[0-9]+)$', organization_view, name='view'),
@@ -20,4 +21,6 @@ urlpatterns = [
         inchar_required(capability_required_decorator(DocumentCapabilityView.as_view())), name='document_capability'),
     url(r'^capability/(?P<capability_id>[0-9]+)/diplomacy/(?P<target_organization_id>[0-9]+)$',
         inchar_required(capability_required_decorator(DiplomacyCapabilityView.as_view())), name='diplomacy_capability'),
+    url(r'^capability/(?P<capability_id>[0-9]+)/stance/(?P<target_organization_id>[0-9]+)$',
+        inchar_required(capability_required_decorator(MilitaryStanceCapabilityView.as_view())), name='military_stance_capability'),
 ]

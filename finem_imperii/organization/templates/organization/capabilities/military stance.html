@@ -9,7 +9,7 @@
     <thead>
         <tr>
             <td>State</td>
-            <td>Default stance</td>
+            <td>Stance</td>
             <td>Region specific stances</td>
             <td>Actions</td>
         </tr>
@@ -18,7 +18,14 @@
         {% for state in states %}
             <tr>
                 <td>{{ state.get_html_link|safe }}</td>
-                <td>{{ state.default_stance.get_stance|capfirst }}</td>
+                <td>
+                    {{ state.default_stance.get_stance|capfirst }}
+                    {% if state.default_stance.stance_type == 'default' %}
+                        <small>auto</small>
+                    {% else %}
+                        <small>manual</small>
+                    {% endif %}
+                </td>
                 <td>
                     {% for region_stance in state.region_stances %}
                         {{ region_stance.region }}: {{ region_stance.get_stance }}
@@ -26,6 +33,13 @@
                     {% empty %}
                         <small>- none -</small>
                     {% endfor %}
+                </td>
+                <td>
+                    <a
+                            href="{% url 'organization:military_stance_capability' capability.id state.id %}"
+                            class="btn btn-primary">
+                        Change
+                    </a>
                 </td>
             </tr>
         {% empty %}

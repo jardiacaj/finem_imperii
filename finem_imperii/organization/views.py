@@ -9,8 +9,8 @@ from django.views.generic.base import View
 
 from decorators import inchar_required
 from organization.models import Organization, PolicyDocument, Capability, CapabilityProposal, CapabilityVote, \
-    PositionCandidacy, PositionElectionVote, PositionElection, OrganizationRelationship
-from world.models import Character
+    PositionCandidacy, PositionElectionVote, PositionElection, OrganizationRelationship, MilitaryStance
+from world.models import Character, Tile
 
 
 @inchar_required
@@ -349,7 +349,46 @@ class DiplomacyCapabilityView(View):
             messages.success(request, "A vote has been started regarding your action", "success")
         else:
             messages.success(request, "Done!", "success")
-        return redirect(reverse('organization:diplomacy_capability', kwargs={'capability_id': capability_id, 'target_organization_id': target_organization_id}))
+        return redirect(reverse(
+            'organization:diplomacy_capability',
+            kwargs={'capability_id': capability_id, 'target_organization_id': target_organization_id})
+        )
+
+
+class MilitaryStanceCapabilityView(View):
+    def get(self, request, capability_id, target_organization_id):
+        capability = get_object_or_404(Capability, id=capability_id, type=Capability.MILITARY_STANCE)
+        target_organization = get_object_or_404(Organization, id=target_organization_id)
+        regions = list(
+            capability.applying_to.world.tile_set.exclude(type__in=(Tile.DEEPSEA, Tile.SHORE)).order_by('name')
+        )
+        for region in regions:
+            region.stance = capability.applying_to.get_region_stance_to(target_organization, region)
+
+        context = {
+            'capability': capability,
+            'target_organization': target_organization,
+            'stance': capability.applying_to.get_default_stance_to(target_organization),
+            'regions': regions,
+            'subtemplate': 'organization/capabilities/military stance_target.html',
+        }
+        return render(request, 'organization/capability.html', context)
+
+    @transaction.atomic
+    def post(self, request, capability_id, target_organization_id):
+        capability = get_object_or_404(Capability, id=capability_id, type=Capability.MILITARY_STANCE)
+        target_organization = get_object_or_404(Organization, id=target_organization_id)
+
+
+
+        if capability.organization.decision_taking == Organization.DEMOCRATIC:
+            messages.success(request, "A vote has been started regarding your action", "success")
+        else:
+            messages.success(request, "Done!", "success")
+        return redirect(reverse(
+            'organization:military_stance_capability',
+            kwargs={'capability_id': capability_id, 'target_organization_id': target_organization_id})
+        )
 
 
 class ProposalView(View):

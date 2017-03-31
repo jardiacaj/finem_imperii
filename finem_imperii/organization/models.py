@@ -125,6 +125,16 @@ class Organization(models.Model):
             to_organization=state,
         ).exclude(region=None)
 
+    def get_region_stance_to(self, state, region):
+        try:
+            return MilitaryStance.objects.get(
+                from_organization=self,
+                to_organization=state,
+                region=region
+            )
+        except MilitaryStance.DoesNotExist:
+            pass
+
     @transaction.atomic
     def convoke_elections(self, months_to_election=6):
         if not self.is_position:
@@ -565,11 +575,13 @@ class MilitaryStance(models.Model):
         unique_together = (
             ("from_organization", "to_organization", "region"),
         )
+    DEFAULT = 'default'
     AVOID_BATTLE = 'avoid battle'
     DEFENSIVE = 'defensive'
     AGGRESSIVE = 'aggressive'
 
     STANCE_CHOICES=(
+        (DEFAULT, "automatic by diplomatic relationship"),
         (AVOID_BATTLE, AVOID_BATTLE),
         (DEFENSIVE, DEFENSIVE),
         (AGGRESSIVE, AGGRESSIVE),
@@ -578,10 +590,10 @@ class MilitaryStance(models.Model):
     from_organization = models.ForeignKey(Organization, related_name='mil_stances_stemming')
     to_organization = models.ForeignKey(Organization, related_name='mil_stances_receiving')
     region = models.ForeignKey(Tile, related_name='+', null=True, blank=True)
-    stance_type = models.CharField(max_length=20, choices=STANCE_CHOICES, null=True, blank=True)
+    stance_type = models.CharField(max_length=20, choices=STANCE_CHOICES, default=DEFAULT)
 
     def get_stance(self):
-        if self.stance_type:
+        if self.stance_type != MilitaryStance.DEFAULT:
             return self.stance_type
         relationship = self.from_organization.get_relationship_to(self.to_organization)
         if relationship.relationship in (OrganizationRelationship.PEACE, ):

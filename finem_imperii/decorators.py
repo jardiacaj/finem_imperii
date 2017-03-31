@@ -5,8 +5,8 @@ from world.models import Character
 
 
 def inchar_required(func):
+    @login_required
     def inner(*args, **kwargs):
-        login_required()
         hero = get_object_or_404(
             Character,
             pk=args[0].session.get('character_id', 0),

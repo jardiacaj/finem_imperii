@@ -119,7 +119,7 @@ class TestOrganizationModel(TestCase):
     def test_external_capabilities_to_this2(self):
         organization = Organization.objects.get(name="Small Kingdom")
         external_capabilities = organization.external_capabilities_to_this()
-        self.assertEqual(len(external_capabilities), 8)
+        self.assertEqual(len(external_capabilities), 9)
         self.assertTrue(external_capabilities.filter(type=Capability.BAN, organization__name="Small King").exists())
 
     def test_get_position_occupier(self):

@@ -1,6 +1,7 @@
 from django.test import TestCase
 
-from organization.models import Organization, Capability, OrganizationRelationship, PositionElection, PositionCandidacy
+from organization.models import Organization, Capability, OrganizationRelationship, PositionElection, PositionCandidacy, \
+    MilitaryStance
 from world.models import Character, Tile
 
 
@@ -166,3 +167,49 @@ class TestOrganizationModel(TestCase):
             self.assertIn(organization.color, html_name)
             if organization.get_position_occupier():
                 self.assertIn(organization.get_position_occupier().name, html_name)
+
+    def test_get_default_stances(self):
+        organization0 = Organization.objects.get(name="Small Democracy")
+        organization1 = Organization.objects.get(name="Small Kingdom")
+        organization2 = Organization.objects.get(name="Small commonwealth")
+
+        self.assertEqual(organization0.get_default_stance_to(organization1).get_stance(), MilitaryStance.DEFENSIVE)
+        self.assertEqual(organization0.get_default_stance_to(organization2).get_stance(), MilitaryStance.DEFENSIVE)
+        self.assertEqual(organization2.get_default_stance_to(organization0).get_stance(), MilitaryStance.DEFENSIVE)
+
+    def test_get_diplomatically_based_default_stances(self):
+        organization0 = Organization.objects.get(name="Small Democracy")
+        organization1 = Organization.objects.get(name="Small Kingdom")
+        relationship = organization0.get_relationship_to(organization1)
+        relationship.set_relationship(OrganizationRelationship.WAR)
+        self.assertEqual(organization0.get_default_stance_to(organization1).get_stance(), MilitaryStance.AGGRESSIVE)
+
+        relationship.set_relationship(OrganizationRelationship.ALLIANCE)
+        self.assertEqual(organization0.get_default_stance_to(organization1).get_stance(), MilitaryStance.AVOID_BATTLE)
+
+    def test_specially_set_stances(self):
+        organization0 = Organization.objects.get(name="Small Democracy")
+        organization1 = Organization.objects.get(name="Small Kingdom")
+        relationship = organization0.get_relationship_to(organization1)
+        relationship.set_relationship(OrganizationRelationship.WAR)
+        stance = organization0.get_default_stance_to(organization1)
+        stance.stance_type = MilitaryStance.AVOID_BATTLE
+        stance.save()
+        self.assertEqual(organization0.get_default_stance_to(organization1).get_stance(), MilitaryStance.AVOID_BATTLE)
+
+    def test_region_stance(self):
+        organization0 = Organization.objects.get(name="Small Democracy")
+        organization1 = Organization.objects.get(name="Small Kingdom")
+        tile = Tile.objects.get(name="Some plains")
+        stance = MilitaryStance.objects.create(
+            from_organization=organization0,
+            to_organization=organization1,
+            region=tile,
+            stance_type=MilitaryStance.AGGRESSIVE
+        )
+        result = organization0.get_region_stances_to(organization1)
+        self.assertEqual(result.count(), 1)
+        self.assertEqual(result[0], stance)
+
+        result = organization1.get_region_stances_to(organization0)
+        self.assertEqual(result.count(), 0)

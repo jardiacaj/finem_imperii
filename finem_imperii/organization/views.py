@@ -117,6 +117,16 @@ def capability_view(request, capability_id):
                 state.relationship_in = state.get_relationship_to(capability.applying_to)
                 context['states'].append(state)
 
+    if capability.type == Capability.MILITARY_STANCE:
+        if capability.applying_to.violence_monopoly:
+            context['states'] = []
+            for state in capability.applying_to.world.get_violence_monopolies():
+                if state == capability.applying_to:
+                    continue
+                state.default_stance = capability.applying_to.get_default_stance_to(state)
+                state.region_stances = capability.applying_to.get_region_stances_to(state)
+                context['states'].append(state)
+
     return render(request, 'organization/capability.html', context)
 
 

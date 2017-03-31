@@ -112,6 +112,19 @@ class Organization(models.Model):
     def get_relationship_from(self, organization):
         return organization.get_relationship_to(self)
 
+    def get_default_stance_to(self, state):
+        return MilitaryStance.objects.get_or_create(
+            from_organization=self,
+            to_organization=state,
+            region=None
+        )[0]
+
+    def get_region_stances_to(self, state):
+        return MilitaryStance.objects.filter(
+            from_organization=self,
+            to_organization=state,
+        ).exclude(region=None)
+
     @transaction.atomic
     def convoke_elections(self, months_to_election=6):
         if not self.is_position:
@@ -564,5 +577,15 @@ class MilitaryStance(models.Model):
 
     from_organization = models.ForeignKey(Organization, related_name='mil_stances_stemming')
     to_organization = models.ForeignKey(Organization, related_name='mil_stances_receiving')
-    region = models.ForeignKey(Tile, related_name='+')
-    stance_type = models.CharField(max_length=20, choices=STANCE_CHOICES)
+    region = models.ForeignKey(Tile, related_name='+', null=True, blank=True)
+    stance_type = models.CharField(max_length=20, choices=STANCE_CHOICES, null=True, blank=True)
+
+    def get_stance(self):
+        if self.stance_type:
+            return self.stance_type
+        relationship = self.from_organization.get_relationship_to(self.to_organization)
+        if relationship.relationship in (OrganizationRelationship.PEACE, ):
+            return MilitaryStance.DEFENSIVE
+        if relationship.relationship in (OrganizationRelationship.WAR, OrganizationRelationship.BANNED):
+            return MilitaryStance.AGGRESSIVE
+        return MilitaryStance.AVOID_BATTLE

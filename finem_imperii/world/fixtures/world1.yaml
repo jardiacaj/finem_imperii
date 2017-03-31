@@ -85,8 +85,8 @@
     applying_to: 1
 - model: organization.Capability
   fields:
-    organization_id: 2
-    type: 'heir'
+    organization_id: 1
+    type: 'military stance'
     applying_to: 2
 
 - model: organization.Organization
@@ -215,6 +215,11 @@
     organization_id: 6
     type: 'memberships'
     applying_to: 5
+- model: organization.Capability
+  fields:
+    organization_id: 6
+    type: 'military stance'
+    applying_to: 5
 
 - model: organization.Organization
   pk: 7
@@ -286,6 +291,11 @@
     organization_id: 7
     type: 'convoke elections'
     applying_to: 8
+- model: organization.Capability
+  fields:
+    organization_id: 7
+    type: 'military stance'
+    applying_to: 7
 
 - model: organization.Organization
   pk: 8

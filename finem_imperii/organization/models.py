@@ -257,6 +257,7 @@ class Capability(models.Model):
     ELECT = 'elect'
     CANDIDACY = 'candidacy'
     CONVOKE_ELECTIONS = 'convoke elections'
+    MILITARY_STANCE = 'military stance'
 
     TYPE_CHOICES = (
         (BAN, 'ban'),
@@ -271,6 +272,7 @@ class Capability(models.Model):
         (ELECT, 'elect'),
         (CANDIDACY, 'present candidacy'),
         (CONVOKE_ELECTIONS, 'convoke elections'),
+        (MILITARY_STANCE, 'military orders'),
     )
 
     organization = models.ForeignKey(Organization)
@@ -543,3 +545,24 @@ class OrganizationRelationship(models.Model):
 
     def __str__(self):
         return "Relationship {} to {}".format(self.from_organization, self.to_organization)
+
+
+class MilitaryStance(models.Model):
+    class Meta:
+        unique_together = (
+            ("from_organization", "to_organization", "region"),
+        )
+    AVOID_BATTLE = 'avoid battle'
+    DEFENSIVE = 'defensive'
+    AGGRESSIVE = 'aggressive'
+
+    STANCE_CHOICES=(
+        (AVOID_BATTLE, AVOID_BATTLE),
+        (DEFENSIVE, DEFENSIVE),
+        (AGGRESSIVE, AGGRESSIVE),
+    )
+
+    from_organization = models.ForeignKey(Organization, related_name='mil_stances_stemming')
+    to_organization = models.ForeignKey(Organization, related_name='mil_stances_receiving')
+    region = models.ForeignKey(Tile, related_name='+')
+    stance_type = models.CharField(max_length=20, choices=STANCE_CHOICES)

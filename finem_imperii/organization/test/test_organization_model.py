@@ -214,8 +214,8 @@ class TestOrganizationModel(TestCase):
         result = organization1.get_region_stances_to(organization0)
         self.assertEqual(result.count(), 0)
 
-        result = organization1.get_region_stance_to(organization0, tile)
+        result = organization0.get_region_stance_to(organization1, tile)
         self.assertEqual(result.get_stance(), MilitaryStance.AGGRESSIVE)
 
-        result = organization1.get_region_stance_to(organization0, Tile.objects.get(name="Some forest"))
+        result = organization0.get_region_stance_to(organization1, Tile.objects.get(name="Some forest"))
         self.assertEqual(result.get_stance(), MilitaryStance.DEFENSIVE)

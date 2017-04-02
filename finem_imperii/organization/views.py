@@ -359,7 +359,7 @@ class DiplomacyCapabilityView(View):
 class MilitaryStanceCapabilityView(View):
     def get(self, request, capability_id, target_organization_id):
         capability = get_object_or_404(Capability, id=capability_id, type=Capability.MILITARY_STANCE)
-        target_organization = get_object_or_404(Organization, id=target_organization_id)
+        target_organization = get_object_or_404(Organization, id=target_organization_id, violence_monopoly=True)
         regions = list(
             capability.applying_to.world.tile_set.exclude(type__in=(Tile.DEEPSEA, Tile.SHORE)).order_by('name')
         )
@@ -385,7 +385,8 @@ class MilitaryStanceCapabilityView(View):
         target_organization = get_object_or_404(
             Organization,
             id=target_organization_id,
-            world=capability.applying_to.world
+            world=capability.applying_to.world,
+            violence_monopoly=True
         )
         target_stance = request.POST.get('new_stance')
         if target_stance not in [o[0] for o in MilitaryStance.STANCE_CHOICES]:

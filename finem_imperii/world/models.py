@@ -378,6 +378,7 @@ class WorldUnit(models.Model):
     status = models.CharField(max_length=30, choices=STATUS_CHOICES)
     mobilization_status_since = models.IntegerField()
     current_status_since = models.IntegerField()
+    generation_size = models.IntegerField(default=0, help_text="Only used in tests that need generated units")
 
     @staticmethod
     def get_unit_types(nice=False):

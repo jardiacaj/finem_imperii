@@ -41,6 +41,48 @@
     location_id: 1005
     owner_user_id: 1
 
+- model: world.Character
+  pk: 5
+  fields:
+    name: Warrior
+    world_id: 2
+    location_id: 1007
+    owner_user_id: 1
+- model: world.WorldUnit
+  pk: 1
+  fields:
+    owner_character_id: 5
+    world: 2
+    location_id: 1007
+    name: Unit of Warrior
+    recruitment_type: conscript
+    type: infantry
+    status: following
+    mobilization_status_since: 0
+    current_status_since: 0
+    generation_size: 30
+
+- model: world.Character
+  pk: 6
+  fields:
+    name: Commonwealth Warrior
+    world_id: 2
+    location_id: 1007
+    owner_user_id: 1
+- model: world.WorldUnit
+  pk: 2
+  fields:
+    owner_character_id: 6
+    world: 2
+    location_id: 1007
+    name: Unit of Commonwealth Warrior
+    recruitment_type: conscript
+    type: infantry
+    status: following
+    mobilization_status_since: 0
+    current_status_since: 0
+    generation_size: 30
+
 
 - model: world.World
   pk: 2
@@ -243,6 +285,8 @@
     decision_taking: democratic
     membership_type: character
     election_period_months: 0
+    character_members:
+     - 6
 - model: organization.Capability
   fields:
     organization_id: 105
@@ -424,6 +468,76 @@
     character_members:
       - 4
 
+- model: organization.Organization
+  pk: 112
+  fields:
+    world_id: 2
+    name: "Horde"
+    color: "928439"
+    description: "Warriors!"
+    is_position: false
+    owner_id: null
+    leader_id: 113
+    owner_and_leader_locked: false
+    violence_monopoly: true
+    decision_taking: distributed
+    membership_type: character
+    election_period_months: 0
+    character_members:
+      - 5
+- model: organization.Capability
+  fields:
+    organization_id: 112
+    type: 'conscript'
+    applying_to: 112
+- model: organization.Capability
+  fields:
+    organization_id: 112
+    type: 'candidacy'
+    applying_to: 112
+- model: organization.Capability
+  fields:
+    organization_id: 112
+    type: 'elect'
+    applying_to: 112
+- model: organization.Capability
+  fields:
+    organization_id: 112
+    type: 'military stance'
+    applying_to: 112
+
+- model: organization.Organization
+  pk: 113
+  fields:
+    world_id: 2
+    name: "Horde leader"
+    color: "928439"
+    description: "Leader of horde"
+    is_position: true
+    position_type: inherited
+    owner_id: null
+    leader_id: null
+    owner_and_leader_locked: false
+    violence_monopoly: false
+    decision_taking: distributed
+    membership_type: character
+    election_period_months: 25
+    character_members:
+      - 5
+
+- model: organization.OrganizationRelationship
+  fields:
+    from_organization: 112
+    to_organization: 105
+    relationship: 0
+
+- model: organization.OrganizationRelationship
+  fields:
+    from_organization: 105
+    to_organization: 112
+    relationship: 0
+
+
 - model: world.Region
   pk: 101
   fields:
@@ -521,6 +635,7 @@
     z_pos: 1
     y_pos: 0.2
     type: mountain
+    controlled_by: 112
 - model: world.Tile
   pk: 109
   fields:

@@ -126,14 +126,11 @@ class Organization(models.Model):
         ).exclude(region=None)
 
     def get_region_stance_to(self, state, region):
-        try:
-            return MilitaryStance.objects.get(
-                from_organization=self,
-                to_organization=state,
-                region=region
-            )
-        except MilitaryStance.DoesNotExist:
-            pass
+        return MilitaryStance.objects.get_or_create(
+            from_organization=self,
+            to_organization=state,
+            region=region
+        )[0]
 
     @transaction.atomic
     def convoke_elections(self, months_to_election=6):
@@ -390,6 +387,19 @@ class CapabilityProposal(models.Model):
             except Organization.DoesNotExist:
                 pass
 
+        elif self.capability.type == Capability.MILITARY_STANCE:
+            try:
+                target_organization = Organization.objects.get(id=proposal['target_organization_id'])
+                if 'region_id' in proposal.keys():
+                    region = Tile.objects.get(id=proposal['region_id'])
+                    target_stance = self.capability.applying_to.get_region_stance_to(target_organization, region)
+                else:
+                    target_stance = self.capability.applying_to.get_default_stance_to(target_organization)
+                target_stance.stance_type = proposal.get('target_stance')
+                target_stance.save()
+            except (Tile.DoesNotExist, Organization.DoesNotExist):
+                pass
+
         else:
             raise Exception("Executing unknown capability action_type '{}'".format(self.capability.type))
 
@@ -601,3 +611,19 @@ class MilitaryStance(models.Model):
         if relationship.relationship in (OrganizationRelationship.WAR, OrganizationRelationship.BANNED):
             return MilitaryStance.AGGRESSIVE
         return MilitaryStance.AVOID_BATTLE
+
+    def get_html_stance(self):
+        stance = self.get_stance()
+        if stance == MilitaryStance.DEFENSIVE:
+            bootstrap_type = 'primary'
+        elif stance == MilitaryStance.AGGRESSIVE:
+            bootstrap_type = 'danger'
+        elif stance == MilitaryStance.AVOID_BATTLE:
+            bootstrap_type = 'info'
+        else:
+            bootstrap_type = 'default'
+
+        return '<span class="label label-{bootstrap_type}">{stance}</span>'.format(
+            bootstrap_type=bootstrap_type,
+            stance =stance
+        )

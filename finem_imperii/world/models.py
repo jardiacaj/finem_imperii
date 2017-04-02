@@ -100,6 +100,9 @@ class Tile(models.Model):
             raise Exception("Can't calculate distance between worlds")
         return euclidean_distance(self.get_absolute_coords(), tile.get_absolute_coords())
 
+    def is_on_ground(self):
+        return self.type in (Tile.PLAINS, Tile.FOREST, Tile.MOUNTAIN)
+
 
 class Settlement(models.Model):
     name = models.CharField(max_length=100)

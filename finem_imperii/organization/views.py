@@ -2,6 +2,7 @@ import json
 
 from django.contrib import messages
 from django.db import transaction
+from django.http.response import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls.base import reverse
 from django.views.decorators.http import require_POST
@@ -376,10 +377,32 @@ class MilitaryStanceCapabilityView(View):
 
     @transaction.atomic
     def post(self, request, capability_id, target_organization_id):
-        capability = get_object_or_404(Capability, id=capability_id, type=Capability.MILITARY_STANCE)
-        target_organization = get_object_or_404(Organization, id=target_organization_id)
+        capability = get_object_or_404(
+            Capability,
+            id=capability_id,
+            type=Capability.MILITARY_STANCE
+        )
+        target_organization = get_object_or_404(
+            Organization,
+            id=target_organization_id,
+            world=capability.applying_to.world
+        )
+        target_stance = request.POST.get('new_stance')
+        if target_stance not in [o[0] for o in MilitaryStance.STANCE_CHOICES]:
+            raise Http404()
 
+        proposal = {
+            'target_organization_id': target_organization.id,
+            'target_stance': target_stance,
+        }
 
+        if 'region_id' in request.POST.keys():
+            region = get_object_or_404(Tile, id=request.POST['region_id'], world=capability.applying_to.world)
+            if not region.is_on_ground():
+                raise Http404()
+            proposal['region_id'] = region.id
+
+        capability.create_proposal(request.hero, proposal)
 
         if capability.organization.decision_taking == Organization.DEMOCRATIC:
             messages.success(request, "A vote has been started regarding your action", "success")

@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Docker Deployment" type="docker-deploy" factoryName="Docker Deployment" singleton="true" server-name="Docker">
-    <deployment type="docker-image">
+    <deployment type="dockerfile" path="$PROJECT_DIR$/Dockerfile">
       <settings>
         <option name="JSONFilePath" value="" />
         <option name="command" value="" />
@@ -12,10 +12,11 @@
             <DockerPortBindingImpl>
               <option name="containerPort" value="80" />
               <option name="hostIp" value="127.0.0.1" />
-              <option name="hostPort" value="80" />
+              <option name="hostPort" value="8080" />
             </DockerPortBindingImpl>
           </list>
         </option>
+        <option name="portBindingsExpanded" value="true" />
         <option name="startBrowserSettings">
           <browser />
         </option>

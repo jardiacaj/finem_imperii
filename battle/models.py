@@ -20,6 +20,13 @@ class Battle(models.Model):
         for organization in conflict:
             BattleOrganization.objects.create(battle=self, organization=organization, z=z)
             z = True
+        for unit in tile.get_units():
+            violence_monopoly = unit.owner_character.get_violence_monopoly()
+            if violence_monopoly in conflict:
+                BattleCharacter.objects.get_or_create(
+                    battle_organization=self.battleorganization_set.get(organization=violence_monopoly),
+                    character=unit.owner_character,
+                )
 
     def get_absolute_url(self):
         return reverse('battle:view_battle', kwargs={'battle_id': self.id})
@@ -117,12 +124,11 @@ class BattleOrganization(models.Model):
 class BattleCharacter(models.Model):
     class Meta:
         unique_together = (
-            ("battle", "character"),
+            ("battle_organization", "character"),
         )
 
-    battle = models.ForeignKey(Battle)
+    battle_organization = models.ForeignKey(BattleOrganization)
     character = models.ForeignKey('world.Character')
-    z = models.BooleanField(default=False)
 
 
 class BattleTurn(models.Model):
@@ -175,7 +181,6 @@ class OrderListElement(models.Model):
     order = models.ForeignKey(Order)
     battle_unit = models.ForeignKey('BattleUnit')
     position = models.SmallIntegerField()
-
 
 class BattleUnit(models.Model):
     orders = models.ManyToManyField(through=OrderListElement, to=Order)

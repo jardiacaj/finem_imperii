@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.http.response import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 
-from battle.models import Battle, BattleUnit, Order, OrderListElement, BattleCharacter
+#from battle.models import Battle, BattleUnit, Order, OrderListElement, BattleCharacter
 from decorators import inchar_required
 
 

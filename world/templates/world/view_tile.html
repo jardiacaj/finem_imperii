@@ -1,0 +1,42 @@
+{% extends "base/base.html" %}
+
+{% load staticfiles %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-3 placeholder">
+            <h1 class="">
+                {{ world.name }}
+            </h1>
+            <p id="region_name"></p>
+            <p id="region_type"></p>
+            <p id="settlement_name"></p>
+        </div>
+
+        <div class="col-md-9 placeholder">
+            <iframe
+                    id="world_map"
+                    class="placeholder"
+                    scrolling="no"
+                    style="height: 600px; width: 100%; padding: 0; border: 0;"
+                    src="{% url 'world:world_iframe' world.id %}"
+            ></iframe>
+        </div>
+    </div>
+
+
+
+    {% include "world/renderer.html" %}
+
+    <script>
+        function region_callback(region) {
+            $("#region_type").text(region ? region.type : '');
+            $("#region_name").text(region ? region.name : '');
+        }
+        function settlement_callback(settlement) {
+            $("#settlement_name").text(settlement ? settlement.name : '');
+        }
+    </script>
+
+{% endblock %}

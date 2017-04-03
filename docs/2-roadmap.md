@@ -49,14 +49,14 @@ Allocated: 3 days
 
  - Organizations part 2. (1 day) (finished)
  - Elections. (1 day) (finished)
- - Diplomacy. (1 day)
+ - Diplomacy. (1 day) (finished)
 
 Allocated: 3 days (vacation!)
 
 ## Week 5
 
- - Messaging. (1 day)
- - CI and Dockerization (1 day)
+ - Messaging. (1 day) (finished)
+ - CI and Dockerization (1 day) (finished)
  - Secession and rebellion. (1 day)
  - Battle rework. (1 day)
 
@@ -64,11 +64,12 @@ Allocated: 4 days
  
 ## Week 6
 
+ - Region view. (1/2 day)
  - Conquest. (1 day)
  - Battle rendering. (1,5 days)
  - Battle orders. (2 days)
 
-Allocated: 4,5 days
+Allocated: 5 days
 
 ## Week 7 
 
@@ -96,7 +97,9 @@ Allocated: 4 days
 
 ## Week 10
 
-Buffer for unplanned issues.
+ - Help system
+ - Character/player prestige
+ - Character start page
 
 ## Week 11
  

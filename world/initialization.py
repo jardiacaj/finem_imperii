@@ -26,6 +26,8 @@ class WorldInitializer:
             self.initialize_organization(organization)
         for tile in self.world.tile_set.all():
             self.initialize_tile(tile)
+        for unit in self.world.worldunit_set.all():
+            self.initialize_unit(unit)
         self.world.initialized = True
         self.world.save()
 
@@ -95,3 +97,22 @@ class WorldInitializer:
                 trained_soldier=(random.getrandbits(4) == 0) if age_months >= NPC.VERY_YOUNG_AGE_LIMIT else False,
                 skill_fighting=random.randint(0, 80)
             )
+
+    def initialize_unit(self, unit):
+        for i in range(unit.generation_size):
+            NPC.objects.create(
+                name="Soldier {} of {}".format(i, unit),
+                male=random.getrandbits(1),
+                able=True,
+                age_months=20*12,
+                origin=unit.location,
+                residence=None,
+                location=unit.location,
+                workplace=None,
+                unit=unit,
+                trained_soldier=random.getrandbits(4) == 0,
+                skill_fighting = random.randint(0, 80)
+            )
+
+        unit.generation_size = 0
+        unit.save()

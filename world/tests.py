@@ -4,7 +4,8 @@ from django.test import TestCase
 from django.urls.base import reverse
 
 from organization.models import Organization
-from world.models import World, Character
+from world.initialization import WorldInitializer
+from world.models import World, Character, WorldUnit
 
 
 class TestHome(TestCase):
@@ -94,3 +95,13 @@ class TestTileView(TestCase):
                 follow=True
             )
             self.assertEqual(response.status_code, 200)
+
+
+class TestInitialization(TestCase):
+    fixtures = ['simple_world']
+
+    def test_initialize_unit(self):
+        unit = WorldUnit.objects.get(id=1)
+        initializer = WorldInitializer(world=unit.world)
+        initializer.initialize_unit(unit)
+        self.assertEqual(unit.soldier.count(), 30)

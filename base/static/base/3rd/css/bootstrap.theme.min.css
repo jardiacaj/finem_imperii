@@ -1,0 +1,14 @@
+--2017-04-03 16:17:56--  https://raw.githubusercontent.com/jardiacaj/finem_imperii/master/base/static/base/css/bootstrap.min.css
+Loaded CA certificate '/etc/ssl/certs/ca-certificates.crt'
+Resolving raw.githubusercontent.com... 151.101.112.133
+Connecting to raw.githubusercontent.com|151.101.112.133|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 125577 (123K) [text/plain]
+Saving to: ‘bootstrap.min.css’
+
+     0K .......... .......... .......... .......... .......... 40%  865K 0s
+    50K .......... .......... .......... .......... .......... 81% 2.18M 0s
+   100K .......... .......... ..                              100% 2.49M=0.09s
+
+2017-04-03 16:17:56 (1.34 MB/s) - ‘bootstrap.min.css’ saved [125577/125577]
+

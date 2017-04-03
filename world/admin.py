@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from world.initialization import WorldInitializer
+from world.initialization import initialize_world
 from world.models import Region, Tile, Settlement, Building, NPC, Character, WorldUnit, World
 
 admin.site.register(Region)
@@ -12,11 +12,10 @@ admin.site.register(Character)
 admin.site.register(WorldUnit)
 
 
-def initialize_world(modeladmin, request, queryset):
+def initialize_world_admin_action(modeladmin, request, queryset):
     for world in queryset.all():
-        initializer = WorldInitializer(world)
-        initializer.initialize()
-initialize_world.short_description = "Initialize world"
+        initialize_world(world)
+initialize_world_admin_action.short_description = "Initialize world"
 
 
 def pass_turn(modeladmin, request, queryset):
@@ -27,4 +26,4 @@ pass_turn.short_description = "Pass turn"
 
 @admin.register(World)
 class WorldAdmin(admin.ModelAdmin):
-    actions = [pass_turn, initialize_world]
+    actions = [pass_turn, initialize_world_admin_action]

@@ -76,18 +76,29 @@ def organizations_with_battle_ready_units(tile):
 
 
 def battle_ready_units_in_tile(tile):
-    return world.models.WorldUnit.objects\
-        .filter(location__tile=tile)\
-        .exclude(status=world.models.WorldUnit.NOT_MOBILIZED)
+    return tile.get_units().exclude(status=world.models.WorldUnit.NOT_MOBILIZED)
 
 
-def opponents_in_organization_list(organizations, region):
+def opponents_in_organization_list(organizations, tile):
     potential_conflicts = []
 
     input_list = list(organizations)
     while len(input_list):
         i = input_list.pop()
         for j in input_list:
-            if i.get_region_stance_to(j, region).get_stance() == organization.models.MilitaryStance.AGGRESSIVE:
+            if i.get_region_stance_to(j, tile).get_stance() == organization.models.MilitaryStance.AGGRESSIVE:
                 potential_conflicts.append([i, j])
     return potential_conflicts
+
+
+def get_largest_conflict_in_list(conflicts, tile):
+    result = None
+    max_soldiers = 0
+    for conflict in conflicts:
+        soldiers = 0
+        for unit in battle_ready_units_in_tile(tile):
+            if unit.owner_character.get_violence_monopoly() in conflict:
+                soldiers += unit.get_fighting_soldiers().count()
+        if soldiers > max_soldiers:
+            result = conflict
+    return result

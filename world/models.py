@@ -13,7 +13,7 @@ from messaging.models import CharacterMessage, MessageRecipient
 from organization.models import Organization
 from world.templatetags.extra_filters import nice_hours
 from world.turn import TurnProcessor, turn_to_date, organizations_with_battle_ready_units, \
-    opponents_in_organization_list
+    opponents_in_organization_list, get_largest_conflict_in_list
 
 Point = namedtuple('Point', ['x', 'z'])
 
@@ -111,8 +111,13 @@ class Tile(models.Model):
     def is_on_ground(self):
         return self.type in (Tile.PLAINS, Tile.FOREST, Tile.MOUNTAIN)
 
+    def get_units(self):
+        return WorldUnit.objects.filter(location__tile=self)
+
     def trigger_battles(self):
         conflicts = opponents_in_organization_list(organizations_with_battle_ready_units(self))
+        conflict = get_largest_conflict_in_list(conflicts, self)
+
 
 class Settlement(models.Model):
     name = models.CharField(max_length=100)
@@ -442,3 +447,6 @@ class WorldUnit(models.Model):
             raise WorldUnitStatusChangeException("A unit can only follow you if you are in the same location.")
         self.status = new_status
         self.save()
+
+    def get_fighting_soldiers(self):
+        return self.soldier.filter(able=True)

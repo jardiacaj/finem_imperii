@@ -10,7 +10,7 @@ from django.views.generic.base import View
 
 from battle.models import Battle
 from decorators import inchar_required
-from name_generator.name_generator import NameGenerator
+from name_generator.name_generator import get_names, get_surnames
 from organization.models import Organization
 from world.models import Character, World, Settlement, WorldUnit, WorldUnitStatusChangeException, NPC, Tile
 from world.renderer import render_world_for_view
@@ -75,11 +75,10 @@ class CharacterCreationView(View):
     template_name = 'world/create_character.html'
 
     def get(self, request, *args, **kwargs):
-        name_generator = NameGenerator()
         return render(request, self.template_name, {
             'world': get_object_or_404(World, id=kwargs['world_id']),
-            'names': name_generator.get_names(limit=100),
-            'surnames': name_generator.get_surnames(limit=100),
+            'names': get_names(limit=100),
+            'surnames': get_surnames(limit=100),
         })
 
     @staticmethod
@@ -105,8 +104,7 @@ class CharacterCreationView(View):
         name = request.POST.get('name')
         surname = request.POST.get('surname')
 
-        name_generator = NameGenerator()
-        if name not in name_generator.get_names() or surname not in name_generator.get_surnames():
+        if name not in get_names() or surname not in get_surnames():
             return self.fail_post_with_error(request, world_id, "Select a valid name/surname")
 
         character = Character.objects.create(

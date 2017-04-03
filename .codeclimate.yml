@@ -31,4 +31,5 @@ exclude_paths:
 - "*/tests/*"
 - "*manage*"
 - "*settings*"
-- "*test*.py"
+- "*/test*.py"
+- "*/test/*.py"

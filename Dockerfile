@@ -9,6 +9,7 @@ RUN ln -s /usr/bin/python3.5 /usr/bin/python
 RUN mkdir /var/www/finem_imperii
 WORKDIR /var/www/finem_imperii
 ADD . .
+ADD .git .git
 RUN pip3 install -r requirements.txt
 
 # Application

@@ -1,4 +1,4 @@
-finem_imperii/db.sqlite3
+db.sqlite3
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -91,17 +91,17 @@ ENV/
 .ropeproject
 
 # User-specific stuff:
-finem_imperii/.idea/workspace.xml
-finem_imperii/.idea/tasks.xml
+.idea/workspace.xml
+.idea/tasks.xml
 
 # Sensitive or high-churn files:
-finem_imperii/.idea/dataSources
-finem_imperii/.idea/dataSources.ids
-finem_imperii/.idea/dataSources.xml
-finem_imperii/.idea/dataSources.local.xml
-finem_imperii/.idea/sqlDataSources.xml
-finem_imperii/.idea/dynamic.xml
-finem_imperii/.idea/uiDesigner.xml
+.idea/dataSources
+.idea/dataSources.ids
+.idea/dataSources.xml
+.idea/dataSources.local.xml
+.idea/sqlDataSources.xml
+.idea/dynamic.xml
+.idea/uiDesigner.xml
 
 # My other stuff
 local

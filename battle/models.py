@@ -6,6 +6,8 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.forms.models import model_to_dict
 
+import world.models
+
 Coordinates = namedtuple("Coordinates", ['x', 'z'])
 
 
@@ -14,10 +16,15 @@ class Battle(models.Model):
     current = models.BooleanField(default=True)
 
     def initialize_from_conflict(self, conflict, tile):
-        pass
+        z = False
+        for organization in conflict:
+            BattleOrganization.objects.create(battle=self, organization=organization, z=z)
+            z = True
 
     def get_absolute_url(self):
         return reverse('battle:view_battle', kwargs={'battle_id': self.id})
+
+
 
     def render_for_view(self):
         result = {
@@ -69,16 +76,6 @@ class Battle(models.Model):
                                                 order=unit.orders.all()[0])
                 unit_in_turn.save()
 
-    def start_battle(self, char1, char2):
-        z = False
-        for wchar in (char1, char2):
-            bchar = BattleCharacter(battle=self, character=wchar, z=z)
-            bchar.save()
-            z = True
-            for wunit in wchar.worldunit_set.all():
-                bunit = BattleUnit(owner=bchar, world_unit=wunit)
-                bunit.save()
-
     def check_all_ready(self):
         all_ready = True
         for combatant in self.battlecharacter_set.all():
@@ -106,6 +103,17 @@ class Battle(models.Model):
             unit.save()
 
 
+class BattleOrganization(models.Model):
+    class Meta:
+        unique_together = (
+            ("battle", "organization"),
+        )
+
+    battle = models.ForeignKey(Battle)
+    organization = models.ForeignKey('organization.Organization')
+    z = models.BooleanField(default=False)
+
+
 class BattleCharacter(models.Model):
     class Meta:
         unique_together = (
@@ -115,7 +123,6 @@ class BattleCharacter(models.Model):
     battle = models.ForeignKey(Battle)
     character = models.ForeignKey('world.Character')
     z = models.BooleanField(default=False)
-    ready = models.BooleanField(default=False)
 
 
 class BattleTurn(models.Model):

@@ -13,8 +13,8 @@ RUN pip3 install -r requirements.txt
 
 # Application
 RUN rm finem_imperii/db.sqlite3 || true
-RUN ./db_create.sh
-RUN finem_imperii/manage.py collectstatic --no-input
+RUN devops/db_create.sh
+RUN ./manage.py collectstatic --no-input
 
 # Apache
 RUN rm /etc/apache2/conf.d/languages.conf /etc/apache2/conf.d/userdir.conf /etc/apache2/conf.d/info.conf

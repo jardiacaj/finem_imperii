@@ -11,7 +11,8 @@ from django.db.models.aggregates import Avg
 
 from messaging.models import CharacterMessage, MessageRecipient
 from world.templatetags.extra_filters import nice_hours
-from world.turn import TurnProcessor, turn_to_date
+from world.turn import TurnProcessor, turn_to_date, organizations_with_battle_ready_units, \
+    opponents_in_organization_list
 
 Point = namedtuple('Point', ['x', 'z'])
 
@@ -109,6 +110,8 @@ class Tile(models.Model):
     def is_on_ground(self):
         return self.type in (Tile.PLAINS, Tile.FOREST, Tile.MOUNTAIN)
 
+    def trigger_battles(self):
+        conflicts = opponents_in_organization_list(organizations_with_battle_ready_units(self))
 
 class Settlement(models.Model):
     name = models.CharField(max_length=100)

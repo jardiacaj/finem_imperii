@@ -1,4 +1,6 @@
 import json
+import world.models
+import world.templatetags.extra_filters
 
 from django.db import models, transaction
 from django.contrib.auth.models import User
@@ -6,8 +8,6 @@ from django.db.models.aggregates import Count
 from django.urls.base import reverse
 from django.utils.html import escape
 
-from world.models import Tile, Character
-from world.templatetags.extra_filters import nice_turn
 
 
 class Organization(models.Model):
@@ -51,8 +51,8 @@ class Organization(models.Model):
     election_period_months = models.IntegerField(default=0)
     current_election = models.ForeignKey('PositionElection', blank=True, null=True, related_name='+')
     last_election = models.ForeignKey('PositionElection', blank=True, null=True, related_name='+')
-    heir_first = models.ForeignKey(Character, blank=True, null=True, related_name='first_heir_to')
-    heir_second = models.ForeignKey(Character, blank=True, null=True, related_name='second_heir_to')
+    heir_first = models.ForeignKey('world.Character', blank=True, null=True, related_name='first_heir_to')
+    heir_second = models.ForeignKey('world.Character', blank=True, null=True, related_name='second_heir_to')
 
     def get_descendants_list(self, including_self=False):
         descendants = list()
@@ -96,7 +96,7 @@ class Organization(models.Model):
         return CapabilityProposal.objects.filter(capability__organization=self, closed=False)
 
     def get_all_controlled_tiles(self):
-        return Tile.objects.filter(controlled_by__in=self.get_descendants_list(including_self=True)).all()
+        return world.models.Tile.objects.filter(controlled_by__in=self.get_descendants_list(including_self=True)).all()
 
     def external_capabilities_to_this(self):
         return self.capabilities_to_this.exclude(organization=self)
@@ -245,7 +245,7 @@ class PositionElection(models.Model):
 
     def __str__(self):
         return "{} election for {}".format(
-            nice_turn(self.turn),
+            world.templatetags.extra_filters.nice_turn(self.turn),
             self.position
         )
 
@@ -256,7 +256,7 @@ class PositionCandidacy(models.Model):
             ("election", "candidate"),
         )
     election = models.ForeignKey(PositionElection)
-    candidate = models.ForeignKey(Character)
+    candidate = models.ForeignKey('world.Character')
     description = models.TextField()
     retired = models.BooleanField(default=False)
 
@@ -267,7 +267,7 @@ class PositionElectionVote(models.Model):
             ("election", "voter"),
         )
     election = models.ForeignKey(PositionElection)
-    voter = models.ForeignKey(Character)
+    voter = models.ForeignKey('world.Character')
     candidacy = models.ForeignKey(PositionCandidacy, blank=True, null=True)
 
 
@@ -327,7 +327,7 @@ class Capability(models.Model):
 
 
 class CapabilityProposal(models.Model):
-    proposing_character = models.ForeignKey(Character)
+    proposing_character = models.ForeignKey('world.Character')
     capability = models.ForeignKey(Capability)
     proposal_json = models.TextField()
     vote_end_turn = models.IntegerField()
@@ -356,9 +356,9 @@ class CapabilityProposal(models.Model):
 
         elif self.capability.type == Capability.BAN:
             try:
-                character_to_ban = Character.objects.get(id=proposal['character_id'])
+                character_to_ban = world.models.Character.objects.get(id=proposal['character_id'])
                 self.capability.applying_to.character_members.remove(character_to_ban)
-            except Character.DoesNotExist:
+            except world.models.Character.DoesNotExist:
                 pass
 
             leader_organization = self.capability.applying_to.leader
@@ -398,13 +398,13 @@ class CapabilityProposal(models.Model):
             try:
                 target_organization = Organization.objects.get(id=proposal['target_organization_id'])
                 if 'region_id' in proposal.keys():
-                    region = Tile.objects.get(id=proposal['region_id'])
+                    region = world.models.Tile.objects.get(id=proposal['region_id'])
                     target_stance = self.capability.applying_to.get_region_stance_to(target_organization, region)
                 else:
                     target_stance = self.capability.applying_to.get_default_stance_to(target_organization)
                 target_stance.stance_type = proposal.get('target_stance')
                 target_stance.save()
-            except (Tile.DoesNotExist, Organization.DoesNotExist):
+            except (world.models.Tile.DoesNotExist, Organization.DoesNotExist):
                 pass
 
         else:
@@ -473,7 +473,7 @@ class CapabilityVote(models.Model):
     )
 
     proposal = models.ForeignKey(CapabilityProposal)
-    voter = models.ForeignKey(Character)
+    voter = models.ForeignKey('world.Character')
     vote = models.CharField(max_length=10, choices=VOTE_CHOICES)
 
 
@@ -583,6 +583,13 @@ class OrganizationRelationship(models.Model):
         reverse_relation.relationship = target_relationship
         reverse_relation.save()
 
+    def default_military_stance(self):
+        if self.relationship in (OrganizationRelationship.PEACE,):
+            return MilitaryStance.DEFENSIVE
+        if self.relationship in (OrganizationRelationship.WAR, OrganizationRelationship.BANNED):
+            return MilitaryStance.AGGRESSIVE
+        return MilitaryStance.AVOID_BATTLE
+
     def __str__(self):
         return "Relationship {} to {}".format(self.from_organization, self.to_organization)
 
@@ -606,18 +613,16 @@ class MilitaryStance(models.Model):
 
     from_organization = models.ForeignKey(Organization, related_name='mil_stances_stemming')
     to_organization = models.ForeignKey(Organization, related_name='mil_stances_receiving')
-    region = models.ForeignKey(Tile, related_name='+', null=True, blank=True)
+    region = models.ForeignKey('world.Tile', related_name='+', null=True, blank=True)
     stance_type = models.CharField(max_length=20, choices=STANCE_CHOICES, default=DEFAULT)
 
     def get_stance(self):
         if self.stance_type != MilitaryStance.DEFAULT:
             return self.stance_type
-        relationship = self.from_organization.get_relationship_to(self.to_organization)
-        if relationship.relationship in (OrganizationRelationship.PEACE, ):
-            return MilitaryStance.DEFENSIVE
-        if relationship.relationship in (OrganizationRelationship.WAR, OrganizationRelationship.BANNED):
-            return MilitaryStance.AGGRESSIVE
-        return MilitaryStance.AVOID_BATTLE
+        if self.region:
+            return self.from_organization.get_default_stance_to(self.to_organization).get_stance()
+        else:
+            return self.from_organization.get_relationship_to(self.to_organization).default_military_stance()
 
     def get_html_stance(self):
         stance = self.get_stance()

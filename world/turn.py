@@ -1,6 +1,8 @@
 from django.db import transaction
 
 from messaging.models import CharacterMessage
+import world.models
+import organization.models
 
 months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November',
           'December']
@@ -18,6 +20,7 @@ class TurnProcessor:
     def do_turn(self):
         self.do_travels()
         self.restore_hours()
+        self.trigger_battles()
         self.do_elections()
 
         self.world.current_turn += 1
@@ -57,3 +60,30 @@ class TurnProcessor:
         for character in self.world.character_set.all():
             character.hours_in_turn_left = 15*24
             character.save()
+
+    def trigger_battles(self):
+        for tile in self.world.tile_set.all():
+            tile.trigger_battles()
+
+
+def organizations_with_battle_ready_units(Tile):
+    return organization.models.Organization.objects.filter(
+        leader__character__worldunit__in=battle_ready_units_in_tile(Tile)
+    )
+
+
+def battle_ready_units_in_tile(Tile):
+    return world.models.WorldUnit.objects\
+        .filter(location__tile=Tile)\
+        .exclude(status=world.models.WorldUnit.NOT_MOBILIZED)
+
+
+def opponents_in_organization_list(organizations, region):
+    potential_conflicts = []
+
+    input_list = list(organizations)
+    while len(input_list):
+        i = input_list.pop()
+        for j in input_list:
+            if i.get_region_stance_to(j, region) == organization.models.MilitaryStance.AGGRESSIVE:
+                potential_conflicts.append([])

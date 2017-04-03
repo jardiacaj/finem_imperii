@@ -13,7 +13,7 @@ from messaging.models import CharacterMessage, MessageRecipient
 from organization.models import Organization
 from world.templatetags.extra_filters import nice_hours
 from world.turn import TurnProcessor, turn_to_date, organizations_with_battle_ready_units, \
-    opponents_in_organization_list, get_largest_conflict_in_list
+    opponents_in_organization_list, get_largest_conflict_in_list, create_battle_from_conflict
 
 Point = namedtuple('Point', ['x', 'z'])
 
@@ -117,6 +117,7 @@ class Tile(models.Model):
     def trigger_battles(self):
         conflicts = opponents_in_organization_list(organizations_with_battle_ready_units(self))
         conflict = get_largest_conflict_in_list(conflicts, self)
+        return create_battle_from_conflict(conflict, self)
 
 
 class Settlement(models.Model):

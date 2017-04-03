@@ -1,5 +1,6 @@
 from django.db import transaction
 
+from battle.models import Battle
 from messaging.models import CharacterMessage
 import world.models
 import organization.models
@@ -102,3 +103,12 @@ def get_largest_conflict_in_list(conflicts, tile):
         if soldiers > max_soldiers:
             result = conflict
     return result
+
+
+def create_battle_from_conflict(conflict, tile):
+    battle = Battle.objects.create(
+        tile=tile,
+        current=True,
+    )
+    battle.initialize_from_conflict(conflict, tile)
+    return battle

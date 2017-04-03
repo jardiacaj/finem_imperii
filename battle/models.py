@@ -6,14 +6,15 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.forms.models import model_to_dict
 
-from world.models import Tile
-
 Coordinates = namedtuple("Coordinates", ['x', 'z'])
 
 
 class Battle(models.Model):
-    tile = models.ForeignKey(Tile)
+    tile = models.ForeignKey('world.Tile')
     current = models.BooleanField(default=True)
+
+    def initialize_from_conflict(self, conflict, tile):
+        pass
 
     def get_absolute_url(self):
         return reverse('battle:view_battle', kwargs={'battle_id': self.id})

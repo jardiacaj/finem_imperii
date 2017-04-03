@@ -141,6 +141,16 @@ class TestOrganizationModel(TestCase):
         organization2 = Organization.objects.get(name="Small King")
         self.assertEqual(organization1.get_relationship_from(organization2).relationship, OrganizationRelationship.PEACE)
 
+    def test_get_war_relationship_to(self):
+        organization1 = Organization.objects.get(name="Horde")
+        organization2 = Organization.objects.get(name="Small commonwealth")
+        self.assertEqual(organization1.get_relationship_to(organization2).relationship, OrganizationRelationship.WAR)
+
+    def test_get_war_relationship_from(self):
+        organization1 = Organization.objects.get(name="Small commonwealth")
+        organization2 = Organization.objects.get(name="Horde")
+        self.assertEqual(organization1.get_relationship_from(organization2).relationship, OrganizationRelationship.WAR)
+
     def test_convoke_elections(self):
         democracy = Organization.objects.get(name="Small Democracy")
         president = democracy.leader
@@ -186,6 +196,12 @@ class TestOrganizationModel(TestCase):
 
         relationship.set_relationship(OrganizationRelationship.ALLIANCE)
         self.assertEqual(organization0.get_default_stance_to(organization1).get_stance(), MilitaryStance.AVOID_BATTLE)
+
+    def test_get_diplomatically_based_default_stances2(self):
+        organization0 = Organization.objects.get(name="Horde")
+        organization1 = Organization.objects.get(name="Small commonwealth")
+        self.assertEqual(organization0.get_default_stance_to(organization1).get_stance(), MilitaryStance.AGGRESSIVE)
+        self.assertEqual(organization1.get_default_stance_to(organization0).get_stance(), MilitaryStance.AGGRESSIVE)
 
     def test_specially_set_stances(self):
         organization0 = Organization.objects.get(name="Small Democracy")

@@ -529,13 +529,13 @@
   fields:
     from_organization: 112
     to_organization: 105
-    relationship: 0
+    relationship: war
 
 - model: organization.OrganizationRelationship
   fields:
     from_organization: 105
     to_organization: 112
-    relationship: 0
+    relationship: war
 
 
 - model: world.Region

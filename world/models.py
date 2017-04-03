@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from django.db.models.aggregates import Avg
 
 from messaging.models import CharacterMessage, MessageRecipient
+from organization.models import Organization
 from world.templatetags.extra_filters import nice_hours
 from world.turn import TurnProcessor, turn_to_date, organizations_with_battle_ready_units, \
     opponents_in_organization_list
@@ -317,6 +318,12 @@ class Character(models.Model):
             message=message,
             character=self
         )
+
+    def get_violence_monopoly(self):
+        try:
+            return self.organization_set.get(violence_monopoly=True)
+        except (Organization.DoesNotExist, Organization.MultipleObjectsReturned):
+            return None
 
     def unread_messages(self):
         return CharacterMessage.objects.filter(messagerecipient__character=self, messagerecipient__read=False)

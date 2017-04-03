@@ -66,15 +66,18 @@ class TurnProcessor:
             tile.trigger_battles()
 
 
-def organizations_with_battle_ready_units(Tile):
-    return organization.models.Organization.objects.filter(
-        leader__character__worldunit__in=battle_ready_units_in_tile(Tile)
-    )
+def organizations_with_battle_ready_units(tile):
+    result = []
+    for unit in battle_ready_units_in_tile(tile):
+        violence_monopoly = unit.owner_character.get_violence_monopoly()
+        if violence_monopoly and violence_monopoly not in result:
+            result.append(violence_monopoly)
+    return result
 
 
-def battle_ready_units_in_tile(Tile):
+def battle_ready_units_in_tile(tile):
     return world.models.WorldUnit.objects\
-        .filter(location__tile=Tile)\
+        .filter(location__tile=tile)\
         .exclude(status=world.models.WorldUnit.NOT_MOBILIZED)
 
 
@@ -85,5 +88,6 @@ def opponents_in_organization_list(organizations, region):
     while len(input_list):
         i = input_list.pop()
         for j in input_list:
-            if i.get_region_stance_to(j, region) == organization.models.MilitaryStance.AGGRESSIVE:
-                potential_conflicts.append([])
+            if i.get_region_stance_to(j, region).get_stance() == organization.models.MilitaryStance.AGGRESSIVE:
+                potential_conflicts.append([i, j])
+    return potential_conflicts

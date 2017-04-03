@@ -1,8 +1,8 @@
 from django.test import TestCase
 
-from battle.models import Battle, BattleCharacter
+from battle.models import Battle, BattleCharacter, BattleUnit
 from organization.models import Organization
-from world.models import Tile
+from world.models import Tile, WorldUnit
 
 
 class TestBattleStart(TestCase):
@@ -30,3 +30,8 @@ class TestBattleStart(TestCase):
             battle_organization__organization=Organization.objects.get(id=112),
         ).exists())
         self.assertEqual(BattleCharacter.objects.count(), 2)
+
+        self.assertTrue(BattleUnit.objects.exists())
+        self.assertTrue(BattleUnit.objects.filter(world_unit=WorldUnit.objects.get(id=1),).exists())
+        self.assertTrue(BattleUnit.objects.filter(world_unit=WorldUnit.objects.get(id=2),).exists())
+        self.assertEqual(BattleUnit.objects.count(), 2)

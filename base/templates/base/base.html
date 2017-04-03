@@ -12,7 +12,7 @@
                 </p>
                 <p class="text-center">
                     You are in {{ request.hero.location }}, a {{ request.hero.location.size_name }} in
-                    {{ request.hero.location.tile }}.
+                    {{ request.hero.location.tile.get_html_link|safe }}.
                 </p>
                 <iframe
                         id="minimap"
@@ -22,7 +22,7 @@
                         src="{% url 'world:minimap' %}"
                 ></iframe>
                 <p class="text-center">
-                    {{ request.hero.location.tile }} is
+                    {{ request.hero.location.tile.get_html_link|safe }} is
                     {% if request.hero.location.tile.controlled_by %}
                         part of {{ request.hero.location.tile.controlled_by.get_html_link|safe }}
                     {% else %}

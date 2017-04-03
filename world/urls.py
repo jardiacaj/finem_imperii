@@ -4,7 +4,8 @@ from django.contrib.auth.decorators import login_required
 from decorators import inchar_required
 from world.views import CharacterCreationView, activate_character, character_home, setup_battle, world_view, \
     create_character, minimap_view, world_view_iframe, RecruitmentView, travel_view_iframe, TravelView, unit_view, \
-    unit_rename, unit_transfer, unit_merge, unit_disband, UnitStatusChangeView, character_view
+    unit_rename, unit_transfer, unit_merge, unit_disband, UnitStatusChangeView, character_view, tile_view, \
+    tile_view_iframe
 
 urlpatterns = [
     url(r'^create_character$', create_character, name='create_character'),
@@ -15,6 +16,8 @@ urlpatterns = [
     url(r'^travel_iframe/(?P<settlement_id>[0-9]+)?$', travel_view_iframe, name='travel_iframe'),
     url(r'^recruit$', inchar_required(RecruitmentView.as_view()), name='recruit'),
     url(r'^setup_battle/(?P<rival_char_id>[0-9]+)?$', setup_battle, name='setup_battle'),
+    url(r'^tile/(?P<tile_id>[0-9]+)$', tile_view, name='tile'),
+    url(r'^tile_iframe/(?P<tile_id>[0-9]+)$', tile_view_iframe, name='tile_iframe'),
     url(r'^world/(?P<world_id>[0-9]+)$', world_view, name='world'),
     url(r'^world_iframe/(?P<world_id>[0-9]+)$', world_view_iframe, name='world_iframe'),
     url(r'^character/(?P<character_id>[0-9]+)$', character_view, name='character'),

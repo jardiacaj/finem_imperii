@@ -12,11 +12,12 @@ from battle.models import Battle
 from decorators import inchar_required
 from name_generator.name_generator import NameGenerator
 from organization.models import Organization
-from world.models import Character, World, Settlement, WorldUnit, WorldUnitStatusChangeException, NPC
+from world.models import Character, World, Settlement, WorldUnit, WorldUnitStatusChangeException, NPC, Tile
 from world.renderer import render_world_for_view
 from world.templatetags.extra_filters import nice_hours
 
 
+@inchar_required
 def world_view(request, world_id):
     world = get_object_or_404(World, id=world_id)
     context = {
@@ -25,6 +26,7 @@ def world_view(request, world_id):
     return render(request, 'world/view_world.html', context)
 
 
+@inchar_required
 def world_view_iframe(request, world_id):
     world = get_object_or_404(World, id=world_id)
     context = {
@@ -32,6 +34,26 @@ def world_view_iframe(request, world_id):
         'regions': render_world_for_view(world)
     }
     return render(request, 'world/view_world_iframe.html', context)
+
+
+@inchar_required
+def tile_view(request, tile_id):
+    tile = get_object_or_404(Tile, id=tile_id, world=request.hero.world)
+    context = {
+        'tile': tile,
+        'characters': Character.objects.filter(location__tile=tile),
+    }
+    return render(request, 'world/view_tile.html', context)
+
+
+@inchar_required
+def tile_view_iframe(request, tile_id):
+    tile = get_object_or_404(Tile, id=tile_id, world=request.hero.world)
+    context = {
+        'tile': tile,
+        'regions': render_world_for_view(tile.world)
+    }
+    return render(request, 'world/view_tile_iframe.html', context)
 
 
 @inchar_required

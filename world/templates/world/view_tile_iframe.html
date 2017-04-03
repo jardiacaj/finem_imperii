@@ -1,0 +1,21 @@
+{% extends "base/base_naked.html" %}
+
+{% block body %}
+
+    {% include "world/renderer.html" %}
+
+    <script>
+        $(function () {
+            var map = new MapRenderer({{ regions|safe }});
+            map.focus_to_region({{ tile.id }});
+            map.highlight_settlement({{ request.hero.location_id }});
+            {% if request.hero.travel_destination %}
+                map.add_travel_line({{ request.hero.location_id }}, {{ request.hero.travel_destination_id }});
+            {% endif %}
+
+            map.region_callback = window.parent.region_callback;
+            map.settlement_callback = window.parent.settlement_callback;
+        })
+    </script>
+
+{% endblock %}

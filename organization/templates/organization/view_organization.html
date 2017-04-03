@@ -49,7 +49,7 @@
             <ul>
                 {% for tile in organization.get_all_controlled_tiles %}
                     <li>
-                        <a href="{{ tile.get_asbolute_url }}">{{ tile }}</a>
+                        {{ tile.get_html_link|safe }}
                         {% if tile.controlled_by != organization %}
                             (controlled by <a href="{{ tile.controlled_by.get_absolute_url }}">
                             {{ tile.controlled_by }}</a>

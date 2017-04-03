@@ -92,6 +92,12 @@ class Tile(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('world:tile', kwargs={'tile_id': self.id})
+
+    def get_html_link(self):
+        return '<a href="{url}">{name}</a>'.format(url=self.get_absolute_url(), name=self.name)
+
     def get_absolute_coords(self):
         return Point(x=self.x_pos, z=self.z_pos)
 

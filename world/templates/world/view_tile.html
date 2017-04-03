@@ -4,27 +4,59 @@
 
 {% block content %}
 
+    <h1 class="page-header">
+        {{ tile }}
+        <small>
+            {% if tile.controlled_by %}
+                {{ tile.controlled_by.get_html_link|safe }}
+            {% else %}
+                Barbaric
+            {% endif %}
+        </small>
+    </h1>
+
     <div class="row">
-        <div class="col-md-3 placeholder">
-            <h1 class="">
-                {{ world.name }}
-            </h1>
-            <p id="region_name"></p>
-            <p id="region_type"></p>
-            <p id="settlement_name"></p>
+        <div class="col-lg-3">
+            <h4>Local settlements</h4>
+
+            <ul>
+                {% for settlement in tile.settlement_set.all %}
+                    <li>
+                        {{ settlement|safe }}: {{ settlement.population }} inhabitants
+                    </li>
+                {% empty %}
+                    <li>None</li>
+                {% endfor %}
+            </ul>
         </div>
 
-        <div class="col-md-9 placeholder">
+        <div class="col-lg-9 col-md-12 placeholder">
             <iframe
-                    id="world_map"
+                    id="tile_map"
                     class="placeholder"
                     scrolling="no"
                     style="height: 600px; width: 100%; padding: 0; border: 0;"
-                    src="{% url 'world:world_iframe' world.id %}"
+                    src="{% url 'world:tile_iframe' tile.id %}"
             ></iframe>
         </div>
     </div>
 
+    <hr>
+
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="panel-title">Characters here</h3></div>
+            <div class="panel-body">
+                <ul>
+                    {% for character in characters.all %}
+                        <li>{{ character.get_html_link|safe }}</li>
+                    {% empty %}
+                        <li>No one</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
 
 
     {% include "world/renderer.html" %}

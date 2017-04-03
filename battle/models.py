@@ -114,27 +114,6 @@ class Battle(models.Model):
             unit.save()
 
 
-class BattleOrganization(models.Model):
-    class Meta:
-        unique_together = (
-            ("battle", "organization"),
-        )
-
-    battle = models.ForeignKey(Battle)
-    organization = models.ForeignKey('organization.Organization')
-    z = models.BooleanField(default=False)
-
-
-class BattleCharacter(models.Model):
-    class Meta:
-        unique_together = (
-            ("battle_organization", "character"),
-        )
-
-    battle_organization = models.ForeignKey(BattleOrganization)
-    character = models.ForeignKey('world.Character')
-
-
 class BattleTurn(models.Model):
     class Meta:
         unique_together = (
@@ -167,28 +146,40 @@ class BattleTurn(models.Model):
         return new_turn
 
 
-class Order(models.Model):
-    what = models.CharField(max_length=15)
-    target_location_x = models.IntegerField(null=True)
-    target_location_z = models.IntegerField(null=True)
-    done = models.BooleanField(default=0)
-
-    def target_location_coordinates(self):
-        return Coordinates(self.target_location_x, self.target_location_z)
-
-
-class OrderListElement(models.Model):
+class BattleOrganization(models.Model):
     class Meta:
         unique_together = (
-            ("battle_unit", "position"),
+            ("battle", "organization"),
         )
-    order = models.ForeignKey(Order)
-    battle_unit = models.ForeignKey('BattleUnit')
-    position = models.SmallIntegerField()
+
+    battle = models.ForeignKey(Battle)
+    organization = models.ForeignKey('organization.Organization')
+    z = models.BooleanField(default=False)
+
+
+class BattleOrganizationInTurn(models.Model):
+    battle_organization = models.ForeignKey(BattleOrganization)
+    battle_turn = models.ForeignKey(BattleTurn)
+
+
+class BattleCharacter(models.Model):
+    class Meta:
+        unique_together = (
+            ("battle_organization", "character"),
+        )
+
+    battle_organization = models.ForeignKey(BattleOrganization)
+    character = models.ForeignKey('world.Character')
+
+
+class BattleCharacterInTurn(models.Model):
+    battle_organization_in_turn = models.ForeignKey(BattleOrganizationInTurn)
+    battle_character = models.ForeignKey(BattleCharacter)
+    battle_turn = models.ForeignKey(BattleTurn)
 
 
 class BattleUnit(models.Model):
-    orders = models.ManyToManyField(through=OrderListElement, to=Order)
+    orders = models.ManyToManyField(through='OrderListElement', to='Order')
     owner = models.ForeignKey(BattleCharacter)
     world_unit = models.ForeignKey('world.WorldUnit')
     starting_x_pos = models.IntegerField(default=0)
@@ -207,7 +198,7 @@ class BattleUnitInTurn(models.Model):
     battle_turn = models.ForeignKey(BattleTurn)
     x_pos = models.IntegerField()
     z_pos = models.IntegerField()
-    order = models.ForeignKey(Order, null=True)
+    order = models.ForeignKey('Order', null=True)
 
     def coordinates(self):
         return Coordinates(self.x_pos, self.z_pos)
@@ -284,6 +275,42 @@ class BattleUnitInTurn(models.Model):
                 g_score[neighbor] = tentative_g_score
                 f_score[neighbor] = g_score[neighbor] + self.euclidean_distance(neighbor, goal)
         return None
+
+
+class BattleContubernium(models.Model):
+    pass
+
+
+class BattleContuberniumInTurn(models.Model):
+    pass
+
+
+class BattleNPC(models.Model):
+    pass
+
+
+class BattleNPCInTurn(models.Model):
+    pass
+
+
+class Order(models.Model):
+    what = models.CharField(max_length=15)
+    target_location_x = models.IntegerField(null=True)
+    target_location_z = models.IntegerField(null=True)
+    done = models.BooleanField(default=0)
+
+    def target_location_coordinates(self):
+        return Coordinates(self.target_location_x, self.target_location_z)
+
+
+class OrderListElement(models.Model):
+    class Meta:
+        unique_together = (
+            ("battle_unit", "position"),
+        )
+    order = models.ForeignKey(Order)
+    battle_unit = models.ForeignKey('BattleUnit')
+    position = models.SmallIntegerField()
 
 
 class BattleObject(models.Model):

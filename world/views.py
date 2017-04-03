@@ -112,7 +112,7 @@ class CharacterCreationView(View):
             name=name + ' ' + surname,
             world=world,
             location=random.choice(
-                Settlement.objects.filter(tile__controlled_by=state) if state is not None
+                Settlement.objects.filter(tile__in=state.get_all_controlled_tiles()) if state is not None
                 else Settlement.objects.filter(tile__world=world)
             ),
             oath_sworn_to=None if state is None else state if state.leader is None else state.leader,

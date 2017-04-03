@@ -27,10 +27,12 @@ class Battle(models.Model):
                     battle_organization=self.battleorganization_set.get(organization=violence_monopoly),
                     character=unit.owner_character,
                 )
-                BattleUnit.objects.create(
+                battle_unit = BattleUnit.objects.create(
                     owner=self.battleorganization_set.get(organization=violence_monopoly).battlecharacter_set.get(character=unit.owner_character),
                     world_unit=unit,
                 )
+                battle_unit.create_contubernia()
+
 
     def get_absolute_url(self):
         return reverse('battle:view_battle', kwargs={'battle_id': self.id})
@@ -185,6 +187,20 @@ class BattleUnit(models.Model):
     starting_x_pos = models.IntegerField(default=0)
     starting_z_pos = models.IntegerField(default=0)
 
+    def create_contubernia(self):
+        soldiers = self.world_unit.get_fighting_soldiers()
+        num_contubernia = math.ceil(soldiers.count()/8)
+        rest = soldiers.count() % 8
+        pointer = 0
+        for i in range(num_contubernia):
+            start = pointer
+            end = pointer + (8 if i < rest else 7)
+            contubernium_soldiers = soldiers[start:end]
+            contubernium = BattleContubernium.objects.create(battle_unit=self)
+            for soldier in contubernium_soldiers:
+                BattleSoldier.objects.create(battle_contubernium=contubernium, world_npc=soldier)
+            pointer = end
+
     def __str__(self):
         return self.world_unit.name
 
@@ -278,19 +294,20 @@ class BattleUnitInTurn(models.Model):
 
 
 class BattleContubernium(models.Model):
-    pass
+    battle_unit = models.ForeignKey(BattleUnit)
 
 
 class BattleContuberniumInTurn(models.Model):
-    pass
+    battle_contubernium = models.ForeignKey(BattleContubernium)
 
 
-class BattleNPC(models.Model):
-    pass
+class BattleSoldier(models.Model):
+    world_npc = models.ForeignKey('world.NPC')
+    battle_contubernium = models.ForeignKey(BattleContubernium)
 
 
-class BattleNPCInTurn(models.Model):
-    pass
+class BattleSoldierInTurn(models.Model):
+    battle_soldier = models.ForeignKey(BattleSoldier)
 
 
 class Order(models.Model):

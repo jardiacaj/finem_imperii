@@ -191,7 +191,7 @@
   fields:
     world_id: 2
     name: "Governor of some forest"
-    color: "008691"
+    color: "B300FF"
     description: "Governs some forest"
     is_position: true
     owner_id: 101
@@ -208,7 +208,7 @@
   fields:
     world_id: 2
     name: "Governor of some plains"
-    color: "008691"
+    color: "B300FF"
     description: "Governs some plains"
     is_position: true
     owner_id: 101
@@ -225,7 +225,7 @@
   fields:
     world_id: 2
     name: "Helper of the governor of some plains"
-    color: "008691"
+    color: "B300FF"
     description: "Helps the governor of some plains"
     is_position: true
     owner_id: 110

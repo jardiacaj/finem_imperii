@@ -65,11 +65,12 @@ Allocated: 4 days
 ## Week 6
 
  - Region view. (1/2 day)
+ - Character view. (1/2 day)
  - Conquest. (1 day)
  - Battle rendering. (1,5 days)
  - Battle orders. (2 days)
 
-Allocated: 5 days
+Allocated: 5,5 days
 
 ## Week 7 
 

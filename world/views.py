@@ -42,6 +42,7 @@ def tile_view(request, tile_id):
     context = {
         'tile': tile,
         'characters': Character.objects.filter(location__tile=tile),
+        'units': WorldUnit.objects.filter(location__tile=tile),
     }
     return render(request, 'world/view_tile.html', context)
 

@@ -325,7 +325,10 @@ class Character(models.Model):
         return reverse('world:character', kwargs={'character_id': self.id})
 
     def get_html_name(self):
-        return self.name
+        result = self.name
+        for membership in self.organization_set.all():
+            result += membership.get_bootstrap_icon()
+        return result
 
     def get_html_link(self):
         return '<a href="{}">{}</a>'.format(self.get_absolute_url(), self.get_html_name())

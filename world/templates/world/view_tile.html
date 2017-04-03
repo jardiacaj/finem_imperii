@@ -49,9 +49,24 @@
             <div class="panel-body">
                 <ul>
                     {% for character in characters.all %}
-                        <li>{{ character.get_html_link|safe }}</li>
+                        <li>{{ character.get_html_link|safe }} - {{ character.location }}</li>
                     {% empty %}
                         <li>No one</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="panel-title">Troops here</h3></div>
+            <div class="panel-body">
+                <ul>
+                    {% for unit in units %}
+                        <li>{{ unit }} - {{ unit.location }} - {{ unit.owner_character.get_html_link|safe }}</li>
+                    {% empty %}
+                        <li class="small">None</li>
                     {% endfor %}
                 </ul>
             </div>

@@ -88,7 +88,7 @@
             <ul>
                 {% if organization.membership_type == 'character' %}
                     {% for char_member in organization.character_members.all %}
-                        <li><a href="{{ char_member.get_absolute_url }}">{{ char_member }}</a></li>
+                        <li>{{ char_member.get_html_link|safe }}</li>
                     {% empty %}
                         <li>None</li>
                     {% endfor %}

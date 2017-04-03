@@ -33,3 +33,4 @@ exclude_paths:
 - "*settings*"
 - "*/test*.py"
 - "*/test/*.py"
+- "*/3rd/*.py"

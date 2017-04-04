@@ -1,0 +1,16 @@
+{% if formation %}
+    <p class="text-center"><b>{{ formation.formation|capfirst }} formation</b></p>
+    {% include 'organization/formation_drawing.html' with formation=formation.formation %}<br>
+    <p class="text-center">
+        {% if formation.formation == 'line' %}
+            Depth {{ formation.element_size }}, spacing {{ formation.spacing }}
+        {% elif formation.formation == 'column' %}
+            Width {{ formation.element_size }}, spacing {{ formation.spacing }}
+        {% else %}
+            Spacing {{ formation.spacing }}
+        {% endif %}
+    </p>
+
+{% else %}
+    <p>None</p>
+{% endif %}

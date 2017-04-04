@@ -28,8 +28,8 @@ class BattleFormation(models.Model):
         (IWEDGE, IWEDGE),
     )
     formation = models.CharField(max_length=15, choices=FORMATION_CHOICES)
-    element_size = models.IntegerField()
-    spacing = models.IntegerField()
+    element_size = models.IntegerField(null=True, blank=True)
+    spacing = models.IntegerField(null=True, blank=True)
     organization = models.ForeignKey('organization.Organization')
     battle = models.ForeignKey('Battle', null=True, blank=True)
 

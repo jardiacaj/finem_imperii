@@ -11,6 +11,8 @@
 
 <h4>Current default formation</h4>
 
+{% include 'organization/formation_display.html' with formation=capability.applying_to.get_default_formation %}
+
 <h4>Change formation</h4>
 
 <form class="form-horizontal" method="post" action="{% url 'organization:battle_formation_capability' capability.id %}">

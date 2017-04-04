@@ -1,0 +1,9 @@
+<blockquote>
+    <p>
+        {{ proposal.proposing_character }} proposes to <b>change the default battle formation in
+        {{ proposal.capability.applying_to }}</b>.
+    </p>
+
+</blockquote>
+
+{% include 'organization/formation_display.html' with formation=proposal.get_proposal_json_content %}

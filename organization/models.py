@@ -133,6 +133,15 @@ class Organization(models.Model):
             region=region
         )[0]
 
+    def get_default_formation(self):
+        try:
+            return BattleFormation.objects.get(
+                organization=self,
+                battle=None
+            )
+        except BattleFormation.DoesNotExist:
+            pass
+
     @transaction.atomic
     def convoke_elections(self, months_to_election=6):
         if not self.is_position:
@@ -338,7 +347,7 @@ class CapabilityProposal(models.Model):
     closed = models.BooleanField(default=False)
 
     def execute(self):
-        proposal = json.loads(self.proposal_json)
+        proposal = self.get_proposal_json_content()
         if self.capability.type == Capability.POLICY_DOCUMENT:
             try:
                 if proposal['new']:
@@ -426,6 +435,9 @@ class CapabilityProposal(models.Model):
         self.executed = True
         self.closed = True
         self.save()
+
+    def get_proposal_json_content(self):
+        return json.loads(self.proposal_json)
 
     def issue_vote(self, character, vote):
         CapabilityVote.objects.create(

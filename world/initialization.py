@@ -3,6 +3,7 @@ import random
 
 from django.db import transaction
 
+from name_generator.name_generator import generate_name
 from organization.models import Organization
 from world.models import Building, NPC
 
@@ -27,7 +28,7 @@ def initialize_world(world):
 
 
 def initialize_organization(organization):
-    if organization.position_type == Organization.ELECTED and not organization.character_members.exists():
+    if organization.position_type == Organization.ELECTED and organization.get_position_occupier() is None:
         organization.convoke_elections()
 
 
@@ -49,7 +50,7 @@ def initialize_settlement(settlement):
 
     for i in range(settlement.population):
         male = random.getrandbits(1)
-        name = name_generator.generate_name(male)
+        name = generate_name(male)
 
         over_sixty = (random.getrandbits(4) == 0)
         if over_sixty:

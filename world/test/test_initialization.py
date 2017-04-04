@@ -1,7 +1,8 @@
 from django.test import TestCase
 
-from world.initialization import initialize_unit
-from world.models import WorldUnit
+import world.initialization
+from organization.models import Organization, PositionElection
+from world.models import WorldUnit, Settlement
 
 
 class TestInitialization(TestCase):
@@ -9,5 +10,22 @@ class TestInitialization(TestCase):
 
     def test_initialize_unit(self):
         unit = WorldUnit.objects.get(id=1)
-        initialize_unit(unit)
+        world.initialization.initialize_unit(unit)
         self.assertEqual(unit.soldier.count(), 30)
+
+    def test_initialize_settlement(self):
+        settlement = Settlement.objects.get(id=1007)
+        world.initialization.initialize_settlement(settlement)
+        self.assertEqual(settlement.npc_set.count(), settlement.population)
+
+    def test_initialize_organization_elected(self):
+        organization = Organization.objects.get(name="Democracy leader")
+        organization.character_members.clear()
+        world.initialization.initialize_organization(organization)
+        self.assertTrue(PositionElection.objects.filter(position=organization, closed=False).exists())
+
+    def test_initialize_organization_inherited(self):
+        organization = Organization.objects.get(name="Small King")
+        organization.character_members.clear()
+        world.initialization.initialize_organization(organization)
+        self.assertFalse(PositionElection.objects.filter(position=organization, closed=False).exists())

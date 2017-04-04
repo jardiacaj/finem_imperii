@@ -85,14 +85,14 @@
     applying_to: 1
 - model: organization.Capability
   fields:
-    organization_id: 1
+    organization_id: 2
     type: 'military stance'
-    applying_to: 2
+    applying_to: 1
 - model: organization.Capability
   fields:
-    organization_id: 1
-    type: 'military formation'
-    applying_to: 2
+    organization_id: 2
+    type: 'battle formation'
+    applying_to: 1
 
 - model: organization.Organization
   pk: 3
@@ -228,7 +228,7 @@
 - model: organization.Capability
   fields:
     organization_id: 6
-    type: 'military formation'
+    type: 'battle formation'
     applying_to: 5
 
 - model: organization.Organization
@@ -309,7 +309,7 @@
 - model: organization.Capability
   fields:
     organization_id: 7
-    type: 'military formation'
+    type: 'battle formation'
     applying_to: 7
 
 - model: organization.Organization

@@ -8,6 +8,7 @@ from django.db.models.aggregates import Count
 from django.urls.base import reverse
 from django.utils.html import escape
 
+from battle.models import BattleFormation
 
 
 class Organization(models.Model):
@@ -408,6 +409,16 @@ class CapabilityProposal(models.Model):
                 target_stance.save()
             except (world.models.Tile.DoesNotExist, Organization.DoesNotExist):
                 pass
+
+        elif self.capability.type == Capability.BATTLE_FORMATION:
+            try:
+                formation = BattleFormation.objects.get(organization=self.capability.applying_to, battle=None)
+            except BattleFormation.DoesNotExist:
+                formation = BattleFormation(organization=self.capability.applying_to, battle=None)
+            formation.formation = proposal['formation']
+            formation.spacing = proposal['spacing']
+            formation.element_size = proposal['element_size']
+            formation.save()
 
         else:
             raise Exception("Executing unknown capability action_type '{}'".format(self.capability.type))

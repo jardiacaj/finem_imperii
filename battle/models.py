@@ -6,9 +6,32 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.forms.models import model_to_dict
 
-import world.models
-
 Coordinates = namedtuple("Coordinates", ['x', 'z'])
+
+
+class BattleFormation(models.Model):
+    class Meta:
+        unique_together = (
+            ('organization', 'battle')
+        )
+
+    LINE = 'line'
+    COLUMN = 'column'
+    SQUARE = 'square'
+    WEDGE = 'wedge'
+    IWEDGE = 'iwedge'
+    FORMATION_CHOICES = (
+        (LINE, LINE),
+        (COLUMN, COLUMN),
+        (SQUARE, SQUARE),
+        (WEDGE, WEDGE),
+        (IWEDGE, IWEDGE),
+    )
+    formation = models.CharField(max_length=15, choices=FORMATION_CHOICES)
+    element_size = models.IntegerField()
+    spacing = models.IntegerField()
+    organization = models.ForeignKey('organization.Organization')
+    battle = models.ForeignKey('Battle', null=True, blank=True)
 
 
 class Battle(models.Model):

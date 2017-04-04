@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls.base import reverse
 
+from battle.models import BattleFormation
 from organization.models import Capability, MilitaryStance
 
 
@@ -17,7 +18,7 @@ class TestMilitaryOrders(TestCase):
         user = auth.get_user(self.client)
         self.assertEqual(User.objects.get(id=1), user)
         response = self.client.get(
-            reverse('world:activate_character', kwargs={'char_id':1}),
+            reverse('world:activate_character', kwargs={'char_id': 1}),
             follow=True
         )
         self.assertEqual(response.status_code, 200)
@@ -74,7 +75,6 @@ class TestMilitaryOrders(TestCase):
         stance = MilitaryStance.objects.get(from_organization_id=101, to_organization_id=105, region=None)
         self.assertEqual(stance.get_stance(), MilitaryStance.AGGRESSIVE)
 
-
     def test_post_new_region_stance(self):
         capability = Capability.objects.get(organization__id=102, type=Capability.MILITARY_STANCE, applying_to_id=101)
         response = self.client.post(
@@ -110,3 +110,63 @@ class TestMilitaryOrders(TestCase):
             follow=True
         )
         self.assertEqual(response.status_code, 404)
+
+
+class TestBattleFormation(TestCase):
+    fixtures = ["simple_world"]
+
+    def setUp(self):
+        self.client.post(
+            reverse('account:login'),
+            {'username': 'alice', 'password': 'test'},
+        )
+        self.client.get(
+            reverse('world:activate_character', kwargs={'char_id': 1}),
+            follow=True
+        )
+
+    def test_view(self):
+        capability = Capability.objects.get(
+            organization__id=102,
+            type=Capability.BATTLE_FORMATION,
+            applying_to_id=101
+        )
+
+        response = self.client.get(capability.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get(
+            reverse('organization:battle_formation_capability', kwargs={
+                'capability_id': capability.id
+            })
+        )
+        self.assertEqual(response.status_code, 405)
+
+    def test_set_formation(self):
+        capability = Capability.objects.get(
+            organization__id=102,
+            type=Capability.BATTLE_FORMATION,
+            applying_to_id=101
+        )
+
+        response = self.client.post(
+            reverse('organization:battle_formation_capability', kwargs={'capability_id': capability.id}),
+            data={
+                'new_formation': 'line',
+                'line_depth': 2,
+                'line_spacing': 3
+            },
+            follow=True
+        )
+
+        self.assertEqual(len(response.redirect_chain), 1)
+        self.assertEqual(response.redirect_chain[0][1], 302)
+        self.assertEqual(response.redirect_chain[0][0], capability.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(BattleFormation.objects.count(), 1)
+        self.assertTrue(BattleFormation.objects.filter(battle=None, organization_id=101).exists())
+        formation = BattleFormation.objects.get(battle=None, organization_id=101)
+        self.assertEqual(formation.formation, 'line')
+        self.assertEqual(formation.spacing, 3)
+        self.assertEqual(formation.element_size, 2)

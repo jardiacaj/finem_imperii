@@ -8,6 +8,7 @@ from django.urls.base import reverse
 from django.views.decorators.http import require_POST
 from django.views.generic.base import View
 
+from battle.models import BattleFormation
 from decorators import inchar_required
 from organization.models import Organization, PolicyDocument, Capability, CapabilityProposal, CapabilityVote, \
     PositionCandidacy, PositionElectionVote, PositionElection, OrganizationRelationship, MilitaryStance
@@ -242,6 +243,56 @@ def banning_view(request, capability_id):
     else:
         messages.success(request, "Done!", "success")
     return redirect(capability.organization.get_absolute_url())
+
+
+@require_POST
+@inchar_required
+@capability_required_decorator
+def formation_view(request, capability_id):
+    capability = get_object_or_404(Capability, id=capability_id, type=Capability.BATTLE_FORMATION)
+
+    new_formation = request.POST['new_formation']
+    if new_formation == BattleFormation.LINE:
+        element_size = int(request.POST['line_depth'])
+        spacing = int(request.POST['line_spacing'])
+        if not 0 < element_size <= 10 or not spacing <= 15:
+            raise Http404("Invalid settings")
+    elif new_formation == BattleFormation.COLUMN:
+        element_size = int(request.POST['column_width'])
+        spacing = int(request.POST['column_spacing'])
+        if not 0 < element_size <= 10 or not spacing <= 15:
+            raise Http404("Invalid settings")
+    elif new_formation == BattleFormation.SQUARE:
+        element_size = None
+        spacing = int(request.POST['square_spacing'])
+        if not spacing <= 15:
+            raise Http404("Invalid settings")
+    elif new_formation == BattleFormation.WEDGE:
+        element_size = None
+        spacing = int(request.POST['wedge_spacing'])
+        if not spacing <= 15:
+            raise Http404("Invalid settings")
+    elif new_formation == BattleFormation.IWEDGE:
+        element_size = None
+        spacing = int(request.POST['iwedge_spacing'])
+        if not spacing <= 15:
+            raise Http404("Invalid settings")
+    else:
+        raise Http404("Invalid formation")
+
+    proposal = {
+        'formation': new_formation,
+        'spacing': spacing,
+        'element_size': element_size
+    }
+
+    capability.create_proposal(request.hero, proposal)
+
+    if capability.organization.decision_taking == Organization.DEMOCRATIC:
+        messages.success(request, "A vote has been started regarding your action", "success")
+    else:
+        messages.success(request, "Done!", "success")
+    return redirect(capability.get_absolute_url())
 
 
 class DocumentCapabilityView(View):

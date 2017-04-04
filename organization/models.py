@@ -285,6 +285,7 @@ class Capability(models.Model):
     CANDIDACY = 'candidacy'
     CONVOKE_ELECTIONS = 'convoke elections'
     MILITARY_STANCE = 'military stance'
+    BATTLE_FORMATION = 'battle formation'
 
     TYPE_CHOICES = (
         (BAN, 'ban'),
@@ -300,6 +301,7 @@ class Capability(models.Model):
         (CANDIDACY, 'present candidacy'),
         (CONVOKE_ELECTIONS, 'convoke elections'),
         (MILITARY_STANCE, 'military orders'),
+        (BATTLE_FORMATION, 'battle formation'),
     )
 
     organization = models.ForeignKey(Organization)

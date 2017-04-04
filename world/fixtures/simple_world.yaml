@@ -187,7 +187,7 @@
 - model: organization.Capability
   fields:
     organization_id: 102
-    type: 'military formation'
+    type: 'battle formation'
     applying_to: 101
 
 
@@ -377,7 +377,7 @@
 - model: organization.Capability
   fields:
     organization_id: 106
-    type: 'military formation'
+    type: 'battle formation'
     applying_to: 105
 
 - model: organization.Organization
@@ -461,7 +461,7 @@
 - model: organization.Capability
   fields:
     organization_id: 107
-    type: 'military formation'
+    type: 'battle formation'
     applying_to: 107
 
 - model: organization.Organization

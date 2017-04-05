@@ -37,28 +37,45 @@ class BattleFormation(models.Model):
 class Battle(models.Model):
     tile = models.ForeignKey('world.Tile')
     current = models.BooleanField(default=True)
+    started = models.BooleanField(default=False)
+
+    def get_absolute_url(self):
+        return reverse('battle:view_battle', kwargs={'battle_id': self.id})
+
+    def get_latest_turn(self):
+        turns = self.battleturn_set.order_by('-num')
+        if not turns:
+            return None
+        return turns[0]
+
+    def get_units_in_battle(self):
+        return BattleUnit.objects.filter(owner__battle_organization__side__battle=self)
 
     def initialize_from_conflict(self, conflict, tile):
         z = False
         for organization in conflict:
-            BattleOrganization.objects.create(battle=self, organization=organization, z=z)
+            battle_side = BattleSide.objects.create(battle=self, z=z)
+            BattleOrganization.objects.create(side=battle_side, organization=organization)
             z = True
         for unit in tile.get_units():
             violence_monopoly = unit.owner_character.get_violence_monopoly()
             if violence_monopoly in conflict:
                 battle_character = BattleCharacter.objects.get_or_create(
-                    battle_organization=self.battleorganization_set.get(organization=violence_monopoly),
+                    battle_organization=BattleOrganization.objects.get(
+                        side__battle=self,
+                        organization=violence_monopoly
+                    ),
                     character=unit.owner_character,
                 )[0]
                 battle_unit = BattleUnit.objects.create(
                     owner=battle_character,
                     world_unit=unit,
                 )
-                battle_unit.create_contubernia()
 
+    def start_battle(self):
+        for unit in self.get_units_in_battle().all():
+            unit.create_contubernia()
 
-    def get_absolute_url(self):
-        return reverse('battle:view_battle', kwargs={'battle_id': self.id})
 
 
 
@@ -87,12 +104,6 @@ class Battle(models.Model):
             }
             result['object_data'].append(object_data)
         return result
-
-    def get_latest_turn(self):
-        turns = self.battleturn_set.order_by('-num')
-        if not turns:
-            return None
-        return turns[0]
 
     def generate_first_turn(self):
         turn = BattleTurn(battle=self, num=0)
@@ -171,34 +182,22 @@ class BattleTurn(models.Model):
         return new_turn
 
 
-class BattleOrganization(models.Model):
-    class Meta:
-        unique_together = (
-            ("battle", "organization"),
-        )
-
+class BattleSide(models.Model):
     battle = models.ForeignKey(Battle)
-    organization = models.ForeignKey('organization.Organization')
     z = models.BooleanField(default=False)
 
 
-class BattleOrganizationInTurn(models.Model):
-    battle_organization = models.ForeignKey(BattleOrganization)
-    battle_turn = models.ForeignKey(BattleTurn)
+class BattleOrganization(models.Model):
+    side = models.ForeignKey(BattleSide)
+    organization = models.ForeignKey('organization.Organization')
 
 
 class BattleCharacter(models.Model):
-    class Meta:
-        unique_together = (
-            ("battle_organization", "character"),
-        )
-
     battle_organization = models.ForeignKey(BattleOrganization)
     character = models.ForeignKey('world.Character')
 
 
 class BattleCharacterInTurn(models.Model):
-    battle_organization_in_turn = models.ForeignKey(BattleOrganizationInTurn)
     battle_character = models.ForeignKey(BattleCharacter)
     battle_turn = models.ForeignKey(BattleTurn)
 

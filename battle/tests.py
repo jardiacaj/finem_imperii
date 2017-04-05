@@ -37,8 +37,12 @@ class TestBattleStart(TestCase):
         self.assertEqual(BattleCharacter.objects.count(), 2)
 
         self.assertTrue(BattleUnit.objects.exists())
-        self.assertTrue(BattleUnit.objects.filter(world_unit=WorldUnit.objects.get(id=1),).exists())
-        self.assertTrue(BattleUnit.objects.filter(world_unit=WorldUnit.objects.get(id=2),).exists())
+        self.assertTrue(
+            BattleUnit.objects.filter(world_unit=WorldUnit.objects.get(id=1), starting_manpower=30).exists()
+        )
+        self.assertTrue(
+            BattleUnit.objects.filter(world_unit=WorldUnit.objects.get(id=2), starting_manpower=30).exists()
+        )
         self.assertEqual(BattleUnit.objects.count(), 2)
 
     def test_start_battle(self):

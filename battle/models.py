@@ -4,6 +4,7 @@ import math
 
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.db.models.aggregates import Sum
 from django.forms.models import model_to_dict
 
 Coordinates = namedtuple("Coordinates", ['x', 'z'])
@@ -60,24 +61,26 @@ class Battle(models.Model):
         for unit in tile.get_units():
             violence_monopoly = unit.owner_character.get_violence_monopoly()
             if violence_monopoly in conflict:
+                battle_organization = BattleOrganization.objects.get(side__battle=self, organization=violence_monopoly)
                 battle_character = BattleCharacter.objects.get_or_create(
-                    battle_organization=BattleOrganization.objects.get(
-                        side__battle=self,
-                        organization=violence_monopoly
-                    ),
+                    battle_organization=battle_organization,
                     character=unit.owner_character,
                 )[0]
                 battle_unit = BattleUnit.objects.create(
                     owner=battle_character,
                     world_unit=unit,
+                    starting_manpower=unit.get_fighting_soldiers().count(),
+                    battle_side=battle_organization.side
                 )
 
     def start_battle(self):
         for unit in self.get_units_in_battle().all():
             unit.create_contubernia()
+        self.initialize_positioning()
 
-
-
+    def initialize_positioning(self):
+        for side in self.battleside_set.all():
+            side.initialize_positioning()
 
     def render_for_view(self):
         result = {
@@ -104,50 +107,6 @@ class Battle(models.Model):
             }
             result['object_data'].append(object_data)
         return result
-
-    def generate_first_turn(self):
-        turn = BattleTurn(battle=self, num=0)
-        turn.save()
-
-        for char in self.battlecharacter_set.all():
-            for unit in char.battleunit_set.all():
-                x = 50 + (unit.starting_x_pos * 20)
-                z = 10 + (unit.starting_z_pos * 10)
-                if char.z:
-                    z = 100 - z
-
-                while turn.battleunitinturn_set.filter(x_pos=x, z_pos=z).exists():
-                    x += 1
-
-                unit_in_turn = BattleUnitInTurn(battle_unit=unit, battle_turn=turn, x_pos=x, z_pos=z,
-                                                order=unit.orders.all()[0])
-                unit_in_turn.save()
-
-    def check_all_ready(self):
-        all_ready = True
-        for combatant in self.battlecharacter_set.all():
-            if not combatant.ready:
-                all_ready = False
-
-        if all_ready:
-            for i in range(10):
-                self.do_turn()
-
-        for combatant in self.battlecharacter_set.all():
-            combatant.ready = False
-            combatant.save()
-
-    def do_turn(self):
-        if not self.get_latest_turn():
-            self.generate_first_turn()
-            return
-
-        prev_turn = self.get_latest_turn()
-        next_turn = prev_turn.create_next()
-
-        for unit in next_turn.battleunitinturn_set.all():
-            unit.do_turn()
-            unit.save()
 
 
 class BattleTurn(models.Model):
@@ -186,10 +145,35 @@ class BattleSide(models.Model):
     battle = models.ForeignKey(Battle)
     z = models.BooleanField(default=False)
 
+    def get_largest_organization(self):
+        max_found = 0
+        result = None
+        for organization in self.battleorganization_set.all():
+            manpower = organization.get_initial_manpower()
+            if manpower > max_found:
+                max_found = manpower
+                result = organization
+        return result
+
+    def get_formation(self):
+        return self.get_largest_organization().organization.get_default_formation()
+
+    def initialize_positioning(self):
+        formation = self.get_formation()
+        if formation == BattleFormation.LINE:
+            self.initialize_line_formation()
+
+    def initialize_line_formation(self):
+        pass
+
 
 class BattleOrganization(models.Model):
     side = models.ForeignKey(BattleSide)
     organization = models.ForeignKey('organization.Organization')
+
+    def get_initial_manpower(self):
+        return BattleUnit.objects.filter(owner__battle_organization=self).\
+            aggregate(Sum('starting_manpower'))['starting_manpower__sum']
 
 
 class BattleCharacter(models.Model):
@@ -204,10 +188,12 @@ class BattleCharacterInTurn(models.Model):
 
 class BattleUnit(models.Model):
     orders = models.ManyToManyField(through='OrderListElement', to='Order')
+    battle_side = models.ForeignKey(BattleSide)
     owner = models.ForeignKey(BattleCharacter)
     world_unit = models.ForeignKey('world.WorldUnit')
     starting_x_pos = models.IntegerField(default=0)
     starting_z_pos = models.IntegerField(default=0)
+    starting_manpower = models.IntegerField()
 
     def create_contubernia(self):
         soldiers = self.world_unit.get_fighting_soldiers()

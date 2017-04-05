@@ -135,12 +135,15 @@ class Organization(models.Model):
 
     def get_default_formation(self):
         try:
-            return BattleFormation.objects.get(
-                organization=self,
-                battle=None
-            )
+            return BattleFormation.objects.get(organization=self, battle=None)
         except BattleFormation.DoesNotExist:
-            pass
+            return BattleFormation.objects.create(
+                organization=self,
+                battle=None,
+                formation=BattleFormation.LINE,
+                element_size=2,
+                spacing=2,
+            )
 
     @transaction.atomic
     def convoke_elections(self, months_to_election=6):

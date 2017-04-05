@@ -1,5 +1,6 @@
 from django.test import TestCase
 
+from battle.battle_init import initialize_from_conflict, start_battle
 from battle.models import Battle, BattleCharacter, BattleUnit, BattleContubernium, BattleSoldier, BattleOrganization
 from organization.models import Organization
 from world.initialization import initialize_unit
@@ -14,7 +15,7 @@ class TestBattleStart(TestCase):
         initialize_unit(WorldUnit.objects.get(id=2))
         tile = Tile.objects.get(id=108)
         battle = Battle.objects.create(tile=tile)
-        battle.initialize_from_conflict([Organization.objects.get(id=105), Organization.objects.get(id=112)], tile)
+        initialize_from_conflict(battle, [Organization.objects.get(id=105), Organization.objects.get(id=112)], tile)
 
         self.assertEqual(battle.battleside_set.count(), 2)
 
@@ -50,8 +51,8 @@ class TestBattleStart(TestCase):
         initialize_unit(WorldUnit.objects.get(id=2))
         tile = Tile.objects.get(id=108)
         battle = Battle.objects.create(tile=tile)
-        battle.initialize_from_conflict([Organization.objects.get(id=105), Organization.objects.get(id=112)], tile)
-        battle.start_battle()
+        initialize_from_conflict(battle, [Organization.objects.get(id=105), Organization.objects.get(id=112)], tile)
+        start_battle(battle)
 
         self.assertTrue(BattleContubernium.objects.exists())
         self.assertEqual(BattleContubernium.objects.count(), 8)

@@ -395,11 +395,11 @@ class WorldUnit(models.Model):
     )
 
     LINE_CHOICES = (
-        (1, "Advanced line"),
-        (2, "Front line"),
-        (3, "Middle line"),
-        (4, "Rear line"),
-        (5, "Rearguard"),
+        (0, "Advanced line"),
+        (1, "Front line"),
+        (2, "Middle line"),
+        (3, "Rear line"),
+        (4, "Rearguard"),
     )
 
     SIDE_CHOICES = (

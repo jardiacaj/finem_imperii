@@ -52,36 +52,6 @@ class Battle(models.Model):
     def get_units_in_battle(self):
         return BattleUnit.objects.filter(owner__battle_organization__side__battle=self)
 
-    def initialize_from_conflict(self, conflict, tile):
-        z = False
-        for organization in conflict:
-            battle_side = BattleSide.objects.create(battle=self, z=z)
-            BattleOrganization.objects.create(side=battle_side, organization=organization)
-            z = True
-        for unit in tile.get_units():
-            violence_monopoly = unit.owner_character.get_violence_monopoly()
-            if violence_monopoly in conflict:
-                battle_organization = BattleOrganization.objects.get(side__battle=self, organization=violence_monopoly)
-                battle_character = BattleCharacter.objects.get_or_create(
-                    battle_organization=battle_organization,
-                    character=unit.owner_character,
-                )[0]
-                battle_unit = BattleUnit.objects.create(
-                    owner=battle_character,
-                    world_unit=unit,
-                    starting_manpower=unit.get_fighting_soldiers().count(),
-                    battle_side=battle_organization.side
-                )
-
-    def start_battle(self):
-        for unit in self.get_units_in_battle().all():
-            unit.create_contubernia()
-        self.initialize_positioning()
-
-    def initialize_positioning(self):
-        for side in self.battleside_set.all():
-            side.initialize_positioning()
-
     def render_for_view(self):
         result = {
             'unit_data': [],
@@ -156,15 +126,7 @@ class BattleSide(models.Model):
         return result
 
     def get_formation(self):
-        return self.get_largest_organization().organization.get_default_formation()
-
-    def initialize_positioning(self):
-        formation = self.get_formation()
-        if formation == BattleFormation.LINE:
-            self.initialize_line_formation()
-
-    def initialize_line_formation(self):
-        pass
+        return self.get_largest_organization().organization.get_default_formation().formation
 
 
 class BattleOrganization(models.Model):
@@ -194,20 +156,6 @@ class BattleUnit(models.Model):
     starting_x_pos = models.IntegerField(default=0)
     starting_z_pos = models.IntegerField(default=0)
     starting_manpower = models.IntegerField()
-
-    def create_contubernia(self):
-        soldiers = self.world_unit.get_fighting_soldiers()
-        num_contubernia = math.ceil(soldiers.count()/8)
-        rest = soldiers.count() % 8
-        pointer = 0
-        for i in range(num_contubernia):
-            start = pointer
-            end = pointer + (8 if i < rest else 7)
-            contubernium_soldiers = soldiers[start:end]
-            contubernium = BattleContubernium.objects.create(battle_unit=self)
-            for soldier in contubernium_soldiers:
-                BattleSoldier.objects.create(battle_contubernium=contubernium, world_npc=soldier)
-            pointer = end
 
     def __str__(self):
         return self.world_unit.name

@@ -1,5 +1,6 @@
 from django.db import transaction
 
+from battle.battle_init import initialize_from_conflict
 from battle.models import Battle
 from messaging.models import CharacterMessage
 import world.models
@@ -110,5 +111,5 @@ def create_battle_from_conflict(conflict, tile):
         tile=tile,
         current=True,
     )
-    battle.initialize_from_conflict(conflict, tile)
+    initialize_from_conflict(battle, conflict, tile)
     return battle

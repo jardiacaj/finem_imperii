@@ -11,6 +11,7 @@ from world.models import Character
 
 
 def recipient_required_decorator(func):
+    @inchar_required
     def inner(*args, **kwargs):
         recipient_id = kwargs.get('recipient_id')
         args[0].recipient = get_object_or_404(MessageRecipient, id=recipient_id, character=args[0].hero)
@@ -152,7 +153,6 @@ def mark_all_read(request):
     return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
 
 
-@inchar_required
 @recipient_required_decorator
 def mark_read(request, recipient_id):
     request.recipient.read = not request.recipient.read
@@ -160,7 +160,6 @@ def mark_read(request, recipient_id):
     return redirect(request.META.get('HTTP_REFERER', reverse('messaging:home')))
 
 
-@inchar_required
 @recipient_required_decorator
 def mark_favourite(request, recipient_id):
     request.recipient.favourite = not request.recipient.favourite
@@ -195,7 +194,6 @@ def sent_list(request):
     return render(request, 'messaging/sent_list.html', context)
 
 
-@inchar_required
 @recipient_required_decorator
 def reply(request, recipient_id, prefilled_text=''):
     view = ComposeView()

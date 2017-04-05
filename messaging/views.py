@@ -10,6 +10,14 @@ from organization.models import Organization
 from world.models import Character
 
 
+def recipient_required_decorator(func):
+    def inner(*args, **kwargs):
+        recipient_id = kwargs.get('recipient_id')
+        args[0].recipient = get_object_or_404(MessageRecipient, id=recipient_id, character=args[0].hero)
+        return func(*args, **kwargs)
+    return inner
+
+
 @inchar_required
 def home(request):
     context = {
@@ -145,18 +153,18 @@ def mark_all_read(request):
 
 
 @inchar_required
+@recipient_required_decorator
 def mark_read(request, recipient_id):
-    recipient = get_object_or_404(MessageRecipient, id=recipient_id, character=request.hero)
-    recipient.read = not recipient.read
-    recipient.save()
+    request.recipient.read = not request.recipient.read
+    request.recipient.save()
     return redirect(request.META.get('HTTP_REFERER', reverse('messaging:home')))
 
 
 @inchar_required
+@recipient_required_decorator
 def mark_favourite(request, recipient_id):
-    recipient = get_object_or_404(MessageRecipient, id=recipient_id, character=request.hero)
-    recipient.favourite = not recipient.favourite
-    recipient.save()
+    request.recipient.favourite = not request.recipient.favourite
+    request.recipient.save()
     return redirect(request.META.get('HTTP_REFERER', reverse('messaging:home')))
 
 
@@ -188,7 +196,7 @@ def sent_list(request):
 
 
 @inchar_required
+@recipient_required_decorator
 def reply(request, recipient_id, prefilled_text=''):
-    recipient = get_object_or_404(MessageRecipient, id=recipient_id, character=request.hero)
     view = ComposeView()
-    return view.get(request, reply_to=recipient, prefilled_text=prefilled_text)
+    return view.get(request, reply_to=request.recipient, prefilled_text=prefilled_text)

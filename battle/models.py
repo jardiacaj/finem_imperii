@@ -126,7 +126,7 @@ class BattleSide(models.Model):
         return result
 
     def get_formation(self):
-        return self.get_largest_organization().organization.get_default_formation().formation
+        return self.get_largest_organization().organization.get_default_formation_settings()
 
 
 class BattleOrganization(models.Model):

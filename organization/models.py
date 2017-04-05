@@ -133,7 +133,7 @@ class Organization(models.Model):
             region=region
         )[0]
 
-    def get_default_formation(self):
+    def get_default_formation_settings(self):
         try:
             return BattleFormation.objects.get(organization=self, battle=None)
         except BattleFormation.DoesNotExist:

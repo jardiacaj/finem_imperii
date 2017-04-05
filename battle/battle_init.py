@@ -42,37 +42,70 @@ def initialize_from_conflict(battle, conflict, tile):
 
 
 def initialize_side_positioning(side):
-    formation = side.get_formation()
-    if formation == BattleFormation.LINE:
-        formation = LineFormation(side)
+    formation_settings = side.get_formation()
+    if formation_settings.formation == BattleFormation.LINE:
+        formation = LineFormation(side, formation_settings)
     else:
-        raise Exception("Formation {} not known".format(formation))
+        raise Exception("Formation {} not known".format(formation_settings.formation))
     formation.make_formation()
 
 
+class Line:
+    def __init__(self, depth):
+        self.depth = depth
+        self.columns = []
+
+    def push_contubernium_on_right_side(self, contubernium):
+        if not self.columns:
+            self.columns.append([contubernium])
+        elif len(self.columns[-1]) >= self.depth:
+            self.columns.append([contubernium])
+        else:
+            self.columns[-1].append(contubernium)
+
+    def push_contubernium_on_left_side(self, contubernium):
+        if not self.columns:
+            self.columns.append([contubernium])
+        elif len(self.columns[0]) >= self.depth:
+            self.columns.insert(0, [contubernium])
+        else:
+            self.columns[0].append(contubernium)
+
+    def push_contubernium(self, contubernium, side):
+        if side < 0:
+            self.push_contubernium_on_left_side(contubernium)
+        else:
+            self.push_contubernium_on_right_side(contubernium)
+
+    def push_unit(self, unit, side):
+        for contubernium in unit.battlecontubernium_set.all():
+            self.push_contubernium(contubernium, side)
+
+
 class LineFormation:
-    class Flank:
-        pass
 
-    class Line:
-        pass
-
-    def __init__(self, side):
-        self.side = side
+    def __init__(self, battle_side, settings):
+        self.settings = settings
+        self.battle_side = battle_side
         self.lines = [
-            LineFormation.Line(),
-            LineFormation.Line(),
-            LineFormation.Line(),
-            LineFormation.Line(),
-            LineFormation.Line(),
+            Line(settings.element_size),
+            Line(settings.element_size),
+            Line(settings.element_size),
+            Line(settings.element_size),
+            Line(settings.element_size),
         ]
-        self.near_flanks = [LineFormation.Line(), LineFormation.Line()]
-        self.far_flanks = [LineFormation.Line(), LineFormation.Line()]
 
     def make_formation(self):
         for line_index in range(5):
-            units = BattleUnit.objects.filter(battle_side=self.side, world_unit__battle_line=line_index)
-            center_units = units.filter(world_unit__battle_side_pos=0)
+            for side_index in [0, 1, -1, 2, -2, 3, -3]:
+                units = BattleUnit.objects.filter(
+                    battle_side=self.battle_side,
+                    world_unit__battle_line=line_index,
+                    world_unit__battle_side_pos=side_index
+                )
+                for unit in units:
+                    self.lines[line_index].push_unit(unit, side_index)
+        #TODO flanks
 
 
 def initialize_battle_positioning(battle):

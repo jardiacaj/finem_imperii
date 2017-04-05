@@ -20,6 +20,7 @@ def home(request):
 
 
 class ComposeView(View):
+
     def get(self, request, character_id=None, prefilled_text='', reply_to=None):
         if character_id:
             target_character = get_object_or_404(Character, id=character_id, world=request.hero.world)
@@ -34,10 +35,12 @@ class ComposeView(View):
         }
         return render(request, 'messaging/compose.html', context)
 
+    class RecipientBuildingException(Exception):
+        pass
+
     @transaction.atomic
     def post(self, request):
         message_body = request.POST.get('message_body')
-        raw_recipients = request.POST.getlist('recipient')
         reply_to = (
             get_object_or_404(MessageRecipient, id=request.POST.get('reply_to'), character=request.hero)
             if request.POST.get('reply_to') else None
@@ -51,7 +54,7 @@ class ComposeView(View):
             messages.error(request, "This message is too long.", "danger")
             return reply(request, reply_to.id, message_body) if reply_to else self.get(request, prefilled_text=message_body)
 
-        if not reply_to and not raw_recipients:
+        if not reply_to and not request.POST.getlist('recipient'):
             messages.error(request, "You must choose at least one recipient.", "danger")
             return reply(request, reply_to.id, message_body) if reply_to else self.get(request, prefilled_text=message_body)
 
@@ -63,49 +66,50 @@ class ComposeView(View):
         )
 
         if reply_to:
-            for original_group in reply_to.message.messagerecipientgroup_set.all():
-                new_group = MessageRecipientGroup.objects.create(message=message, organization=original_group.organization)
-                for character in original_group.organization.character_members.all():
-                    MessageRecipient.objects.create(message=message, character=character, group=new_group)
-            for recipient in reply_to.message.messagerecipient_set.filter(group=None):
-                MessageRecipient.objects.create(message=message, character=recipient.character)
+            message.add_recipients_for_reply(reply_to)
         else:
-            organization_count = 0
-            character_count = 0
-
-            for raw_recipient in raw_recipients:
-                split = raw_recipient.split('_')
-
-                if split[0] == 'settlement':
-                    for character in request.hero.location.character_set.all():
-                        character_count += 1
-                        message.add_recipient(character)
-                elif split[0] == 'region':
-                    for character in Character.objects.filter(location__tile=request.hero.location.tile):
-                        character_count += 1
-                        message.add_recipient(character)
-                elif split[0] == 'organization':
-                    organization_count += 1
-                    organization = get_object_or_404(Organization, id=split[1])
-                    group = MessageRecipientGroup.objects.create(message=message, organization=organization)
-                    for character in organization.character_members.all():
-                        message.add_recipient(character, group)
-                elif split[0] == 'character':
-                    character_count += 1
-                    character = get_object_or_404(Character, id=split[1])
-                    message.add_recipient(character)
-                else:
-                    message.delete()
-                    messages.error(request, "Invalid recipient.", "danger")
-                    return self.get(request, prefilled_text=message_body)
-
-            if organization_count > 4 or character_count > 40:
-                message.delete()
-                messages.error(request, "Too many recipients.", "danger")
+            try:
+                self.create_recipients_from_post_data(request, message)
+            except ComposeView.RecipientBuildingException as e:
+                messages.error(request, str(e), "danger")
                 return self.get(request, prefilled_text=message_body)
 
         messages.success(request, "Message sent.", "success")
         return redirect('messaging:sent')
+
+    def create_recipients_from_post_data(self, request, message):
+        raw_recipients = request.POST.getlist('recipient')
+        organization_count = 0
+        character_count = 0
+
+        for raw_recipient in raw_recipients:
+            split = raw_recipient.split('_')
+
+            if split[0] == 'settlement':
+                for character in request.hero.location.character_set.all():
+                    character_count += 1
+                    message.add_recipient(character)
+            elif split[0] == 'region':
+                for character in Character.objects.filter(location__tile=request.hero.location.tile):
+                    character_count += 1
+                    message.add_recipient(character)
+            elif split[0] == 'organization':
+                organization_count += 1
+                organization = get_object_or_404(Organization, id=split[1])
+                group = MessageRecipientGroup.objects.create(message=message, organization=organization)
+                for character in organization.character_members.all():
+                    message.add_recipient(character, group)
+            elif split[0] == 'character':
+                character_count += 1
+                character = get_object_or_404(Character, id=split[1])
+                message.add_recipient(character)
+            else:
+                message.delete()
+                raise ComposeView.RecipientBuildingException("Invalid recipient.")
+
+        if organization_count > 4 or character_count > 40:
+            message.delete()
+            raise ComposeView.RecipientBuildingException("Too many recipients.")
 
 
 @inchar_required

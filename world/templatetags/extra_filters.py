@@ -1,3 +1,5 @@
+from collections import namedtuple
+
 from django import template
 
 from world.turn import turn_to_date
@@ -15,29 +17,35 @@ def nice_turn(value):
     return turn_to_date(value)
 
 
+Unit = namedtuple('Unit', ['multiplier', 'singular', 'plural'])
+hour = Unit(multiplier=1, singular='hour', plural='hours')
+day = Unit(multiplier=24, singular='day', plural='days')
+month = Unit(multiplier=1, singular='month', plural='months')
+year = Unit(multiplier=12, singular='year', plural='years')
+
+
+def unit_breaker(value, units):
+    unit = units[0]
+    unit_amount = value // unit.multiplier
+    rest = value % unit.multiplier
+    suffix = ''
+    following_units = units[1:]
+    if not unit_amount and following_units:
+        return unit_breaker(value, following_units)
+    if rest and following_units:
+        suffix = ' and {}'.format(unit_breaker(rest, following_units))
+    return "{} {}{}".format(
+        unit_amount,
+        unit.singular if unit_amount == 1 else unit.plural,
+        suffix
+    )
+
+
 @register.filter
 def nice_hours(value):
-    if value == 1:
-        return "1 hour"
-    elif value < 24:  # includes 0
-        return "{} hours".format(value)
-    elif value == 24:
-        return "1 day"
-    elif value < 48:
-        return "1 day and {}".format(nice_hours(value % 24))
-    else:
-        return "{} days and {}".format(value // 24, nice_hours(value % 24))
+    return unit_breaker(value, [day, hour])
 
 
 @register.filter
 def nice_turns(value):
-    if value == 1:
-        return "1 month"
-    elif value < 12:  # includes 0
-        return "{} months".format(value)
-    elif value == 12:
-        return "1 year"
-    elif value < 24:
-        return "1 year and {}".format(nice_turns(value % 12))
-    else:
-        return "{} years and {}".format(value // 12, nice_turns(value % 12))
+    return unit_breaker(value, [year, month])

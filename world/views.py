@@ -5,7 +5,9 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models.query_utils import Q
+from django.http.response import Http404
 from django.shortcuts import render, get_object_or_404, redirect
+from django.views.decorators.http import require_POST
 from django.views.generic.base import View
 
 from battle.models import Battle
@@ -395,7 +397,21 @@ def unit_rename(request, unit_id):
     if request.POST.get('name'):
         unit.name = request.POST.get('name')
         unit.save()
-    return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
+    return redirect(request.META.get('HTTP_REFERER', unit.get_absolute_url()))
+
+
+@inchar_required
+@require_POST
+def unit_orders(request, unit_id):
+    unit = get_object_or_404(WorldUnit, id=unit_id, owner_character=request.hero)
+    battle_line = int(request.POST['battle_line'])
+    battle_side_pos = int(request.POST['battle_side_pos'])
+    if not 0 < battle_line < 6 or not -5 <= battle_side_pos <= 5:
+        raise Http404("Invalid orders")
+    unit.battle_side_pos = battle_side_pos
+    unit.battle_line = battle_line
+    unit.save()
+    return redirect(request.META.get('HTTP_REFERER', unit.get_absolute_url()))
 
 
 class UnitStatusChangeView(View):

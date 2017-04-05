@@ -394,6 +394,28 @@ class WorldUnit(models.Model):
         (CUSTOMER_SEARCH, CUSTOMER_SEARCH),
     )
 
+    LINE_CHOICES = (
+        (1, "Advanced line"),
+        (2, "Front line"),
+        (3, "Middle line"),
+        (4, "Rear line"),
+        (5, "Rearguard"),
+    )
+
+    SIDE_CHOICES = (
+        (-5, "Flanking far left"),
+        (-4, "Flanking left"),
+        (-3, "Cover left flank"),
+        (-2, "Left side"),
+        (-1, "Left-center"),
+        (0, "Center"),
+        (1, "Right-center"),
+        (2, "Right side"),
+        (3, "Cover right flank"),
+        (4, "Flanking right"),
+        (5, "Flanking far right"),
+    )
+
     owner_character = models.ForeignKey(Character, blank=True, null=True)
     world = models.ForeignKey(World)
     location = models.ForeignKey(Settlement)
@@ -403,6 +425,8 @@ class WorldUnit(models.Model):
     status = models.CharField(max_length=30, choices=STATUS_CHOICES)
     mobilization_status_since = models.IntegerField()
     current_status_since = models.IntegerField()
+    battle_line = models.IntegerField(choices=LINE_CHOICES, default=3)
+    battle_side_pos = models.IntegerField(choices=SIDE_CHOICES, default=0)
     generation_size = models.IntegerField(default=0, help_text="Only used in tests that need generated units")
 
     @staticmethod

@@ -51,12 +51,12 @@ class ComposeView(View):
             return redirect(request.META.get('HTTP_REFERER', reverse('messaging:compose')))
 
         if len(message_body) > 10000:
-            messages.error(request, "This message is too long.", "danger")
-            return reply(request, reply_to.id, message_body) if reply_to else self.get(request, prefilled_text=message_body)
+            return self.fail_post_gracefully(request, reply_to, message_body, error_message="This message is too long.")
 
         if not reply_to and not request.POST.getlist('recipient'):
-            messages.error(request, "You must choose at least one recipient.", "danger")
-            return reply(request, reply_to.id, message_body) if reply_to else self.get(request, prefilled_text=message_body)
+            return self.fail_post_gracefully(
+                request, reply_to, message_body, error_message="You must choose at least one recipient."
+            )
 
         message = CharacterMessage.objects.create(
             content=message_body,
@@ -71,11 +71,16 @@ class ComposeView(View):
             try:
                 self.create_recipients_from_post_data(request, message)
             except ComposeView.RecipientBuildingException as e:
-                messages.error(request, str(e), "danger")
-                return self.get(request, prefilled_text=message_body)
+                return self.fail_post_gracefully(
+                    request, reply_to, message_body, error_message=str(e)
+                )
 
         messages.success(request, "Message sent.", "success")
         return redirect('messaging:sent')
+
+    def fail_post_gracefully(self, request, reply_to, prefilled_body, error_message):
+        messages.error(request, error_message, "danger")
+        return self.get(request, None, prefilled_body, reply_to)
 
     def create_recipients_from_post_data(self, request, message):
         raw_recipients = request.POST.getlist('recipient')

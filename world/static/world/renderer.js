@@ -157,8 +157,10 @@ function MapRenderer(world_data) {
         zis.camera.updateProjectionMatrix();
 
         for (var region_id in zis.regions)  {
-            var region = world_data.regions[region_id];
-            zis.render_region_tag(region);
+            if (Object.prototype.hasOwnProperty.call(zis.regions, region_id)) {
+                var region = world_data.regions[region_id];
+                zis.render_region_tag(region);
+            }
         }
     };
 
@@ -169,8 +171,10 @@ function MapRenderer(world_data) {
         zis.camera.updateProjectionMatrix();
 
         for (var settlement_id in zis.settlements)  {
-            var settlement = world_data.settlements[settlement_id];
-            zis.render_settlement_tag(settlement);
+            if (Object.prototype.hasOwnProperty.call(zis.settlements, settlement_id)) {
+                var settlement = world_data.settlements[settlement_id];
+                zis.render_settlement_tag(settlement);
+            }
         }
     };
 
@@ -269,7 +273,7 @@ function MapRenderer(world_data) {
         "forest": new THREE.MeshLambertMaterial({color: 0x207F07, shading: THREE.SmoothShading}),
         "shore": new THREE.MeshLambertMaterial({color: 0x0D81CD, shading: THREE.SmoothShading}),
         "deepsea": new THREE.MeshLambertMaterial({color: 0x000E85, shading: THREE.SmoothShading}),
-        "mountain": new THREE.MeshLambertMaterial({color: 0x837D71, shading: THREE.SmoothShading}),
+        "mountain": new THREE.MeshLambertMaterial({color: 0x837D71, shading: THREE.SmoothShading})
     };
     zis.settlement_material_highlighted = new THREE.MeshBasicMaterial( {color: 0xFFFFFF} );
     zis.settlement_material_barbarian = new THREE.MeshBasicMaterial( {color: 0x000000} );
@@ -299,18 +303,24 @@ function MapRenderer(world_data) {
     $(document).on('click', zis.mouse_click_listener_notifier);
 
     for (var organization_id in zis.organizations) {
-        var organization = zis.organizations[organization_id];
-        organization.settlement_material = new THREE.MeshBasicMaterial( {color: parseInt(organization.color, 16)} );
+        if (Object.prototype.hasOwnProperty.call(zis.organizations, organization_id)) {
+            var organization = zis.organizations[organization_id];
+            organization.settlement_material = new THREE.MeshBasicMaterial({color: parseInt(organization.color, 16)});
+        }
     }
 
     for (var region_id in zis.regions)  {
-        var region = zis.regions[region_id];
-        zis.render_region(region);
+        if (Object.prototype.hasOwnProperty.call(zis.regions, region_id)) {
+            var region = zis.regions[region_id];
+            zis.render_region(region);
+        }
     }
 
     for (var settlement_id in zis.settlements)  {
-        var settlement = zis.settlements[settlement_id];
-        zis.render_settlement(settlement);
+        if (Object.prototype.hasOwnProperty.call(zis.settlements, settlement_id)) {
+            var settlement = zis.settlements[settlement_id];
+            zis.render_settlement(settlement);
+        }
     }
 
     zis.render();

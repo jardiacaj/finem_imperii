@@ -3,7 +3,7 @@ from django.test import TestCase
 from battle.models import Battle, BattleCharacter, BattleUnit, BattleContubernium, BattleSoldier
 from organization.models import Organization
 from world.initialization import initialize_unit
-from world.models import Tile, WorldUnit
+from world.models import Tile, WorldUnit, NPC
 
 
 class TestBattleStart(TestCase):
@@ -43,3 +43,6 @@ class TestBattleStart(TestCase):
         self.assertEqual(BattleContubernium.objects.count(), 8)
         self.assertTrue(BattleSoldier.objects.exists())
         self.assertEqual(BattleSoldier.objects.count(), 60)
+
+        for npc in NPC.objects.all():
+            self.assertTrue(BattleSoldier.objects.filter(world_npc=npc).exists())

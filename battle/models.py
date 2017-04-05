@@ -46,12 +46,12 @@ class Battle(models.Model):
         for unit in tile.get_units():
             violence_monopoly = unit.owner_character.get_violence_monopoly()
             if violence_monopoly in conflict:
-                BattleCharacter.objects.get_or_create(
+                battle_character = BattleCharacter.objects.get_or_create(
                     battle_organization=self.battleorganization_set.get(organization=violence_monopoly),
                     character=unit.owner_character,
-                )
+                )[0]
                 battle_unit = BattleUnit.objects.create(
-                    owner=self.battleorganization_set.get(organization=violence_monopoly).battlecharacter_set.get(character=unit.owner_character),
+                    owner=battle_character,
                     world_unit=unit,
                 )
                 battle_unit.create_contubernia()

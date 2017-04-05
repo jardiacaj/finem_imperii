@@ -1,5 +1,11 @@
 ---
 engines:
+  pep8:
+    enabled: true
+  shellcheck:
+    enabled: true
+  markdownlint:
+    enabled: true
   csslint:
     enabled: true
   duplication:
@@ -18,6 +24,8 @@ engines:
     enabled: true
 ratings:
   paths:
+  - "**.sh"
+  - "**.md"
   - "**.css"
   - "**.inc"
   - "**.js"

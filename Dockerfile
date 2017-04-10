@@ -15,7 +15,6 @@ RUN pip3 install -r requirements.txt
 # Application
 RUN rm db.sqlite3 || true
 RUN devops/db_create.sh
-RUN ./manage.py initialize_world 1 2
 RUN ./manage.py collectstatic --no-input
 RUN chown apache db.sqlite3 .
 RUN devops/generate_build_name.sh

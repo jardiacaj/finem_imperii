@@ -1,7 +1,16 @@
 from django.contrib import admin
-from django.apps import apps
 
-app = apps.get_app_config('battle')
+from battle.battle_init import start_battle
+from battle.models import Battle, BattleFormation
 
-for model_name, model in app.models.items():
-    admin.site.register(model)
+admin.site.register(BattleFormation)
+
+def start(modeladmin, request, queryset):
+    for battle in queryset.all():
+        start_battle(battle)
+start.short_description = "Start battle"
+
+
+@admin.register(Battle)
+class WorldAdmin(admin.ModelAdmin):
+    actions = [start, ]

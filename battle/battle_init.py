@@ -1,5 +1,7 @@
 import math
 
+from django.db import transaction
+
 from battle.models import BattleFormation, BattleUnit, BattleContubernium, BattleSoldier, BattleOrganization, \
     BattleSide, BattleCharacter, Coordinates
 
@@ -19,6 +21,7 @@ def create_contubernia(unit):
         pointer = end
 
 
+@transaction.atomic
 def initialize_from_conflict(battle, conflict, tile):
     z = False
     for organization in conflict:
@@ -124,7 +127,18 @@ def initialize_battle_positioning(battle):
         initialize_side_positioning(side)
 
 
+class BattleAlreadyStartedException(Exception):
+    pass
+
+
+@transaction.atomic
 def start_battle(battle):
+    if battle.started:
+        raise BattleAlreadyStartedException("Battle {} already started!".format(battle.id))
+
     for unit in battle.get_units_in_battle().all():
         create_contubernia(unit)
     initialize_battle_positioning(battle)
+
+    battle.started = True
+    battle.save()

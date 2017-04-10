@@ -61,3 +61,8 @@ class TestBattleStart(TestCase):
 
         for npc in NPC.objects.all():
             self.assertTrue(BattleSoldier.objects.filter(world_npc=npc).exists())
+
+    def test_conflict_creation_on_region_without_able_soldiers(self):
+        tile = Tile.objects.get(id=108)
+        tile.trigger_battles()
+        self.assertFalse(Battle.objects.exists())

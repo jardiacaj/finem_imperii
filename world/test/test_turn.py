@@ -1,14 +1,18 @@
 from django.test import TestCase
 
 from organization.models import Organization
+from world.admin import pass_turn
 from world.initialization import initialize_unit
-from world.models import Tile, WorldUnit
+from world.models import Tile, WorldUnit, World
 from world.turn import organizations_with_battle_ready_units, battle_ready_units_in_tile, \
     opponents_in_organization_list, get_largest_conflict_in_list, create_battle_from_conflict
 
 
 class TestTurn(TestCase):
     fixtures = ['simple_world']
+
+    def test_pass_turn_admin_action(self):
+        pass_turn(None, None, World.objects.all())
 
     def test_organizations_with_battle_ready_units(self):
         tile = Tile.objects.get(id=108)

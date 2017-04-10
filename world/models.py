@@ -115,9 +115,10 @@ class Tile(models.Model):
         return WorldUnit.objects.filter(location__tile=self)
 
     def trigger_battles(self):
-        conflicts = opponents_in_organization_list(organizations_with_battle_ready_units(self))
+        conflicts = opponents_in_organization_list(organizations_with_battle_ready_units(self), self)
         conflict = get_largest_conflict_in_list(conflicts, self)
-        return create_battle_from_conflict(conflict, self)
+        if conflict:
+            return create_battle_from_conflict(conflict, self)
 
 
 class Settlement(models.Model):

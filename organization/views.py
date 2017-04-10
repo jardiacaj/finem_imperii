@@ -28,6 +28,7 @@ def organization_view(request, organization_id):
 
 
 def capability_required_decorator(func):
+    @inchar_required
     def inner(*args, **kwargs):
         def fail_the_request(*args, **kwargs):
             messages.error(args[0], "You cannot do that", "danger")
@@ -80,7 +81,6 @@ def document_view(request, document_id):
     return render(request, 'organization/view_document.html', context)
 
 
-@inchar_required
 @capability_required_decorator
 def capability_view(request, capability_id):
     capability = get_object_or_404(Capability, id=capability_id)
@@ -133,7 +133,6 @@ def capability_view(request, capability_id):
 
 
 @require_POST
-@inchar_required
 @capability_required_decorator
 def elect_view(request, capability_id):
     capability = get_object_or_404(Capability, id=capability_id, type=Capability.ELECT)
@@ -169,7 +168,6 @@ def elect_view(request, capability_id):
 
 
 @require_POST
-@inchar_required
 @capability_required_decorator
 def election_convoke_view(request, capability_id):
     capability = get_object_or_404(Capability, id=capability_id, type=Capability.CONVOKE_ELECTIONS)
@@ -191,7 +189,6 @@ def election_convoke_view(request, capability_id):
 
 
 @require_POST
-@inchar_required
 @capability_required_decorator
 def candidacy_view(request, capability_id):
     capability = get_object_or_404(Capability, id=capability_id, type=Capability.CANDIDACY)
@@ -224,7 +221,6 @@ def candidacy_view(request, capability_id):
 
 
 @require_POST
-@inchar_required
 @capability_required_decorator
 def banning_view(request, capability_id):
     capability = get_object_or_404(Capability, id=capability_id, type=Capability.BAN)
@@ -246,7 +242,6 @@ def banning_view(request, capability_id):
 
 
 @require_POST
-@inchar_required
 @capability_required_decorator
 def formation_view(request, capability_id):
     capability = get_object_or_404(Capability, id=capability_id, type=Capability.BATTLE_FORMATION)

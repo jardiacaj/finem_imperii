@@ -3,7 +3,8 @@ import math
 from django.db import transaction
 
 from battle.models import BattleFormation, BattleUnit, BattleContubernium, BattleSoldier, BattleOrganization, \
-    BattleSide, BattleCharacter, Coordinates
+    BattleSide, BattleCharacter, Coordinates, BattleTurn, BattleCharacterInTurn, BattleUnitInTurn, \
+    BattleContuberniumInTurn, BattleSoldierInTurn
 
 
 def create_contubernia(unit):
@@ -127,6 +128,39 @@ def initialize_battle_positioning(battle):
         initialize_side_positioning(side)
 
 
+def generate_in_turn_objects(battle):
+    turn = BattleTurn.objects.create(
+        battle=battle,
+        num=0
+    )
+    for side in battle.battleside_set.all():
+        for organization in side.battleorganization_set.all():
+            for character in organization.battlecharacter_set.all():
+                BattleCharacterInTurn.objects.create(
+                    battle_character=character,
+                    battle_turn=turn
+                )
+                for unit in character.battleunit_set.all():
+                    BattleUnitInTurn.objects.create(
+                        battle_unit=unit,
+                        battle_turn=turn,
+                        x_pos=unit.starting_x_pos,
+                        z_pos=unit.starting_z_pos
+                    )
+                    for contubernium in unit.battlecontubernium_set.all():
+                        BattleContuberniumInTurn.objects.create(
+                            battle_contubernium=contubernium,
+                            battle_turn=turn,
+                            x_pos=contubernium.starting_x_pos,
+                            z_pos=contubernium.starting_z_pos
+                        )
+                        for soldier in contubernium.battlesoldier_set.all():
+                            BattleSoldierInTurn.objects.create(
+                                battle_turn=turn,
+                                battle_soldier=soldier
+                            )
+
+
 class BattleAlreadyStartedException(Exception):
     pass
 
@@ -139,6 +173,7 @@ def start_battle(battle):
     for unit in battle.get_units_in_battle().all():
         create_contubernia(unit)
     initialize_battle_positioning(battle)
+    generate_in_turn_objects(battle)
 
     battle.started = True
     battle.save()

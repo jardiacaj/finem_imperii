@@ -259,6 +259,9 @@ class BattleContubernium(models.Model):
 
 class BattleContuberniumInTurn(models.Model):
     battle_contubernium = models.ForeignKey(BattleContubernium)
+    battle_turn = models.ForeignKey(BattleTurn)
+    x_pos = models.IntegerField()
+    z_pos = models.IntegerField()
 
 
 class BattleSoldier(models.Model):
@@ -268,6 +271,7 @@ class BattleSoldier(models.Model):
 
 class BattleSoldierInTurn(models.Model):
     battle_soldier = models.ForeignKey(BattleSoldier)
+    battle_turn = models.ForeignKey(BattleTurn)
 
 
 class Order(models.Model):

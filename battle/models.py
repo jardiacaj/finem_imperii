@@ -41,7 +41,7 @@ class Battle(models.Model):
     started = models.BooleanField(default=False)
 
     def get_absolute_url(self):
-        return reverse('battle:view_battle', kwargs={'battle_id': self.id})
+        return reverse('battle:battlefield', kwargs={'battle_id': self.id})
 
     def get_latest_turn(self):
         turns = self.battleturn_set.order_by('-num')

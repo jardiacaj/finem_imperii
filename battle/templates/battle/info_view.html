@@ -1,0 +1,16 @@
+{% extends "base/base.html" %}
+
+{% load staticfiles %}
+
+{% block content %}
+
+    <h1 class="page-header">
+        {% if battle.current %}
+            Current battle in {{ battle.tile.get_html_link|safe }}
+        {% else %}
+            Battle in {{ battle.tile.get_html_link|safe }}
+        {% endif %}
+    </h1>
+
+
+{% endblock %}

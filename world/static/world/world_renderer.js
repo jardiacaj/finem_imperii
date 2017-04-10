@@ -11,7 +11,7 @@ function MapRenderer(world_data) {
     zis.highlight_settlement = function (settlement_id) {
         settlement = zis.settlements[settlement_id];
         settlement.mesh.material = zis.settlement_material_highlighted;
-        zis.render();
+        zis.renderer.render();
     };
 
     zis.enable_region_tags = function () {
@@ -32,40 +32,11 @@ function MapRenderer(world_data) {
         geometry.vertices.push(source_settlement.mesh.position, target_settlement.mesh.position);
 
         var line = new THREE.Line( geometry, zis.travel_line_material );
-        zis.scene.add( line );
-        zis.render();
+        zis.renderer.scene.add( line );
+        zis.renderer.render();
     };
 
     /* INTERNALS */
-
-    zis.init_camera = function () {
-        zis.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-        zis.camera.position.z = 2.5;
-        zis.camera.position.x = 2.5;
-        zis.camera.position.y = 12;
-        zis.camera.lookAt(new THREE.Vector3( 0, 0, 0 ));
-        zis.camera.aspect = window.innerWidth / window.innerHeight;
-        zis.camera.updateProjectionMatrix();
-    };
-
-    zis.init_renderer = function () {
-        zis.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-        zis.renderer.setSize(window.innerWidth, window.innerHeight);
-        zis.renderer.setClearColor( 0xffffff, 0);
-    };
-
-    zis.add_orbit_controls = function () {
-        zis.controls = new THREE.OrbitControls(zis.camera, zis.renderer.domElement);
-        zis.controls.addEventListener( 'change', zis.render );
-    };
-
-    zis.init_lighting = function () {
-        zis.ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
-        zis.scene.add(zis.ambientLight);
-        zis.directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-        zis.directionalLight.position.set(1, 1, 1).normalize();
-        zis.scene.add(zis.directionalLight);
-    };
 
     zis.render_region = function (region) {
         var mesh = new THREE.Mesh(zis.region_geometry, zis.region_materials[region.type]);
@@ -80,7 +51,7 @@ function MapRenderer(world_data) {
         region.mesh = mesh;
         mesh.region = region;
 
-        zis.scene.add(mesh);
+        zis.renderer.scene.add(mesh);
     };
 
     zis.render_settlement = function (settlement) {
@@ -99,14 +70,14 @@ function MapRenderer(world_data) {
         cylinder.settlement = settlement;
         settlement.mesh = cylinder;
 
-        zis.scene.add(cylinder);
+        zis.renderer.scene.add(cylinder);
     };
 
     zis.render_region_tag = function (region) {
         var widthHalf = window.innerWidth / 2, heightHalf = window.innerHeight / 2;
         var pos = region.mesh.position.clone();
         pos.y += 0.5;
-        pos.project(zis.camera);
+        pos.project(zis.renderer.camera);
         pos.x = ( pos.x * widthHalf ) + widthHalf;
         pos.y = -( pos.y * heightHalf ) + heightHalf;
 
@@ -131,7 +102,7 @@ function MapRenderer(world_data) {
         var widthHalf = window.innerWidth / 2, heightHalf = window.innerHeight / 2;
         var pos = settlement.mesh.position.clone();
         pos.z -= 0.12;
-        pos.project(zis.camera);
+        pos.project(zis.renderer.camera);
         pos.x = ( pos.x * widthHalf ) + widthHalf;
         pos.y = -( pos.y * heightHalf ) + heightHalf;
 
@@ -153,8 +124,8 @@ function MapRenderer(world_data) {
     zis.rerender_region_tags = function () {
         $('.region_tag').remove();
 
-        zis.camera.updateMatrixWorld();
-        zis.camera.updateProjectionMatrix();
+        zis.renderer.camera.updateMatrixWorld();
+        zis.renderer.camera.updateProjectionMatrix();
 
         for (var region_id in zis.regions)  {
             if (Object.prototype.hasOwnProperty.call(zis.regions, region_id)) {
@@ -167,8 +138,8 @@ function MapRenderer(world_data) {
     zis.rerender_settlement_tags = function () {
         $('.settlement_tag').remove();
 
-        zis.camera.updateMatrixWorld();
-        zis.camera.updateProjectionMatrix();
+        zis.renderer.camera.updateMatrixWorld();
+        zis.renderer.camera.updateProjectionMatrix();
 
         for (var settlement_id in zis.settlements)  {
             if (Object.prototype.hasOwnProperty.call(zis.settlements, settlement_id)) {
@@ -180,83 +151,10 @@ function MapRenderer(world_data) {
 
     zis.focus_to_region = function (region_id) {
         var region = zis.regions[region_id];
-        zis.camera.position.x = region.mesh.position.x;
-        zis.camera.position.y = 4;
-        zis.camera.position.z = region.mesh.position.z;
-        zis.camera.lookAt(region.mesh.position);
-    };
-
-    zis.mouse_move_listener = function (event) {
-        // it's pointless to do anything if there are no callbacks set
-        if(zis.region_callback === undefined && zis.settlement_callback === undefined && zis.click_callback === undefined)
-            return;
-        // calculate mouse position in normalized device coordinates
-        // (-1 to +1) for both components
-        zis.mouse_vector.x = (event.clientX / window.innerWidth ) * 2 - 1;
-        zis.mouse_vector.y = - (event.clientY / window.innerHeight) * 2 + 1;
-        zis.pick();
-    };
-
-    zis.window_resize_listener = function (event) {
-        zis.camera.aspect = window.innerWidth / window.innerHeight;
-        zis.camera.updateProjectionMatrix();
-        zis.renderer.setSize( window.innerWidth, window.innerHeight );
-        zis.render();
-        if(zis.region_tags_enabled) zis.rerender_region_tags();
-        if(zis.settlement_tags_enabled) zis.rerender_settlement_tags();
-        zis.pick();
-    };
-
-    zis.mouse_click_listener_notifier = function (event) {
-        if (zis.click_callback !== undefined) {
-            return zis.click_callback(zis.picked_region, zis.picked_settlement);
-        }
-    };
-
-    zis.notify_region_pick = function (region) {
-        if (region !== zis.picked_region) {
-            zis.picked_region = region;
-            if (zis.region_callback !== undefined) return zis.region_callback(region);
-        }
-    };
-
-    zis.notify_settlement_pick = function (settlement) {
-        if (settlement !== zis.picked_settlement) {
-            zis.picked_settlement = settlement;
-            if (zis.settlement_callback !== undefined) return zis.settlement_callback(settlement);
-        }
-    };
-
-    zis.pick = function () {
-        zis.raycaster.setFromCamera( zis.mouse_vector, zis.camera );
-
-        // calculate objects intersecting the picking ray
-        var intersects = zis.raycaster.intersectObjects( zis.scene.children );
-        var region_intersected = false;
-        var settlement_intersected = false;
-
-        // notify only the first intersected element
-        for ( var i = 0; i < intersects.length; i++ ) {
-
-            var region = intersects[ i ].object.region;
-            if (region !== undefined && !region_intersected) {
-                zis.notify_region_pick(region);
-                region_intersected = true;
-            }
-            var settlement = intersects[ i ].object.settlement;
-            if (settlement !== undefined && !settlement_intersected) {
-                zis.notify_settlement_pick(settlement);
-                settlement_intersected = true;
-            }
-
-        }
-
-        if (!settlement_intersected) zis.notify_settlement_pick(undefined);
-        if (!region_intersected) zis.notify_region_pick(undefined);
-    };
-
-    zis.render = function () {
-        zis.renderer.render(zis.scene, zis.camera);
+        zis.renderer.camera.position.x = region.mesh.position.x;
+        zis.renderer.camera.position.y = 4;
+        zis.renderer.camera.position.z = region.mesh.position.z;
+        zis.renderer.camera.lookAt(region.mesh.position);
     };
 
     /* VARS */
@@ -285,22 +183,7 @@ function MapRenderer(world_data) {
     zis.settlement_tags_enabled = false;
 
     /* CONSTRUCTION */
-
-    zis.canvas_container = document.createElement( 'div' );
-    document.body.appendChild( zis.canvas_container );
-
-    zis.scene = new THREE.Scene();
-    zis.init_camera();
-    zis.init_renderer();
-    zis.init_lighting();
-    zis.raycaster = new THREE.Raycaster();
-    zis.mouse_vector = new THREE.Vector2();
-
-    zis.canvas_container.appendChild(zis.renderer.domElement);
-
-    $(window).on('resize', zis.window_resize_listener);
-    $(document).on('mousemove', zis.mouse_move_listener);
-    $(document).on('click', zis.mouse_click_listener_notifier);
+    zis.renderer = new BaseRenderer();
 
     for (var organization_id in zis.organizations) {
         if (Object.prototype.hasOwnProperty.call(zis.organizations, organization_id)) {
@@ -323,6 +206,6 @@ function MapRenderer(world_data) {
         }
     }
 
-    zis.render();
+    zis.renderer.render();
 
 }

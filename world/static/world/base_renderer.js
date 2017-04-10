@@ -2,6 +2,8 @@ function BaseRenderer() {
 
     var zis = this;
 
+    zis.picking_types = {};
+
     zis.init_camera = function () {
         zis.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
         zis.camera.position.z = 2.5;
@@ -33,7 +35,7 @@ function BaseRenderer() {
 
     zis.mouse_move_listener = function (event) {
         // it's pointless to do anything if there are no callbacks set
-        if(zis.region_callback === undefined && zis.settlement_callback === undefined && zis.click_callback === undefined)
+        if($.isEmptyObject(zis.picking_types))
             return;
         // calculate mouse position in normalized device coordinates
         // (-1 to +1) for both components
@@ -58,18 +60,11 @@ function BaseRenderer() {
         }
     };
 
-    zis.notify_region_pick = function (region) {
-        if (region !== zis.picked_region) {
-            zis.picked_region = region;
-            if (zis.region_callback !== undefined) return zis.region_callback(region);
-        }
-    };
-
-    zis.notify_settlement_pick = function (settlement) {
-        if (settlement !== zis.picked_settlement) {
-            zis.picked_settlement = settlement;
-            if (zis.settlement_callback !== undefined) return zis.settlement_callback(settlement);
-        }
+    zis.unproject = function (pos) {
+        var widthHalf = window.innerWidth / 2, heightHalf = window.innerHeight / 2;
+        pos.project(zis.camera);
+        pos.x = ( pos.x * widthHalf ) + widthHalf;
+        pos.y = -( pos.y * heightHalf ) + heightHalf;
     };
 
     zis.pick = function () {
@@ -77,32 +72,40 @@ function BaseRenderer() {
 
         // calculate objects intersecting the picking ray
         var intersects = zis.raycaster.intersectObjects( zis.scene.children );
-        var region_intersected = false;
-        var settlement_intersected = false;
+        var intersected_types = [];
 
         // notify only the first intersected element
         for ( var i = 0; i < intersects.length; i++ ) {
 
-            var region = intersects[ i ].object.region;
-            if (region !== undefined && !region_intersected) {
-                zis.notify_region_pick(region);
-                region_intersected = true;
-            }
-            var settlement = intersects[ i ].object.settlement;
-            if (settlement !== undefined && !settlement_intersected) {
-                zis.notify_settlement_pick(settlement);
-                settlement_intersected = true;
-            }
+            var picked_object = intersects[ i ].object;
+            var picked_type = picked_object.pick_type;
 
+            if (picked_type !== undefined) {
+                if (intersected_types.indexOf(picked_type) === -1) {
+                    intersected_types.push(picked_type);
+                    if (zis.last_picking_results[picked_type] !== picked_object) {
+                        zis.picking_types[picked_type](picked_object);
+                        zis.last_picking_results[picked_type] = picked_object;
+                    }
+                }
+            }
         }
 
-        if (!settlement_intersected) zis.notify_settlement_pick(undefined);
-        if (!region_intersected) zis.notify_region_pick(undefined);
+        for (var picking_type in zis.picking_types) {
+            if (Object.prototype.hasOwnProperty.call(zis.picking_types, picking_type)) {
+                if (intersected_types.indexOf(picking_type) === -1 && zis.last_picking_results[picking_type] !== undefined) {
+                    zis.last_picking_results[picking_type] = undefined;
+                    zis.picking_types[picking_type]();
+                }
+            }
+        }
     };
 
     zis.render = function () {
         zis.renderer.render(zis.scene, zis.camera);
     };
+
+    zis.last_picking_results = {};
 
     zis.canvas_container = document.createElement( 'div' );
     document.body.appendChild( zis.canvas_container );

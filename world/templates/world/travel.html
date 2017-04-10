@@ -60,7 +60,8 @@
             selected_region = region;
         }
         function settlement_callback(settlement) {
-            $("#settlement_name").text(settlement ? settlement.name : 'none');
+            console.log(settlement);
+            $("#settlement_name").text(settlement ? settlement.settlement.name : 'none');
         }
     </script>
 

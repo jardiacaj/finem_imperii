@@ -38,6 +38,14 @@ function MapRenderer(world_data) {
 
     /* INTERNALS */
 
+    zis.notify_region_pick = function (region) {
+        if (zis.region_callback !== undefined) return zis.region_callback(region);
+    };
+
+    zis.notify_settlement_pick = function (settlement) {
+        if (zis.settlement_callback !== undefined) return zis.settlement_callback(settlement);
+    };
+
     zis.render_region = function (region) {
         var mesh = new THREE.Mesh(zis.region_geometry, zis.region_materials[region.type]);
         var mat = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 1 } );
@@ -48,8 +56,9 @@ function MapRenderer(world_data) {
         mesh.position.z = region.z_pos - 1;
         mesh.position.y = region.y_pos;
 
-        region.mesh = mesh;
         mesh.region = region;
+        mesh.pick_type = "region";
+        region.mesh = mesh;
 
         zis.renderer.scene.add(mesh);
     };
@@ -68,18 +77,16 @@ function MapRenderer(world_data) {
         cylinder.position.y = region.y_pos + 0.51;
 
         cylinder.settlement = settlement;
+        cylinder.pick_type = "settlement";
         settlement.mesh = cylinder;
 
         zis.renderer.scene.add(cylinder);
     };
 
     zis.render_region_tag = function (region) {
-        var widthHalf = window.innerWidth / 2, heightHalf = window.innerHeight / 2;
         var pos = region.mesh.position.clone();
         pos.y += 0.5;
-        pos.project(zis.renderer.camera);
-        pos.x = ( pos.x * widthHalf ) + widthHalf;
-        pos.y = -( pos.y * heightHalf ) + heightHalf;
+        zis.renderer.unproject(pos);
 
         if (pos.x < window.innerWidth && pos.y < window.innerHeight) {
             var region_tag = document.createElement('div');
@@ -99,12 +106,9 @@ function MapRenderer(world_data) {
     };
 
     zis.render_settlement_tag = function (settlement) {
-        var widthHalf = window.innerWidth / 2, heightHalf = window.innerHeight / 2;
         var pos = settlement.mesh.position.clone();
         pos.z -= 0.12;
-        pos.project(zis.renderer.camera);
-        pos.x = ( pos.x * widthHalf ) + widthHalf;
-        pos.y = -( pos.y * heightHalf ) + heightHalf;
+        zis.renderer.unproject(pos);
 
         if (pos.x < window.innerWidth && pos.y < window.innerHeight) {
             var settlement_tag = document.createElement('div');
@@ -176,14 +180,13 @@ function MapRenderer(world_data) {
     zis.settlement_material_highlighted = new THREE.MeshBasicMaterial( {color: 0xFFFFFF} );
     zis.settlement_material_barbarian = new THREE.MeshBasicMaterial( {color: 0x000000} );
 
-    zis.picked_region = undefined;
-    zis.picked_settlement = undefined;
-
     zis.region_tags_enabled = false;
     zis.settlement_tags_enabled = false;
 
     /* CONSTRUCTION */
     zis.renderer = new BaseRenderer();
+    zis.renderer.picking_types['settlement'] = zis.notify_settlement_pick;
+    zis.renderer.picking_types['region'] = zis.notify_region_pick;
 
     for (var organization_id in zis.organizations) {
         if (Object.prototype.hasOwnProperty.call(zis.organizations, organization_id)) {

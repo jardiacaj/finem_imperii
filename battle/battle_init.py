@@ -41,7 +41,9 @@ def initialize_from_conflict(battle, conflict, tile):
                 owner=battle_character,
                 world_unit=unit,
                 starting_manpower=unit.get_fighting_soldiers().count(),
-                battle_side=battle_organization.side
+                battle_side=battle_organization.side,
+                name=unit.name,
+                type=unit.type
             )
 
 

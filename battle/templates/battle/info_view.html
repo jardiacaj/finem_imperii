@@ -12,5 +12,26 @@
         {% endif %}
     </h1>
 
+    {% if battle.started %}
+        <p class="text-center">
+            <a href="{% url "battle:battlefield" battle.id %}" class="btn btn-primary">
+                Show battlefield
+            </a>
+        </p>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-sm-5">
+            {% include 'battle/render_side_tree.html' with side=battle.get_side_a %}
+        </div>
+
+        <div class="col-sm-2 text-center">
+            <h1>VS</h1>
+        </div>
+
+        <div class="col-sm-5">
+            {% include 'battle/render_side_tree.html' with side=battle.get_side_b %}
+        </div>
+    </div>
 
 {% endblock %}

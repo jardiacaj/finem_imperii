@@ -1,0 +1,27 @@
+<ul>
+    {% for battle_organization in side.battleorganization_set.all %}
+        <li class="lead">{{ battle_organization.organization.get_html_link|safe }}</li>
+
+        <ul>
+            {% for battle_character in battle_organization.battlecharacter_set.all %}
+                <li>{{ battle_character.character.get_html_link|safe }}</li>
+
+                <ul>
+                    {% for battle_unit in battle_character.battleunit_set.all %}
+                        <li>
+                            {{ battle_unit.starting_manpower }}
+                            {{ battle_unit.type }}:
+                            {{ battle_unit.world_unit.name }}
+                        </li>
+                    {% endfor %}
+                </ul>
+
+            {% empty %}
+                <li>No one</li>
+            {% endfor %}
+        </ul>
+
+    {% empty %}
+        <li>No one</li>
+    {% endfor %}
+</ul>

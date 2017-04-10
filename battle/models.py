@@ -39,6 +39,8 @@ class Battle(models.Model):
     tile = models.ForeignKey('world.Tile')
     current = models.BooleanField(default=True)
     started = models.BooleanField(default=False)
+    start_turn = models.IntegerField()
+    end_turn = models.IntegerField(blank=True, null=True)
 
     def get_absolute_url(self):
         return reverse('battle:battlefield', kwargs={'battle_id': self.id})
@@ -79,6 +81,12 @@ class Battle(models.Model):
             }
             result['object_data'].append(object_data)
         return result
+
+    def get_side_a(self):
+        return self.battleside_set.all()[0]
+
+    def get_side_b(self):
+        return self.battleside_set.all()[1]
 
 
 class BattleTurn(models.Model):
@@ -158,6 +166,8 @@ class BattleUnit(models.Model):
     starting_x_pos = models.IntegerField(default=0)
     starting_z_pos = models.IntegerField(default=0)
     starting_manpower = models.IntegerField()
+    name = models.CharField(max_length=100)
+    type = models.CharField(max_length=30)
 
     def __str__(self):
         return self.world_unit.name

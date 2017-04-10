@@ -25,7 +25,7 @@ class TestBattleStart(TestCase):
         initialize_unit(WorldUnit.objects.get(id=1))
         initialize_unit(WorldUnit.objects.get(id=2))
         tile = Tile.objects.get(id=108)
-        battle = Battle.objects.create(tile=tile)
+        battle = Battle.objects.create(tile=tile, start_turn=0)
         initialize_from_conflict(battle, [Organization.objects.get(id=105), Organization.objects.get(id=112)], tile)
 
         self.assertEqual(battle.battleside_set.count(), 2)
@@ -57,14 +57,14 @@ class TestBattleStart(TestCase):
         )
         self.assertEqual(BattleUnit.objects.count(), 2)
 
-        response = self.client.get(battle.get_absolute_url())
+        response = self.client.get(battle.get_absolute_url(), follow=True)
         self.assertEqual(response.status_code, 200)
 
     def test_start_battle(self):
         initialize_unit(WorldUnit.objects.get(id=1))
         initialize_unit(WorldUnit.objects.get(id=2))
         tile = Tile.objects.get(id=108)
-        battle = Battle.objects.create(tile=tile)
+        battle = Battle.objects.create(tile=tile, start_turn=0)
         initialize_from_conflict(battle, [Organization.objects.get(id=105), Organization.objects.get(id=112)], tile)
         start_battle(battle)
 

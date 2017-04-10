@@ -110,6 +110,7 @@ def create_battle_from_conflict(conflict, tile):
     battle = Battle.objects.create(
         tile=tile,
         current=True,
+        start_turn=tile.world.current_turn
     )
     initialize_from_conflict(battle, conflict, tile)
     return battle

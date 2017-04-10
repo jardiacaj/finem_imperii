@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.urls.base import reverse
 
 from battle.battle_init import initialize_from_conflict, start_battle
 from battle.models import Battle, BattleCharacter, BattleUnit, BattleContubernium, BattleSoldier, BattleOrganization
@@ -9,6 +10,16 @@ from world.models import Tile, WorldUnit, NPC
 
 class TestBattleStart(TestCase):
     fixtures = ['simple_world']
+
+    def setUp(self):
+        self.client.post(
+            reverse('account:login'),
+            {'username': 'alice', 'password': 'test'},
+        )
+        self.client.get(
+            reverse('world:activate_character', kwargs={'char_id': 5}),
+            follow=True
+        )
 
     def test_battle_create_from_conflict(self):
         initialize_unit(WorldUnit.objects.get(id=1))
@@ -46,6 +57,9 @@ class TestBattleStart(TestCase):
         )
         self.assertEqual(BattleUnit.objects.count(), 2)
 
+        response = self.client.get(battle.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+
     def test_start_battle(self):
         initialize_unit(WorldUnit.objects.get(id=1))
         initialize_unit(WorldUnit.objects.get(id=2))
@@ -61,6 +75,9 @@ class TestBattleStart(TestCase):
 
         for npc in NPC.objects.all():
             self.assertTrue(BattleSoldier.objects.filter(world_npc=npc).exists())
+
+        response = self.client.get(battle.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
 
     def test_conflict_creation_on_region_without_able_soldiers(self):
         tile = Tile.objects.get(id=108)

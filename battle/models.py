@@ -59,6 +59,7 @@ class Battle(models.Model):
             'turn_count': self.battleturn_set.count(),
             'heightmap': [0]*100
         }
+        """
         for char in self.battlecharacter_set.all():
             for battle_unit in char.battleunit_set.all():
                 unit_data = {
@@ -68,6 +69,7 @@ class Battle(models.Model):
                     ]
                 }
                 result['unit_data'].append(unit_data)
+                """
         for battle_object in self.battleobject_set.all():
             object_data = {
                 'turn_data': [

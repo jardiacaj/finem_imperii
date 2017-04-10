@@ -54,12 +54,6 @@ function BaseRenderer() {
         zis.pick();
     };
 
-    zis.mouse_click_listener_notifier = function (event) {
-        if (zis.click_callback !== undefined) {
-            return zis.click_callback(zis.picked_region, zis.picked_settlement);
-        }
-    };
-
     zis.unproject = function (pos) {
         var widthHalf = window.innerWidth / 2, heightHalf = window.innerHeight / 2;
         pos.project(zis.camera);
@@ -121,6 +115,5 @@ function BaseRenderer() {
 
     $(window).on('resize', zis.window_resize_listener);
     $(document).on('mousemove', zis.mouse_move_listener);
-    $(document).on('click', zis.mouse_click_listener_notifier);
 
 }

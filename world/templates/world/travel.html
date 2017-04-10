@@ -52,7 +52,7 @@
 
         function click_callback(region, settlement) {
             if (settlement !== undefined) {
-                window.location.href = '{% url 'world:travel' %}' + settlement.id
+                window.location.href = '{% url 'world:travel' %}' + settlement.settlement.id
             }
         }
 
@@ -60,7 +60,6 @@
             selected_region = region;
         }
         function settlement_callback(settlement) {
-            console.log(settlement);
             $("#settlement_name").text(settlement ? settlement.settlement.name : 'none');
         }
     </script>

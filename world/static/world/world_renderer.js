@@ -38,11 +38,19 @@ function MapRenderer(world_data) {
 
     /* INTERNALS */
 
+    zis.mouse_click_listener_notifier = function (event) {
+        if (zis.click_callback !== undefined) {
+            return zis.click_callback(zis.picked_region, zis.picked_settlement);
+        }
+    };
+
     zis.notify_region_pick = function (region) {
+        zis.picked_region = region;
         if (zis.region_callback !== undefined) return zis.region_callback(region);
     };
 
     zis.notify_settlement_pick = function (settlement) {
+        zis.picked_settlement = settlement;
         if (zis.settlement_callback !== undefined) return zis.settlement_callback(settlement);
     };
 
@@ -167,6 +175,9 @@ function MapRenderer(world_data) {
     zis.settlements = world_data.settlements;
     zis.organizations = world_data.organizations;
 
+    zis.picked_region = undefined;
+    zis.picked_settlement = undefined;
+
     zis.travel_line_material = new THREE.LineBasicMaterial({color: 0x801919, linewidth: 3});
     zis.region_geometry = new THREE.CubeGeometry(1, 1, 1);
     zis.region_edges_geometry = new THREE.EdgesGeometry( zis.region_geometry );
@@ -210,5 +221,6 @@ function MapRenderer(world_data) {
     }
 
     zis.renderer.render();
+    $(document).on('click', zis.mouse_click_listener_notifier);
 
 }

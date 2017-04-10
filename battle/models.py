@@ -251,6 +251,8 @@ class BattleUnitInTurn(models.Model):
 
 class BattleContubernium(models.Model):
     battle_unit = models.ForeignKey(BattleUnit)
+    starting_x_pos = models.IntegerField(default=0)
+    starting_z_pos = models.IntegerField(default=0)
 
 
 class BattleContuberniumInTurn(models.Model):

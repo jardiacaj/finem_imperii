@@ -1,7 +1,7 @@
 import math
 
 from battle.models import BattleFormation, BattleUnit, BattleContubernium, BattleSoldier, BattleOrganization, \
-    BattleSide, BattleCharacter
+    BattleSide, BattleCharacter, Coordinates
 
 
 def create_contubernia(unit):
@@ -48,6 +48,10 @@ def initialize_side_positioning(side):
     else:
         raise Exception("Formation {} not known".format(formation_settings.formation))
     formation.make_formation()
+    for coords, contub in formation.output_formation():
+        contub.starting_x_pos = coords.x
+        contub.starting_z_pos = coords.z
+        contub.save()
 
 
 class Line:
@@ -83,16 +87,15 @@ class Line:
 
 
 class LineFormation:
-
-    def __init__(self, battle_side, settings):
-        self.settings = settings
+    def __init__(self, battle_side, formation_object):
+        self.formation_object = formation_object
         self.battle_side = battle_side
         self.lines = [
-            Line(settings.element_size),
-            Line(settings.element_size),
-            Line(settings.element_size),
-            Line(settings.element_size),
-            Line(settings.element_size),
+            Line(formation_object.element_size),
+            Line(formation_object.element_size),
+            Line(formation_object.element_size),
+            Line(formation_object.element_size),
+            Line(formation_object.element_size),
         ]
 
     def make_formation(self):
@@ -106,6 +109,14 @@ class LineFormation:
                 for unit in units:
                     self.lines[line_index].push_unit(unit, side_index)
         #TODO flanks
+
+    def output_formation(self):
+        for line_index, line in enumerate(self.lines):
+            for col_index, column in enumerate(line.columns):
+                for contub_index, contub in enumerate(column):
+                    x = col_index
+                    z = line_index * (self.formation_object.element_size + self.formation_object.spacing) + contub_index
+                    yield Coordinates(x, z), contub
 
 
 def initialize_battle_positioning(battle):

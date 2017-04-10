@@ -120,6 +120,9 @@ class Tile(models.Model):
         if conflict:
             return create_battle_from_conflict(conflict, self)
 
+    def get_current_battles(self):
+        return self.battle_set.filter(current=True)
+
 
 class Settlement(models.Model):
     name = models.CharField(max_length=100)

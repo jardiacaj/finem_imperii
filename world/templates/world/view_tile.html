@@ -17,6 +17,14 @@
 
     <div class="row">
         <div class="col-lg-3">
+            {% for battle in tile.get_current_battles %}
+                <p class="alert alert-danger text-center">
+                    <a href="{{ battle.get_absolute_url }}">
+                        Battle in progress
+                    </a>
+                </p>
+            {% endfor %}
+
             <h4>Local settlements</h4>
 
             <ul>

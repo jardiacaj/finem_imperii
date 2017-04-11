@@ -31,6 +31,14 @@
                     <a href="{{ request.hero.world.get_absolute_url }}">{{ request.hero.world }}</a>.
                 </p>
 
+                {% for battle in request.hero.location.tile.get_current_battles %}
+                    <p class="text-center">
+                        <a href="{{ battle.get_absolute_url }}" class="btn btn-danger">
+                            Battle in progress
+                        </a>
+                    </p>
+                {% endfor %}
+
                 <table class="table table-striped table-hover">
                     <thead>
                         <tr><td class="h5">Your units</td></tr>

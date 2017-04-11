@@ -9,6 +9,7 @@ from django.db import models, transaction
 from django.contrib.auth.models import User
 from django.db.models.aggregates import Avg
 
+from battle.models import BattleUnit
 from messaging.models import CharacterMessage, MessageRecipient
 from organization.models import Organization
 from world.templatetags.extra_filters import nice_hours
@@ -479,3 +480,10 @@ class WorldUnit(models.Model):
 
     def get_fighting_soldiers(self):
         return self.soldier.filter(able=True)
+
+    def get_current_battle(self):
+        try:
+            in_battle = BattleUnit.objects.get(world_unit=self, battle_side__battle__current=True)
+            return in_battle.battle_side.battle
+        except BattleUnit.DoesNotExist:
+            pass

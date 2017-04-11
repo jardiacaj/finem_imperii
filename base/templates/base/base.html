@@ -48,9 +48,13 @@
                             <tr>
                                 <td>
                                     <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
-                                    <a href="{{ unit.get_absolute_url }}">
-                                        {{ unit }}
-                                    </a>
+                                    <a href="{{ unit.get_absolute_url }}">{{ unit }}</a>
+                                    {% if unit.get_current_battle %}
+                                        <a
+                                                href="{{ unit.get_current_battle.get_absolute_url }}"
+                                                class="btn btn-danger btn-sm"
+                                        >Battle</a>
+                                    {% endif %}
                                 </td>
                                 <td>
                                     {{ unit.descriptor }}

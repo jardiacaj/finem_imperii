@@ -7,21 +7,7 @@
     <h1 class="page-header">{{ request.hero }}</h1>
 
     <p>
-        <a href="{% url 'world:travel' %}">Travel</a>
-    </p>
-
-    <h2>Battles</h2>
-
-    {% for battle_character in request.hero.battlecharacter_set.all %}
-        <p>
-            <a href="{% url 'battle:setup' battle_character.battle_id %}">{{ battle_character.battle }}</a>
-        </p>
-    {% empty %}
-        <p>No battles</p>
-    {% endfor %}
-
-    <p>
-        <a href="{% url 'world:setup_battle' %}">Set up new battle</a>
+        {% lorem 5 %}
     </p>
 
 {% endblock %}

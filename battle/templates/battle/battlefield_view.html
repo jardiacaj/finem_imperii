@@ -1,8 +1,8 @@
-{% extends "base/base_naked.html" %}
+{% extends "base/base.html" %}
 
 {% load staticfiles %}
 
-{% block body %}
+{% block content %}
 
     <h1 class="page-header">
         Battle test
@@ -10,6 +10,14 @@
         <a href="#" onclick="do_next_turn()" class="btn btn-default">NEXT</a>
     </h1>
 
+    <iframe
+            id="battlefield_map"
+            class="placeholder"
+            scrolling="no"
+            style="height: 700px; width: 100%; padding: 0; border: 0;"
+            src="{% url 'battle:battlefield_iframe' battle.id %}"
+    ></iframe>
+<!--
     <script src="{% static 'world/3rd/three.min.js' %}"></script>
     <script src="{% static 'world/3rd/Tween.js' %}"></script>
     <script src="{% static 'world/3rd/OrbitControls.js' %}"></script>
@@ -161,5 +169,6 @@
     </script>
 
     <div id="canvas-container"></div>
+    -->
 
 {% endblock %}

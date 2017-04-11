@@ -79,6 +79,12 @@ class TestBattleStart(TestCase):
         response = self.client.get(battle.get_absolute_url())
         self.assertEqual(response.status_code, 200)
 
+        response = self.client.get(reverse('battle:info', kwargs={'battle_id': battle.id}))
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get(reverse('battle:battlefield_iframe', kwargs={'battle_id': battle.id}))
+        self.assertEqual(response.status_code, 200)
+
     def test_conflict_creation_on_region_without_able_soldiers(self):
         tile = Tile.objects.get(id=108)
         tile.trigger_battles()

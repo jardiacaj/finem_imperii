@@ -1,0 +1,19 @@
+{% extends "base/base_naked.html" %}
+
+{% load staticfiles %}
+
+{% block body %}
+
+    <script src="{% static 'world/3rd/three.min.js' %}"></script>
+    <script src="{% static 'world/3rd/OrbitControls.js' %}"></script>
+    <script src="{% static 'world/base_renderer.js' %}"></script>
+    <script src="{% static 'world/battle_renderer.js' %}"></script>
+
+    <script>
+        $(function () {
+            var map = new BattleRenderer({{ battle_data|safe }});
+            map.renderer.add_orbit_controls();
+        })
+    </script>
+
+{% endblock %}

@@ -54,34 +54,6 @@ class Battle(models.Model):
     def get_units_in_battle(self):
         return BattleUnit.objects.filter(owner__battle_organization__side__battle=self)
 
-    def render_for_view(self):
-        result = {
-            'unit_data': [],
-            'object_data': [],
-            'turn_count': self.battleturn_set.count(),
-            'heightmap': [0]*100
-        }
-        """
-        for char in self.battlecharacter_set.all():
-            for battle_unit in char.battleunit_set.all():
-                unit_data = {
-                    'turn_data': [
-                        model_to_dict(battle_unit_in_turn)
-                        for battle_unit_in_turn in battle_unit.battleunitinturn_set.all()
-                    ]
-                }
-                result['unit_data'].append(unit_data)
-                """
-        for battle_object in self.battleobject_set.all():
-            object_data = {
-                'turn_data': [
-                    model_to_dict(battle_object_in_turn)
-                    for battle_object_in_turn in battle_object.battleobjectinturn_set.all()
-                ]
-            }
-            result['object_data'].append(object_data)
-        return result
-
     def get_side_a(self):
         return self.battleside_set.all()[0]
 

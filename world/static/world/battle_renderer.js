@@ -14,6 +14,44 @@ function BattleRenderer(battle_data) {
         zis.renderer.scene.add(ground);
     };
 
+    zis.render_turn = function (turn_num) {
+        for (var contubernium_id in zis.contubernia)  {
+            if (Object.prototype.hasOwnProperty.call(zis.contubernia, contubernium_id)) {
+                var contubernium = zis.contubernia[contubernium_id];
+                var contubernium_in_turn = contubernium.in_turn[turn_num];
+
+                if (contubernium.mesh === undefined) {
+                    var unit = zis.units[contubernium.unit_id];
+                    var character = zis.characters[unit.character_id];
+                    var organization = zis.organizations[character.organization_id];
+
+                    var mesh = new THREE.Mesh( zis.contubernium_geometry, organization.material );
+
+                    console.log(contubernium_in_turn);
+                    mesh.position.x = contubernium_in_turn.x_pos;
+                    mesh.position.z = contubernium_in_turn.z_pos;
+                    mesh.position.y = 0.5;
+
+                    mesh.contubernium = contubernium;
+                    mesh.pick_type = "contubernium";
+                    contubernium.mesh = mesh;
+
+                    zis.renderer.scene.add(mesh);
+                }
+
+            }
+        }
+    };
+
+    zis.generate_organization_materials = function () {
+        for (var organization_id in zis.organizations) {
+            if (Object.prototype.hasOwnProperty.call(zis.organizations, organization_id)) {
+                var organization = zis.organizations[organization_id];
+                organization.material = new THREE.MeshBasicMaterial({color: parseInt(organization.color, 16)});
+            }
+        }
+    };
+
     /* DATA */
 
     zis.organizations = battle_data.organizations;
@@ -30,12 +68,15 @@ function BattleRenderer(battle_data) {
 
     zis.ground_material = new THREE.MeshLambertMaterial({color: 0x207F07, shading: THREE.SmoothShading});
     zis.ground_geometry = new THREE.CubeGeometry(100, 2, 100);
+    zis.contubernium_geometry = new THREE.CubeGeometry(1, 1, 1);
+    zis.generate_organization_materials();
 
     /* CONSTRUCTION */
 
     zis.renderer = new BaseRenderer();
     zis.renderer.enable_rendering_helpers();
-    zis.render_ground()
+    zis.render_ground();
+    zis.render_turn(zis.showing_turn);
 
     zis.renderer.render();
     $(document).on('click', zis.mouse_click_listener_notifier);

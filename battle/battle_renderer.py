@@ -11,6 +11,7 @@ def render_battle_for_view(battle: Battle):
             organizations[battle_organization.id] = {
                 'z': battle_side.z,
                 'name': battle_organization.organization.name,
+                'color': battle_organization.organization.color,
             }
             for battle_character in battle_organization.battlecharacter_set.all():
                 characters[battle_character.id] = {

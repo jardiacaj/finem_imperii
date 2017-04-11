@@ -72,3 +72,44 @@ class TestUnitManagement(TestCase):
         self.not_my_unit.refresh_from_db()
         self.assertNotEqual(self.not_my_unit.battle_line, 1)
         self.assertNotEqual(self.not_my_unit.battle_side_pos, 2)
+
+    def test_unit_set_status(self):
+        self.assertEqual(self.my_unit.status, WorldUnit.FOLLOWING)
+        response = self.client.post(
+            reverse('world:unit_status_change', kwargs={'unit_id': self.my_unit.id, 'new_status': WorldUnit.STANDING}),
+            follow=True
+        )
+        self.assertRedirects(response, self.my_unit.get_absolute_url())
+        self.my_unit.refresh_from_db()
+        self.assertEqual(self.my_unit.status, WorldUnit.STANDING)
+
+    def test_unit_set_status_denied(self):
+        self.assertEqual(self.not_my_unit.status, WorldUnit.FOLLOWING)
+        response = self.client.post(
+            reverse('world:unit_status_change', kwargs={'unit_id': self.not_my_unit.id, 'new_status': WorldUnit.STANDING}),
+            follow=True
+        )
+        self.assertEqual(response.status_code, 404)
+        self.not_my_unit.refresh_from_db()
+        self.assertEqual(self.not_my_unit.status, WorldUnit.FOLLOWING)
+
+    def test_unit_set_status_too_soon(self):
+        self.assertEqual(self.my_unit.status, WorldUnit.FOLLOWING)
+        response = self.client.post(
+            reverse('world:unit_status_change', kwargs={'unit_id': self.my_unit.id, 'new_status': WorldUnit.NOT_MOBILIZED}),
+            follow=True
+        )
+        self.assertRedirects(response, self.my_unit.get_absolute_url())
+        self.my_unit.refresh_from_db()
+        self.assertEqual(self.my_unit.status, WorldUnit.FOLLOWING)
+
+    def test_unit_set_status_in_battle(self):
+        self.assertEqual(self.my_unit.status, WorldUnit.FOLLOWING)
+        self.my_unit.world.pass_turn()
+        response = self.client.post(
+            reverse('world:unit_status_change', kwargs={'unit_id': self.my_unit.id, 'new_status': WorldUnit.NOT_MOBILIZED}),
+            follow=True
+        )
+        self.assertRedirects(response, self.my_unit.get_absolute_url())
+        self.my_unit.refresh_from_db()
+        self.assertEqual(self.my_unit.status, WorldUnit.FOLLOWING)

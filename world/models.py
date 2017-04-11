@@ -462,7 +462,7 @@ class WorldUnit(models.Model):
         if new_status == WorldUnit.CUSTOMER_SEARCH:
             raise Exception("Can't switch to searching customer status")
         if self.get_current_battle() is not None:
-            raise Exception("Can't change status while in battle")
+            raise WorldUnitStatusChangeException("Can't change status while in battle")
         if self.status == new_status:
             raise WorldUnitStatusChangeException("The unit is already {}".format(self.get_status_display()))
         if new_status == WorldUnit.NOT_MOBILIZED:

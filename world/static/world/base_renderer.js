@@ -33,6 +33,11 @@ function BaseRenderer() {
         zis.scene.add(zis.directionalLight);
     };
 
+    zis.enable_rendering_helpers = function () {
+        zis.scene.add(new THREE.AxisHelper(2));
+        zis.scene.add(new THREE.GridHelper(10, 1));
+    };
+
     zis.mouse_move_listener = function (event) {
         // it's pointless to do anything if there are no callbacks set
         if($.isEmptyObject(zis.picking_types))

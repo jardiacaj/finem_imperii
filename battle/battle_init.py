@@ -47,7 +47,7 @@ def initialize_from_conflict(battle, conflict, tile):
             )
 
 
-def initialize_side_positioning(side):
+def initialize_side_positioning(side: BattleSide):
     formation_settings = side.get_formation()
     if formation_settings.formation == BattleFormation.LINE:
         formation = LineFormation(side, formation_settings)
@@ -55,8 +55,8 @@ def initialize_side_positioning(side):
         raise Exception("Formation {} not known".format(formation_settings.formation))
     formation.make_formation()
     for coords, contub in formation.output_formation():
-        contub.starting_x_pos = coords.x
-        contub.starting_z_pos = coords.z
+        contub.starting_x_pos = coords.x if side.z else -coords.x
+        contub.starting_z_pos = coords.z if side.z else -coords.z
         contub.save()
 
 

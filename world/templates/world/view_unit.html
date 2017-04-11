@@ -2,7 +2,12 @@
 
 {% block content %}
 
-    <h1 class="page-header">{{ unit }}</h1>
+    <h1 class="page-header">
+        {% if unit.get_current_battle %}
+            <a href="{{ unit.get_current_battle.get_absolute_url }}" class="btn btn-danger">In battle</a>
+        {% endif %}
+        {{ unit }}
+    </h1>
 
     <div class="row">
         <div class="col-sm-9">
@@ -30,57 +35,60 @@
                     </tr>
                     <tr>
                         <td>Owner</td>
-                        <td>{{ unit.owner_character }}</td>
+                        <td>{{ unit.owner_character.get_html_link|safe }}</td>
                     </tr>
                     <tr>
                         <td>Soldiers</td>
-                        <td>{{ unit.soldier.all|length }}</td>
-                    </tr>
-                    <tr>
-                        <td>Type</td>
-                        <td>{{ unit.get_type_display|capfirst }}</td>
+                        <td>
+                            {{ unit.soldier.all|length }}
+                            {{ unit.get_type_display|capfirst }}
+                            ({{ unit.get_recruitment_type_display }})
+                        </td>
                     </tr>
                     <tr>
                         <td>Status</td>
                         <td>
                             {% if unit.owner_character == request.hero %}
-                            <form class="form-inline" role="form" method="post" action="{% url 'world:unit_status_change' unit.id 'not mobilized' %}">
+                                <form class="form-inline" role="form" method="post" action="{% url 'world:unit_status_change' unit.id 'not mobilized' %}" style="display: inline">
                                     {% csrf_token %}
                                     <button
                                         type="submit"
                                         class="btn btn-sm
                                         {% if unit.status == 'not mobilized' %}disabled btn-success
-                                        {% else %}btn-primary
+                                        {% elif unit.get_current_battle %}disabled btn-default
+                                        {% else %}btn-default
                                         {% endif %}">
                                         Not mobilized
                                     </button>
                                 </form>
-                            </p>
-                            <p>
-                                <form class="form-inline" role="form" method="post" action="{% url 'world:unit_status_change' unit.id 'standing' %}">
+                                <form class="form-inline" role="form" method="post" action="{% url 'world:unit_status_change' unit.id 'standing' %}" style="display: inline">
                                     {% csrf_token %}
                                     <button
                                         type="submit"
                                         class="btn btn-sm
                                         {% if unit.status == 'standing' %}disabled btn-success
-                                        {% else %}btn-primary
+                                        {% elif unit.get_current_battle %}disabled btn-default
+                                        {% else %}btn-default
                                         {% endif %}">
                                         Standing
                                     </button>
                                 </form>
-                            </p>
-                            <p>
-                                <form class="form-inline" role="form" method="post" action="{% url 'world:unit_status_change' unit.id 'following' %}">
+                                <form class="form-inline" role="form" method="post" action="{% url 'world:unit_status_change' unit.id 'following' %}" style="display: inline">
                                     {% csrf_token %}
                                     <button
                                         type="submit"
                                         class="btn btn-sm
                                         {% if unit.status == 'following' %}disabled btn-success
-                                        {% else %}btn-primary
+                                        {% elif unit.get_current_battle %}disabled btn-default
+                                        {% else %}btn-default
                                         {% endif %}">
                                         Following
                                     </button>
                                 </form>
+
+                                {% if unit.get_current_battle %}
+                                    Can't change status when in a battle
+                                {% endif %}
                             {% else %}
                                 {{ unit.get_status_display|capfirst }}
                             {% endif %}
@@ -89,18 +97,14 @@
                     <tr>
                         <td>Location</td>
                         <td>
-                            {{ unit.location }} ({{ unit.location.tile }},
+                            {{ unit.location }} ({{ unit.location.tile.get_html_link|safe }},
                             {% if unit.location.tile.controlled_by %}
-                                <a href="{{ unit.location.tile.controlled_by.get_absolute_url }}">{{ unit.location.tile.controlled_by }}</a>
+                                {{ unit.location.tile.controlled_by.get_html_link|safe }}
                             {% else %}
                                 barbaric
                             {% endif %}
                             )
                         </td>
-                    </tr>
-                    <tr>
-                        <td>Recruitment type</td>
-                        <td>{{ unit.get_recruitment_type_display|capfirst }}</td>
                     </tr>
                     <tr>
                         <td>Average skill</td>

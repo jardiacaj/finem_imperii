@@ -259,7 +259,7 @@ class RecruitmentView(View):
                 name="New unit from {}".format(request.hero.location),
                 recruitment_type=recruitment_type,
                 type=unit_type,
-                status=WorldUnit.NOT_MOBILIZED,
+                status=WorldUnit.STANDING,
                 mobilization_status_since=request.hero.world.current_turn,
                 current_status_since=request.hero.world.current_turn,
             )
@@ -278,7 +278,7 @@ class RecruitmentView(View):
                 "You formed a new unit of {} called {}".format(len(soldiers), unit.name),
                 "success"
             )
-            return redirect('world:recruit')
+            return redirect(unit.get_absolute_url())
 
         else:
             pass
@@ -414,19 +414,15 @@ def unit_orders(request, unit_id):
     return redirect(request.META.get('HTTP_REFERER', unit.get_absolute_url()))
 
 
-class UnitStatusChangeView(View):
-    template_name = 'world/travel.html'
-
-    def get(self, request, unit_id, new_status):
-        return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
-
-    def post(self, request, unit_id, new_status):
-        unit = get_object_or_404(WorldUnit, id=unit_id, owner_character=request.hero)
-        try:
-            unit.change_status(new_status)
-        except WorldUnitStatusChangeException as e:
-            messages.error(request, str(e), "danger")
-        return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
+@inchar_required
+@require_POST
+def unit_status_change(request, unit_id, new_status):
+    unit = get_object_or_404(WorldUnit, id=unit_id, owner_character=request.hero)
+    try:
+        unit.change_status(new_status)
+    except WorldUnitStatusChangeException as e:
+        messages.error(request, str(e), "danger")
+    return redirect(request.META.get('HTTP_REFERER', unit.get_absolute_url()))
 
 
 @inchar_required

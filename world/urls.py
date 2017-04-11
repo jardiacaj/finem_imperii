@@ -4,8 +4,8 @@ from django.contrib.auth.decorators import login_required
 from decorators import inchar_required
 from world.views import CharacterCreationView, activate_character, character_home, setup_battle, world_view, \
     create_character, minimap_view, world_view_iframe, RecruitmentView, travel_view_iframe, TravelView, unit_view, \
-    unit_rename, unit_transfer, unit_merge, unit_disband, UnitStatusChangeView, character_view, tile_view, \
-    tile_view_iframe, unit_orders
+    unit_rename, unit_transfer, unit_merge, unit_disband, character_view, tile_view, \
+    tile_view_iframe, unit_orders, unit_status_change
 
 urlpatterns = [
     url(r'^create_character$', create_character, name='create_character'),
@@ -27,6 +27,6 @@ urlpatterns = [
     url(r'^unit/(?P<unit_id>[0-9]+)/disband', unit_disband, name='unit_disband'),
     url(r'^unit/(?P<unit_id>[0-9]+)/merge$', unit_merge, name='unit_merge'),
     url(r'^unit/(?P<unit_id>[0-9]+)/transfer', unit_transfer, name='unit_transfer'),
-    url(r'^unit/(?P<unit_id>[0-9]+)/(?P<new_status>[ a-z]+)', inchar_required(UnitStatusChangeView.as_view()), name='unit_status_change'),
+    url(r'^unit/(?P<unit_id>[0-9]+)/(?P<new_status>[ a-z]+)', unit_status_change, name='unit_status_change'),
     url(r'^minimap$', minimap_view, name='minimap'),
 ]

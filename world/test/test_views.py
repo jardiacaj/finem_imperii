@@ -78,3 +78,23 @@ class TestWorldView(TestCase):
         world = World.objects.get(id=2)
         response = self.client.get(world.get_absolute_url())
         self.assertEqual(response.status_code, 200)
+
+    def test_view_world_iframe(self):
+        response = self.client.get(reverse('world:world_iframe', kwargs={'world_id': 2}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_minimap_iframe(self):
+        response = self.client.get(reverse('world:minimap'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_travel_view(self):
+        response = self.client.get(reverse('world:travel'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_travel_iframe_view(self):
+        response = self.client.get(reverse('world:travel_iframe'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_travel_iframe_view_with_destination(self):
+        response = self.client.get(reverse('world:travel_iframe', kwargs={'settlement_id': 1001}))
+        self.assertEqual(response.status_code, 200)

@@ -189,3 +189,22 @@ class TestBattleStart(TestCase):
         self.assertEqual(buit.z_pos, battle_unit.starting_z_pos - 1)
         order.refresh_from_db()
         self.assertTrue(order.done)
+
+    def test_unit_formation_follow(self):
+        start_battle(self.battle)
+        unit = WorldUnit.objects.get(id=1)
+        battle_unit = BattleUnit.objects.get(world_unit=unit)
+
+        battle_tick(self.battle)
+
+        self.battle.refresh_from_db()
+        buit = BattleUnitInTurn.objects.get(battle_turn=self.battle.get_latest_turn(), battle_unit=battle_unit)
+        self.assertEqual(buit.x_pos, battle_unit.starting_x_pos)
+        self.assertEqual(buit.z_pos, battle_unit.starting_z_pos - 1)
+
+        battle_tick(self.battle)
+
+        self.battle.refresh_from_db()
+        buit = BattleUnitInTurn.objects.get(battle_turn=self.battle.get_latest_turn(), battle_unit=battle_unit)
+        self.assertEqual(buit.x_pos, battle_unit.starting_x_pos)
+        self.assertEqual(buit.z_pos, battle_unit.starting_z_pos - 2)

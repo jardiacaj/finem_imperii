@@ -82,23 +82,30 @@ def do_turn(battle_contubernium_in_turn: BattleContuberniumInTurn):
                 x=(unit_target.x + battle_contubernium_in_turn.battle_contubernium.x_offset_to_unit),
                 z=(unit_target.z + battle_contubernium_in_turn.battle_contubernium.z_offset_to_unit)
             )
-            if euclidean_distance(battle_contubernium_in_turn.coordinates(), contub_target) > 0:
-                path = find_path(
-                    battle_contubernium_in_turn,
-                    contub_target
-                )
-                if len(path) > 1:
-                    battle_contubernium_in_turn.x_pos = path[1].x
-                    battle_contubernium_in_turn.z_pos = path[1].z
+            find_and_follow_path(battle_contubernium_in_turn, contub_target)
         if order.what == Order.FLEE:
             pass
         if order.what == Order.CHARGE:
             pass
         if order.what == Order.ADVANCE_IN_FORMATION:
-            pass
+            z_direction = -1 if battle_contubernium_in_turn.battle_contubernium.battle_unit.battle_side.z else 1
+            z_offset = battle_contubernium_in_turn.battle_turn.num * z_direction
+            target = Coordinates(
+                x=battle_contubernium_in_turn.battle_contubernium.starting_x_pos,
+                z=battle_contubernium_in_turn.battle_contubernium.starting_z_pos + z_offset
+            )
+            find_and_follow_path(battle_contubernium_in_turn, target)
         if order.what == Order.RANGED_ATTACK:
             pass
     battle_contubernium_in_turn.save()
+
+
+def find_and_follow_path(battle_contubernium_in_turn, target):
+    if euclidean_distance(battle_contubernium_in_turn.coordinates(), target) > 0:
+        path = find_path(battle_contubernium_in_turn, target)
+        if len(path) > 1:
+            battle_contubernium_in_turn.x_pos = path[1].x
+            battle_contubernium_in_turn.z_pos = path[1].z
 
 
 def euclidean_distance(start: Coordinates, goal: Coordinates):
@@ -114,7 +121,7 @@ def coordinate_neighbours(coord: Coordinates):
     return result
 
 
-def find_path(battle_contubernium_in_turn: BattleContuberniumInTurn, goal):
+def find_path(battle_contubernium_in_turn: BattleContuberniumInTurn, goal) -> list:
     if euclidean_distance(battle_contubernium_in_turn.coordinates(), goal) == 0:
         return True
 

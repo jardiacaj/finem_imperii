@@ -138,20 +138,22 @@ def generate_in_turn_objects(battle):
     for side in battle.battleside_set.all():
         for organization in side.battleorganization_set.all():
             for character in organization.battlecharacter_set.all():
-                BattleCharacterInTurn.objects.create(
+                bcit = BattleCharacterInTurn.objects.create(
                     battle_character=character,
                     battle_turn=turn
                 )
                 for unit in character.battleunit_set.all():
-                    BattleUnitInTurn.objects.create(
+                    buit = BattleUnitInTurn.objects.create(
                         battle_unit=unit,
+                        battle_character_in_turn=bcit,
                         battle_turn=turn,
                         x_pos=unit.starting_x_pos,
                         z_pos=unit.starting_z_pos
                     )
                     for contubernium in unit.battlecontubernium_set.all():
-                        BattleContuberniumInTurn.objects.create(
+                        bcontubit = BattleContuberniumInTurn.objects.create(
                             battle_contubernium=contubernium,
+                            battle_unit_in_turn=buit,
                             battle_turn=turn,
                             x_pos=contubernium.starting_x_pos,
                             z_pos=contubernium.starting_z_pos
@@ -159,6 +161,7 @@ def generate_in_turn_objects(battle):
                         for soldier in contubernium.battlesoldier_set.all():
                             BattleSoldierInTurn.objects.create(
                                 battle_turn=turn,
+                                battle_contubernium_in_turn=bcontubit,
                                 battle_soldier=soldier
                             )
 

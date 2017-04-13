@@ -151,6 +151,7 @@ class BattleUnitInTurn(models.Model):
             ["battle_turn", "x_pos", "z_pos"],
         ]
     battle_unit = models.ForeignKey(BattleUnit)
+    battle_character_in_turn = models.ForeignKey(BattleCharacterInTurn)
     battle_turn = models.ForeignKey(BattleTurn)
     x_pos = models.IntegerField()
     z_pos = models.IntegerField()
@@ -168,6 +169,7 @@ class BattleContubernium(models.Model):
 
 class BattleContuberniumInTurn(models.Model):
     battle_contubernium = models.ForeignKey(BattleContubernium)
+    battle_unit_in_turn = models.ForeignKey(BattleUnitInTurn)
     battle_turn = models.ForeignKey(BattleTurn)
     x_pos = models.IntegerField()
     z_pos = models.IntegerField()
@@ -180,17 +182,20 @@ class BattleSoldier(models.Model):
 
 class BattleSoldierInTurn(models.Model):
     battle_soldier = models.ForeignKey(BattleSoldier)
+    battle_contubernium_in_turn = models.ForeignKey(BattleContuberniumInTurn)
     battle_turn = models.ForeignKey(BattleTurn)
 
 
 class Order(models.Model):
     STAND = 'stand'
+    MOVE = 'move'
     FLEE = 'flee'
     CHARGE = 'charge'
     ADVANCE_IN_FORMATION = 'formation'
     RANGED_ATTACK = 'ranged'
     WHAT_CHOICES = (
        (STAND, STAND),
+       (MOVE, MOVE),
        (FLEE, FLEE),
        (CHARGE, CHARGE),
        (ADVANCE_IN_FORMATION, ADVANCE_IN_FORMATION),

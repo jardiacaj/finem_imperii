@@ -104,12 +104,29 @@ class TestBattleStart(TestCase):
         battle = Battle.objects.create(tile=tile, start_turn=0)
         initialize_from_conflict(battle, [Organization.objects.get(id=105), Organization.objects.get(id=112)], tile)
         start_battle(battle)
+
         battle_tick(battle)
 
         self.assertTrue(BattleContuberniumInTurn.objects.exists())
-        self.assertEqual(BattleContuberniumInTurn.objects.count(), 16)
+        self.assertEqual(BattleContuberniumInTurn.objects.count(), 8*2)
         self.assertTrue(BattleSoldierInTurn.objects.exists())
-        self.assertEqual(BattleSoldierInTurn.objects.count(), 120)
+        self.assertEqual(BattleSoldierInTurn.objects.count(), 60*2)
+
+        response = self.client.get(battle.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get(reverse('battle:info', kwargs={'battle_id': battle.id}))
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get(reverse('battle:battlefield_iframe', kwargs={'battle_id': battle.id}))
+        self.assertEqual(response.status_code, 200)
+
+        battle_tick(battle)
+
+        self.assertTrue(BattleContuberniumInTurn.objects.exists())
+        self.assertEqual(BattleContuberniumInTurn.objects.count(), 8*3)
+        self.assertTrue(BattleSoldierInTurn.objects.exists())
+        self.assertEqual(BattleSoldierInTurn.objects.count(), 60*3)
 
         response = self.client.get(battle.get_absolute_url())
         self.assertEqual(response.status_code, 200)

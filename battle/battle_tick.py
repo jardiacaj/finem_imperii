@@ -1,7 +1,7 @@
 import math
 
 from battle.models import Battle, BattleCharacterInTurn, BattleUnitInTurn, BattleContuberniumInTurn, \
-    BattleSoldierInTurn, Coordinates
+    BattleSoldierInTurn, Coordinates, Order
 
 
 def create_next_turn(battle: Battle):
@@ -23,42 +23,54 @@ def create_next_turn(battle: Battle):
                     buit = BattleUnitInTurn.objects.get(battle_unit=unit, battle_turn=prev_turn)
                     buit.id = None
                     buit.battle_turn = new_turn
+                    buit.battle_character_in_turn = bcit
                     buit.save()
 
                     for contubernium in unit.battlecontubernium_set.all():
-                        bcit = BattleContuberniumInTurn.objects.get(
+                        bcontubit = BattleContuberniumInTurn.objects.get(
                             battle_contubernium=contubernium, battle_turn=prev_turn
                         )
-                        bcit.id = None
-                        bcit.battle_turn = new_turn
-                        bcit.save()
+                        bcontubit.id = None
+                        bcontubit.battle_turn = new_turn
+                        bcontubit.battle_unit_in_turn = buit
+                        bcontubit.save()
 
                         for soldier in contubernium.battlesoldier_set.all():
-                            bsit = BattleSoldierInTurn.objects.get(battle_turn=prev_turn, battle_soldier=soldier)
+                            bsit = BattleSoldierInTurn.objects.get(
+                                battle_turn=prev_turn,
+                                battle_soldier=soldier
+                            )
                             bsit.id = None
                             bsit.battle_turn = new_turn
+                            bsit.battle_contubernium_in_turn = bcontubit
                             bsit.save()
 
 
-def do_turn(battle_unit_in_turn):
-    if battle_unit_in_turn.order:
-        if battle_unit_in_turn.order.what == 'move':
-            path = battle_unit_in_turn.find_path(battle_unit_in_turn.order.target_location_coordinates())
-            print(path)
+def do_turn(battle_contubernium_in_turn: BattleContuberniumInTurn):
+    order = battle_contubernium_in_turn.battle_unit_in_turn.order
+    if order:
+        if order.what == Order.STAND:
+            pass
+        if order.what == Order.MOVE:
+            path = battle_contubernium_in_turn.find_path(order.target_location_coordinates())
             if len(path) > 1:
-                battle_unit_in_turn.x_pos = path[1].x
-                battle_unit_in_turn.z_pos = path[1].z
-        if battle_unit_in_turn.order.what == 'attack':
+                battle_contubernium_in_turn.x_pos = path[1].x
+                battle_contubernium_in_turn.z_pos = path[1].z
+        if order.what == Order.FLEE:
             pass
-        if battle_unit_in_turn.order.what == 'stand':
+        if order.what == Order.CHARGE:
+            pass
+        if order.what == Order.ADVANCE_IN_FORMATION:
+            pass
+        if order.what == Order.RANGED_ATTACK:
             pass
 
 
-def euclidean_distance(start, goal):
+def euclidean_distance(start: Coordinates, goal: Coordinates):
     return math.sqrt((start.x - goal.x)**2 + (start.z - goal.z)**2)
 
 
-def coordinate_neighbours(coord):
+def coordinate_neighbours(coord: Coordinates):
     result = []
     for dx in (-1, 0, 1):
         for dz in (-1, 0, 1):
@@ -67,15 +79,15 @@ def coordinate_neighbours(coord):
     return result
 
 
-def find_path(battle_unit_in_turn, goal):
+def find_path(battle_contubernium_in_turn: BattleContuberniumInTurn, goal):
     closed_set = set()
     open_set = set()
-    open_set.add((battle_unit_in_turn.coordinates()))
+    open_set.add((battle_contubernium_in_turn.coordinates()))
     came_from = {}
     g_score = {}
-    g_score[battle_unit_in_turn.coordinates()] = 0
+    g_score[battle_contubernium_in_turn.coordinates()] = 0
     f_score = {}
-    f_score[battle_unit_in_turn.coordinates()] = battle_unit_in_turn.euclidean_distance(battle_unit_in_turn.coordinates(), goal)
+    f_score[battle_contubernium_in_turn.coordinates()] = battle_contubernium_in_turn.euclidean_distance(battle_contubernium_in_turn.coordinates(), goal)
 
     while open_set:
         minel = None
@@ -97,11 +109,11 @@ def find_path(battle_unit_in_turn, goal):
             return total_path
 
         closed_set.add(current)
-        for neighbor in battle_unit_in_turn.coordinate_neighbours(current):
+        for neighbor in battle_contubernium_in_turn.coordinate_neighbours(current):
             if neighbor in closed_set:
                 # print("Already closed: {}".format(neighbor))
                 continue
-            tentative_g_score = g_score[current] + battle_unit_in_turn.euclidean_distance(current, neighbor)
+            tentative_g_score = g_score[current] + battle_contubernium_in_turn.euclidean_distance(current, neighbor)
             # print("Considering {} with score {}".format(neighbor, tentative_g_score))
             if neighbor not in open_set:
                 # print("Adding to open set")
@@ -113,14 +125,20 @@ def find_path(battle_unit_in_turn, goal):
             # print("Found better path")
             came_from[neighbor] = current
             g_score[neighbor] = tentative_g_score
-            f_score[neighbor] = g_score[neighbor] + battle_unit_in_turn.euclidean_distance(neighbor, goal)
+            f_score[neighbor] = g_score[neighbor] + battle_contubernium_in_turn.euclidean_distance(neighbor, goal)
     return None
 
 
 def process_turn(battle: Battle):
+    for bcit in BattleContuberniumInTurn.objects.filter(battle_turn=battle.get_latest_turn()):
+        do_turn(bcit)
+
+
+def check_end(battle: Battle):
     pass
 
 
 def battle_tick(battle: Battle):
     create_next_turn(battle)
     process_turn(battle)
+    check_end(battle)

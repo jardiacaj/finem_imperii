@@ -184,7 +184,20 @@ class BattleSoldierInTurn(models.Model):
 
 
 class Order(models.Model):
-    what = models.CharField(max_length=15)
+    STAND = 'stand'
+    FLEE = 'flee'
+    CHARGE = 'charge'
+    ADVANCE_IN_FORMATION = 'formation'
+    RANGED_ATTACK = 'ranged'
+    WHAT_CHOICES = (
+       (STAND, STAND),
+       (FLEE, FLEE),
+       (CHARGE, CHARGE),
+       (ADVANCE_IN_FORMATION, ADVANCE_IN_FORMATION),
+       (RANGED_ATTACK, RANGED_ATTACK),
+    )
+
+    what = models.CharField(max_length=15, choices=WHAT_CHOICES)
     target_location_x = models.IntegerField(null=True)
     target_location_z = models.IntegerField(null=True)
     done = models.BooleanField(default=0)

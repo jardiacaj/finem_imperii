@@ -141,6 +141,9 @@ class BattleUnit(models.Model):
     name = models.CharField(max_length=100)
     type = models.CharField(max_length=30)
 
+    def get_turn_order(self):
+        return OrderListElement.objects.filter(battle_unit=self, order__done=False).order_by('position')[0].order
+
     def __str__(self):
         return self.world_unit.name
 

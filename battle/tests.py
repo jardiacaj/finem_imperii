@@ -4,7 +4,7 @@ from django.urls.base import reverse
 from battle.battle_init import initialize_from_conflict, start_battle
 from battle.battle_tick import battle_tick
 from battle.models import Battle, BattleCharacter, BattleUnit, BattleContubernium, BattleSoldier, BattleOrganization, \
-    BattleContuberniumInTurn, BattleSoldierInTurn
+    BattleContuberniumInTurn, BattleSoldierInTurn, BattleUnitInTurn, Order
 from organization.models import Organization
 from world.initialization import initialize_unit
 from world.models import Tile, WorldUnit, NPC
@@ -95,6 +95,15 @@ class TestBattleStart(TestCase):
         response = self.client.get(reverse('battle:battlefield_iframe', kwargs={'battle_id': self.battle.id}))
         self.assertEqual(response.status_code, 200)
 
+        self.assertEqual(
+            BattleUnitInTurn.objects.get(battle_turn=self.battle.get_latest_turn(), battle_unit__world_unit__id=2).order.what,
+            Order.CHARGE
+        )
+        self.assertEqual(
+            BattleUnitInTurn.objects.get(battle_turn=self.battle.get_latest_turn(), battle_unit__world_unit__id=1).order.what,
+            Order.ADVANCE_IN_FORMATION
+        )
+
     def test_battle_tick(self):
         start_battle(self.battle)
 
@@ -114,6 +123,15 @@ class TestBattleStart(TestCase):
         response = self.client.get(reverse('battle:battlefield_iframe', kwargs={'battle_id': self.battle.id}))
         self.assertEqual(response.status_code, 200)
 
+        self.assertEqual(
+            BattleUnitInTurn.objects.get(battle_turn=self.battle.get_latest_turn(), battle_unit__world_unit__id=2).order.what,
+            Order.CHARGE
+        )
+        self.assertEqual(
+            BattleUnitInTurn.objects.get(battle_turn=self.battle.get_latest_turn(), battle_unit__world_unit__id=1).order.what,
+            Order.ADVANCE_IN_FORMATION
+        )
+
         battle_tick(self.battle)
 
         self.assertTrue(BattleContuberniumInTurn.objects.exists())
@@ -129,6 +147,17 @@ class TestBattleStart(TestCase):
 
         response = self.client.get(reverse('battle:battlefield_iframe', kwargs={'battle_id': self.battle.id}))
         self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(
+            BattleUnitInTurn.objects.get(battle_turn=self.battle.get_latest_turn(), battle_unit__world_unit__id=2).order.what,
+            Order.CHARGE
+        )
+        self.assertEqual(
+            BattleUnitInTurn.objects.get(battle_turn=self.battle.get_latest_turn(), battle_unit__world_unit__id=1).order.what,
+            Order.ADVANCE_IN_FORMATION
+        )
+
+        self.assertEqual(self.battle.get_latest_turn().num, 2)
 
     def test_unit_move(self):
         WorldUnit.objects.get(id=1)

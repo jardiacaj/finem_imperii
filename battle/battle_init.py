@@ -5,7 +5,7 @@ from django.db.models.aggregates import Avg
 
 from battle.models import BattleFormation, BattleUnit, BattleContubernium, BattleSoldier, BattleOrganization, \
     BattleSide, BattleCharacter, Coordinates, BattleTurn, BattleCharacterInTurn, BattleUnitInTurn, \
-    BattleContuberniumInTurn, BattleSoldierInTurn
+    BattleContuberniumInTurn, BattleSoldierInTurn, OrderListElement
 
 
 def create_contubernia(unit):
@@ -46,6 +46,10 @@ def initialize_from_conflict(battle, conflict, tile):
                 name=unit.name,
                 type=unit.type
             )
+            order = unit.default_battle_orders
+            order.pk = None
+            order.save()
+            OrderListElement.objects.create(order=order, battle_unit=battle_unit, position=0)
 
 
 def initialize_side_positioning(side: BattleSide):
@@ -164,7 +168,8 @@ def generate_in_turn_objects(battle):
                         battle_character_in_turn=bcit,
                         battle_turn=turn,
                         x_pos=unit.starting_x_pos,
-                        z_pos=unit.starting_z_pos
+                        z_pos=unit.starting_z_pos,
+                        order=unit.get_turn_order(),
                     )
                     for contubernium in unit.battlecontubernium_set.all():
                         bcontubit = BattleContuberniumInTurn.objects.create(

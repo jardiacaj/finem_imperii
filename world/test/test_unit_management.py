@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls.base import reverse
 
+from battle.models import Order
 from world.initialization import initialize_unit
 from world.models import World, WorldUnit
 
@@ -46,9 +47,9 @@ class TestUnitManagement(TestCase):
         self.not_my_unit.refresh_from_db()
         self.assertNotEqual(self.not_my_unit.name, "My new name")
 
-    def test_unit_set_orders(self):
+    def test_unit_change_settings(self):
         response = self.client.post(
-            reverse('world:orders_unit', kwargs={'unit_id': self.my_unit.id}),
+            reverse('world:battle_settings_unit', kwargs={'unit_id': self.my_unit.id}),
             data={
                 'battle_line': 1,
                 'battle_side_pos': 2
@@ -60,9 +61,21 @@ class TestUnitManagement(TestCase):
         self.assertEqual(self.my_unit.battle_line, 1)
         self.assertEqual(self.my_unit.battle_side_pos, 2)
 
-    def test_unit_set_orders_denied(self):
+    def test_unit_change_orders(self):
         response = self.client.post(
-            reverse('world:orders_unit', kwargs={'unit_id': self.not_my_unit.id}),
+            reverse('world:battle_orders_unit', kwargs={'unit_id': self.my_unit.id}),
+            data={
+                'battle_orders': 'flee'
+            },
+            follow=True
+        )
+        self.assertRedirects(response, self.my_unit.get_absolute_url())
+        self.my_unit.refresh_from_db()
+        self.assertEqual(self.my_unit.default_battle_orders.what, Order.FLEE)
+
+    def test_unit_change_settings_denied(self):
+        response = self.client.post(
+            reverse('world:battle_settings_unit', kwargs={'unit_id': self.not_my_unit.id}),
             data={
                 'battle_line': 1,
                 'battle_side_pos': 2

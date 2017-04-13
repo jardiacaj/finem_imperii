@@ -10,7 +10,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from django.views.generic.base import View
 
-from battle.models import Battle
+from battle.models import Battle, Order
 from decorators import inchar_required
 from name_generator.name_generator import get_names, get_surnames
 from organization.models import Organization
@@ -252,6 +252,8 @@ class RecruitmentView(View):
             request.hero.hours_in_turn_left -= conscription_time
             request.hero.save()
 
+            orders = Order.objects.create(what=Order.STAND)
+
             unit = WorldUnit.objects.create(
                 owner_character=request.hero,
                 world=request.hero.world,
@@ -262,6 +264,7 @@ class RecruitmentView(View):
                 status=WorldUnit.STANDING,
                 mobilization_status_since=request.hero.world.current_turn,
                 current_status_since=request.hero.world.current_turn,
+                default_battle_orders=orders
             )
 
             if target_soldier_count < candidates.count():
@@ -402,14 +405,26 @@ def unit_rename(request, unit_id):
 
 @inchar_required
 @require_POST
-def unit_orders(request, unit_id):
+def unit_battle_settings(request, unit_id):
     unit = get_object_or_404(WorldUnit, id=unit_id, owner_character=request.hero)
     battle_line = int(request.POST['battle_line'])
     battle_side_pos = int(request.POST['battle_side_pos'])
     if not 0 < battle_line < 6 or not -5 <= battle_side_pos <= 5:
-        raise Http404("Invalid orders")
+        raise Http404("Invalid settings")
     unit.battle_side_pos = battle_side_pos
     unit.battle_line = battle_line
+    unit.save()
+    return redirect(request.META.get('HTTP_REFERER', unit.get_absolute_url()))
+
+
+@inchar_required
+@require_POST
+def unit_battle_orders(request, unit_id):
+    unit = get_object_or_404(WorldUnit, id=unit_id, owner_character=request.hero)
+    battle_orders = request.POST['battle_orders']
+    if battle_orders not in [order[0] for order in Order.WHAT_CHOICES]:
+        raise Http404("Invalid orders")
+    unit.default_battle_orders = Order.objects.create(what=battle_orders)
     unit.save()
     return redirect(request.META.get('HTTP_REFERER', unit.get_absolute_url()))
 

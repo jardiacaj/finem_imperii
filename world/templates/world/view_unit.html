@@ -114,14 +114,14 @@
                         <tr>
                             <td>Battle settings</td>
                             <td>
-                                <form class="form-inline" role="form" method="post" action="{% url 'world:orders_unit' unit.id %}">
+                                <form class="form-inline" role="form" method="post" action="{% url 'world:battle_settings_unit' unit.id %}">
                                     {% csrf_token %}
                                     <select class="form-control" name="battle_line" id="battle_line">
-                                        <option value="1" {% if unit.battle_line == 1 %}selected{% endif %}>Advanced line</option>
-                                        <option value="2" {% if unit.battle_line == 2 %}selected{% endif %}>Front line</option>
-                                        <option value="3" {% if unit.battle_line == 3 %}selected{% endif %}>Middle line</option>
-                                        <option value="4" {% if unit.battle_line == 4 %}selected{% endif %}>Rear line</option>
-                                        <option value="5" {% if unit.battle_line == 5 %}selected{% endif %}>Rearguard</option>
+                                        <option value="0" {% if unit.battle_line == 0 %}selected{% endif %}>Advanced line</option>
+                                        <option value="1" {% if unit.battle_line == 1 %}selected{% endif %}>Front line</option>
+                                        <option value="2" {% if unit.battle_line == 2 %}selected{% endif %}>Middle line</option>
+                                        <option value="3" {% if unit.battle_line == 3 %}selected{% endif %}>Rear line</option>
+                                        <option value="4" {% if unit.battle_line == 4 %}selected{% endif %}>Rearguard</option>
                                     </select>
                                     <select class="form-control" name="battle_side_pos" id="battle_side_pos">
                                         <option value="-5" {% if unit.battle_side_pos == -5 %}selected{% endif %}>Flanking far left</option>
@@ -135,6 +135,22 @@
                                         <option value="3" {% if unit.battle_side_pos == 3 %}selected{% endif %}>Cover right flank</option>
                                         <option value="4" {% if unit.battle_side_pos == 4 %}selected{% endif %}>Flanking right</option>
                                         <option value="5" {% if unit.battle_side_pos == 5 %}selected{% endif %}>Flanking far right</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-primary btn-sm">Save</button>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Battle orders</td>
+                            <td>
+                                <form class="form-inline" role="form" method="post" action="{% url 'world:battle_orders_unit' unit.id %}">
+                                    {% csrf_token %}
+                                    <select class="form-control" name="battle_orders" id="battle_orders">
+                                        <option value="charge" {% if unit.default_battle_orders.what == "charge" %}selected{% endif %}>Stand ground</option>
+                                        <option value="formation" {% if unit.default_battle_orders.what == "formation" %}selected{% endif %}>Advance in formation</option>
+                                        <option value="ranged" {% if unit.default_battle_orders.what == "ranged" %}selected{% endif %}>Ranged attack</option>
+                                        <option value="stand" {% if unit.default_battle_orders.what == "stand" %}selected{% endif %}>Keep ground</option>
+                                        <option value="flee" {% if unit.default_battle_orders.what == "flee" %}selected{% endif %}>Flee</option>
                                     </select>
                                     <button type="submit" class="btn btn-primary btn-sm">Save</button>
                                 </form>

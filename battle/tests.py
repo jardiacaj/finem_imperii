@@ -38,7 +38,6 @@ class TestBattleStart(TestCase):
         initialize_from_conflict(self.battle, [Organization.objects.get(id=105), Organization.objects.get(id=112)], tile)
 
     def test_battle_create_from_conflict(self):
-
         self.assertEqual(self.battle.battleside_set.count(), 2)
 
         self.assertTrue(BattleOrganization.objects.filter(side__battle=self.battle, organization=Organization.objects.get(id=105)).exists())
@@ -132,4 +131,4 @@ class TestBattleStart(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_unit_move(self):
-        pass
+        WorldUnit.objects.get(id=1)

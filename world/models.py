@@ -433,6 +433,7 @@ class WorldUnit(models.Model):
     battle_line = models.IntegerField(choices=LINE_CHOICES, default=3)
     battle_side_pos = models.IntegerField(choices=SIDE_CHOICES, default=0)
     generation_size = models.IntegerField(default=0, help_text="Only used in tests that need generated units")
+    default_battle_orders = models.ForeignKey('battle.Order')
 
     @staticmethod
     def get_unit_types(nice=False):

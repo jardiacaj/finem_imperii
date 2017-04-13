@@ -48,6 +48,10 @@
     world_id: 2
     location_id: 1007
     owner_user_id: 1
+- model: battle.Order
+  pk: 1
+  fields:
+    what: formation
 - model: world.WorldUnit
   pk: 1
   fields:
@@ -61,6 +65,7 @@
     mobilization_status_since: 0
     current_status_since: 0
     generation_size: 30
+    default_battle_orders: 1
 
 - model: world.Character
   pk: 6
@@ -69,6 +74,10 @@
     world_id: 2
     location_id: 1007
     owner_user_id: 1
+- model: battle.Order
+  pk: 2
+  fields:
+    what: charge
 - model: world.WorldUnit
   pk: 2
   fields:
@@ -82,6 +91,7 @@
     mobilization_status_since: 0
     current_status_since: 0
     generation_size: 30
+    default_battle_orders: 2
 
 
 - model: world.World

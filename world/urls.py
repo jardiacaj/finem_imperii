@@ -5,7 +5,7 @@ from decorators import inchar_required
 from world.views import CharacterCreationView, activate_character, character_home, setup_battle, world_view, \
     create_character, minimap_view, world_view_iframe, RecruitmentView, travel_view_iframe, TravelView, unit_view, \
     unit_rename, unit_transfer, unit_merge, unit_disband, character_view, tile_view, \
-    tile_view_iframe, unit_orders, unit_status_change
+    tile_view_iframe, unit_battle_settings, unit_status_change, unit_battle_orders
 
 urlpatterns = [
     url(r'^create_character$', create_character, name='create_character'),
@@ -23,7 +23,8 @@ urlpatterns = [
     url(r'^character/(?P<character_id>[0-9]+)$', character_view, name='character'),
     url(r'^unit/(?P<unit_id>[0-9]+)$', unit_view, name='unit'),
     url(r'^unit/(?P<unit_id>[0-9]+)/rename$', unit_rename, name='rename_unit'),
-    url(r'^unit/(?P<unit_id>[0-9]+)/orders$', unit_orders, name='orders_unit'),
+    url(r'^unit/(?P<unit_id>[0-9]+)/battle_settings', unit_battle_settings, name='battle_settings_unit'),
+    url(r'^unit/(?P<unit_id>[0-9]+)/battle_orders$', unit_battle_orders, name='battle_orders_unit'),
     url(r'^unit/(?P<unit_id>[0-9]+)/disband', unit_disband, name='unit_disband'),
     url(r'^unit/(?P<unit_id>[0-9]+)/merge$', unit_merge, name='unit_merge'),
     url(r'^unit/(?P<unit_id>[0-9]+)/transfer', unit_transfer, name='unit_transfer'),

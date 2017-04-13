@@ -49,6 +49,26 @@ def create_next_turn(battle: Battle):
                         do_turn(bcontubit)
 
                     buit.update_pos()
+                    check_if_order_done(buit)
+
+
+def check_if_order_done(battle_unit_in_turn: BattleUnitInTurn):
+    order = battle_unit_in_turn.battle_unit.get_turn_order()
+    if order:
+        if order.what == Order.STAND:
+            pass
+        if order.what == Order.MOVE:
+            if euclidean_distance(battle_unit_in_turn.coordinates(), order.target_location_coordinates()) == 0:
+                order.done = True
+                order.save()
+        if order.what == Order.FLEE:
+            pass
+        if order.what == Order.CHARGE:
+            pass
+        if order.what == Order.ADVANCE_IN_FORMATION:
+            pass
+        if order.what == Order.RANGED_ATTACK:
+            pass
 
 
 def do_turn(battle_contubernium_in_turn: BattleContuberniumInTurn):

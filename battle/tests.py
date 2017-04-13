@@ -178,6 +178,8 @@ class TestBattleStart(TestCase):
         buit = BattleUnitInTurn.objects.get(battle_turn=self.battle.get_latest_turn(), battle_unit=battle_unit)
         self.assertEqual(buit.x_pos, battle_unit.starting_x_pos)
         self.assertEqual(buit.z_pos, battle_unit.starting_z_pos - 1)
+        order.refresh_from_db()
+        self.assertTrue(order.done)
 
         battle_tick(self.battle)
 
@@ -185,3 +187,5 @@ class TestBattleStart(TestCase):
         buit = BattleUnitInTurn.objects.get(battle_turn=self.battle.get_latest_turn(), battle_unit=battle_unit)
         self.assertEqual(buit.x_pos, battle_unit.starting_x_pos)
         self.assertEqual(buit.z_pos, battle_unit.starting_z_pos - 1)
+        order.refresh_from_db()
+        self.assertTrue(order.done)

@@ -26,10 +26,10 @@ function BaseRenderer() {
     };
 
     zis.init_lighting = function () {
-        zis.ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+        zis.ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
         zis.scene.add(zis.ambientLight);
-        zis.directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-        zis.directionalLight.position.set(1, 1, 1).normalize();
+        zis.directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        zis.directionalLight.position.set(3, 100, 3).normalize();
         zis.scene.add(zis.directionalLight);
     };
 

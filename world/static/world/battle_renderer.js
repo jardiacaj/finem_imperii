@@ -27,7 +27,6 @@ function BattleRenderer(battle_data) {
 
                     var mesh = new THREE.Mesh( zis.contubernium_geometry, organization.material );
 
-                    console.log(contubernium_in_turn);
                     mesh.position.x = contubernium_in_turn.x_pos;
                     mesh.position.z = contubernium_in_turn.z_pos;
                     mesh.position.y = 0.5;
@@ -47,7 +46,10 @@ function BattleRenderer(battle_data) {
         for (var organization_id in zis.organizations) {
             if (Object.prototype.hasOwnProperty.call(zis.organizations, organization_id)) {
                 var organization = zis.organizations[organization_id];
-                organization.material = new THREE.MeshBasicMaterial({color: parseInt(organization.color, 16)});
+                organization.material = new THREE.MeshLambertMaterial({
+                    color: parseInt(organization.color, 16),
+                    shading: THREE.SmoothShading
+                });
             }
         }
     };
@@ -66,9 +68,9 @@ function BattleRenderer(battle_data) {
 
     /* MATERIALS AND GEOMETRIES */
 
-    zis.ground_material = new THREE.MeshLambertMaterial({color: 0x207F07, shading: THREE.SmoothShading});
+    zis.ground_material = new THREE.MeshLambertMaterial({color: 0x1A5B07, shading: THREE.SmoothShading});
     zis.ground_geometry = new THREE.CubeGeometry(100, 2, 100);
-    zis.contubernium_geometry = new THREE.CubeGeometry(1, 1, 1);
+    zis.contubernium_geometry = new THREE.CubeGeometry(0.9, 0.9, 0.9);
     zis.generate_organization_materials();
 
     /* CONSTRUCTION */

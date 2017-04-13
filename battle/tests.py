@@ -2,7 +2,9 @@ from django.test import TestCase
 from django.urls.base import reverse
 
 from battle.battle_init import initialize_from_conflict, start_battle
-from battle.models import Battle, BattleCharacter, BattleUnit, BattleContubernium, BattleSoldier, BattleOrganization
+from battle.battle_tick import battle_tick
+from battle.models import Battle, BattleCharacter, BattleUnit, BattleContubernium, BattleSoldier, BattleOrganization, \
+    BattleContuberniumInTurn, BattleSoldierInTurn
 from organization.models import Organization
 from world.initialization import initialize_unit
 from world.models import Tile, WorldUnit, NPC
@@ -73,6 +75,11 @@ class TestBattleStart(TestCase):
         self.assertTrue(BattleSoldier.objects.exists())
         self.assertEqual(BattleSoldier.objects.count(), 60)
 
+        self.assertTrue(BattleContuberniumInTurn.objects.exists())
+        self.assertEqual(BattleContuberniumInTurn.objects.count(), 8)
+        self.assertTrue(BattleSoldierInTurn.objects.exists())
+        self.assertEqual(BattleSoldierInTurn.objects.count(), 60)
+
         for npc in NPC.objects.all():
             self.assertTrue(BattleSoldier.objects.filter(world_npc=npc).exists())
 
@@ -89,3 +96,26 @@ class TestBattleStart(TestCase):
         tile = Tile.objects.get(id=108)
         tile.trigger_battles()
         self.assertFalse(Battle.objects.exists())
+
+    def test_battle_tick(self):
+        initialize_unit(WorldUnit.objects.get(id=1))
+        initialize_unit(WorldUnit.objects.get(id=2))
+        tile = Tile.objects.get(id=108)
+        battle = Battle.objects.create(tile=tile, start_turn=0)
+        initialize_from_conflict(battle, [Organization.objects.get(id=105), Organization.objects.get(id=112)], tile)
+        start_battle(battle)
+        battle_tick(battle)
+
+        self.assertTrue(BattleContuberniumInTurn.objects.exists())
+        self.assertEqual(BattleContuberniumInTurn.objects.count(), 16)
+        self.assertTrue(BattleSoldierInTurn.objects.exists())
+        self.assertEqual(BattleSoldierInTurn.objects.count(), 120)
+
+        response = self.client.get(battle.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get(reverse('battle:info', kwargs={'battle_id': battle.id}))
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get(reverse('battle:battlefield_iframe', kwargs={'battle_id': battle.id}))
+        self.assertEqual(response.status_code, 200)

@@ -165,6 +165,10 @@ class BattleContubernium(models.Model):
     battle_unit = models.ForeignKey(BattleUnit)
     starting_x_pos = models.IntegerField(default=0)
     starting_z_pos = models.IntegerField(default=0)
+    x_offset_to_unit = models.IntegerField(default=0, help_text="Offset to BattleUnit starting_pos")
+    z_offset_to_unit = models.IntegerField(default=0)
+    x_offset_to_formation = models.IntegerField(default=0)
+    z_offset_to_formation = models.IntegerField(default=0)
 
 
 class BattleContuberniumInTurn(models.Model):

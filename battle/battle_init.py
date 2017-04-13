@@ -1,6 +1,7 @@
 import math
 
 from django.db import transaction
+from django.db.models.aggregates import Avg
 
 from battle.models import BattleFormation, BattleUnit, BattleContubernium, BattleSoldier, BattleOrganization, \
     BattleSide, BattleCharacter, Coordinates, BattleTurn, BattleCharacterInTurn, BattleUnitInTurn, \
@@ -54,10 +55,25 @@ def initialize_side_positioning(side: BattleSide):
     else:
         raise Exception("Formation {} not known".format(formation_settings.formation))
     formation.make_formation()
+
     for coords, contub in formation.output_formation():
+        contub.x_offset_to_formation = coords.x
+        contub.z_offset_to_formation = coords.z
         contub.starting_x_pos = coords.x if side.z else -coords.x
         contub.starting_z_pos = coords.z if side.z else -coords.z
         contub.save()
+
+    for unit in side.battleunit_set.all()\
+            .annotate(avg_x=Avg('battlecontubernium__starting_x_pos'))\
+            .annotate(avg_z=Avg('battlecontubernium__starting_z_pos')):
+        unit.starting_x_pos = round(unit.avg_x)
+        unit.starting_z_pos = round(unit.avg_z)
+        unit.save()
+
+        for contub in unit.battlecontubernium_set.all():
+            contub.x_offset_to_unit = contub.starting_x_pos - unit.starting_x_pos
+            contub.z_offset_to_unit = contub.starting_z_pos - unit.starting_z_pos
+            contub.save()
 
 
 class Line:

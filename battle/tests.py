@@ -10,6 +10,15 @@ from world.initialization import initialize_unit
 from world.models import Tile, WorldUnit, NPC
 
 
+class MiscTests(TestCase):
+    fixtures = ['simple_world']
+
+    def test_conflict_creation_on_region_without_able_soldiers(self):
+        tile = Tile.objects.get(id=108)
+        tile.trigger_battles()
+        self.assertFalse(Battle.objects.exists())
+
+
 class TestBattleStart(TestCase):
     fixtures = ['simple_world']
 
@@ -22,18 +31,18 @@ class TestBattleStart(TestCase):
             reverse('world:activate_character', kwargs={'char_id': 5}),
             follow=True
         )
-
-    def test_battle_create_from_conflict(self):
         initialize_unit(WorldUnit.objects.get(id=1))
         initialize_unit(WorldUnit.objects.get(id=2))
         tile = Tile.objects.get(id=108)
-        battle = Battle.objects.create(tile=tile, start_turn=0)
-        initialize_from_conflict(battle, [Organization.objects.get(id=105), Organization.objects.get(id=112)], tile)
+        self.battle = Battle.objects.create(tile=tile, start_turn=0)
+        initialize_from_conflict(self.battle, [Organization.objects.get(id=105), Organization.objects.get(id=112)], tile)
 
-        self.assertEqual(battle.battleside_set.count(), 2)
+    def test_battle_create_from_conflict(self):
 
-        self.assertTrue(BattleOrganization.objects.filter(side__battle=battle, organization=Organization.objects.get(id=105)).exists())
-        self.assertTrue(BattleOrganization.objects.filter(side__battle=battle, organization=Organization.objects.get(id=112)).exists())
+        self.assertEqual(self.battle.battleside_set.count(), 2)
+
+        self.assertTrue(BattleOrganization.objects.filter(side__battle=self.battle, organization=Organization.objects.get(id=105)).exists())
+        self.assertTrue(BattleOrganization.objects.filter(side__battle=self.battle, organization=Organization.objects.get(id=112)).exists())
         self.assertEqual(BattleOrganization.objects.count(), 2)
 
         self.assertTrue(
@@ -59,16 +68,11 @@ class TestBattleStart(TestCase):
         )
         self.assertEqual(BattleUnit.objects.count(), 2)
 
-        response = self.client.get(battle.get_absolute_url(), follow=True)
+        response = self.client.get(self.battle.get_absolute_url(), follow=True)
         self.assertEqual(response.status_code, 200)
 
     def test_start_battle(self):
-        initialize_unit(WorldUnit.objects.get(id=1))
-        initialize_unit(WorldUnit.objects.get(id=2))
-        tile = Tile.objects.get(id=108)
-        battle = Battle.objects.create(tile=tile, start_turn=0)
-        initialize_from_conflict(battle, [Organization.objects.get(id=105), Organization.objects.get(id=112)], tile)
-        start_battle(battle)
+        start_battle(self.battle)
 
         self.assertTrue(BattleContubernium.objects.exists())
         self.assertEqual(BattleContubernium.objects.count(), 8)
@@ -83,56 +87,49 @@ class TestBattleStart(TestCase):
         for npc in NPC.objects.all():
             self.assertTrue(BattleSoldier.objects.filter(world_npc=npc).exists())
 
-        response = self.client.get(battle.get_absolute_url())
+        response = self.client.get(self.battle.get_absolute_url())
         self.assertEqual(response.status_code, 200)
 
-        response = self.client.get(reverse('battle:info', kwargs={'battle_id': battle.id}))
+        response = self.client.get(reverse('battle:info', kwargs={'battle_id': self.battle.id}))
         self.assertEqual(response.status_code, 200)
 
-        response = self.client.get(reverse('battle:battlefield_iframe', kwargs={'battle_id': battle.id}))
+        response = self.client.get(reverse('battle:battlefield_iframe', kwargs={'battle_id': self.battle.id}))
         self.assertEqual(response.status_code, 200)
-
-    def test_conflict_creation_on_region_without_able_soldiers(self):
-        tile = Tile.objects.get(id=108)
-        tile.trigger_battles()
-        self.assertFalse(Battle.objects.exists())
 
     def test_battle_tick(self):
-        initialize_unit(WorldUnit.objects.get(id=1))
-        initialize_unit(WorldUnit.objects.get(id=2))
-        tile = Tile.objects.get(id=108)
-        battle = Battle.objects.create(tile=tile, start_turn=0)
-        initialize_from_conflict(battle, [Organization.objects.get(id=105), Organization.objects.get(id=112)], tile)
-        start_battle(battle)
+        start_battle(self.battle)
 
-        battle_tick(battle)
+        battle_tick(self.battle)
 
         self.assertTrue(BattleContuberniumInTurn.objects.exists())
         self.assertEqual(BattleContuberniumInTurn.objects.count(), 8*2)
         self.assertTrue(BattleSoldierInTurn.objects.exists())
         self.assertEqual(BattleSoldierInTurn.objects.count(), 60*2)
 
-        response = self.client.get(battle.get_absolute_url())
+        response = self.client.get(self.battle.get_absolute_url())
         self.assertEqual(response.status_code, 200)
 
-        response = self.client.get(reverse('battle:info', kwargs={'battle_id': battle.id}))
+        response = self.client.get(reverse('battle:info', kwargs={'battle_id': self.battle.id}))
         self.assertEqual(response.status_code, 200)
 
-        response = self.client.get(reverse('battle:battlefield_iframe', kwargs={'battle_id': battle.id}))
+        response = self.client.get(reverse('battle:battlefield_iframe', kwargs={'battle_id': self.battle.id}))
         self.assertEqual(response.status_code, 200)
 
-        battle_tick(battle)
+        battle_tick(self.battle)
 
         self.assertTrue(BattleContuberniumInTurn.objects.exists())
         self.assertEqual(BattleContuberniumInTurn.objects.count(), 8*3)
         self.assertTrue(BattleSoldierInTurn.objects.exists())
         self.assertEqual(BattleSoldierInTurn.objects.count(), 60*3)
 
-        response = self.client.get(battle.get_absolute_url())
+        response = self.client.get(self.battle.get_absolute_url())
         self.assertEqual(response.status_code, 200)
 
-        response = self.client.get(reverse('battle:info', kwargs={'battle_id': battle.id}))
+        response = self.client.get(reverse('battle:info', kwargs={'battle_id': self.battle.id}))
         self.assertEqual(response.status_code, 200)
 
-        response = self.client.get(reverse('battle:battlefield_iframe', kwargs={'battle_id': battle.id}))
+        response = self.client.get(reverse('battle:battlefield_iframe', kwargs={'battle_id': self.battle.id}))
         self.assertEqual(response.status_code, 200)
+
+    def test_unit_move(self):
+        pass

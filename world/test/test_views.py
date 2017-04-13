@@ -58,3 +58,23 @@ class TestTileView(TestCase):
                 follow=True
             )
             self.assertEqual(response.status_code, 200)
+
+
+class TestWorldView(TestCase):
+    fixtures = ['simple_world']
+
+    def setUp(self):
+        self.client.post(
+            reverse('account:login'),
+            {'username': 'alice', 'password': 'test'},
+        )
+        user = auth.get_user(self.client)
+        self.client.get(
+            reverse('world:activate_character', kwargs={'char_id': 1}),
+            follow=True
+        )
+
+    def test_view_world(self):
+        world = World.objects.get(id=2)
+        response = self.client.get(world.get_absolute_url())
+        self.assertEqual(response.status_code, 200)

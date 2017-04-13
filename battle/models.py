@@ -4,7 +4,7 @@ import math
 
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.db.models.aggregates import Sum
+from django.db.models.aggregates import Sum, Avg
 from django.forms.models import model_to_dict
 
 Coordinates = namedtuple("Coordinates", ['x', 'z'])
@@ -142,7 +142,10 @@ class BattleUnit(models.Model):
     type = models.CharField(max_length=30)
 
     def get_turn_order(self):
-        return OrderListElement.objects.filter(battle_unit=self, order__done=False).order_by('position')[0].order
+        try:
+            return OrderListElement.objects.filter(battle_unit=self, order__done=False).order_by('position')[0].order
+        except IndexError:
+            pass
 
     def __str__(self):
         return self.world_unit.name
@@ -163,6 +166,15 @@ class BattleUnitInTurn(models.Model):
     def coordinates(self):
         return Coordinates(self.x_pos, self.z_pos)
 
+    def update_pos(self):
+        aggregation = self.battlecontuberniuminturn_set.all().aggregate(
+            avg_x=Avg('x_pos'),
+            avg_z=Avg('z_pos')
+        )
+        self.x_pos = math.floor(aggregation['avg_x'])
+        self.z_pos = math.floor(aggregation['avg_z'])
+        self.save()
+
 
 class BattleContubernium(models.Model):
     battle_unit = models.ForeignKey(BattleUnit)
@@ -180,6 +192,9 @@ class BattleContuberniumInTurn(models.Model):
     battle_turn = models.ForeignKey(BattleTurn)
     x_pos = models.IntegerField()
     z_pos = models.IntegerField()
+
+    def coordinates(self):
+        return Coordinates(self.x_pos, self.z_pos)
 
 
 class BattleSoldier(models.Model):

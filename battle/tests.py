@@ -4,7 +4,7 @@ from django.urls.base import reverse
 from battle.battle_init import initialize_from_conflict, start_battle
 from battle.battle_tick import battle_tick
 from battle.models import Battle, BattleCharacter, BattleUnit, BattleContubernium, BattleSoldier, BattleOrganization, \
-    BattleContuberniumInTurn, BattleSoldierInTurn, BattleUnitInTurn, Order
+    BattleContuberniumInTurn, BattleSoldierInTurn, BattleUnitInTurn, Order, OrderListElement
 from organization.models import Organization
 from world.initialization import initialize_unit
 from world.models import Tile, WorldUnit, NPC
@@ -160,4 +160,28 @@ class TestBattleStart(TestCase):
         self.assertEqual(self.battle.get_latest_turn().num, 2)
 
     def test_unit_move(self):
-        WorldUnit.objects.get(id=1)
+        start_battle(self.battle)
+        unit = WorldUnit.objects.get(id=1)
+        battle_unit = BattleUnit.objects.get(world_unit=unit)
+        battle_unit.orders.clear()
+        order = Order.objects.create(
+            what=Order.MOVE,
+            target_location_x=battle_unit.starting_x_pos,
+            target_location_z=battle_unit.starting_z_pos - 1
+        )
+        OrderListElement.objects.create(order=order, battle_unit=battle_unit, position=0)
+        battle_unit.refresh_from_db()
+
+        battle_tick(self.battle)
+
+        self.battle.refresh_from_db()
+        buit = BattleUnitInTurn.objects.get(battle_turn=self.battle.get_latest_turn(), battle_unit=battle_unit)
+        self.assertEqual(buit.x_pos, battle_unit.starting_x_pos)
+        self.assertEqual(buit.z_pos, battle_unit.starting_z_pos - 1)
+
+        battle_tick(self.battle)
+
+        self.battle.refresh_from_db()
+        buit = BattleUnitInTurn.objects.get(battle_turn=self.battle.get_latest_turn(), battle_unit=battle_unit)
+        self.assertEqual(buit.x_pos, battle_unit.starting_x_pos)
+        self.assertEqual(buit.z_pos, battle_unit.starting_z_pos - 1)

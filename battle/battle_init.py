@@ -70,8 +70,8 @@ def initialize_side_positioning(side: BattleSide):
     for unit in side.battleunit_set.all()\
             .annotate(avg_x=Avg('battlecontubernium__starting_x_pos'))\
             .annotate(avg_z=Avg('battlecontubernium__starting_z_pos')):
-        unit.starting_x_pos = round(unit.avg_x)
-        unit.starting_z_pos = round(unit.avg_z)
+        unit.starting_x_pos = math.floor(unit.avg_x)
+        unit.starting_z_pos = math.floor(unit.avg_z)
         unit.save()
 
         for contub in unit.battlecontubernium_set.all():

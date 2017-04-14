@@ -1,11 +1,10 @@
-from collections import namedtuple
+from collections import namedtuple, defaultdict
 
 import math
 
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.aggregates import Sum, Avg
-from django.forms.models import model_to_dict
 
 Coordinates = namedtuple("Coordinates", ['x', 'z'])
 
@@ -76,6 +75,12 @@ class BattleTurn(models.Model):
             if contubernium.coordinates() in occupied:
                 return True
             occupied.add(contubernium.coordinates())
+
+    def get_contubernia_by_desired_position(self) -> dict:
+        result = defaultdict(list)
+        for contubernium in BattleContuberniumInTurn.objects.filter(battle_turn=self, desires_pos=True):
+            result[contubernium.desired_coordinates()].append(contubernium)
+        return result
 
 
 class BattleSide(models.Model):
@@ -177,9 +182,15 @@ class BattleContuberniumInTurn(models.Model):
     battle_turn = models.ForeignKey(BattleTurn)
     x_pos = models.IntegerField()
     z_pos = models.IntegerField()
+    desires_pos = models.BooleanField(default=False)
+    desired_x_pos = models.IntegerField(blank=True, null=True)
+    desired_z_pos = models.IntegerField(blank=True, null=True)
 
     def coordinates(self):
         return Coordinates(self.x_pos, self.z_pos)
+
+    def desired_coordinates(self):
+        return Coordinates(self.desired_x_pos, self.desired_z_pos) if self.desires_pos else None
 
 
 class BattleSoldier(models.Model):
@@ -208,6 +219,14 @@ class Order(models.Model):
        (ADVANCE_IN_FORMATION, ADVANCE_IN_FORMATION),
        (RANGED_ATTACK, RANGED_ATTACK),
     )
+    ORDER_PRIORITY = {
+        STAND: 4,
+        MOVE: 0,
+        FLEE: 3,
+        CHARGE: 0,
+        ADVANCE_IN_FORMATION: 2,
+        RANGED_ATTACK: 1,
+    }
 
     what = models.CharField(max_length=15, choices=WHAT_CHOICES)
     target_location_x = models.IntegerField(null=True)

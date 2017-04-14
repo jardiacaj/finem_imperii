@@ -1,7 +1,7 @@
 import math
 
 from battle.models import Battle, BattleCharacterInTurn, BattleUnitInTurn, BattleContuberniumInTurn, \
-    BattleSoldierInTurn, Coordinates, Order
+    BattleSoldierInTurn, Coordinates, Order, BattleUnit
 
 
 def create_next_turn(battle: Battle):
@@ -46,10 +46,41 @@ def create_next_turn(battle: Battle):
                             bsit.battle_contubernium_in_turn = bcontubit
                             bsit.save()
 
-                        do_turn(bcontubit)
 
-                    buit.update_pos()
-                    check_if_order_done(buit)
+def solve_position_desires(battle: Battle):
+    contubernia_by_desired_position = battle.get_latest_turn().get_contubernia_by_desired_position()
+
+    for desired_position in contubernia_by_desired_position.keys():
+        contubernia_desiring_position = contubernia_by_desired_position[desired_position]
+        desire_getter = get_highest_priority_desire(contubernia_desiring_position)
+
+        desire_getter.desires_pos = False
+        desire_getter.x_pos = desire_getter.desired_x_pos
+        desire_getter.z_pos = desire_getter.desired_z_pos
+        desire_getter.save()
+
+
+def get_highest_priority_desire(contubernium_list: list) -> BattleContuberniumInTurn:
+    highest_prio = -1
+    result = None
+    for contubernium in contubernium_list:
+        order = contubernium.battle_unit_in_turn.order
+        what = order.what if order else Order.STAND
+        prio = Order.ORDER_PRIORITY[what]
+        if prio > highest_prio:
+            result = contubernium
+            highest_prio = prio
+    return result
+
+
+def unit_movement(battle: Battle):
+    for battle_unit_in_turn in BattleUnitInTurn.objects.filter(battle_turn=battle.get_latest_turn()):
+        for battle_contubernium_in_turn in battle_unit_in_turn.battlecontuberniuminturn_set.all():
+            do_position_desires(battle_contubernium_in_turn)
+    solve_position_desires(battle)
+    for battle_unit_in_turn in BattleUnitInTurn.objects.filter(battle_turn=battle.get_latest_turn()):
+        battle_unit_in_turn.update_pos()
+        check_if_order_done(battle_unit_in_turn)
 
 
 def check_if_order_done(battle_unit_in_turn: BattleUnitInTurn):
@@ -71,7 +102,7 @@ def check_if_order_done(battle_unit_in_turn: BattleUnitInTurn):
             pass
 
 
-def do_turn(battle_contubernium_in_turn: BattleContuberniumInTurn):
+def do_position_desires(battle_contubernium_in_turn: BattleContuberniumInTurn):
     order = battle_contubernium_in_turn.battle_unit_in_turn.battle_unit.get_turn_order()
     if order:
         if order.what == Order.STAND:
@@ -82,7 +113,7 @@ def do_turn(battle_contubernium_in_turn: BattleContuberniumInTurn):
                 x=(unit_target.x + battle_contubernium_in_turn.battle_contubernium.x_offset_to_unit),
                 z=(unit_target.z + battle_contubernium_in_turn.battle_contubernium.z_offset_to_unit)
             )
-            find_and_follow_path(battle_contubernium_in_turn, contub_target)
+            find_and_desire_path(battle_contubernium_in_turn, contub_target)
         if order.what == Order.FLEE:
             pass
         if order.what == Order.CHARGE:
@@ -94,18 +125,19 @@ def do_turn(battle_contubernium_in_turn: BattleContuberniumInTurn):
                 x=battle_contubernium_in_turn.battle_contubernium.starting_x_pos,
                 z=battle_contubernium_in_turn.battle_contubernium.starting_z_pos + z_offset
             )
-            find_and_follow_path(battle_contubernium_in_turn, target)
+            find_and_desire_path(battle_contubernium_in_turn, target)
         if order.what == Order.RANGED_ATTACK:
             pass
-    battle_contubernium_in_turn.save()
 
 
-def find_and_follow_path(battle_contubernium_in_turn, target):
+def find_and_desire_path(battle_contubernium_in_turn, target):
     if euclidean_distance(battle_contubernium_in_turn.coordinates(), target) > 0:
         path = find_path(battle_contubernium_in_turn, target)
         if len(path) > 1:
-            battle_contubernium_in_turn.x_pos = path[1].x
-            battle_contubernium_in_turn.z_pos = path[1].z
+            battle_contubernium_in_turn.desires_pos = True
+            battle_contubernium_in_turn.desired_x_pos = path[1].x
+            battle_contubernium_in_turn.desired_z_pos = path[1].z
+            battle_contubernium_in_turn.save()
 
 
 def euclidean_distance(start: Coordinates, goal: Coordinates):
@@ -180,4 +212,5 @@ def check_end(battle: Battle):
 
 def battle_tick(battle: Battle):
     create_next_turn(battle)
+    unit_movement(battle)
     check_end(battle)

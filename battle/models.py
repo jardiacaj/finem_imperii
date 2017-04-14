@@ -69,28 +69,13 @@ class BattleTurn(models.Model):
     battle = models.ForeignKey(Battle)
     num = models.IntegerField()
 
-    def create_next(self):
-        new_turn = BattleTurn(battle=self.battle, num=self.num+1)
-        new_turn.save()
-
-        for unit in self.battleunitinturn_set.all():
-            BattleUnitInTurn(
-                battle_unit=unit.battle_unit,
-                battle_turn=new_turn,
-                x_pos=unit.x_pos,
-                z_pos=unit.z_pos,
-                order=unit.order
-            ).save()
-
-        for battle_object in self.battleobjectinturn_set.all():
-            BattleObjectInTurn(
-                battle_object=battle_object.battle_object,
-                battle_turn=new_turn,
-                x_pos=battle_object.x_pos,
-                z_pos=battle_object.z_pos
-            ).save()
-
-        return new_turn
+    def test_contubernia_superposition(self):
+        occupied = set()
+        contubernia = BattleContuberniumInTurn.objects.filter(battle_turn=self)
+        for contubernium in contubernia:
+            if contubernium.coordinates() in occupied:
+                return True
+            occupied.add(contubernium.coordinates())
 
 
 class BattleSide(models.Model):
@@ -152,10 +137,6 @@ class BattleUnit(models.Model):
 
 
 class BattleUnitInTurn(models.Model):
-    class Meta:
-        index_together = [
-            ["battle_turn", "x_pos", "z_pos"],
-        ]
     battle_unit = models.ForeignKey(BattleUnit)
     battle_character_in_turn = models.ForeignKey(BattleCharacterInTurn)
     battle_turn = models.ForeignKey(BattleTurn)
@@ -187,6 +168,10 @@ class BattleContubernium(models.Model):
 
 
 class BattleContuberniumInTurn(models.Model):
+    class Meta:
+        index_together = [
+            ["battle_turn", "x_pos", "z_pos"],
+        ]
     battle_contubernium = models.ForeignKey(BattleContubernium)
     battle_unit_in_turn = models.ForeignKey(BattleUnitInTurn)
     battle_turn = models.ForeignKey(BattleTurn)

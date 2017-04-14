@@ -33,6 +33,7 @@ class TestBattleStart(TestCase):
         )
         initialize_unit(WorldUnit.objects.get(id=1))
         initialize_unit(WorldUnit.objects.get(id=2))
+        initialize_unit(WorldUnit.objects.get(id=3))
         tile = Tile.objects.get(id=108)
         self.battle = Battle.objects.create(tile=tile, start_turn=0)
         initialize_from_conflict(self.battle, [Organization.objects.get(id=105), Organization.objects.get(id=112)], tile)
@@ -65,7 +66,7 @@ class TestBattleStart(TestCase):
         self.assertTrue(
             BattleUnit.objects.filter(world_unit=WorldUnit.objects.get(id=2), starting_manpower=30).exists()
         )
-        self.assertEqual(BattleUnit.objects.count(), 2)
+        self.assertEqual(BattleUnit.objects.count(), 3)
 
         response = self.client.get(self.battle.get_absolute_url(), follow=True)
         self.assertEqual(response.status_code, 200)
@@ -74,14 +75,14 @@ class TestBattleStart(TestCase):
         start_battle(self.battle)
 
         self.assertTrue(BattleContubernium.objects.exists())
-        self.assertEqual(BattleContubernium.objects.count(), 8)
+        self.assertEqual(BattleContubernium.objects.count(), 16)
         self.assertTrue(BattleSoldier.objects.exists())
-        self.assertEqual(BattleSoldier.objects.count(), 60)
+        self.assertEqual(BattleSoldier.objects.count(), 120)
 
         self.assertTrue(BattleContuberniumInTurn.objects.exists())
-        self.assertEqual(BattleContuberniumInTurn.objects.count(), 8)
+        self.assertEqual(BattleContuberniumInTurn.objects.count(), 16)
         self.assertTrue(BattleSoldierInTurn.objects.exists())
-        self.assertEqual(BattleSoldierInTurn.objects.count(), 60)
+        self.assertEqual(BattleSoldierInTurn.objects.count(), 120)
 
         for npc in NPC.objects.all():
             self.assertTrue(BattleSoldier.objects.filter(world_npc=npc).exists())
@@ -110,9 +111,9 @@ class TestBattleStart(TestCase):
         battle_tick(self.battle)
 
         self.assertTrue(BattleContuberniumInTurn.objects.exists())
-        self.assertEqual(BattleContuberniumInTurn.objects.count(), 8*2)
+        self.assertEqual(BattleContuberniumInTurn.objects.count(), 16*2)
         self.assertTrue(BattleSoldierInTurn.objects.exists())
-        self.assertEqual(BattleSoldierInTurn.objects.count(), 60*2)
+        self.assertEqual(BattleSoldierInTurn.objects.count(), 120*2)
 
         response = self.client.get(self.battle.get_absolute_url())
         self.assertEqual(response.status_code, 200)
@@ -135,9 +136,9 @@ class TestBattleStart(TestCase):
         battle_tick(self.battle)
 
         self.assertTrue(BattleContuberniumInTurn.objects.exists())
-        self.assertEqual(BattleContuberniumInTurn.objects.count(), 8*3)
+        self.assertEqual(BattleContuberniumInTurn.objects.count(), 16*3)
         self.assertTrue(BattleSoldierInTurn.objects.exists())
-        self.assertEqual(BattleSoldierInTurn.objects.count(), 60*3)
+        self.assertEqual(BattleSoldierInTurn.objects.count(), 120*3)
 
         response = self.client.get(self.battle.get_absolute_url())
         self.assertEqual(response.status_code, 200)
@@ -158,53 +159,3 @@ class TestBattleStart(TestCase):
         )
 
         self.assertEqual(self.battle.get_latest_turn().num, 2)
-
-    def test_unit_move(self):
-        start_battle(self.battle)
-        unit = WorldUnit.objects.get(id=1)
-        battle_unit = BattleUnit.objects.get(world_unit=unit)
-        battle_unit.orders.clear()
-        order = Order.objects.create(
-            what=Order.MOVE,
-            target_location_x=battle_unit.starting_x_pos,
-            target_location_z=battle_unit.starting_z_pos - 1
-        )
-        OrderListElement.objects.create(order=order, battle_unit=battle_unit, position=0)
-        battle_unit.refresh_from_db()
-
-        battle_tick(self.battle)
-
-        self.battle.refresh_from_db()
-        buit = BattleUnitInTurn.objects.get(battle_turn=self.battle.get_latest_turn(), battle_unit=battle_unit)
-        self.assertEqual(buit.x_pos, battle_unit.starting_x_pos)
-        self.assertEqual(buit.z_pos, battle_unit.starting_z_pos - 1)
-        order.refresh_from_db()
-        self.assertTrue(order.done)
-
-        battle_tick(self.battle)
-
-        self.battle.refresh_from_db()
-        buit = BattleUnitInTurn.objects.get(battle_turn=self.battle.get_latest_turn(), battle_unit=battle_unit)
-        self.assertEqual(buit.x_pos, battle_unit.starting_x_pos)
-        self.assertEqual(buit.z_pos, battle_unit.starting_z_pos - 1)
-        order.refresh_from_db()
-        self.assertTrue(order.done)
-
-    def test_unit_formation_follow(self):
-        start_battle(self.battle)
-        unit = WorldUnit.objects.get(id=1)
-        battle_unit = BattleUnit.objects.get(world_unit=unit)
-
-        battle_tick(self.battle)
-
-        self.battle.refresh_from_db()
-        buit = BattleUnitInTurn.objects.get(battle_turn=self.battle.get_latest_turn(), battle_unit=battle_unit)
-        self.assertEqual(buit.x_pos, battle_unit.starting_x_pos)
-        self.assertEqual(buit.z_pos, battle_unit.starting_z_pos - 1)
-
-        battle_tick(self.battle)
-
-        self.battle.refresh_from_db()
-        buit = BattleUnitInTurn.objects.get(battle_turn=self.battle.get_latest_turn(), battle_unit=battle_unit)
-        self.assertEqual(buit.x_pos, battle_unit.starting_x_pos)
-        self.assertEqual(buit.z_pos, battle_unit.starting_z_pos - 2)

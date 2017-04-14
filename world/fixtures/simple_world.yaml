@@ -66,6 +66,24 @@
     current_status_since: 0
     generation_size: 30
     default_battle_orders: 1
+- model: battle.Order
+  pk: 3
+  fields:
+    what: formation
+- model: world.WorldUnit
+  pk: 3
+  fields:
+    owner_character_id: 5
+    world: 2
+    location_id: 1007
+    name: Second Unit of Warrior
+    recruitment_type: conscript
+    type: infantry
+    status: following
+    mobilization_status_since: 0
+    current_status_since: 0
+    generation_size: 60
+    default_battle_orders: 3
 
 - model: world.Character
   pk: 6

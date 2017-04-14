@@ -26,7 +26,7 @@ class TestTurn(TestCase):
         result = battle_ready_units_in_tile(tile)
         self.assertIn(WorldUnit.objects.get(id=1), result)
         self.assertIn(WorldUnit.objects.get(id=2), result)
-        self.assertEqual(len(result), 2)
+        self.assertEqual(len(result), 3)
 
     def test_opponents_in_organization_list(self):
         tile = Tile.objects.get(id=108)

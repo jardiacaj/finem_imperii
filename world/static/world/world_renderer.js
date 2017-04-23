@@ -195,7 +195,7 @@ function MapRenderer(world_data) {
     zis.settlement_tags_enabled = false;
 
     /* CONSTRUCTION */
-    zis.renderer = new BaseRenderer();
+    zis.renderer = new BaseRenderer(2.5, 12, 2.5);
     zis.renderer.picking_types['settlement'] = zis.notify_settlement_pick;
     zis.renderer.picking_types['region'] = zis.notify_region_pick;
 

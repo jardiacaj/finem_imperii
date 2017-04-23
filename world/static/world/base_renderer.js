@@ -1,4 +1,4 @@
-function BaseRenderer() {
+function BaseRenderer(initial_camera_x, initial_camera_y, initial_camera_z) {
 
     var zis = this;
 
@@ -6,9 +6,9 @@ function BaseRenderer() {
 
     zis.init_camera = function () {
         zis.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-        zis.camera.position.z = 2.5;
-        zis.camera.position.x = 2.5;
-        zis.camera.position.y = 12;
+        zis.camera.position.x = initial_camera_x;
+        zis.camera.position.y = initial_camera_y;
+        zis.camera.position.z = initial_camera_z;
         zis.camera.lookAt(new THREE.Vector3( 0, 0, 0 ));
         zis.camera.aspect = window.innerWidth / window.innerHeight;
         zis.camera.updateProjectionMatrix();

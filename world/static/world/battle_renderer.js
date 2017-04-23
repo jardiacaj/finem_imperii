@@ -69,13 +69,13 @@ function BattleRenderer(battle_data) {
     /* MATERIALS AND GEOMETRIES */
 
     zis.ground_material = new THREE.MeshLambertMaterial({color: 0x1A5B07, shading: THREE.SmoothShading});
-    zis.ground_geometry = new THREE.CubeGeometry(100, 2, 100);
+    zis.ground_geometry = new THREE.CubeGeometry(300, 2, 300);
     zis.contubernium_geometry = new THREE.CubeGeometry(0.9, 0.9, 0.9);
     zis.generate_organization_materials();
 
     /* CONSTRUCTION */
 
-    zis.renderer = new BaseRenderer();
+    zis.renderer = new BaseRenderer(40, 60, 0);
     zis.renderer.enable_rendering_helpers();
     zis.render_ground();
     zis.render_turn(zis.showing_turn);

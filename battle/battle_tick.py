@@ -47,7 +47,7 @@ def create_next_turn(battle: Battle):
                             bsit.save()
 
 
-def solve_position_desires(battle: Battle):
+def optimistic_move_desire_resolving(battle: Battle):
     while BattleContuberniumInTurn.objects.filter(desires_pos=True).exists():
         bcuit = BattleContuberniumInTurn.objects.filter(desires_pos=True)[0]
         contubernia_desiring_position = battle.get_latest_turn().get_contubernia_desiring_position(bcuit.desired_coordinates())
@@ -98,10 +98,15 @@ def unit_movement(battle: Battle):
         for battle_contubernium_in_turn in battle_unit_in_turn.battlecontuberniuminturn_set.all():
             movement_target = get_movement_target(battle_contubernium_in_turn)
             if movement_target:
-                find_and_desire_path(battle_contubernium_in_turn, movement_target)
-    solve_position_desires(battle)
+                optimistic_move_desire_formulation(battle_contubernium_in_turn, movement_target)
+    optimistic_move_desire_resolving(battle)
 
     # second pass: if could not move, do "safe" move
+    for battle_unit_in_turn in BattleUnitInTurn.objects.filter(battle_turn=battle.get_latest_turn()):
+        for battle_contubernium_in_turn in battle_unit_in_turn.battlecontuberniuminturn_set.filter(moved_this_turn=False):
+            movement_target = get_movement_target(battle_contubernium_in_turn)
+            if movement_target:
+                safe_move(battle_contubernium_in_turn, movement_target)
 
     # finalize
     for battle_unit_in_turn in BattleUnitInTurn.objects.filter(battle_turn=battle.get_latest_turn()):
@@ -154,13 +159,29 @@ def get_movement_target(battle_contubernium_in_turn: BattleContuberniumInTurn):
             pass
 
 
-def find_and_desire_path(battle_contubernium_in_turn: BattleContuberniumInTurn, target: Coordinates):
+def optimistic_move_desire_formulation(battle_contubernium_in_turn: BattleContuberniumInTurn, target: Coordinates):
+    def tile_availability_test(coords: Coordinates):
+        return True
+
     if euclidean_distance(battle_contubernium_in_turn.coordinates(), target) > 0:
-        path = find_path(battle_contubernium_in_turn, target)
+        path = find_path(battle_contubernium_in_turn, target, tile_availability_test)
         if len(path) > 1:
             battle_contubernium_in_turn.desires_pos = True
             battle_contubernium_in_turn.desired_x_pos = path[1].x
             battle_contubernium_in_turn.desired_z_pos = path[1].z
+            battle_contubernium_in_turn.save()
+
+
+def safe_move(battle_contubernium_in_turn: BattleContuberniumInTurn, target: Coordinates):
+    def tile_availability_test(coords: Coordinates):
+        return True if battle_contubernium_in_turn.battle_turn.get_contubernium_in_position(coords) is None else False
+
+    if euclidean_distance(battle_contubernium_in_turn.coordinates(), target) > 0:
+        path = find_path(battle_contubernium_in_turn, target, tile_availability_test)
+        if len(path) > 1:
+            battle_contubernium_in_turn.moved_this_turn = True
+            battle_contubernium_in_turn.x_pos = path[1].x
+            battle_contubernium_in_turn.z_pos = path[1].z
             battle_contubernium_in_turn.save()
 
 
@@ -177,7 +198,7 @@ def coordinate_neighbours(coord: Coordinates):
     return result
 
 
-def find_path(battle_contubernium_in_turn: BattleContuberniumInTurn, goal) -> list:
+def find_path(battle_contubernium_in_turn: BattleContuberniumInTurn, goal, tile_availability_test) -> list:
     if euclidean_distance(battle_contubernium_in_turn.coordinates(), goal) == 0:
         return True
 
@@ -204,6 +225,8 @@ def find_path(battle_contubernium_in_turn: BattleContuberniumInTurn, goal) -> li
             total_path = [current]
             while current in came_from.keys():
                 current = came_from[current]
+                if not tile_availability_test(current):
+                    return []
                 total_path.append(current)
                 # print("Backtrace {}".format(current))
             total_path.reverse()
@@ -215,6 +238,8 @@ def find_path(battle_contubernium_in_turn: BattleContuberniumInTurn, goal) -> li
                 # print("Already closed: {}".format(neighbor))
                 continue
             tentative_g_score = g_score[current] + euclidean_distance(current, neighbor)
+            if not tile_availability_test(neighbor):
+                tentative_g_score += 20
             # print("Considering {} with score {}".format(neighbor, tentative_g_score))
             if neighbor not in open_set:
                 # print("Adding to open set")
@@ -227,7 +252,8 @@ def find_path(battle_contubernium_in_turn: BattleContuberniumInTurn, goal) -> li
             came_from[neighbor] = current
             g_score[neighbor] = tentative_g_score
             f_score[neighbor] = g_score[neighbor] + euclidean_distance(neighbor, goal)
-    return None
+
+    return []
 
 
 def check_end(battle: Battle):

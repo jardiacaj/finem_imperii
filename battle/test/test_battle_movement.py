@@ -118,7 +118,7 @@ class TestBattleMovement(TestCase):
         self.assertFalse(self.battle.get_latest_turn().test_contubernia_superposition())
         battle_tick(self.battle)
 
-    def test_unit_pos_swap(self):
+    def test_unit_pos_swap_almost(self):
         unit1 = WorldUnit.objects.get(id=1)
         unit3 = WorldUnit.objects.get(id=3)
 
@@ -131,7 +131,7 @@ class TestBattleMovement(TestCase):
         order3 = Order.objects.create(
             what=Order.MOVE,
             target_location_x=battle_unit1.starting_x_pos,
-            target_location_z=battle_unit1.starting_z_pos
+            target_location_z=battle_unit1.starting_z_pos + 1
         )
         OrderListElement.objects.create(order=order3, battle_unit=battle_unit3, position=0)
         battle_unit3.refresh_from_db()
@@ -139,15 +139,16 @@ class TestBattleMovement(TestCase):
         order1 = Order.objects.create(
             what=Order.MOVE,
             target_location_x=battle_unit3.starting_x_pos,
-            target_location_z=battle_unit3.starting_z_pos
+            target_location_z=battle_unit3.starting_z_pos - 1
         )
         OrderListElement.objects.create(order=order1, battle_unit=battle_unit1, position=0)
-        battle_unit3.refresh_from_db()
+        battle_unit1.refresh_from_db()
 
-        for i in range(10):
+        for i in range(20):
             self.assertFalse(self.battle.get_latest_turn().test_contubernia_superposition())
             battle_tick(self.battle)
 
+        self.assertFalse(self.battle.get_latest_turn().test_contubernia_superposition())
         order1.refresh_from_db()
         self.assertTrue(order1.done)
         order3.refresh_from_db()

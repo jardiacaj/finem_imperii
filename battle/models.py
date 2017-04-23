@@ -98,7 +98,7 @@ class BattleTurn(models.Model):
                 z_pos=coords.z
             )
         except BattleContuberniumInTurn.DoesNotExist:
-            pass
+            return None
 
 
 class BattleSide(models.Model):

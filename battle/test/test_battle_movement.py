@@ -94,7 +94,6 @@ class TestBattleMovement(TestCase):
         self.assertEqual(buit.x_pos, battle_unit.starting_x_pos)
         self.assertEqual(buit.z_pos, battle_unit.starting_z_pos - 2)
 
-    @skip
     def test_unit_superposition(self):
         unit1 = WorldUnit.objects.get(id=1)
         unit3 = WorldUnit.objects.get(id=3)
@@ -117,3 +116,29 @@ class TestBattleMovement(TestCase):
         self.assertFalse(self.battle.get_latest_turn().test_contubernia_superposition())
         battle_tick(self.battle)
         self.assertFalse(self.battle.get_latest_turn().test_contubernia_superposition())
+        battle_tick(self.battle)
+
+    @skip
+    def test_unit_pos_swap(self):
+        unit1 = WorldUnit.objects.get(id=1)
+        unit3 = WorldUnit.objects.get(id=3)
+
+        start_battle(self.battle)
+        battle_unit1 = BattleUnit.objects.get(world_unit=unit1)
+        battle_unit1.orders.clear()
+        battle_unit3 = BattleUnit.objects.get(world_unit=unit3)
+        battle_unit3.orders.clear()
+        order = Order.objects.create(
+            what=Order.MOVE,
+            target_location_x=battle_unit1.starting_x_pos,
+            target_location_z=battle_unit1.starting_z_pos
+        )
+        OrderListElement.objects.create(order=order, battle_unit=battle_unit3, position=0)
+        battle_unit3.refresh_from_db()
+
+        for i in range(10):
+            self.assertFalse(self.battle.get_latest_turn().test_contubernia_superposition())
+            battle_tick(self.battle)
+
+        order.refresh_from_db()
+        self.assertTrue(order.done)

@@ -48,16 +48,35 @@ def create_next_turn(battle: Battle):
 
 
 def solve_position_desires(battle: Battle):
-    contubernia_by_desired_position = battle.get_latest_turn().get_contubernia_by_desired_position()
+    while BattleContuberniumInTurn.objects.filter(desires_pos=True).exists():
+        bcuit = BattleContuberniumInTurn.objects.filter(desires_pos=True)[0]
+        contubernia_desiring_position = battle.get_latest_turn().get_contubernia_desiring_position(bcuit.desired_coordinates())
+        desired_position_occupier = battle.get_latest_turn().get_contubernium_in_position(bcuit.desired_coordinates())
 
-    for desired_position in contubernia_by_desired_position.keys():
-        contubernia_desiring_position = contubernia_by_desired_position[desired_position]
-        desire_getter = get_highest_priority_desire(contubernia_desiring_position)
+        if desired_position_occupier:
+            if desired_position_occupier.desires_pos:  # test if mutually desiring position
+                for desirer in contubernia_desiring_position:
+                    if desirer.coordinates() == desired_position_occupier.desired_coordinates():
+                        grant_position_desire(desirer)
+                        grant_position_desire(desired_position_occupier)
+                        continue
+                # TODO: try to move blocking contubernium before giving up
+                contubernia_desiring_position.update(desires_pos=False)
+            else:
+                contubernia_desiring_position.update(desires_pos=False)
 
-        desire_getter.desires_pos = False
-        desire_getter.x_pos = desire_getter.desired_x_pos
-        desire_getter.z_pos = desire_getter.desired_z_pos
-        desire_getter.save()
+        else:
+            desire_getter = get_highest_priority_desire(contubernia_desiring_position)
+            grant_position_desire(desire_getter)
+            contubernia_desiring_position.update(desires_pos=False)
+
+
+def grant_position_desire(desire_getter: BattleContuberniumInTurn):
+    desire_getter.desires_pos = False
+    desire_getter.moved_this_turn = True
+    desire_getter.x_pos = desire_getter.desired_x_pos
+    desire_getter.z_pos = desire_getter.desired_z_pos
+    desire_getter.save()
 
 
 def get_highest_priority_desire(contubernium_list: list) -> BattleContuberniumInTurn:

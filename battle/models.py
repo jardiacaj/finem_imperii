@@ -82,6 +82,24 @@ class BattleTurn(models.Model):
             result[contubernium.desired_coordinates()].append(contubernium)
         return result
 
+    def get_contubernia_desiring_position(self, coords: Coordinates):
+        return BattleContuberniumInTurn.objects.filter(
+            battle_turn=self,
+            desires_pos=True,
+            desired_x_pos=coords.x,
+            desired_z_pos=coords.z
+        )
+
+    def get_contubernium_in_position(self, coords: Coordinates):
+        try:
+            return BattleContuberniumInTurn.objects.get(
+                battle_turn=self,
+                x_pos=coords.x,
+                z_pos=coords.z
+            )
+        except BattleContuberniumInTurn.DoesNotExist:
+            pass
+
 
 class BattleSide(models.Model):
     battle = models.ForeignKey(Battle)
@@ -182,6 +200,7 @@ class BattleContuberniumInTurn(models.Model):
     battle_turn = models.ForeignKey(BattleTurn)
     x_pos = models.IntegerField()
     z_pos = models.IntegerField()
+    moved_this_turn = models.BooleanField(default=False)
     desires_pos = models.BooleanField(default=False)
     desired_x_pos = models.IntegerField(blank=True, null=True)
     desired_z_pos = models.IntegerField(blank=True, null=True)

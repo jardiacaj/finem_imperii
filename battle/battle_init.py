@@ -64,7 +64,7 @@ def initialize_side_positioning(side: BattleSide):
         contub.x_offset_to_formation = coords.x
         contub.z_offset_to_formation = coords.z
         contub.starting_x_pos = coords.x if side.z else -coords.x
-        contub.starting_z_pos = coords.z if side.z else -coords.z
+        contub.starting_z_pos = coords.z + 10 if side.z else -coords.z - 10
         contub.save()
 
     for unit in side.battleunit_set.all()\
@@ -111,6 +111,10 @@ class Line:
         for contubernium in unit.battlecontubernium_set.all():
             self.push_contubernium(contubernium, side)
 
+    @property
+    def width(self):
+        return len(self.columns)
+
 
 class LineFormation:
     def __init__(self, battle_side, formation_object):
@@ -137,10 +141,11 @@ class LineFormation:
         #TODO flanks
 
     def output_formation(self):
+        widest_line_width = max([line.width for line in self.lines])
         for line_index, line in enumerate(self.lines):
             for col_index, column in enumerate(line.columns):
                 for contub_index, contub in enumerate(column):
-                    x = col_index
+                    x = col_index - round(line.width / 2)
                     z = line_index * (self.formation_object.element_size + self.formation_object.spacing) + contub_index
                     yield Coordinates(x, z), contub
 

@@ -409,7 +409,7 @@ def unit_battle_settings(request, unit_id):
     unit = get_object_or_404(WorldUnit, id=unit_id, owner_character=request.hero)
     battle_line = int(request.POST['battle_line'])
     battle_side_pos = int(request.POST['battle_side_pos'])
-    if not 0 < battle_line < 6 or not -5 <= battle_side_pos <= 5:
+    if not 0 <= battle_line < 5 or not -5 <= battle_side_pos <= 5:
         raise Http404("Invalid settings")
     unit.battle_side_pos = battle_side_pos
     unit.battle_line = battle_line

@@ -61,6 +61,56 @@ class TestUnitManagement(TestCase):
         self.assertEqual(self.my_unit.battle_line, 1)
         self.assertEqual(self.my_unit.battle_side_pos, 2)
 
+    def test_unit_change_settings_frontest_line(self):
+        response = self.client.post(
+            reverse('world:battle_settings_unit', kwargs={'unit_id': self.my_unit.id}),
+            data={
+                'battle_line': 0,
+                'battle_side_pos': 2
+            },
+            follow=True
+        )
+        self.assertRedirects(response, self.my_unit.get_absolute_url())
+        self.my_unit.refresh_from_db()
+        self.assertEqual(self.my_unit.battle_line, 0)
+        self.assertEqual(self.my_unit.battle_side_pos, 2)
+
+    def test_unit_change_settings_rearest_line(self):
+        response = self.client.post(
+            reverse('world:battle_settings_unit', kwargs={'unit_id': self.my_unit.id}),
+            data={
+                'battle_line': 0,
+                'battle_side_pos': 4
+            },
+            follow=True
+        )
+        self.assertRedirects(response, self.my_unit.get_absolute_url())
+        self.my_unit.refresh_from_db()
+        self.assertEqual(self.my_unit.battle_line, 0)
+        self.assertEqual(self.my_unit.battle_side_pos, 4)
+
+    def test_unit_change_settings_minus_one_line(self):
+        response = self.client.post(
+            reverse('world:battle_settings_unit', kwargs={'unit_id': self.my_unit.id}),
+            data={
+                'battle_line': -1,
+                'battle_side_pos': 2
+            },
+            follow=True
+        )
+        self.assertEqual(response.status_code, 404)
+
+    def test_unit_change_settings_line_five(self):
+        response = self.client.post(
+            reverse('world:battle_settings_unit', kwargs={'unit_id': self.my_unit.id}),
+            data={
+                'battle_line': 5,
+                'battle_side_pos': 2
+            },
+            follow=True
+        )
+        self.assertEqual(response.status_code, 404)
+
     def test_unit_change_orders(self):
         response = self.client.post(
             reverse('world:battle_orders_unit', kwargs={'unit_id': self.my_unit.id}),

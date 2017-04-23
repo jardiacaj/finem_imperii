@@ -93,10 +93,17 @@ def get_highest_priority_desire(contubernium_list: list) -> BattleContuberniumIn
 
 
 def unit_movement(battle: Battle):
+    # first pass: desire positions / optimistic move
     for battle_unit_in_turn in BattleUnitInTurn.objects.filter(battle_turn=battle.get_latest_turn()):
         for battle_contubernium_in_turn in battle_unit_in_turn.battlecontuberniuminturn_set.all():
-            do_position_desires(battle_contubernium_in_turn)
+            movement_target = get_movement_target(battle_contubernium_in_turn)
+            if movement_target:
+                find_and_desire_path(battle_contubernium_in_turn, movement_target)
     solve_position_desires(battle)
+
+    # second pass: if could not move, do "safe" move
+
+    # finalize
     for battle_unit_in_turn in BattleUnitInTurn.objects.filter(battle_turn=battle.get_latest_turn()):
         battle_unit_in_turn.update_pos()
         check_if_order_done(battle_unit_in_turn)
@@ -121,18 +128,17 @@ def check_if_order_done(battle_unit_in_turn: BattleUnitInTurn):
             pass
 
 
-def do_position_desires(battle_contubernium_in_turn: BattleContuberniumInTurn):
+def get_movement_target(battle_contubernium_in_turn: BattleContuberniumInTurn):
     order = battle_contubernium_in_turn.battle_unit_in_turn.battle_unit.get_turn_order()
     if order:
         if order.what == Order.STAND:
-            pass
+            return None
         if order.what == Order.MOVE:
             unit_target = order.target_location_coordinates()
-            contub_target = Coordinates(
+            return Coordinates(
                 x=(unit_target.x + battle_contubernium_in_turn.battle_contubernium.x_offset_to_unit),
                 z=(unit_target.z + battle_contubernium_in_turn.battle_contubernium.z_offset_to_unit)
             )
-            find_and_desire_path(battle_contubernium_in_turn, contub_target)
         if order.what == Order.FLEE:
             pass
         if order.what == Order.CHARGE:
@@ -140,16 +146,15 @@ def do_position_desires(battle_contubernium_in_turn: BattleContuberniumInTurn):
         if order.what == Order.ADVANCE_IN_FORMATION:
             z_direction = -1 if battle_contubernium_in_turn.battle_contubernium.battle_unit.battle_side.z else 1
             z_offset = battle_contubernium_in_turn.battle_turn.num * z_direction
-            target = Coordinates(
+            return Coordinates(
                 x=battle_contubernium_in_turn.battle_contubernium.starting_x_pos,
                 z=battle_contubernium_in_turn.battle_contubernium.starting_z_pos + z_offset
             )
-            find_and_desire_path(battle_contubernium_in_turn, target)
         if order.what == Order.RANGED_ATTACK:
             pass
 
 
-def find_and_desire_path(battle_contubernium_in_turn, target):
+def find_and_desire_path(battle_contubernium_in_turn: BattleContuberniumInTurn, target: Coordinates):
     if euclidean_distance(battle_contubernium_in_turn.coordinates(), target) > 0:
         path = find_path(battle_contubernium_in_turn, target)
         if len(path) > 1:

@@ -11,10 +11,13 @@
     <script src="{% static 'world/battle_renderer.js' %}"></script>
 
     <script>
+        var map;
         $(function () {
-            var map = new BattleRenderer({{ battle_data|safe }});
+            map = new BattleRenderer({{ battle_data|safe }});
             map.renderer.add_orbit_controls();
         })
     </script>
+        <a href="#" onclick="map.prev_turn()" class="btn btn-default">PREV</a>
+        <a href="#" onclick="map.fwd_turn()" class="btn btn-default">NEXT</a>
 
 {% endblock %}

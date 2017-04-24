@@ -1,5 +1,6 @@
 from django.test import TestCase
 
+from battle.models import Battle
 from organization.models import Organization
 from world.admin import pass_turn
 from world.initialization import initialize_unit
@@ -57,3 +58,14 @@ class TestTurn(TestCase):
 
         battle = create_battle_from_conflict([organization1, organization2], tile)
         self.assertEqual(battle.tile, tile)
+
+    def test_create_only_one_conflict(self):
+        world = World.objects.get(id=2)
+        for unit in WorldUnit.objects.filter(world=world):
+            initialize_unit(unit)
+        pass_turn(None, None, World.objects.filter(id=2))
+        pass_turn(None, None, World.objects.filter(id=2))
+        self.assertEqual(Battle.objects.count(), 1)
+        Battle.objects.filter(tile__world=world).update(current=False)
+        pass_turn(None, None, World.objects.filter(id=2))
+        self.assertEqual(Battle.objects.count(), 2)

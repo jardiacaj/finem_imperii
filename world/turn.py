@@ -86,7 +86,7 @@ def organizations_with_battle_ready_units(tile):
 
 
 def battle_ready_units_in_tile(tile):
-    return tile.get_units().exclude(status=world.models.WorldUnit.NOT_MOBILIZED)
+    return tile.get_units().exclude(status=world.models.WorldUnit.NOT_MOBILIZED).exclude(battleunit__battle_side__battle__current=True)
 
 
 def opponents_in_organization_list(organizations, tile):

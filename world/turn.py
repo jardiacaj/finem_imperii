@@ -1,6 +1,7 @@
 from django.db import transaction
 
-from battle.battle_init import initialize_from_conflict
+from battle.battle_init import initialize_from_conflict, start_battle
+from battle.battle_tick import battle_turn
 from battle.models import Battle
 from messaging.models import CharacterMessage
 import world.models
@@ -22,6 +23,7 @@ class TurnProcessor:
     def do_turn(self):
         self.do_travels()
         self.restore_hours()
+        self.battle_turns()
         self.trigger_battles()
         self.do_elections()
 
@@ -66,6 +68,12 @@ class TurnProcessor:
     def trigger_battles(self):
         for tile in self.world.tile_set.all():
             tile.trigger_battles()
+
+    def battle_turns(self):
+        for battle in Battle.objects.filter(tile__world=self.world, current=True):
+            if not battle.started:
+                start_battle(battle)
+            battle_turn(battle)
 
 
 def organizations_with_battle_ready_units(tile):

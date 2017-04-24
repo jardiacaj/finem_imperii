@@ -4,9 +4,10 @@ from django.test import TestCase
 from django.urls.base import reverse
 
 from battle.battle_init import initialize_from_conflict, start_battle
-from battle.battle_tick import battle_tick
+from battle.battle_tick import battle_tick, optimistic_move_desire_formulation, optimistic_move_desire_resolving, \
+    safe_move
 from battle.models import Battle, BattleCharacter, BattleUnit, BattleContubernium, BattleSoldier, BattleOrganization, \
-    BattleContuberniumInTurn, BattleSoldierInTurn, BattleUnitInTurn, Order, OrderListElement
+    BattleContuberniumInTurn, BattleSoldierInTurn, BattleUnitInTurn, Order, OrderListElement, Coordinates
 from organization.models import Organization
 from world.initialization import initialize_unit
 from world.models import Tile, WorldUnit, NPC
@@ -144,7 +145,7 @@ class TestBattleMovement(TestCase):
         OrderListElement.objects.create(order=order1, battle_unit=battle_unit1, position=0)
         battle_unit1.refresh_from_db()
 
-        for i in range(10):
+        for i in range(6):
             self.assertFalse(self.battle.get_latest_turn().test_contubernia_superposition())
             battle_tick(self.battle)
 
@@ -153,3 +154,173 @@ class TestBattleMovement(TestCase):
         #self.assertTrue(order1.done)
         #order3.refresh_from_db()
         #self.assertTrue(order3.done)
+
+    def test_move_avoiding_single_obstacle(self):
+        unit1 = WorldUnit.objects.get(id=1)
+        unit3 = WorldUnit.objects.get(id=3)
+
+        start_battle(self.battle)
+        battle_unit1 = BattleUnit.objects.get(world_unit=unit1)
+        battle_unit3 = BattleUnit.objects.get(world_unit=unit3)
+
+        contub1 = BattleContuberniumInTurn.objects.filter(battle_contubernium__battle_unit=battle_unit1)[0]
+        contub1.x_pos = 100
+        contub1.z_pos = 100
+        contub1.save()
+
+        contub3 = BattleContuberniumInTurn.objects.filter(battle_contubernium__battle_unit=battle_unit3)[0]
+        contub3.x_pos = 99
+        contub3.z_pos = 100
+        contub3.save()
+
+        self.assertFalse(self.battle.get_latest_turn().test_contubernia_superposition())
+
+        self.assertFalse(contub1.desires_pos)
+        self.assertEqual(contub1.x_pos, 100)
+        self.assertEqual(contub1.z_pos, 100)
+        self.assertFalse(contub1.moved_this_turn)
+
+        self.assertFalse(contub3.desires_pos)
+        self.assertEqual(contub3.x_pos, 99)
+        self.assertEqual(contub3.z_pos, 100)
+        self.assertFalse(contub3.moved_this_turn)
+
+        contub3_movement_target = Coordinates(x=101, z=100)
+        optimistic_move_desire_formulation(contub3, contub3_movement_target)
+
+        contub1.refresh_from_db()
+        self.assertFalse(contub1.desires_pos)
+        self.assertEqual(contub1.x_pos, 100)
+        self.assertEqual(contub1.z_pos, 100)
+        self.assertFalse(contub1.moved_this_turn)
+
+        contub3.refresh_from_db()
+        self.assertTrue(contub3.desires_pos)
+        self.assertEqual(contub3.desired_x_pos, 100)
+        self.assertEqual(contub3.desired_z_pos, 100)
+        self.assertEqual(contub3.x_pos, 99)
+        self.assertEqual(contub3.z_pos, 100)
+        self.assertFalse(contub3.moved_this_turn)
+
+        optimistic_move_desire_resolving(self.battle)
+
+        contub1.refresh_from_db()
+        self.assertFalse(contub1.desires_pos)
+        self.assertEqual(contub1.x_pos, 100)
+        self.assertEqual(contub1.z_pos, 100)
+        self.assertFalse(contub1.moved_this_turn)
+
+        contub3.refresh_from_db()
+        self.assertFalse(contub3.desires_pos)
+        self.assertEqual(contub3.x_pos, 99)
+        self.assertEqual(contub3.z_pos, 100)
+        self.assertFalse(contub3.moved_this_turn)
+        self.assertFalse(self.battle.get_latest_turn().test_contubernia_superposition())
+
+        safe_move(contub3, contub3_movement_target)
+        contub3.refresh_from_db()
+        self.assertFalse(contub3.desires_pos)
+        self.assertNotEqual(contub3.x_pos, 99)
+        self.assertNotEqual(contub3.z_pos, 100)
+        self.assertNotEqual(contub3.coordinates(), contub1.coordinates())
+        self.assertTrue(contub3.moved_this_turn)
+
+        self.assertFalse(self.battle.get_latest_turn().test_contubernia_superposition())
+
+        optimistic_move_desire_formulation(contub3, contub3_movement_target)
+        optimistic_move_desire_resolving(self.battle)
+        contub3.refresh_from_db()
+        self.assertFalse(contub3.desires_pos)
+        self.assertEqual(contub3.x_pos, 101)
+        self.assertEqual(contub3.z_pos, 100)
+        self.assertTrue(contub3.moved_this_turn)
+
+    def test_move_avoiding_wall_obstacle(self):
+        unit1 = WorldUnit.objects.get(id=1)
+        unit3 = WorldUnit.objects.get(id=3)
+
+        start_battle(self.battle)
+        battle_unit1 = BattleUnit.objects.get(world_unit=unit1)
+        battle_unit3 = BattleUnit.objects.get(world_unit=unit3)
+
+        obstacles = BattleContuberniumInTurn.objects.filter(battle_contubernium__battle_unit=battle_unit1)
+        contub1 = obstacles[0]
+        contub1.x_pos = 100
+        contub1.z_pos = 99
+        contub1.save()
+        contub1 = obstacles[1]
+        contub1.x_pos = 100
+        contub1.z_pos = 101
+        contub1.save()
+        contub1 = obstacles[2]
+        contub1.x_pos = 100
+        contub1.z_pos = 100
+        contub1.save()
+
+        contub3 = BattleContuberniumInTurn.objects.filter(battle_contubernium__battle_unit=battle_unit3)[0]
+        contub3.x_pos = 99
+        contub3.z_pos = 100
+        contub3.save()
+
+        self.assertFalse(self.battle.get_latest_turn().test_contubernia_superposition())
+
+        self.assertFalse(contub1.desires_pos)
+        self.assertEqual(contub1.x_pos, 100)
+        self.assertEqual(contub1.z_pos, 100)
+        self.assertFalse(contub1.moved_this_turn)
+
+        self.assertFalse(contub3.desires_pos)
+        self.assertEqual(contub3.x_pos, 99)
+        self.assertEqual(contub3.z_pos, 100)
+        self.assertFalse(contub3.moved_this_turn)
+
+        contub3_movement_target = Coordinates(x=101, z=100)
+        optimistic_move_desire_formulation(contub3, contub3_movement_target)
+
+        contub1.refresh_from_db()
+        self.assertFalse(contub1.desires_pos)
+        self.assertEqual(contub1.x_pos, 100)
+        self.assertEqual(contub1.z_pos, 100)
+        self.assertFalse(contub1.moved_this_turn)
+
+        contub3.refresh_from_db()
+        self.assertTrue(contub3.desires_pos)
+        self.assertEqual(contub3.desired_x_pos, 100)
+        self.assertEqual(contub3.desired_z_pos, 100)
+        self.assertEqual(contub3.x_pos, 99)
+        self.assertEqual(contub3.z_pos, 100)
+        self.assertFalse(contub3.moved_this_turn)
+
+        optimistic_move_desire_resolving(self.battle)
+
+        contub1.refresh_from_db()
+        self.assertFalse(contub1.desires_pos)
+        self.assertEqual(contub1.x_pos, 100)
+        self.assertEqual(contub1.z_pos, 100)
+        self.assertFalse(contub1.moved_this_turn)
+
+        contub3.refresh_from_db()
+        self.assertFalse(contub3.desires_pos)
+        self.assertEqual(contub3.x_pos, 99)
+        self.assertEqual(contub3.z_pos, 100)
+        self.assertFalse(contub3.moved_this_turn)
+        self.assertFalse(self.battle.get_latest_turn().test_contubernia_superposition())
+
+        safe_move(contub3, contub3_movement_target)
+        contub3.refresh_from_db()
+        self.assertFalse(self.battle.get_latest_turn().test_contubernia_superposition())
+        safe_move(contub3, contub3_movement_target)
+        contub3.refresh_from_db()
+        self.assertFalse(self.battle.get_latest_turn().test_contubernia_superposition())
+        safe_move(contub3, contub3_movement_target)
+        contub3.refresh_from_db()
+        self.assertFalse(self.battle.get_latest_turn().test_contubernia_superposition())
+        safe_move(contub3, contub3_movement_target)
+        contub3.refresh_from_db()
+        self.assertFalse(self.battle.get_latest_turn().test_contubernia_superposition())
+
+        contub3.refresh_from_db()
+        self.assertFalse(contub3.desires_pos)
+        self.assertEqual(contub3.x_pos, 101)
+        self.assertEqual(contub3.z_pos, 100)
+        self.assertTrue(contub3.moved_this_turn)

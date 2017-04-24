@@ -264,3 +264,8 @@ def battle_tick(battle: Battle):
     create_next_turn(battle)
     unit_movement(battle)
     check_end(battle)
+
+
+def battle_turn(battle: Battle):
+    for i in range(10):
+        battle_tick(battle)

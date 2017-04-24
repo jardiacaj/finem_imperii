@@ -48,8 +48,8 @@ def create_next_turn(battle: Battle):
 
 
 def optimistic_move_desire_resolving(battle: Battle):
-    while BattleContuberniumInTurn.objects.filter(desires_pos=True).exists():
-        bcuit = BattleContuberniumInTurn.objects.filter(desires_pos=True)[0]
+    while BattleContuberniumInTurn.objects.filter(desires_pos=True, battle_turn=battle.get_latest_turn()).exists():
+        bcuit = BattleContuberniumInTurn.objects.filter(desires_pos=True, battle_turn=battle.get_latest_turn())[0]
         contubernia_desiring_position = battle.get_latest_turn().get_contubernia_desiring_position(bcuit.desired_coordinates())
         desired_position_occupier = battle.get_latest_turn().get_contubernium_in_position(bcuit.desired_coordinates())
 
@@ -199,17 +199,18 @@ def coordinate_neighbours(coord: Coordinates):
 
 
 def find_path(battle_contubernium_in_turn: BattleContuberniumInTurn, goal, tile_availability_test) -> list:
-    if euclidean_distance(battle_contubernium_in_turn.coordinates(), goal) == 0:
+    starting_coordinates = battle_contubernium_in_turn.coordinates()
+    if euclidean_distance(starting_coordinates, goal) == 0:
         return True
 
     closed_set = set()
     open_set = set()
-    open_set.add((battle_contubernium_in_turn.coordinates()))
+    open_set.add((starting_coordinates))
     came_from = {}
     g_score = {}
-    g_score[battle_contubernium_in_turn.coordinates()] = 0
+    g_score[starting_coordinates] = 0
     f_score = {}
-    f_score[battle_contubernium_in_turn.coordinates()] = euclidean_distance(battle_contubernium_in_turn.coordinates(), goal)
+    f_score[starting_coordinates] = euclidean_distance(starting_coordinates, goal)
 
     while open_set:
         minel = None
@@ -225,7 +226,7 @@ def find_path(battle_contubernium_in_turn: BattleContuberniumInTurn, goal, tile_
             total_path = [current]
             while current in came_from.keys():
                 current = came_from[current]
-                if not tile_availability_test(current):
+                if current != starting_coordinates and not tile_availability_test(current):
                     return []
                 total_path.append(current)
                 # print("Backtrace {}".format(current))

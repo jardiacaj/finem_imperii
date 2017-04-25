@@ -87,6 +87,23 @@ function BattleRenderer(battle_data) {
         }
     };
 
+    zis.notify_contubernium_pick = function (contubernium) {
+        if (zis.picked_contubernium !== undefined) {
+            var previously_picked = zis.picked_contubernium.contubernium;
+            var unit = zis.units[previously_picked.unit_id];
+            var character = zis.characters[unit.character_id];
+            var organization = zis.organizations[character.organization_id];
+            previously_picked.mesh.material = organization.material;
+            zis.renderer.render();
+        }
+
+        if (contubernium !== undefined) {
+            zis.picked_contubernium = contubernium;
+            contubernium.material = zis.contubernium_material_highlighted;
+            zis.renderer.render();
+        }
+    };
+
     /* DATA */
 
     zis.organizations = battle_data.organizations;
@@ -101,6 +118,7 @@ function BattleRenderer(battle_data) {
 
     /* MATERIALS AND GEOMETRIES */
 
+    zis.contubernium_material_highlighted = new THREE.MeshBasicMaterial( {color: 0xFFFFFF} );
     zis.ground_material = new THREE.MeshLambertMaterial({color: 0x1A5B07, shading: THREE.SmoothShading});
     zis.ground_geometry = new THREE.CubeGeometry(300, 2, 300);
     zis.contubernium_geometry = new THREE.CubeGeometry(0.9, 0.9, 0.9);
@@ -109,6 +127,7 @@ function BattleRenderer(battle_data) {
     /* CONSTRUCTION */
 
     zis.renderer = new BaseRenderer(40, 60, 0);
+    zis.renderer.picking_types['contubernium'] = zis.notify_contubernium_pick;
     zis.renderer.enable_rendering_helpers();
     zis.render_ground();
     zis.render_turn(zis.showing_turn);

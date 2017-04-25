@@ -190,6 +190,6 @@ function BattleRenderer(battle_data) {
     zis.render_turn(zis.showing_turn);
 
     zis.renderer.render();
-    $(document).on('click', zis.mouse_click_listener_notifier);
+    $(zis.renderer.canvas_container).on('click', zis.mouse_click_listener_notifier);
 
 }

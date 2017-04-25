@@ -13,6 +13,7 @@
     <script>
         function info_callback(contubernium, unit, character, organization) {
             $('#unit_name').text(contubernium === undefined ? '' : unit.name);
+            $('#char_name').text(character === undefined ? '' : character.name);
             $('#org_name').text(organization === undefined ? '' : organization.name);
         }
 
@@ -29,9 +30,10 @@
         <a href="#" onclick="map.fwd_turn()" class="btn btn-default">NEXT</a>
     </div>
 
-    <div style="position: absolute; top: 10px; right: 10px; color: black">
-        <div id="unit_name"></div>
+    <div style="position: absolute; top: 10px; right: 10px; color: black" class="text-right">
         <div id="org_name"></div>
+        <div id="char_name"></div>
+        <div id="unit_name"></div>
     </div>
 
 {% endblock %}

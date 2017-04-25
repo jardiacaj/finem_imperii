@@ -11,16 +11,27 @@
     <script src="{% static 'world/battle_renderer.js' %}"></script>
 
     <script>
+        function info_callback(contubernium, unit, character, organization) {
+            $('#unit_name').text(contubernium === undefined ? '' : unit.name);
+            $('#org_name').text(organization === undefined ? '' : organization.name);
+        }
+
         var map;
         $(function () {
             map = new BattleRenderer({{ battle_data|safe }});
             map.renderer.add_orbit_controls();
+            map.hover_callback = info_callback;
         })
     </script>
 
     <div style="position: absolute; top: 10px; left: 10px">
         <a href="#" onclick="map.prev_turn()" class="btn btn-default">PREV</a>
         <a href="#" onclick="map.fwd_turn()" class="btn btn-default">NEXT</a>
+    </div>
+
+    <div style="position: absolute; top: 10px; right: 10px; color: black">
+        <div id="unit_name"></div>
+        <div id="org_name"></div>
     </div>
 
 {% endblock %}

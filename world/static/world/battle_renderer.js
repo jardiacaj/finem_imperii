@@ -4,6 +4,9 @@ function BattleRenderer(battle_data) {
 
     /* API */
 
+    zis.click_callback = undefined;
+    zis.hover_callback = undefined;
+
     zis.prev_turn = function () {
         if (zis.showing_turn > 0) zis.showing_turn--;
         zis.animated_update();
@@ -111,10 +114,21 @@ function BattleRenderer(battle_data) {
             zis.clicked_contubernium.mesh.material = zis.get_contubernium_actual_material(zis.clicked_contubernium);
         }
         if (previously_clicked !== undefined) {
-            previously_clicked.mesh.material = zis.get_contubernium_actual_material(previously_clicked)
+            previously_clicked.mesh.material = zis.get_contubernium_actual_material(previously_clicked);
         }
 
         zis.renderer.render();
+
+        if (zis.click_callback) {
+            if (zis.clicked_contubernium === undefined) {
+                zis.click_callback(undefined, undefined, undefined, undefined);
+            } else {
+                var unit = zis.units[zis.clicked_contubernium.unit_id];
+                var character = zis.characters[unit.character_id];
+                var organization = zis.organizations[character.organization_id];
+                zis.click_callback(zis.clicked_contubernium, unit, character, organization);
+            }
+        }
     };
 
     zis.notify_contubernium_pick = function (contubernium_three_object) {
@@ -131,6 +145,17 @@ function BattleRenderer(battle_data) {
         }
 
         zis.renderer.render();
+
+        if (zis.hover_callback) {
+            if (zis.picked_contubernium === undefined) {
+                zis.hover_callback(undefined, undefined, undefined, undefined);
+            } else {
+                var unit = zis.units[zis.picked_contubernium.unit_id];
+                var character = zis.characters[unit.character_id];
+                var organization = zis.organizations[character.organization_id];
+                zis.hover_callback(zis.picked_contubernium, unit, character, organization);
+            }
+        }
 
     };
 

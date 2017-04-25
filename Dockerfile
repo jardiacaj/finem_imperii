@@ -4,6 +4,7 @@ MAINTAINER "Joan Ardiaca Jové"
 # Base packages
 RUN apk add --no-cache apache2 python3 bash git
 RUN ln -s /usr/bin/python3.5 /usr/bin/python
+RUN ln -s /usr/bin/python3.5 /usr/bin/python3
 
 # Code
 RUN mkdir /var/www/finem_imperii

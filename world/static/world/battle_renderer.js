@@ -24,12 +24,26 @@ function BattleRenderer(battle_data) {
         zis.renderer.scene.add(ground);
     };
 
-    zis.add_contubernium = function (contubernium, contubernium_in_turn) {
+    zis.get_contubernium_actual_material = function (contubernium) {
+        if (contubernium === zis.clicked_contubernium) {
+            return zis.contubernium_material_highlighted;
+        } else if (contubernium == zis.picked_contubernium) {
+            return zis.contubernium_material_highlighted;
+        } else {
+            return zis.get_contubernium_default_material(contubernium);
+        }
+    };
+
+    zis.get_contubernium_default_material = function (contubernium) {
         var unit = zis.units[contubernium.unit_id];
         var character = zis.characters[unit.character_id];
         var organization = zis.organizations[character.organization_id];
+        return organization.material;
+    };
 
-        var mesh = new THREE.Mesh( zis.contubernium_geometry, organization.material );
+    zis.add_contubernium = function (contubernium, contubernium_in_turn) {
+        var material = zis.get_contubernium_default_material(contubernium);
+        var mesh = new THREE.Mesh( zis.contubernium_geometry, material );
 
         mesh.position.x = contubernium_in_turn.x_pos;
         mesh.position.z = contubernium_in_turn.z_pos;
@@ -87,21 +101,37 @@ function BattleRenderer(battle_data) {
         }
     };
 
-    zis.notify_contubernium_pick = function (contubernium) {
-        if (zis.picked_contubernium !== undefined) {
-            var previously_picked = zis.picked_contubernium.contubernium;
-            var unit = zis.units[previously_picked.unit_id];
-            var character = zis.characters[unit.character_id];
-            var organization = zis.organizations[character.organization_id];
-            previously_picked.mesh.material = organization.material;
-            zis.renderer.render();
+    zis.mouse_click_listener_notifier = function (event) {
+        var previously_clicked = zis.clicked_contubernium;
+
+        if (zis.picked_contubernium === undefined) {
+            zis.clicked_contubernium = undefined;
+        } else {
+            zis.clicked_contubernium = zis.picked_contubernium;
+            zis.clicked_contubernium.mesh.material = zis.get_contubernium_actual_material(zis.clicked_contubernium);
+        }
+        if (previously_clicked !== undefined) {
+            previously_clicked.mesh.material = zis.get_contubernium_actual_material(previously_clicked)
         }
 
-        if (contubernium !== undefined) {
-            zis.picked_contubernium = contubernium;
-            contubernium.material = zis.contubernium_material_highlighted;
-            zis.renderer.render();
+        zis.renderer.render();
+    };
+
+    zis.notify_contubernium_pick = function (contubernium_three_object) {
+        var previously_picked = zis.picked_contubernium;
+
+        if (contubernium_three_object === undefined) {
+            zis.picked_contubernium = undefined;
+        } else {
+            zis.picked_contubernium = contubernium_three_object.contubernium;
+            zis.picked_contubernium.mesh.material = zis.get_contubernium_actual_material(zis.picked_contubernium);
         }
+        if (previously_picked !== undefined) {
+            previously_picked.mesh.material = zis.get_contubernium_actual_material(previously_picked);
+        }
+
+        zis.renderer.render();
+
     };
 
     /* DATA */
@@ -115,6 +145,8 @@ function BattleRenderer(battle_data) {
     /* VARS */
 
     zis.showing_turn = zis.turn_count - 1;
+    zis.picked_contubernium = undefined;
+    zis.clicked_contubernium = undefined;
 
     /* MATERIALS AND GEOMETRIES */
 

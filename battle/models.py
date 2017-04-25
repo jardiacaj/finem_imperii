@@ -59,6 +59,12 @@ class Battle(models.Model):
     def get_side_b(self):
         return self.battleside_set.all()[1]
 
+    def __str__(self):
+        return "{current} battle in {tile}".format(
+            current='Current' if self.current else 'Past',
+            tile=self.tile
+        )
+
 
 class BattleTurn(models.Model):
     class Meta:

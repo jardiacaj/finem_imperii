@@ -1,0 +1,17 @@
+<ul class="nav nav-tabs nav-justified">
+    <li role="presentation" {% if active == 'info' %}class="active"{% endif %}>
+        <a href="{% url 'battle:info' battle.id %}">View battle information</a>
+    </li>
+    {% if battle.started %}
+        <li role="presentation" {% if active == 'battlefield' %}class="active"{% endif %}>
+            <a href="{% url "battle:battlefield" battle.id %}">Show battlefield</a>
+        </li>
+    {% endif %}
+    {% if battle.current and heros_units %}
+        <li role="presentation" {% if active == 'orders' %}class="active"{% endif %}>
+            <a href="{% url 'battle:set_orders' battle.id %}">
+                Set orders
+            </a>
+        </li>
+    {% endif %}
+</ul>

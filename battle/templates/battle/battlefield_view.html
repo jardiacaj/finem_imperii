@@ -5,8 +5,10 @@
 {% block content %}
 
     <h1 class="page-header">
-        Battle test
+        {{ battle }}
     </h1>
+
+    {% include 'battle/battle_nav_include.html' with active='battlefield' %}
 
     <iframe
             id="battlefield_map"

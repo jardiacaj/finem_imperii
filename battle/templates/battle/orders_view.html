@@ -1,0 +1,30 @@
+{% extends "base/base.html" %}
+
+{% load staticfiles %}
+
+{% block content %}
+
+    <h1 class="page-header">
+        Orders in {{ battle }}
+    </h1>
+
+    {% include 'battle/battle_nav_include.html' with active='orders' %}
+
+    <p></p>
+
+    {% for unit in heros_units %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    {{ unit }}
+                </h3>
+            </div>
+
+            <div class="panel-body">
+                <p>{{ unit.default_battle_orders.get_what_display|capfirst }}</p>
+                <p><a href="{{ unit.get_absolute_url }}" class="btn btn-primary">Change</a></p>
+            </div>
+        </div>
+    {% endfor %}
+
+{% endblock %}

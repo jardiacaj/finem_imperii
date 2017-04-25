@@ -5,20 +5,12 @@
 {% block content %}
 
     <h1 class="page-header">
-        {% if battle.current %}
-            Current battle in {{ battle.tile.get_html_link|safe }}
-        {% else %}
-            Battle in {{ battle.tile.get_html_link|safe }}
-        {% endif %}
+        {{ battle }}
     </h1>
 
-    {% if battle.started %}
-        <p class="text-center">
-            <a href="{% url "battle:battlefield" battle.id %}" class="btn btn-primary">
-                Show battlefield
-            </a>
-        </p>
-    {% endif %}
+    {% include 'battle/battle_nav_include.html' with active='info' %}
+
+    <p></p>
 
     <div class="row">
         <div class="col-sm-5">

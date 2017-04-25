@@ -146,7 +146,7 @@
                                 <form class="form-inline" role="form" method="post" action="{% url 'world:battle_orders_unit' unit.id %}">
                                     {% csrf_token %}
                                     <select class="form-control" name="battle_orders" id="battle_orders">
-                                        <option value="charge" {% if unit.default_battle_orders.what == "charge" %}selected{% endif %}>Stand ground</option>
+                                        <option value="charge" {% if unit.default_battle_orders.what == "charge" %}selected{% endif %}>Charge</option>
                                         <option value="formation" {% if unit.default_battle_orders.what == "formation" %}selected{% endif %}>Advance in formation</option>
                                         <option value="ranged" {% if unit.default_battle_orders.what == "ranged" %}selected{% endif %}>Ranged attack</option>
                                         <option value="stand" {% if unit.default_battle_orders.what == "stand" %}selected{% endif %}>Keep ground</option>

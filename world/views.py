@@ -447,12 +447,6 @@ def unit_disband(request, unit_id):
 
 
 @inchar_required
-def unit_merge(request, unit_id):
-    unit = get_object_or_404(WorldUnit, id=unit_id, owner_character=request.hero)
-    return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
-
-
-@inchar_required
 def unit_transfer(request, unit_id):
     unit = get_object_or_404(WorldUnit, id=unit_id, owner_character=request.hero)
     return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))

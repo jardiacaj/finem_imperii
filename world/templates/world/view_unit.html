@@ -165,9 +165,6 @@
             {% if unit.owner_character == request.hero %}
                 <h4>Actions</h4>
                 <p>
-                    <a class="btn btn-sm btn-primary" href="{% url 'world:unit_merge' unit.id %}">Merge</a>
-                </p>
-                <p>
                     <a class="btn btn-sm btn-primary" href="{% url 'world:unit_transfer' unit.id %}">Transfer</a>
                 </p>
                 <p>

@@ -299,34 +299,4 @@
         </div>
     </div>
 
-    <div class="col-lg-3 col-md-6">
-        <div class="panel panel-default">
-            <div class="panel-heading"><h3 class="panel-title">Origin</h3></div>
-            <div class="panel-body">
-                <canvas id="origin_chart"></canvas>
-                <script>
-                    var ctx = $('#origin_chart');
-                    var data = {
-                        labels: [
-                            {% for key,value in unit.soldier.origin_distribution.items %}
-                                "{{ key|capfirst }}",
-                            {% endfor %}
-                        ],
-                        datasets: [
-                            {
-                                data: [
-                                    {% for key,value in unit.soldier.origin_distribution.items %}
-                                        {{ value }},
-                                    {% endfor %}
-                                ],
-                                backgroundColor: ["#FF5654", "#6AFF68", ],
-                                hoverBackgroundColor: ["#FF5654",  "#6AFF68", ]
-                            }]
-                    };
-                    var my_origin_chart = new Chart(ctx,{type: 'pie', data: data, options: {}});
-                </script>
-            </div>
-        </div>
-    </div>
-
 {% endblock %}

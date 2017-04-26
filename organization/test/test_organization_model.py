@@ -72,27 +72,27 @@ class TestOrganizationModel(TestCase):
 
     def test_is_part_of_violence_monopoly(self):
         organization = Organization.objects.get(name="Small Kingdom")
-        self.assertTrue(organization.is_part_of_violence_monopoly())
+        self.assertTrue(organization.get_violence_monopoly())
 
     def test_is_part_of_violence_monopoly2(self):
         organization = Organization.objects.get(name="Small King")
-        self.assertTrue(organization.is_part_of_violence_monopoly())
+        self.assertTrue(organization.get_violence_monopoly())
 
     def test_is_part_of_violence_monopoly3(self):
         organization = Organization.objects.get(name="Governor of some plains")
-        self.assertTrue(organization.is_part_of_violence_monopoly())
+        self.assertTrue(organization.get_violence_monopoly())
 
     def test_is_part_of_violence_monopoly4(self):
         organization = Organization.objects.get(name="Helper of the governor of some plains")
-        self.assertTrue(organization.is_part_of_violence_monopoly())
+        self.assertTrue(organization.get_violence_monopoly())
 
     def test_is_part_of_violence_monopoly5(self):
         organization = Organization.objects.get(name="Small Federation")
-        self.assertFalse(organization.is_part_of_violence_monopoly())
+        self.assertFalse(organization.get_violence_monopoly())
 
     def test_is_part_of_violence_monopoly6(self):
         organization = Organization.objects.get(name="President of the Small Federation")
-        self.assertFalse(organization.is_part_of_violence_monopoly())
+        self.assertFalse(organization.get_violence_monopoly())
 
     def test_get_all_controlled_tiles(self):
         organization = Organization.objects.get(name="Small Kingdom")

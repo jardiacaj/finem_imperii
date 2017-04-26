@@ -5,7 +5,7 @@ from django.urls.base import reverse
 
 from battle.models import BattleFormation
 from organization.models import Capability, MilitaryStance, CapabilityProposal
-from world.models import World, Character
+from world.models import World, Character, Tile, TileEvent
 
 
 class TestMilitaryOrders(TestCase):
@@ -240,3 +240,39 @@ class TestConquest(TestCase):
                 self.assertContains(response, tile.name)
             else:
                 self.assertNotContains(response, tile.name)
+
+    def test_start_conquest(self):
+        tile = Tile.objects.get(name="More mountains")
+        capability = Capability.objects.get(
+            organization__id=106,
+            type=Capability.CONQUEST,
+            applying_to_id=105
+        )
+
+        response = self.client.post(
+            reverse('organization:conquest_capability', kwargs={'capability_id': capability.id}),
+            data={
+                'tile_to_conquest_id': tile.id,
+            },
+            follow=True
+        )
+
+        self.assertRedirects(response, capability.get_absolute_url())
+
+        self.assertEqual(TileEvent.objects.count(), 1)
+        event = TileEvent.objects.get(id=1)
+        self.assertEqual(event.tile, tile)
+        self.assertEqual(event.type, TileEvent.CONQUEST)
+        self.assertEqual(event.organization.id, 105)
+        self.assertEqual(event.counter, 0)
+        self.assertEqual(event.start_turn, tile.world.current_turn)
+
+        response = self.client.get(capability.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.post(
+            reverse('organization:conquest_capability', kwargs={'capability_id': capability.id}),
+            data={'tile_to_conquest_id': tile.id,},
+        )
+
+        self.assertEqual(response.status_code, 404)

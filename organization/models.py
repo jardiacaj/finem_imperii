@@ -84,14 +84,30 @@ class Organization(models.Model):
     def character_is_member(self, character):
         return character in self.character_members.all()
 
-    def is_part_of_violence_monopoly(self):
+    def get_violence_monopoly(self):
         if self.violence_monopoly:
-            return True
-        if self.leaded_organizations.filter(violence_monopoly=True):
-            return True
+            return self
+        try:
+            return self.leaded_organizations.get(violence_monopoly=True)
+        except Organization.DoesNotExist:
+            pass
         if self.owner:
-            return self.owner.is_part_of_violence_monopoly()
+            return self.owner.get_violence_monopoly()
         return False
+
+    def conquestable_tiles(self):
+        candidate_tiles = world.models.Tile.objects \
+            .filter(world=self.world) \
+            .exclude(controlled_by=self) \
+            .exclude(type__in=(world.models.Tile.SHORE, world.models.Tile.DEEPSEA))
+        result = []
+        for tile in candidate_tiles:
+            if (
+                tile.get_units().filter(owner_character__in=self.character_members.all()) and
+                not tile.tileevent_set.filter(organization=self, type=world.models.TileEvent.CONQUEST).exists()
+            ):
+                result.append(tile)
+        return result
 
     def get_open_proposals(self):
         return CapabilityProposal.objects.filter(capability__organization=self, closed=False)
@@ -190,7 +206,7 @@ class Organization(models.Model):
             icon = "tower"
         elif self.leaded_organizations.filter(violence_monopoly=True).exists():
             icon = "king"
-        elif self.is_part_of_violence_monopoly():
+        elif self.get_violence_monopoly():
             icon = "knight"
         elif self.leaded_organizations.exists():
             icon = "menu-up"
@@ -433,6 +449,20 @@ class CapabilityProposal(models.Model):
             formation.spacing = proposal['spacing']
             formation.element_size = proposal['element_size']
             formation.save()
+
+        elif self.capability.type == Capability.CONQUEST:
+            try:
+                tile = world.models.Tile.objects.get(id=proposal['tile_id'])
+                if tile in self.capability.applying_to.conquestable_tiles():
+                    world.models.TileEvent.objects.create(
+                        tile=tile,
+                        type=world.models.TileEvent.CONQUEST,
+                        organization=self.capability.applying_to,
+                        counter=0,
+                        start_turn=self.capability.applying_to.world.current_turn
+                    )
+            except world.models.Tile.DoesNotExist:
+                pass
 
         else:
             raise Exception("Executing unknown capability action_type '{}'".format(self.capability.type))

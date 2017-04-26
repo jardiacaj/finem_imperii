@@ -131,14 +131,7 @@ def capability_view(request, capability_id):
 
     if capability.type == Capability.CONQUEST:
         if capability.applying_to.violence_monopoly:
-            candidate_tiles = Tile.objects\
-                .filter(world=capability.applying_to.world)\
-                .exclude(controlled_by=capability.applying_to)\
-                .exclude(type__in=(Tile.SHORE, Tile.DEEPSEA))
-            context['conquestable_tiles'] = []
-            for tile in candidate_tiles:
-                if tile.get_units().filter(owner_character__in=capability.applying_to.character_members.all()):
-                    context['conquestable_tiles'].append(tile)
+            context['conquestable_tiles'] = capability.applying_to.conquestable_tiles()
 
     return render(request, 'organization/capability.html', context)
 
@@ -250,6 +243,26 @@ def banning_view(request, capability_id):
     else:
         messages.success(request, "Done!", "success")
     return redirect(capability.organization.get_absolute_url())
+
+
+@require_POST
+@capability_required_decorator
+def conquest_view(request, capability_id):
+    capability = get_object_or_404(Capability, id=capability_id, type=Capability.CONQUEST)
+    tile_to_conquer = get_object_or_404(Tile, id=request.POST.get('tile_to_conquest_id'))
+
+    if tile_to_conquer not in capability.applying_to.conquestable_tiles():
+        raise Http404
+
+    proposal = {'tile_id': tile_to_conquer.id}
+
+    capability.create_proposal(request.hero, proposal)
+
+    if capability.organization.decision_taking == Organization.DEMOCRATIC:
+        messages.success(request, "A vote has been started regarding your action", "success")
+    else:
+        messages.success(request, "Done!", "success")
+    return redirect(capability.get_absolute_url())
 
 
 @require_POST

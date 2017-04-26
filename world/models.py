@@ -125,6 +125,18 @@ class Tile(models.Model):
         return self.battle_set.filter(current=True)
 
 
+class TileEvent(models.Model):
+    CONQUEST = 'conquest'
+    TYPE_CHOICES = (
+        (CONQUEST, CONQUEST),
+    )
+
+    tile = models.ForeignKey(Tile)
+    type = models.CharField(max_length=20, choices=TYPE_CHOICES)
+    organization = models.ForeignKey(Organization)
+    counter = models.IntegerField(blank=True, null=True)
+
+
 class Settlement(models.Model):
     name = models.CharField(max_length=100)
     tile = models.ForeignKey(Tile)

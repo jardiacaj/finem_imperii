@@ -543,6 +543,9 @@ class ProposalView(View):
             context['target_organization'] = Organization.objects.get(id=proposal_content['target_organization_id'])
             context['target_relationship_html'] = OrganizationRelationship(relationship=proposal_content['target_relationship']).get_relationship_html()
 
+        elif proposal.capability.type == Capability.CONQUEST:
+            context['target_tile'] = Tile.objects.get(id=proposal_content['tile_id'])
+
         return render(request, 'organization/proposal.html', context)
 
     def post(self, request, proposal_id):

@@ -1,0 +1,11 @@
+<blockquote>
+    <p>
+        {{ proposal.proposing_character }} proposes to
+        {% if proposal_content.stop %}
+            stop the conquest of
+        {% else %}
+            start occupying
+        {% endif %}
+        {{ target_tile.get_html_link|safe }}
+    </p>
+</blockquote>

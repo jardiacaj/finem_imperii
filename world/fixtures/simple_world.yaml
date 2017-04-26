@@ -36,6 +36,14 @@
 - model: world.Character
   pk: 4
   fields:
+    name: Democracy Leader
+    world_id: 2
+    location_id: 1005
+    owner_user_id: 1
+
+- model: world.Character
+  pk: 8
+  fields:
     name: Democracy Member
     world_id: 2
     location_id: 1005
@@ -446,6 +454,7 @@
     election_period_months: 0
     character_members:
       - 4
+      - 8
 
 - model: organization.Capability
   fields:

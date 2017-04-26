@@ -3,9 +3,9 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls.base import reverse
 
-from battle.models import BattleFormation
+from battle.models import BattleFormation, Order
 from organization.models import Capability, MilitaryStance, CapabilityProposal
-from world.models import World, Character, Tile, TileEvent
+from world.models import World, Character, Tile, TileEvent, WorldUnit, Settlement
 
 
 class TestMilitaryOrders(TestCase):
@@ -272,7 +272,7 @@ class TestConquest(TestCase):
 
         response = self.client.post(
             reverse('organization:conquest_capability', kwargs={'capability_id': capability.id}),
-            data={'tile_to_conquest_id': tile.id,},
+            data={'tile_to_conquest_id': tile.id, },
         )
 
         self.assertEqual(response.status_code, 404)
@@ -333,3 +333,86 @@ class TestConquest(TestCase):
 
         response = self.client.get(capability.get_absolute_url())
         self.assertEqual(response.status_code, 200)
+
+    def test_proposal(self):
+        self.client.get(
+            reverse('world:activate_character', kwargs={'char_id': 8}),
+            follow=True
+        )
+
+        capability = Capability.objects.get(
+            organization__id=107,
+            type=Capability.CONQUEST,
+            applying_to_id=107
+        )
+        settlement = Settlement.objects.get(id=1008)
+
+        WorldUnit.objects.create(
+            owner_character_id=8,
+            world_id=2,
+            location=settlement,
+            name="conqueror",
+            recruitment_type=WorldUnit.CONSCRIPTION,
+            type=WorldUnit.INFANTRY,
+            status=WorldUnit.STANDING,
+            mobilization_status_since=0,
+            current_status_since=0,
+            battle_line=3,
+            battle_side_pos=0,
+            generation_size=30,
+            default_battle_orders=Order.objects.create(what=''),
+        )
+
+        response = self.client.post(
+            reverse('organization:conquest_capability', kwargs={'capability_id': capability.id}),
+            data={'tile_to_conquest_id': settlement.tile.id, },
+            follow=True
+        )
+
+        self.assertRedirects(response, capability.get_absolute_url())
+
+        self.assertEqual(CapabilityProposal.objects.count(), 1)
+        proposal = CapabilityProposal.objects.get(id=1)
+        self.assertEqual(proposal.capability, capability)
+        proposal_json = proposal.get_proposal_json_content()
+        self.assertEqual(proposal_json['tile_id'], settlement.tile.id)
+
+        response = self.client.get(proposal.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+
+    def test_proposal_fails_because_unit_is_not_movilized(self):
+        self.client.get(
+            reverse('world:activate_character', kwargs={'char_id': 8}),
+            follow=True
+        )
+
+        capability = Capability.objects.get(
+            organization__id=107,
+            type=Capability.CONQUEST,
+            applying_to_id=107
+        )
+        settlement = Settlement.objects.get(id=1008)
+
+        WorldUnit.objects.create(
+            owner_character_id=8,
+            world_id=2,
+            location=settlement,
+            name="conqueror",
+            recruitment_type=WorldUnit.CONSCRIPTION,
+            type=WorldUnit.INFANTRY,
+            status=WorldUnit.NOT_MOBILIZED,
+            mobilization_status_since=0,
+            current_status_since=0,
+            battle_line=3,
+            battle_side_pos=0,
+            generation_size=30,
+            default_battle_orders=Order.objects.create(what=''),
+        )
+
+        response = self.client.post(
+            reverse('organization:conquest_capability', kwargs={'capability_id': capability.id}),
+            data={'tile_to_conquest_id': settlement.tile.id, },
+            follow=True
+        )
+
+        self.assertEqual(response.status_code, 404)

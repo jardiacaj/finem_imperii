@@ -109,9 +109,11 @@ class Organization(models.Model):
                 type=world.models.TileEvent.CONQUEST,
                 end_turn__isnull=True
             )
+            conquering_units = tile.get_units()\
+                .filter(owner_character__in=self.character_members.all())\
+                .exclude(status=world.models.WorldUnit.NOT_MOBILIZED)
             if (
-                tile.get_units().filter(owner_character__in=self.character_members.all()) and
-                not conquest_tile_event.exists()
+                conquering_units.exists() and not conquest_tile_event.exists()
             ):
                 result.append(tile)
         return result

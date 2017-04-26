@@ -132,9 +132,11 @@ class TileEvent(models.Model):
     )
 
     tile = models.ForeignKey(Tile)
-    type = models.CharField(max_length=20, choices=TYPE_CHOICES)
-    organization = models.ForeignKey(Organization)
+    type = models.CharField(max_length=20, choices=TYPE_CHOICES, db_index=True)
+    organization = models.ForeignKey(Organization, blank=True, null=True)
     counter = models.IntegerField(blank=True, null=True)
+    start_turn = models.IntegerField()
+    end_turn = models.IntegerField(blank=True, null=True)
 
 
 class Settlement(models.Model):

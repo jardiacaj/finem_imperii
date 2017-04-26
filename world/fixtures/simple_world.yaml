@@ -111,6 +111,14 @@
     generation_size: 30
     default_battle_orders: 2
 
+- model: world.Character
+  pk: 7
+  fields:
+    name: Commonwealth Lord
+    world_id: 2
+    location_id: 1003
+    owner_user_id: 1
+
 
 - model: world.World
   pk: 2
@@ -320,6 +328,7 @@
     election_period_months: 0
     character_members:
      - 6
+     - 7
 - model: organization.Capability
   fields:
     organization_id: 105
@@ -372,6 +381,8 @@
     decision_taking: distributed
     membership_type: character
     election_period_months: 0
+    character_members:
+      - 7
 - model: organization.Capability
   fields:
     organization_id: 106
@@ -406,6 +417,11 @@
   fields:
     organization_id: 106
     type: 'battle formation'
+    applying_to: 105
+- model: organization.Capability
+  fields:
+    organization_id: 106
+    type: 'occupy region'
     applying_to: 105
 
 - model: organization.Organization

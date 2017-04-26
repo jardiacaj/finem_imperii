@@ -5,6 +5,7 @@ from django.urls.base import reverse
 
 from battle.models import BattleFormation
 from organization.models import Capability, MilitaryStance, CapabilityProposal
+from world.models import World, Character
 
 
 class TestMilitaryOrders(TestCase):
@@ -208,3 +209,34 @@ class TestBattleFormation(TestCase):
 
         response = self.client.get(proposal.get_absolute_url())
         self.assertEqual(response.status_code, 200)
+
+
+class TestConquest(TestCase):
+
+    fixtures = ["simple_world"]
+
+    def setUp(self):
+        self.client.post(
+            reverse('account:login'),
+            {'username': 'alice', 'password': 'test'},
+        )
+        self.client.get(
+            reverse('world:activate_character', kwargs={'char_id': 7}),
+            follow=True
+        )
+
+    def test_view(self):
+        capability = Capability.objects.get(
+            organization__id=106,
+            type=Capability.CONQUEST,
+            applying_to_id=105
+        )
+
+        response = self.client.get(capability.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+
+        for tile in World.objects.get(id=2).tile_set.all():
+            if tile.name in ("More mountains", Character.objects.get(id=7).location.tile.name):
+                self.assertContains(response, tile.name)
+            else:
+                self.assertNotContains(response, tile.name)

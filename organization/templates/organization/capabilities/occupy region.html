@@ -1,0 +1,9 @@
+<p>
+    You have been granted the power to start occupation of territories in the name of {{ capability.applying_to }}.
+</p>
+
+{% for tile in conquestable_tiles %}
+    {{ tile.get_html_link|safe }}<br>
+{% empty %}
+    <p>No members</p>
+{% endfor %}

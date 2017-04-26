@@ -129,6 +129,17 @@ def capability_view(request, capability_id):
                 state.region_stances = capability.applying_to.get_region_stances_to(state)
                 context['states'].append(state)
 
+    if capability.type == Capability.CONQUEST:
+        if capability.applying_to.violence_monopoly:
+            candidate_tiles = Tile.objects\
+                .filter(world=capability.applying_to.world)\
+                .exclude(controlled_by=capability.applying_to)\
+                .exclude(type__in=(Tile.SHORE, Tile.DEEPSEA))
+            context['conquestable_tiles'] = []
+            for tile in candidate_tiles:
+                if tile.get_units().filter(owner_character__in=capability.applying_to.character_members.all()):
+                    context['conquestable_tiles'].append(tile)
+
     return render(request, 'organization/capability.html', context)
 
 

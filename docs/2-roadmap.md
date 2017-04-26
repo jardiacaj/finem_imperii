@@ -9,8 +9,8 @@ Week 4  | 03-20 to 03-26 | 50% vacation.
 Week 5  | 03-27 to 04-02 |
 Week 6  | 04-03 to 04-09 |
 Week 7  | 04-10 to 04-16 | 25% vacation.
-Week 8  | 04-17 to 04-24 | 25% vacation. 04-23 is PAC2 end date
-Week 9  | 04-25 to 04-30 |
+Week 8  | 04-17 to 04-23 | 25% vacation. 04-23 is PAC2 end date
+Week 9  | 04-24 to 04-30 |
 Week 10 | 05-01 to 05-07 |
 Week 11 | 05-08 to 05-14 |
 Week 12 | 05-15 to 05-21 | 05-20 is PAC3 end date
@@ -57,7 +57,6 @@ Allocated: 3 days (vacation!)
 
  - Messaging. (1 day) (finished)
  - CI and Dockerization (1 day) (finished)
- - Secession and rebellion. (1 day)
  - Battle rework. (1 day)
 
 Allocated: 4 days
@@ -66,7 +65,6 @@ Allocated: 4 days
 
  - Region view. (1/2 day)
  - Character view. (1/2 day)
- - Conquest. (1 day)
  - Battle rendering. (1,5 days)
  - Battle orders. (2 days)
 
@@ -74,33 +72,37 @@ Allocated: 5,5 days
 
 ## Week 7 
 
- - Sieges. (1 day)
- - Barbarians. (2 days)
- - PAC2 (1/2 day)
+ - Battle movement (2 days)
  
-Allocated: 3,5 days (vacation!)
+Allocated: 2 days (vacation!)
  
 ## Week 8 
- 
- - Building production (1 day)
- - Test environment setup (1/2 day)
- - Trade (1,5 days)
 
-Allocated: 3 days (vacation!)
+ - Battle movement (1,5 days)
+ - Battle rendering (1,5 days)
+ - PAC 2 (1 day)
+
+Allocated: 4 days (vacation!)
 
 ## Week 9
 
- - Taxation (1 day)
- - Closed alpha release (1 day)
- - Game start/tutorial (2 days)
+ - Battle orders (1 day)
+ - Battle formations (1 day)
+ - Battle damage (1 day)
+ - Battle end (1 day)
+ - Battle restrictions on travel, time and recruitment (1 day)
+ - Conquest. (1 day)
 
-Allocated: 4 days
+Allocated: 6 days
 
 ## Week 10
 
- - Help system
- - Character/player prestige
- - Character start page
+ - Barbarians. (2 days)
+ - Sieges. (1 day)
+ - Character pause and deletion
+ - Emortuus
+ - Organization creation
+ - Professional units and mercenaries
 
 ## Week 11
  
@@ -109,11 +111,24 @@ Allocated: 4 days
  
 ## Week 12
 
-Final delivery preparation
+ - Final delivery preparation
+ - Character creation limit
+ - Missing notifications
+ - Taxation (1 day)
+ - Building production (1 day)
+ - Trade (1,5 days)
+ - Secession and rebellion. (1 day)
+ - PAC3 delivery
  
 ## Week 13
  
-Final delivery preparation
+ - Final delivery preparation
+ - Test environment setup (1/2 day)
+ - Closed alpha release (1 day)
+ - Game start/tutorial (2 days)
+ - Help system
+ - Character/player prestige
+ - Character start page
  
 ## Week 14
 

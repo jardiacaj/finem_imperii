@@ -116,7 +116,7 @@ organizations. A list of currently existing capaiblities:
 
 Some positions within an organization may be elected democratically.
 
-## Battle start (done)
+## Battle start (80%)
 
 An algorithm searches for potential military conflicts and starts
 battles if needed. This takes into account diplomatic relationships,
@@ -136,15 +136,32 @@ still some bugs present. Also, not every battle order is working.
 
 # Important missing features
 
-## Further character actions
+## Battle resolution and conquest
+
+Currently battles never end, as there is no check for ending conditions.
+Also, there is currently no way to conquer a region.
 
 ## Barbarians
 
+Hostile, computer-controlled armies and regions should be a core part of
+the game, especially in early game, to provide a challenge for players
+and to make conquest of new territories more difficult.
+
+## Further character actions
+
+Currently, there is not much a player can spend their time on. Further
+character actions are planned.
+
 ## Economy
 
-## Battle resolution and conquest
+There is not yet a system for characters to get and spend money and
+possibly other resources.
 
 ## Help system
+
+To ease the introduction to the game, help pages should be created.
+A tutorial feature could prove useful.
+
 
 [1]: https://en.wikipedia.org/wiki/Minimum_viable_product
 [2]: https://en.wikipedia.org/wiki/Contubernium

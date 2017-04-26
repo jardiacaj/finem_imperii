@@ -96,15 +96,22 @@ class Organization(models.Model):
         return False
 
     def conquestable_tiles(self):
+        if not self.violence_monopoly:
+            return None
         candidate_tiles = world.models.Tile.objects \
             .filter(world=self.world) \
             .exclude(controlled_by=self) \
             .exclude(type__in=(world.models.Tile.SHORE, world.models.Tile.DEEPSEA))
         result = []
         for tile in candidate_tiles:
+            conquest_tile_event = tile.tileevent_set.filter(
+                organization=self,
+                type=world.models.TileEvent.CONQUEST,
+                end_turn__isnull=True
+            )
             if (
                 tile.get_units().filter(owner_character__in=self.character_members.all()) and
-                not tile.tileevent_set.filter(organization=self, type=world.models.TileEvent.CONQUEST).exists()
+                not conquest_tile_event.exists()
             ):
                 result.append(tile)
         return result
@@ -453,15 +460,24 @@ class CapabilityProposal(models.Model):
         elif self.capability.type == Capability.CONQUEST:
             try:
                 tile = world.models.Tile.objects.get(id=proposal['tile_id'])
-                if tile in self.capability.applying_to.conquestable_tiles():
-                    world.models.TileEvent.objects.create(
+                if proposal['stop']:
+                    tile_event = world.models.TileEvent.objects.get(
                         tile=tile,
-                        type=world.models.TileEvent.CONQUEST,
                         organization=self.capability.applying_to,
-                        counter=0,
-                        start_turn=self.capability.applying_to.world.current_turn
+                        end_turn__isnull=True
                     )
-            except world.models.Tile.DoesNotExist:
+                    tile_event.end_turn = self.capability.applying_to.world.current_turn
+                    tile_event.save()
+                else:
+                    if tile in self.capability.applying_to.conquestable_tiles():
+                        world.models.TileEvent.objects.create(
+                            tile=tile,
+                            type=world.models.TileEvent.CONQUEST,
+                            organization=self.capability.applying_to,
+                            counter=0,
+                            start_turn=self.capability.applying_to.world.current_turn
+                        )
+            except (world.models.Tile.DoesNotExist, world.models.TileEvent.DoesNotExist):
                 pass
 
         else:

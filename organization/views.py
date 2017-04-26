@@ -12,7 +12,7 @@ from battle.models import BattleFormation
 from decorators import inchar_required
 from organization.models import Organization, PolicyDocument, Capability, CapabilityProposal, CapabilityVote, \
     PositionCandidacy, PositionElectionVote, PositionElection, OrganizationRelationship, MilitaryStance
-from world.models import Character, Tile
+from world.models import Character, Tile, TileEvent
 
 
 @inchar_required
@@ -132,6 +132,11 @@ def capability_view(request, capability_id):
     if capability.type == Capability.CONQUEST:
         if capability.applying_to.violence_monopoly:
             context['conquestable_tiles'] = capability.applying_to.conquestable_tiles()
+            context['conquests_in_progress'] = TileEvent.objects.filter(
+                organization=capability.applying_to,
+                type=TileEvent.CONQUEST,
+                end_turn=None
+            )
 
     return render(request, 'organization/capability.html', context)
 
@@ -251,10 +256,23 @@ def conquest_view(request, capability_id):
     capability = get_object_or_404(Capability, id=capability_id, type=Capability.CONQUEST)
     tile_to_conquer = get_object_or_404(Tile, id=request.POST.get('tile_to_conquest_id'))
 
-    if tile_to_conquer not in capability.applying_to.conquestable_tiles():
-        raise Http404
+    if request.POST.get('stop'):
+        try:
+            tile_event = TileEvent.objects.get(
+                tile=tile_to_conquer,
+                organization=capability.applying_to,
+                end_turn__isnull=True
+            )
+        except TileEvent.DoesNotExist:
+            raise Http404
+    else:
+        if tile_to_conquer not in capability.applying_to.conquestable_tiles():
+            raise Http404
 
-    proposal = {'tile_id': tile_to_conquer.id}
+    proposal = {
+        'tile_id': tile_to_conquer.id,
+        'stop': request.POST.get('stop')
+    }
 
     capability.create_proposal(request.hero, proposal)
 

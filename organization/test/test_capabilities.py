@@ -276,3 +276,60 @@ class TestConquest(TestCase):
         )
 
         self.assertEqual(response.status_code, 404)
+
+    def test_start_and_stop_conquest(self):
+        tile = Tile.objects.get(name="More mountains")
+        capability = Capability.objects.get(
+            organization__id=106,
+            type=Capability.CONQUEST,
+            applying_to_id=105
+        )
+
+        response = self.client.post(
+            reverse('organization:conquest_capability', kwargs={'capability_id': capability.id}),
+            data={'tile_to_conquest_id': tile.id, },
+            follow=True
+        )
+
+        response = self.client.post(
+            reverse('organization:conquest_capability', kwargs={'capability_id': capability.id}),
+            data={'tile_to_conquest_id': tile.id, 'stop': '1', },
+            follow=True
+        )
+        self.assertRedirects(response, capability.get_absolute_url())
+        self.assertEqual(TileEvent.objects.count(), 1)
+        event = TileEvent.objects.get(id=1)
+        self.assertEqual(event.tile, tile)
+        self.assertEqual(event.type, TileEvent.CONQUEST)
+        self.assertEqual(event.organization.id, 105)
+        self.assertEqual(event.counter, 0)
+        self.assertEqual(event.start_turn, tile.world.current_turn)
+        self.assertEqual(event.end_turn, tile.world.current_turn)
+
+        response = self.client.post(
+            reverse('organization:conquest_capability', kwargs={'capability_id': capability.id}),
+            data={'tile_to_conquest_id': tile.id, 'stop': '1', },
+            follow=True
+        )
+        self.assertEqual(response.status_code, 404)
+
+        response = self.client.post(
+            reverse('organization:conquest_capability', kwargs={'capability_id': capability.id}),
+            data={
+                'tile_to_conquest_id': tile.id,
+            },
+            follow=True
+        )
+
+        self.assertRedirects(response, capability.get_absolute_url())
+
+        self.assertEqual(TileEvent.objects.count(), 2)
+        event = TileEvent.objects.get(id=2)
+        self.assertEqual(event.tile, tile)
+        self.assertEqual(event.type, TileEvent.CONQUEST)
+        self.assertEqual(event.organization.id, 105)
+        self.assertEqual(event.counter, 0)
+        self.assertEqual(event.start_turn, tile.world.current_turn)
+
+        response = self.client.get(capability.get_absolute_url())
+        self.assertEqual(response.status_code, 200)

@@ -225,6 +225,11 @@
     organization_id: 102
     type: 'battle formation'
     applying_to: 101
+- model: organization.Capability
+  fields:
+    organization_id: 102
+    type: 'occupy region'
+    applying_to: 101
 
 
 - model: organization.Organization
@@ -507,6 +512,11 @@
     organization_id: 107
     type: 'battle formation'
     applying_to: 107
+- model: organization.Capability
+  fields:
+    organization_id: 107
+    type: 'occupy region'
+    applying_to: 107
 
 - model: organization.Organization
   pk: 108
@@ -553,16 +563,21 @@
   fields:
     organization_id: 112
     type: 'candidacy'
-    applying_to: 112
+    applying_to: 113
 - model: organization.Capability
   fields:
     organization_id: 112
     type: 'elect'
-    applying_to: 112
+    applying_to: 113
 - model: organization.Capability
   fields:
     organization_id: 112
     type: 'military stance'
+    applying_to: 112
+- model: organization.Capability
+  fields:
+    organization_id: 112
+    type: 'occupy region'
     applying_to: 112
 
 - model: organization.Organization

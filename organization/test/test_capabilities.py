@@ -380,7 +380,7 @@ class TestConquest(TestCase):
         response = self.client.get(proposal.get_absolute_url())
         self.assertEqual(response.status_code, 200)
 
-    def test_proposal_fails_because_unit_is_not_movilized(self):
+    def test_proposal_fails_because_unit_is_not_mobilized(self):
         self.client.get(
             reverse('world:activate_character', kwargs={'char_id': 8}),
             follow=True

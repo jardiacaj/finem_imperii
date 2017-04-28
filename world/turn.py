@@ -39,12 +39,12 @@ class TurnProcessor:
             tile__world=self.world
         )
         for conquest in conquests_in_this_world:
-            present_movilized_units = world.models.WorldUnit.objects\
+            present_mobilized_units = world.models.WorldUnit.objects\
                 .filter(location__tile=conquest.tile)\
                 .exclude(status=world.models.WorldUnit.NOT_MOBILIZED)
             conquering_units = []
             defending_units = []
-            for unit in present_movilized_units:
+            for unit in present_mobilized_units:
                 if unit.owner_character.get_violence_monopoly() == conquest.organization:
                     conquering_units.append(unit)
                 if unit.owner_character.get_violence_monopoly() == conquest.tile.controlled_by.get_violence_monopoly():
@@ -79,7 +79,6 @@ class TurnProcessor:
                     ),
                     True
                 )
-
 
     def do_elections(self):
         for organization in self.world.organization_set.all():

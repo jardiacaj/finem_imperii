@@ -390,7 +390,8 @@ def unit_view(request, unit_id):
     unit = get_object_or_404(WorldUnit, id=unit_id)
     context = {
         'unit': unit,
-        'origins': unit.soldier.origin_distribution()
+        'origins': unit.soldier.origin_distribution(),
+        'conquests': TileEvent.objects.filter(tile=unit.location.tile, type=TileEvent.CONQUEST, end_turn__isnull=True)
     }
     return render(request, 'world/view_unit.html', context)
 
@@ -438,6 +439,40 @@ def unit_status_change(request, unit_id, new_status):
         unit.change_status(new_status)
     except WorldUnitStatusChangeException as e:
         messages.error(request, str(e), "danger")
+    return redirect(request.META.get('HTTP_REFERER', unit.get_absolute_url()))
+
+
+@inchar_required
+@require_POST
+def unit_conquest_action(request, unit_id):
+    unit = get_object_or_404(WorldUnit, id=unit_id, owner_character=request.hero)
+    tile_event = get_object_or_404(
+        TileEvent,
+        end_turn__isnull=True,
+        type=TileEvent.CONQUEST,
+        tile=unit.location.tile,
+        organization_id=request.POST.get('conqueror_id')
+    )
+    hours = int(request.POST.get('hours'))
+    if unit.status == WorldUnit.NOT_MOBILIZED:
+        messages.error(request, "Unit not movilized")
+    elif unit.location != request.hero.location:
+        messages.error(request, "You must be in the same region to do this.")
+    elif not 0 < hours <= request.hero.hours_in_turn_left:
+        messages.error(request, "Invalid number of hours")
+    elif request.POST.get('action') == "support":
+        tile_event.counter += unit.get_fighting_soldiers().count() * hours // (15*24)
+        request.hero.hours_in_turn_left -= hours
+        request.hero.save()
+        tile_event.save()
+    elif request.POST.get('action') == "counter":
+        tile_event.counter -= unit.get_fighting_soldiers().count() * hours // (15*24)
+        request.hero.hours_in_turn_left -= hours
+        request.hero.save()
+        tile_event.save()
+    else:
+        messages.error(request, "Invalid action")
+
     return redirect(request.META.get('HTTP_REFERER', unit.get_absolute_url()))
 
 

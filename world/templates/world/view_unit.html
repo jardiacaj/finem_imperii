@@ -175,6 +175,46 @@
                         </button>
                     </form>
                 </p>
+
+                {% if unit.status != 'not mobilized' and unit.location == request.hero.location %}
+                    {% for conquest in conquests %}
+                        <div class="well text-center">
+                            <p>
+                                Conquest of {{ conquest.tile }} by {{ conquest.organization.get_html_link|safe }}
+                            </p>
+                            <form class="form-inline" role="form" method="post" action="{% url 'world:unit_conquest_action' unit.id %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="conqueror_id" value="{{ conquest.organization_id }}">
+                                <input
+                                        class="form-control"
+                                        name="hours"
+                                        type="number"
+                                        min="1"
+                                        placeholder="hours, max {{ request.hero.hours_in_turn_left }}"
+                                        required="required"
+                                >
+                                <button
+                                        name="action"
+                                        value="support"
+                                        type="submit"
+                                        class="btn btn-primary btn-sm"
+                                        onclick="return confirm('Are you sure?')"
+                                >
+                                    Support
+                                </button>
+                                <button
+                                        name="action"
+                                        value="counter"
+                                        type="submit"
+                                        class="btn btn-primary btn-sm"
+                                        onclick="return confirm('Are you sure?')"
+                                >
+                                    Counter
+                                </button>
+                            </form>
+                        </div>
+                    {% endfor %}
+                {% endif %}
             {% endif %}
         </div>
     </div>

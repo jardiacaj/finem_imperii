@@ -28,6 +28,7 @@ Basic
 
  Technical
  - [Rendering](https://github.com/jardiacaj/finem_imperii/blob/master/docs/4-rendering.md)
+ - [Server setup guide](https://github.com/jardiacaj/finem_imperii/blob/master/docs/4-server_setup.md)
 
 
 [1]: https://github.com/jardiacaj/finem_imperii/tree/master/docs

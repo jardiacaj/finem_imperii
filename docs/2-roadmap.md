@@ -17,6 +17,10 @@ Week 12 | 05-15 to 05-21 | 05-20 is PAC3 end date
 Week 13 | 05-22 to 05-28 | 
 Week 14 | 05-29 to 06-04 | 06-04 is final delivery date
 
+## Snapshots
+
+[View the status at PAC2 stage (2017-04-26)](https://github.com/jardiacaj/finem_imperii/blob/master/docs/5-PAC2.md)
+
 ## Week 1
 
  - Review old code. (1 day) (finished)

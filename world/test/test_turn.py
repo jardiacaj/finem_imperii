@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.urls.base import reverse
 
 from battle.models import Battle
 from organization.models import Organization
@@ -69,3 +70,14 @@ class TestTurn(TestCase):
         Battle.objects.filter(tile__world=world).update(current=False)
         pass_turn(None, None, World.objects.filter(id=2))
         self.assertEqual(Battle.objects.count(), 2)
+
+    def test_world_blocking(self):
+        world = World.objects.get(id=2)
+        world.blocked_for_turn = True
+        world.save()
+
+        response = self.client.get(
+            reverse('world:activate_character', kwargs={'char_id': 3}),
+            follow=True
+        )
+        self.assertRedirects(response, reverse('account:home'))

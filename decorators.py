@@ -1,7 +1,16 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 
 from world.models import Character
+
+
+def world_blocked(request):
+    messages.warning(
+        request,
+        "{} is undergoing a turn pass. Try again in a few minutes.".format(request.hero.world)
+    )
+    return redirect('account:home')
 
 
 def inchar_required(func):
@@ -13,6 +22,10 @@ def inchar_required(func):
             owner_user=args[0].user,
         )
         args[0].hero = hero
+
+        if hero.world.blocked_for_turn:
+            return world_blocked(args[0])
+
         return func(*args, **kwargs)
 
     return inner

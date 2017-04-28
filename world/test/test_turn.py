@@ -103,3 +103,42 @@ class TestTurn(TestCase):
         self.assertNotEqual(tile.controlled_by, conqueror)
         tile_event.refresh_from_db()
         self.assertEqual(tile_event.end_turn, None)
+        self.assertEqual(tile_event.counter, 0)
+
+    def test_conquest_end(self):
+        tile = Tile.objects.get(id=107)
+        conqueror = Organization.objects.get(id=105)
+        tile_event = TileEvent.objects.create(
+            tile=tile,
+            type=TileEvent.CONQUEST,
+            organization=conqueror,
+            counter=0,
+            start_turn=0
+        )
+        processor = TurnProcessor(tile.world)
+        processor.do_conquests()
+
+        tile.refresh_from_db()
+        self.assertNotEqual(tile.controlled_by, conqueror)
+        tile_event.refresh_from_db()
+        self.assertEqual(tile_event.end_turn, 0)
+        self.assertNotEqual(tile_event.end_turn, None)
+
+    def test_conquest_success(self):
+        tile = Tile.objects.get(name="More mountains")
+        conqueror = Organization.objects.get(id=105)
+        tile_event = TileEvent.objects.create(
+            tile=tile,
+            type=TileEvent.CONQUEST,
+            organization=conqueror,
+            counter=100000,
+            start_turn=0
+        )
+        processor = TurnProcessor(tile.world)
+        processor.do_conquests()
+
+        tile.refresh_from_db()
+        self.assertEqual(tile.controlled_by, conqueror)
+        tile_event.refresh_from_db()
+        self.assertEqual(tile_event.end_turn, 0)
+        self.assertNotEqual(tile_event.end_turn, None)

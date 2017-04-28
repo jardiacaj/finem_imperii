@@ -38,7 +38,8 @@
         }
 
         function click_callback(region, settlement) {
-            window.location = '/tile/' + region.region.id;
+            if (region !== undefined)
+                window.location = '/tile/' + region.region.id;
         }
     </script>
 

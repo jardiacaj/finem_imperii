@@ -21,6 +21,13 @@
                         style="height: 20vw; min-height: 200px; width: 100%; padding: 0; border: 0;"
                         src="{% url 'world:minimap' %}"
                 ></iframe>
+                <script>
+                    function minimap_click_callback(region, settlement) {
+                        if (region !== undefined)
+                            window.location = '/tile/' + region.region.id;
+                    }
+                </script>
+
                 <p class="text-center">
                     {{ request.hero.location.tile.get_html_link|safe }} is
                     {% if request.hero.location.tile.controlled_by %}

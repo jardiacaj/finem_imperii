@@ -76,6 +76,10 @@ class TestTurn(TestCase):
         world.blocked_for_turn = True
         world.save()
 
+        self.client.post(
+            reverse('account:login'),
+            {'username': 'alice', 'password': 'test'},
+        )
         response = self.client.get(
             reverse('world:activate_character', kwargs={'char_id': 3}),
             follow=True

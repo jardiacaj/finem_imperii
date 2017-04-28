@@ -36,7 +36,7 @@
         function settlement_callback(settlement) {
             $("#settlement_name").text(settlement ? settlement.settlement.name : '');
         }
-        
+
         function click_callback(region, settlement) {
             window.location = '/tile/' + region.region.id;
         }

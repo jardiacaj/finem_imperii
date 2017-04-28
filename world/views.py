@@ -14,7 +14,7 @@ from battle.models import Battle, Order
 from decorators import inchar_required
 from name_generator.name_generator import get_names, get_surnames
 from organization.models import Organization
-from world.models import Character, World, Settlement, WorldUnit, WorldUnitStatusChangeException, NPC, Tile
+from world.models import Character, World, Settlement, WorldUnit, WorldUnitStatusChangeException, NPC, Tile, TileEvent
 from world.renderer import render_world_for_view
 from world.templatetags.extra_filters import nice_hours
 
@@ -45,6 +45,7 @@ def tile_view(request, tile_id):
         'tile': tile,
         'characters': Character.objects.filter(location__tile=tile),
         'units': WorldUnit.objects.filter(location__tile=tile),
+        'conquests': TileEvent.objects.filter(tile=tile, type=TileEvent.CONQUEST, end_turn__isnull=True)
     }
     return render(request, 'world/view_tile.html', context)
 

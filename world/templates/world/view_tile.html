@@ -25,6 +25,12 @@
                 </p>
             {% endfor %}
 
+            {% for conquest in conquests %}
+                <p class="alert alert-danger text-center">
+                    {{ conquest.organization.get_html_link|safe }} is occupying this region.
+                </p>
+            {% endfor %}
+
             <h4>Local settlements</h4>
 
             <ul>

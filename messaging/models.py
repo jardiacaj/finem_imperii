@@ -17,8 +17,10 @@ class CharacterMessage(models.Model):
         ordering = ['creation_time']
 
     TRAVEL = 'travel'
+    CONQUEST = 'conquest'
     CATEGORY_CHOICES = (
         (TRAVEL, TRAVEL),
+        (CONQUEST, CONQUEST),
     )
 
     content = models.TextField()

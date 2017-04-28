@@ -3,6 +3,7 @@ from django.db import transaction
 from battle.battle_init import initialize_from_conflict, start_battle
 from battle.battle_tick import battle_turn
 from battle.models import Battle
+from messaging.helpers import send_notification_to_characters
 from messaging.models import CharacterMessage
 import world.models
 import organization.models
@@ -26,9 +27,59 @@ class TurnProcessor:
         self.battle_turns()
         self.trigger_battles()
         self.do_elections()
+        self.do_conquests()
 
         self.world.current_turn += 1
         self.world.save()
+
+    def do_conquests(self):
+        conquests_in_this_world = world.models.TileEvent.objects.filter(
+            type=world.models.TileEvent.CONQUEST,
+            end_turn__isnull=True,
+            tile__world=self.world
+        )
+        for conquest in conquests_in_this_world:
+            present_movilized_units = world.models.WorldUnit.objects\
+                .filter(location__tile=conquest.tile)\
+                .exclude(status=world.models.WorldUnit.NOT_MOBILIZED)
+            conquering_units = []
+            defending_units = []
+            for unit in present_movilized_units:
+                if unit.owner_character.get_violence_monopoly() == conquest.organization:
+                    conquering_units.append(unit)
+                if unit.owner_character.get_violence_monopoly() == conquest.tile.controlled_by.get_violence_monopoly():
+                    defending_units.append(unit)
+
+            # stop conquest if no more units present
+            if len(conquering_units) == 0:
+                conquest.end_turn = self.world.current_turn
+                conquest.save()
+                continue
+
+            # decrease counter
+            for unit in defending_units:
+                conquest.counter -= unit.get_fighting_soldiers().count()
+            if conquest.counter < 0:
+                conquest.counter = 0
+
+            # if counter is larger than population, conquer
+            if conquest.counter > conquest.tile.get_total_population():
+                previous_owner = conquest.tile.controlled_by.get_violence_monopoly()
+                conquest.tile.controlled_by = conquest.organization
+                conquest.end_turn = self.world.current_turn
+                conquest.tile.save()
+                conquest.save()
+                send_notification_to_characters(
+                    self.world.character_set,
+                    CharacterMessage.CONQUEST,
+                    "{tile}, which was previously controlled by {previous}, has been conquered by {conqueror}!".format(
+                        tile=conquest.tile.get_html_link(),
+                        previous=previous_owner.get_html_link(),
+                        conqueror=conquest.organization.get_html_link()
+                    ),
+                    True
+                )
+
 
     def do_elections(self):
         for organization in self.world.organization_set.all():

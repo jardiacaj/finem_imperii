@@ -124,6 +124,9 @@ class Tile(models.Model):
     def get_current_battles(self):
         return self.battle_set.filter(current=True)
 
+    def get_total_population(self):
+        return sum(settlement.population for settlement in self.settlement_set.all())
+
 
 class TileEvent(models.Model):
     CONQUEST = 'conquest'
@@ -182,6 +185,10 @@ class Settlement(models.Model):
         if self.tile.world != settlement.tile.world:
             raise Exception("Can't calculate distance between worlds")
         return euclidean_distance(self.get_absolute_coords(), settlement.get_absolute_coords())
+
+    def update_population(self):
+        self.population = self.npc_set.all().count()
+        self.save()
 
 
 class Building(models.Model):

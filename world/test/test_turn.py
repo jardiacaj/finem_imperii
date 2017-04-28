@@ -5,9 +5,9 @@ from battle.models import Battle
 from organization.models import Organization
 from world.admin import pass_turn
 from world.initialization import initialize_unit
-from world.models import Tile, WorldUnit, World
+from world.models import Tile, WorldUnit, World, TileEvent
 from world.turn import organizations_with_battle_ready_units, battle_ready_units_in_tile, \
-    opponents_in_organization_list, get_largest_conflict_in_list, create_battle_from_conflict
+    opponents_in_organization_list, get_largest_conflict_in_list, create_battle_from_conflict, TurnProcessor
 
 
 class TestTurn(TestCase):
@@ -85,3 +85,21 @@ class TestTurn(TestCase):
             follow=True
         )
         self.assertRedirects(response, reverse('account:home'))
+
+    def test_conquest(self):
+        tile = Tile.objects.get(name="More mountains")
+        conqueror = Organization.objects.get(id=105)
+        tile_event = TileEvent.objects.create(
+            tile=tile,
+            type=TileEvent.CONQUEST,
+            organization=conqueror,
+            counter=0,
+            start_turn=0
+        )
+        processor = TurnProcessor(tile.world)
+        processor.do_conquests()
+
+        tile.refresh_from_db()
+        self.assertNotEqual(tile.controlled_by, conqueror)
+        tile_event.refresh_from_db()
+        self.assertEqual(tile_event.end_turn, None)

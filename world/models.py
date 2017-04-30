@@ -28,7 +28,9 @@ class World(models.Model):
     description = models.TextField()
     initialized = models.BooleanField(default=False)
     current_turn = models.IntegerField(default=0)
-    blocked_for_turn = models.BooleanField(default=False, help_text="True during turn processing")
+    blocked_for_turn = models.BooleanField(
+        default=False, help_text="True during turn processing"
+    )
 
     def get_violence_monopolies(self):
         return self.organization_set.filter(violence_monopoly=True)
@@ -86,7 +88,9 @@ class Tile(models.Model):
     name = models.CharField(max_length=100)
     world = models.ForeignKey(World)
     region = models.ForeignKey(Region)
-    controlled_by = models.ForeignKey('organization.Organization', null=True, blank=True)
+    controlled_by = models.ForeignKey(
+        'organization.Organization', null=True, blank=True
+    )
     x_pos = models.IntegerField()
     y_pos = models.FloatField()
     z_pos = models.IntegerField()
@@ -99,7 +103,9 @@ class Tile(models.Model):
         return reverse('world:tile', kwargs={'tile_id': self.id})
 
     def get_html_link(self):
-        return '<a href="{url}">{name}</a>'.format(url=self.get_absolute_url(), name=self.name)
+        return '<a href="{url}">{name}</a>'.format(
+            url=self.get_absolute_url(), name=self.name
+        )
 
     def get_absolute_coords(self):
         return Point(x=self.x_pos, z=self.z_pos)
@@ -107,7 +113,9 @@ class Tile(models.Model):
     def distance_to(self, tile):
         if self.world != tile.world:
             raise Exception("Can't calculate distance between worlds")
-        return euclidean_distance(self.get_absolute_coords(), tile.get_absolute_coords())
+        return euclidean_distance(
+            self.get_absolute_coords(), tile.get_absolute_coords()
+        )
 
     def is_on_ground(self):
         return self.type in (Tile.PLAINS, Tile.FOREST, Tile.MOUNTAIN)
@@ -116,7 +124,10 @@ class Tile(models.Model):
         return WorldUnit.objects.filter(location__tile=self)
 
     def trigger_battles(self):
-        conflicts = opponents_in_organization_list(organizations_with_battle_ready_units(self), self)
+        conflicts = opponents_in_organization_list(
+            organizations_with_battle_ready_units(self),
+            self
+        )
         conflict = get_largest_conflict_in_list(conflicts, self)
         if conflict:
             return create_battle_from_conflict(conflict, self)
@@ -125,7 +136,9 @@ class Tile(models.Model):
         return self.battle_set.filter(current=True)
 
     def get_total_population(self):
-        return sum(settlement.population for settlement in self.settlement_set.all())
+        return sum(
+            settlement.population for settlement in self.settlement_set.all()
+        )
 
 
 class TileEvent(models.Model):
@@ -184,7 +197,10 @@ class Settlement(models.Model):
     def distance_to(self, settlement):
         if self.tile.world != settlement.tile.world:
             raise Exception("Can't calculate distance between worlds")
-        return euclidean_distance(self.get_absolute_coords(), settlement.get_absolute_coords())
+        return euclidean_distance(
+            self.get_absolute_coords(),
+            settlement.get_absolute_coords()
+        )
 
     def update_population(self):
         self.population = self.npc_set.all().count()
@@ -212,8 +228,10 @@ class Building(models.Model):
     type = models.CharField(max_length=15, choices=TYPE_CHOICES)
     quantity = models.IntegerField(default=1)
     settlement = models.ForeignKey(Settlement)
-    owner = models.ForeignKey('organization.Organization', null=True, blank=True,
-                              help_text="NULL means 'owned by local population'")
+    owner = models.ForeignKey(
+        'organization.Organization', null=True, blank=True,
+        help_text="NULL means 'owned by local population'"
+    )
 
     def max_employment(self):
         if self.type:
@@ -229,17 +247,23 @@ class NPCManager(models.Manager):
 
     def skill_distribution(self):
         return {
-            'high skill': self.get_queryset().filter(skill_fighting__gte=NPC.TOP_SKILL_LIMIT).count(),
+            'high skill': self.get_queryset().filter(
+                skill_fighting__gte=NPC.TOP_SKILL_LIMIT
+            ).count(),
             'medium skill': self.get_queryset().filter(
                 skill_fighting__gte=NPC.MEDIUM_SKILL_LIMIT,
                 skill_fighting__lt=NPC.TOP_SKILL_LIMIT
             ).count(),
-            'low skill': self.get_queryset().filter(skill_fighting__lt=NPC.MEDIUM_SKILL_LIMIT).count(),
+            'low skill': self.get_queryset().filter(
+                skill_fighting__lt=NPC.MEDIUM_SKILL_LIMIT
+            ).count(),
         }
 
     def age_distribution(self):
         return {
-            'too young': self.get_queryset().filter(age_months__lt=NPC.VERY_YOUNG_AGE_LIMIT).count(),
+            'too young': self.get_queryset().filter(
+                age_months__lt=NPC.VERY_YOUNG_AGE_LIMIT
+            ).count(),
             'very young': self.get_queryset().filter(
                 age_months__gte=NPC.VERY_YOUNG_AGE_LIMIT,
                 age_months__lt=NPC.YOUNG_AGE_LIMIT
@@ -252,13 +276,17 @@ class NPCManager(models.Manager):
                 age_months__gte=NPC.MIDDLE_AGE_LIMIT,
                 age_months__lt=NPC.OLD_AGE_LIMIT
             ).count(),
-            'old': self.get_queryset().filter(age_months__gte=NPC.OLD_AGE_LIMIT).count(),
+            'old': self.get_queryset().filter(
+                age_months__gte=NPC.OLD_AGE_LIMIT
+            ).count(),
         }
 
     def professionality_distribution(self):
         return {
-            'professional': self.get_queryset().filter(trained_soldier=True).count(),
-            'non-professional': self.get_queryset().filter(trained_soldier=False).count()
+            'professional':
+                self.get_queryset().filter(trained_soldier=True).count(),
+            'non-professional':
+                self.get_queryset().filter(trained_soldier=False).count()
         }
 
     def origin_distribution(self):
@@ -287,10 +315,16 @@ class NPC(models.Model):
     able = models.BooleanField()
     age_months = models.IntegerField()
     origin = models.ForeignKey(Settlement, related_name='offspring')
-    residence = models.ForeignKey(Building, null=True, blank=True, related_name='resident')
+    residence = models.ForeignKey(
+        Building, null=True, blank=True, related_name='resident'
+    )
     location = models.ForeignKey(Settlement, null=True, blank=True)
-    workplace = models.ForeignKey(Building, null=True, blank=True, related_name='worker')
-    unit = models.ForeignKey('WorldUnit', null=True, blank=True, related_name='soldier')
+    workplace = models.ForeignKey(
+        Building, null=True, blank=True, related_name='worker'
+    )
+    unit = models.ForeignKey(
+        'WorldUnit', null=True, blank=True, related_name='soldier'
+    )
     trained_soldier = models.BooleanField(default=None)
     skill_fighting = models.IntegerField()
 
@@ -302,11 +336,15 @@ class Character(models.Model):
     name = models.CharField(max_length=100)
     world = models.ForeignKey(World)
     location = models.ForeignKey(Settlement)
-    oath_sworn_to = models.ForeignKey('organization.Organization', null=True, blank=True)
+    oath_sworn_to = models.ForeignKey(
+        'organization.Organization', null=True, blank=True
+    )
     owner_user = models.ForeignKey(User)
     cash = models.IntegerField(default=0)
     hours_in_turn_left = models.IntegerField(default=15*24)
-    travel_destination = models.ForeignKey(Settlement, null=True, blank=True, related_name='travellers_heading')
+    travel_destination = models.ForeignKey(
+        Settlement, null=True, blank=True, related_name='travellers_heading'
+    )
 
     @property
     def activation_url(self):
@@ -314,21 +352,26 @@ class Character(models.Model):
 
     def travel_time(self, target_settlement):
         distance = self.location.distance_to(target_settlement)
-        if self.location.tile.type == Tile.MOUNTAIN or target_settlement.tile.type == Tile.MOUNTAIN:
+        if (self.location.tile.type == Tile.MOUNTAIN
+                or target_settlement.tile.type == Tile.MOUNTAIN):
             distance *= 2
         days = distance / 100 * 2
         return math.ceil(days * 24)
 
     def check_travelability(self, target_settlement):
         if target_settlement == self.location:
-            return "You can't travel to {} as you are already there.".format(target_settlement)
+            return "You can't travel to {} as you are already there.".format(
+                target_settlement
+            )
         if target_settlement.tile.distance_to(self.location.tile) > 1.5:
             return "You can only travel to contiguous regions."
-        if self.travel_destination is not None and self.travel_destination != target_settlement:
-            return "You cant travel to {} because you are already travelling to {}.".format(
-                target_settlement,
-                self.travel_destination
-            )
+        if (self.travel_destination is not None
+                and self.travel_destination != target_settlement):
+            return "You cant travel to {} because you are already travelling" \
+                   " to {}.".format(
+                        target_settlement,
+                        self.travel_destination
+                   )
         return None
 
     def perform_travel(self, destination):
@@ -336,7 +379,9 @@ class Character(models.Model):
         self.location = destination
         self.hours_in_turn_left -= travel_time
         self.save()
-        return "After {} of travel you have reached {}.".format(nice_hours(travel_time), destination)
+        return "After {} of travel you have reached {}.".format(
+            nice_hours(travel_time), destination
+        )
 
     @transaction.atomic
     def add_notification(self, category, content, safe=False):
@@ -354,11 +399,14 @@ class Character(models.Model):
     def get_violence_monopoly(self):
         try:
             return self.organization_set.get(violence_monopoly=True)
-        except (Organization.DoesNotExist, Organization.MultipleObjectsReturned):
+        except (Organization.DoesNotExist,
+                Organization.MultipleObjectsReturned):
             return None
 
     def unread_messages(self):
-        return CharacterMessage.objects.filter(messagerecipient__character=self, messagerecipient__read=False)
+        return CharacterMessage.objects.filter(
+            messagerecipient__character=self, messagerecipient__read=False
+        )
 
     def __str__(self):
         return self.name
@@ -373,7 +421,9 @@ class Character(models.Model):
         return result
 
     def get_html_link(self):
-        return '<a href="{}">{}</a>'.format(self.get_absolute_url(), self.get_html_name())
+        return '<a href="{}">{}</a>'.format(
+            self.get_absolute_url(), self.get_html_name()
+        )
 
 
 class WorldUnitStatusChangeException(Exception):
@@ -446,19 +496,24 @@ class WorldUnit(models.Model):
     world = models.ForeignKey(World)
     location = models.ForeignKey(Settlement)
     name = models.CharField(max_length=100)
-    recruitment_type = models.CharField(max_length=30, choices=RECTRUITMENT_CHOICES)
+    recruitment_type = models.CharField(
+        max_length=30, choices=RECTRUITMENT_CHOICES
+    )
     type = models.CharField(max_length=30, choices=TYPE_CHOICES)
     status = models.CharField(max_length=30, choices=STATUS_CHOICES)
     mobilization_status_since = models.IntegerField()
     current_status_since = models.IntegerField()
     battle_line = models.IntegerField(choices=LINE_CHOICES, default=3)
     battle_side_pos = models.IntegerField(choices=SIDE_CHOICES, default=0)
-    generation_size = models.IntegerField(default=0, help_text="Only used in tests that need generated units")
+    generation_size = models.IntegerField(
+        default=0, help_text="Only used in tests that need generated units"
+    )
     default_battle_orders = models.ForeignKey('battle.Order')
 
     @staticmethod
     def get_unit_types(nice=False):
-        return (unit_type[1 if nice else 0] for unit_type in WorldUnit.TYPE_CHOICES)
+        return (unit_type[1 if nice else 0]
+                for unit_type in WorldUnit.TYPE_CHOICES)
 
     @staticmethod
     def get_unit_states(nice=False):
@@ -474,7 +529,11 @@ class WorldUnit(models.Model):
         return reverse('world:unit', kwargs={'unit_id': self.id})
 
     def average_fighting_skill(self):
-        return round(self.soldier.all().aggregate(Avg('skill_fighting'))['skill_fighting__avg'])
+        return round(
+            self.soldier.all().aggregate(
+                Avg('skill_fighting')
+            )['skill_fighting__avg']
+        )
 
     def change_status(self, new_status):
         if new_status not in WorldUnit.get_unit_states():
@@ -484,21 +543,31 @@ class WorldUnit(models.Model):
         if new_status == WorldUnit.CUSTOMER_SEARCH:
             raise Exception("Can't switch to searching customer status")
         if self.get_current_battle() is not None:
-            raise WorldUnitStatusChangeException("Can't change status while in battle")
+            raise WorldUnitStatusChangeException(
+                "Can't change status while in battle"
+            )
         if self.status == new_status:
-            raise WorldUnitStatusChangeException("The unit is already {}".format(self.get_status_display()))
+            raise WorldUnitStatusChangeException(
+                "The unit is already {}".format(self.get_status_display())
+            )
         if new_status == WorldUnit.NOT_MOBILIZED:
             if self.mobilization_status_since == self.world.current_turn:
                 raise WorldUnitStatusChangeException(
-                    "Cannot demobilize {} the same turn it has been mobilized".format(self)
+                    "Cannot demobilize {} the same turn it has been"
+                    " mobilized".format(self)
                 )
-        if new_status != WorldUnit.NOT_MOBILIZED and self.status == WorldUnit.NOT_MOBILIZED:
+        if (new_status != WorldUnit.NOT_MOBILIZED
+                and self.status == WorldUnit.NOT_MOBILIZED):
             if self.mobilization_status_since == self.world.current_turn:
                 raise WorldUnitStatusChangeException(
-                    "Cannot mobilize {} the same turn it has been demobilized".format(self)
+                    "Cannot mobilize {} the same turn it has been"
+                    " demobilized".format(self)
                 )
-        if new_status == WorldUnit.FOLLOWING and self.owner_character.location != self.location:
-            raise WorldUnitStatusChangeException("A unit can only follow you if you are in the same location.")
+        if (new_status == WorldUnit.FOLLOWING
+                and self.owner_character.location != self.location):
+            raise WorldUnitStatusChangeException(
+                "A unit can only follow you if you are in the same location."
+            )
         self.status = new_status
         self.save()
 
@@ -507,7 +576,9 @@ class WorldUnit(models.Model):
 
     def get_current_battle(self):
         try:
-            in_battle = BattleUnit.objects.get(world_unit=self, battle_side__battle__current=True)
+            in_battle = BattleUnit.objects.get(
+                world_unit=self, battle_side__battle__current=True
+            )
             return in_battle.battle_side.battle
         except BattleUnit.DoesNotExist:
             pass

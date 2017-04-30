@@ -19,7 +19,10 @@ def create_contubernia(unit):
         contubernium_soldiers = soldiers[start:end]
         contubernium = BattleContubernium.objects.create(battle_unit=unit)
         for soldier in contubernium_soldiers:
-            BattleSoldier.objects.create(battle_contubernium=contubernium, world_npc=soldier)
+            BattleSoldier.objects.create(
+                battle_contubernium=contubernium,
+                world_npc=soldier
+            )
         pointer = end
 
 
@@ -28,12 +31,18 @@ def initialize_from_conflict(battle, conflict, tile):
     z = False
     for organization in conflict:
         battle_side = BattleSide.objects.create(battle=battle, z=z)
-        BattleOrganization.objects.create(side=battle_side, organization=organization)
+        BattleOrganization.objects.create(
+            side=battle_side,
+            organization=organization
+        )
         z = True
     for unit in tile.get_units():
         violence_monopoly = unit.owner_character.get_violence_monopoly()
         if violence_monopoly in conflict:
-            battle_organization = BattleOrganization.objects.get(side__battle=battle, organization=violence_monopoly)
+            battle_organization = BattleOrganization.objects.get(
+                side__battle=battle,
+                organization=violence_monopoly
+            )
             battle_character = BattleCharacter.objects.get_or_create(
                 battle_organization=battle_organization,
                 character=unit.owner_character,
@@ -49,7 +58,11 @@ def initialize_from_conflict(battle, conflict, tile):
             order = unit.default_battle_orders
             order.pk = None
             order.save()
-            OrderListElement.objects.create(order=order, battle_unit=battle_unit, position=0)
+            OrderListElement.objects.create(
+                order=order,
+                battle_unit=battle_unit,
+                position=0
+            )
 
 
 def initialize_side_positioning(side: BattleSide):
@@ -57,7 +70,9 @@ def initialize_side_positioning(side: BattleSide):
     if formation_settings.formation == BattleFormation.LINE:
         formation = LineFormation(side, formation_settings)
     else:
-        raise Exception("Formation {} not known".format(formation_settings.formation))
+        raise Exception(
+            "Formation {} not known".format(formation_settings.formation)
+        )
     formation.make_formation()
 
     for coords, contub in formation.output_formation():
@@ -75,8 +90,10 @@ def initialize_side_positioning(side: BattleSide):
         unit.save()
 
         for contub in unit.battlecontubernium_set.all():
-            contub.x_offset_to_unit = contub.starting_x_pos - unit.starting_x_pos
-            contub.z_offset_to_unit = contub.starting_z_pos - unit.starting_z_pos
+            contub.x_offset_to_unit = contub.starting_x_pos - \
+                                      unit.starting_x_pos
+            contub.z_offset_to_unit = contub.starting_z_pos - \
+                                      unit.starting_z_pos
             contub.save()
 
 
@@ -142,11 +159,13 @@ class LineFormation:
 
     def output_formation(self):
         widest_line_width = max([line.width for line in self.lines])
+        full_size_of_line = (self.formation_object.element_size +
+                             self.formation_object.spacing)
         for line_index, line in enumerate(self.lines):
             for col_index, column in enumerate(line.columns):
                 for contub_index, contub in enumerate(column):
                     x = col_index - round(line.width / 2)
-                    z = line_index * (self.formation_object.element_size + self.formation_object.spacing) + contub_index
+                    z = line_index * full_size_of_line + contub_index
                     yield Coordinates(x, z), contub
 
 
@@ -199,7 +218,9 @@ class BattleAlreadyStartedException(Exception):
 @transaction.atomic
 def start_battle(battle):
     if battle.started:
-        raise BattleAlreadyStartedException("Battle {} already started!".format(battle.id))
+        raise BattleAlreadyStartedException(
+            "Battle {} already started!".format(battle.id)
+        )
 
     for unit in battle.get_units_in_battle().all():
         create_contubernia(unit)

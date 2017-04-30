@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='character',
             name='oath_sworn_to',
-            field=models.ForeignKey(default=0, on_delete=django.db.models.deletion.CASCADE, to='organization.Organization'),
+            field=models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, to='organization.Organization'),
             preserve_default=False,
         ),
     ]

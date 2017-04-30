@@ -185,7 +185,6 @@ function BattleRenderer(battle_data) {
 
     zis.renderer = new BaseRenderer(40, 60, 0);
     zis.renderer.picking_types['contubernium'] = zis.notify_contubernium_pick;
-    zis.renderer.enable_rendering_helpers();
     zis.render_ground();
     zis.render_turn(zis.showing_turn);
 

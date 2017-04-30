@@ -588,6 +588,11 @@
     organization_id: 112
     type: 'occupy region'
     applying_to: 112
+- model: organization.Capability
+  fields:
+    organization_id: 112
+    type: 'battle formation'
+    applying_to: 112
 
 - model: organization.Organization
   pk: 113

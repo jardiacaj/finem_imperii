@@ -30,7 +30,7 @@ function BattleRenderer(battle_data) {
     zis.get_contubernium_actual_material = function (contubernium) {
         if (contubernium === zis.clicked_contubernium) {
             return zis.contubernium_material_highlighted;
-        } else if (contubernium == zis.picked_contubernium) {
+        } else if (contubernium === zis.picked_contubernium) {
             return zis.contubernium_material_highlighted;
         } else {
             return zis.get_contubernium_default_material(contubernium);

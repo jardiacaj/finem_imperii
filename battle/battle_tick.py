@@ -152,7 +152,7 @@ def closest_in_set(coords, contubernium_set):
         if closest is None or tentative_distance < distance:
             closest = contubernium
             distance = tentative_distance
-    return (closest, distance)
+    return closest, distance
 
 
 def get_target_distance_function(battle_contubernium_in_turn: BattleContuberniumInTurn):
@@ -264,7 +264,7 @@ def find_path(battle_contubernium_in_turn: BattleContuberniumInTurn, target_dist
 
     closed_set = set()
     open_set = set()
-    open_set.add((starting_coordinates))
+    open_set.add(starting_coordinates)
     came_from = {}
     g_score = {}
     g_score[starting_coordinates] = 0

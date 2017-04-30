@@ -32,6 +32,8 @@ def create_next_turn(battle: Battle):
                             battle_contubernium=contubernium, battle_turn=prev_turn
                         )
                         bcontubit.id = None
+                        bcontubit.moved_this_turn = False
+                        bcontubit.desires_pos = False
                         bcontubit.battle_turn = new_turn
                         bcontubit.battle_unit_in_turn = buit
                         bcontubit.save()

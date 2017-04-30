@@ -5,7 +5,7 @@ from django.urls.base import reverse
 
 from battle.battle_init import initialize_from_conflict, start_battle
 from battle.battle_tick import battle_tick, optimistic_move_desire_formulation, optimistic_move_desire_resolving, \
-    safe_move
+    safe_move, euclidean_distance
 from battle.models import Battle, BattleCharacter, BattleUnit, BattleContubernium, BattleSoldier, BattleOrganization, \
     BattleContuberniumInTurn, BattleSoldierInTurn, BattleUnitInTurn, Order, OrderListElement, Coordinates
 from organization.models import Organization
@@ -186,7 +186,10 @@ class TestBattleMovement(TestCase):
         self.assertFalse(contub3.moved_this_turn)
 
         contub3_movement_target = Coordinates(x=101, z=100)
-        optimistic_move_desire_formulation(contub3, contub3_movement_target)
+
+        def target_distance_function(coords):
+            return euclidean_distance(coords, contub3_movement_target)
+        optimistic_move_desire_formulation(contub3, target_distance_function)
 
         contub1.refresh_from_db()
         self.assertFalse(contub1.desires_pos)
@@ -217,7 +220,7 @@ class TestBattleMovement(TestCase):
         self.assertFalse(contub3.moved_this_turn)
         self.assertFalse(self.battle.get_latest_turn().test_contubernia_superposition())
 
-        safe_move(contub3, contub3_movement_target)
+        safe_move(contub3, target_distance_function)
         contub3.refresh_from_db()
         self.assertFalse(contub3.desires_pos)
         self.assertNotEqual(contub3.x_pos, 99)
@@ -227,7 +230,7 @@ class TestBattleMovement(TestCase):
 
         self.assertFalse(self.battle.get_latest_turn().test_contubernia_superposition())
 
-        optimistic_move_desire_formulation(contub3, contub3_movement_target)
+        optimistic_move_desire_formulation(contub3, target_distance_function)
         optimistic_move_desire_resolving(self.battle)
         contub3.refresh_from_db()
         self.assertFalse(contub3.desires_pos)
@@ -275,7 +278,10 @@ class TestBattleMovement(TestCase):
         self.assertFalse(contub3.moved_this_turn)
 
         contub3_movement_target = Coordinates(x=101, z=100)
-        optimistic_move_desire_formulation(contub3, contub3_movement_target)
+
+        def target_distance_function(coords):
+            return euclidean_distance(coords, contub3_movement_target)
+        optimistic_move_desire_formulation(contub3, target_distance_function)
 
         contub1.refresh_from_db()
         self.assertFalse(contub1.desires_pos)
@@ -306,16 +312,16 @@ class TestBattleMovement(TestCase):
         self.assertFalse(contub3.moved_this_turn)
         self.assertFalse(self.battle.get_latest_turn().test_contubernia_superposition())
 
-        safe_move(contub3, contub3_movement_target)
+        safe_move(contub3, target_distance_function)
         contub3.refresh_from_db()
         self.assertFalse(self.battle.get_latest_turn().test_contubernia_superposition())
-        safe_move(contub3, contub3_movement_target)
+        safe_move(contub3, target_distance_function)
         contub3.refresh_from_db()
         self.assertFalse(self.battle.get_latest_turn().test_contubernia_superposition())
-        safe_move(contub3, contub3_movement_target)
+        safe_move(contub3, target_distance_function)
         contub3.refresh_from_db()
         self.assertFalse(self.battle.get_latest_turn().test_contubernia_superposition())
-        safe_move(contub3, contub3_movement_target)
+        safe_move(contub3, target_distance_function)
         contub3.refresh_from_db()
         self.assertFalse(self.battle.get_latest_turn().test_contubernia_superposition())
 

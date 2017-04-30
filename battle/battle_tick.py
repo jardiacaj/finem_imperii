@@ -107,17 +107,17 @@ def unit_movement(battle: Battle):
     # first pass: desire positions / optimistic move
     for battle_unit_in_turn in BattleUnitInTurn.objects.filter(battle_turn=battle.get_latest_turn()):
         for battle_contubernium_in_turn in battle_unit_in_turn.battlecontuberniuminturn_set.all():
-            movement_target = get_movement_target(battle_contubernium_in_turn)
-            if movement_target:
-                optimistic_move_desire_formulation(battle_contubernium_in_turn, movement_target)
+            target_distance_function = get_target_distance_function(battle_contubernium_in_turn)
+            if target_distance_function:
+                optimistic_move_desire_formulation(battle_contubernium_in_turn, target_distance_function)
     optimistic_move_desire_resolving(battle)
 
     # second pass: if could not move, do "safe" move
     for battle_unit_in_turn in BattleUnitInTurn.objects.filter(battle_turn=battle.get_latest_turn()):
         for battle_contubernium_in_turn in battle_unit_in_turn.battlecontuberniuminturn_set.filter(moved_this_turn=False):
-            movement_target = get_movement_target(battle_contubernium_in_turn)
-            if movement_target:
-                safe_move(battle_contubernium_in_turn, movement_target)
+            target_distance_function = get_target_distance_function(battle_contubernium_in_turn)
+            if target_distance_function:
+                safe_move(battle_contubernium_in_turn, target_distance_function)
 
     # finalize
     for battle_unit_in_turn in BattleUnitInTurn.objects.filter(battle_turn=battle.get_latest_turn()):
@@ -144,38 +144,52 @@ def check_if_order_done(battle_unit_in_turn: BattleUnitInTurn):
             pass
 
 
-def get_movement_target(battle_contubernium_in_turn: BattleContuberniumInTurn):
+def get_target_distance_function(battle_contubernium_in_turn: BattleContuberniumInTurn):
     order = battle_contubernium_in_turn.battle_unit_in_turn.battle_unit.get_turn_order()
     if order:
+
         if order.what == Order.STAND:
             return None
+
         if order.what == Order.MOVE:
             unit_target = order.target_location_coordinates()
-            return Coordinates(
+            target = Coordinates(
                 x=(unit_target.x + battle_contubernium_in_turn.battle_contubernium.x_offset_to_unit),
                 z=(unit_target.z + battle_contubernium_in_turn.battle_contubernium.z_offset_to_unit)
             )
+
+            def result(coords: Coordinates):
+                return euclidean_distance(coords, target)
+            return result
+
         if order.what == Order.FLEE:
             pass
+
         if order.what == Order.CHARGE:
             pass
+
         if order.what == Order.ADVANCE_IN_FORMATION:
             z_direction = -1 if battle_contubernium_in_turn.battle_contubernium.battle_unit.battle_side.z else 1
             z_offset = battle_contubernium_in_turn.battle_turn.num * z_direction
-            return Coordinates(
+            target = Coordinates(
                 x=battle_contubernium_in_turn.battle_contubernium.starting_x_pos,
                 z=battle_contubernium_in_turn.battle_contubernium.starting_z_pos + z_offset
             )
+
+            def result(coords: Coordinates):
+                return euclidean_distance(coords, target)
+            return result
+
         if order.what == Order.RANGED_ATTACK:
             pass
 
 
-def optimistic_move_desire_formulation(battle_contubernium_in_turn: BattleContuberniumInTurn, target: Coordinates):
+def optimistic_move_desire_formulation(battle_contubernium_in_turn: BattleContuberniumInTurn, target_distance_function):
     def tile_availability_test(coords: Coordinates):
         return True
 
-    if euclidean_distance(battle_contubernium_in_turn.coordinates(), target) > 0:
-        path = find_path(battle_contubernium_in_turn, target, tile_availability_test)
+    if target_distance_function(battle_contubernium_in_turn.coordinates()) > 0:
+        path = find_path(battle_contubernium_in_turn, target_distance_function, tile_availability_test)
         if len(path) > 1:
             battle_contubernium_in_turn.desires_pos = True
             battle_contubernium_in_turn.desired_x_pos = path[1].x
@@ -183,14 +197,14 @@ def optimistic_move_desire_formulation(battle_contubernium_in_turn: BattleContub
             battle_contubernium_in_turn.save()
 
 
-def safe_move(battle_contubernium_in_turn: BattleContuberniumInTurn, target: Coordinates):
+def safe_move(battle_contubernium_in_turn: BattleContuberniumInTurn, target_distance_function):
     turn = battle_contubernium_in_turn.battle_turn
 
     def tile_availability_test(coords: Coordinates):
         return True if turn.get_contubernium_in_position(coords) is None else False
 
-    if euclidean_distance(battle_contubernium_in_turn.coordinates(), target) > 0:
-        path = find_path(battle_contubernium_in_turn, target, tile_availability_test)
+    if target_distance_function(battle_contubernium_in_turn.coordinates()) > 0:
+        path = find_path(battle_contubernium_in_turn, target_distance_function, tile_availability_test)
         if len(path) > 1:
             battle_contubernium_in_turn.moved_this_turn = True
             battle_contubernium_in_turn.x_pos = path[1].x
@@ -217,9 +231,9 @@ def coordinate_neighbours(coord: Coordinates):
     return result
 
 
-def find_path(battle_contubernium_in_turn: BattleContuberniumInTurn, goal, tile_availability_test) -> list:
+def find_path(battle_contubernium_in_turn: BattleContuberniumInTurn, target_distance_function, tile_availability_test) -> list:
     starting_coordinates = battle_contubernium_in_turn.coordinates()
-    if euclidean_distance(starting_coordinates, goal) == 0:
+    if target_distance_function(starting_coordinates) == 0:
         return True
 
     closed_set = set()
@@ -229,7 +243,7 @@ def find_path(battle_contubernium_in_turn: BattleContuberniumInTurn, goal, tile_
     g_score = {}
     g_score[starting_coordinates] = 0
     f_score = {}
-    f_score[starting_coordinates] = euclidean_distance(starting_coordinates, goal)
+    f_score[starting_coordinates] = target_distance_function(starting_coordinates)
 
     while open_set:
         minel = None
@@ -239,7 +253,7 @@ def find_path(battle_contubernium_in_turn: BattleContuberniumInTurn, goal, tile_
         current = minel
         open_set.remove(minel)
 
-        if current == goal:
+        if target_distance_function(current) == 0:
             # RECONSTRUCT
             # print("REACHED GOAL, backtracing")
             total_path = [current]
@@ -271,7 +285,7 @@ def find_path(battle_contubernium_in_turn: BattleContuberniumInTurn, goal, tile_
             # print("Found better path")
             came_from[neighbor] = current
             g_score[neighbor] = tentative_g_score
-            f_score[neighbor] = g_score[neighbor] + euclidean_distance(neighbor, goal)
+            f_score[neighbor] = g_score[neighbor] + target_distance_function(neighbor)
 
     return []
 

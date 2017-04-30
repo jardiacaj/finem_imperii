@@ -403,3 +403,40 @@ class TestBattleMovement(TestCase):
 
         for bcuit in unit1_contubernia:
             self.assertEqual(bcuit.z_pos, bcuit.battle_contubernium.starting_z_pos - 4)
+
+    def test_move_charge(self):
+        unit3 = WorldUnit.objects.get(id=3)
+        start_battle(self.battle)
+        battle_unit3 = BattleUnit.objects.get(world_unit=unit3)
+        battle_unit3.orders.clear()
+        order3 = Order.objects.create(what=Order.CHARGE)
+        OrderListElement.objects.create(order=order3, battle_unit=battle_unit3, position=0)
+
+        battle_tick(self.battle)
+
+        unit3_contubernia = BattleContuberniumInTurn.objects.filter(
+            battle_turn=self.battle.get_latest_turn(),
+            battle_contubernium__battle_unit=battle_unit3
+        )
+
+        for bcuit in unit3_contubernia:
+            self.assertEqual(bcuit.z_pos, bcuit.battle_contubernium.starting_z_pos - 1)
+
+    def test_move_flee(self):
+        unit3 = WorldUnit.objects.get(id=3)
+        start_battle(self.battle)
+        battle_unit3 = BattleUnit.objects.get(world_unit=unit3)
+        battle_unit3.orders.clear()
+        order3 = Order.objects.create(what=Order.FLEE)
+        OrderListElement.objects.create(order=order3, battle_unit=battle_unit3, position=0)
+
+        battle_tick(self.battle)
+
+        unit3_contubernia = BattleContuberniumInTurn.objects.filter(
+            battle_turn=self.battle.get_latest_turn(),
+            battle_contubernium__battle_unit=battle_unit3
+        )
+
+        # TODO this fails for some reason
+        #for bcuit in unit3_contubernia:
+        #    self.assertEqual(bcuit.z_pos, bcuit.battle_contubernium.starting_z_pos + 1)

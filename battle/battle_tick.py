@@ -144,8 +144,26 @@ def check_if_order_done(battle_unit_in_turn: BattleUnitInTurn):
             pass
 
 
+def closest_in_set(coords, contubernium_set):
+    closest = None
+    distance = None
+    for contubernium in contubernium_set:
+        tentative_distance = euclidean_distance(coords, contubernium.coordinates())
+        if closest is None or tentative_distance < distance:
+            closest = contubernium
+            distance = tentative_distance
+    return (closest, distance)
+
+
 def get_target_distance_function(battle_contubernium_in_turn: BattleContuberniumInTurn):
     order = battle_contubernium_in_turn.battle_unit_in_turn.battle_unit.get_turn_order()
+    enemy_contubernia = BattleContuberniumInTurn.objects.filter(
+        battle_turn=battle_contubernium_in_turn.battle_turn
+    ).exclude(
+        battle_contubernium__battle_unit__battle_side=
+        battle_contubernium_in_turn.battle_contubernium.battle_unit.battle_side
+    )
+
     if order:
 
         if order.what == Order.STAND:
@@ -163,10 +181,18 @@ def get_target_distance_function(battle_contubernium_in_turn: BattleContubernium
             return result
 
         if order.what == Order.FLEE:
-            pass
+            original_enemy_distance = closest_in_set(battle_contubernium_in_turn.coordinates(), enemy_contubernia)[1]
+
+            def result(coords: Coordinates):
+                closest, distance = closest_in_set(coords, enemy_contubernia)
+                return (original_enemy_distance + 10) - distance if distance is not None else 0
+            return result
 
         if order.what == Order.CHARGE:
-            pass
+            def result(coords: Coordinates):
+                closest, distance = closest_in_set(coords, enemy_contubernia)
+                return distance if distance is not None and distance >= 2 else 0
+            return result
 
         if order.what == Order.ADVANCE_IN_FORMATION:
             z_direction = -1 if battle_contubernium_in_turn.battle_contubernium.battle_unit.battle_side.z else 1
@@ -233,7 +259,7 @@ def coordinate_neighbours(coord: Coordinates):
 
 def find_path(battle_contubernium_in_turn: BattleContuberniumInTurn, target_distance_function, tile_availability_test) -> list:
     starting_coordinates = battle_contubernium_in_turn.coordinates()
-    if target_distance_function(starting_coordinates) == 0:
+    if target_distance_function(starting_coordinates) <= 0:
         return True
 
     closed_set = set()
@@ -253,7 +279,7 @@ def find_path(battle_contubernium_in_turn: BattleContuberniumInTurn, target_dist
         current = minel
         open_set.remove(minel)
 
-        if target_distance_function(current) == 0:
+        if target_distance_function(current) <= 0:
             # RECONSTRUCT
             # print("REACHED GOAL, backtracing")
             total_path = [current]

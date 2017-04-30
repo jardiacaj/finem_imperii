@@ -300,23 +300,6 @@ def character_home(request):
     return render(request, 'world/character_home.html')
 
 
-@inchar_required
-def setup_battle(request, rival_char_id=None):
-    if rival_char_id is None:
-        rivals = Character.objects.exclude(pk=request.hero.pk)
-        return render(request, 'world/setup_battle.html', context={'rivals': rivals})
-    else:
-        if rival_char_id == request.hero.id:
-            messages.error(request, "Cannot battle yourself!", extra_tags="danger")
-            return setup_battle(request)
-        rival = get_object_or_404(Character, id=rival_char_id)
-        battle = Battle()
-        battle.save()
-        battle.start_battle(request.hero, rival)
-
-        return redirect(reverse('battle:setup', kwargs={'battle_id': battle.id}))
-
-
 class TravelView(View):
     template_name = 'world/travel.html'
 

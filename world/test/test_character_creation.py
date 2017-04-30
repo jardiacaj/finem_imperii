@@ -18,6 +18,20 @@ class TestCharacterCreation(TestCase):
         user = auth.get_user(self.client)
         self.assertEqual(User.objects.get(id=1), user)
 
+    def test_step1_view(self):
+        response = self.client.post(
+            reverse('world:create_character'),
+            follow=True
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_step2_view(self):
+        response = self.client.post(
+            reverse('world:create_character', kwargs={'world_id': 2}),
+            follow=True
+        )
+        self.assertEqual(response.status_code, 200)
+
     def test_create_character_in_kingdom(self):
         response = self.client.post(
             reverse('world:create_character', kwargs={'world_id': 2}),

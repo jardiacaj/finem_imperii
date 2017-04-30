@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls.base import reverse
 
-from world.models import World
+from world.models import World, Character
 
 
 class TestHome(TestCase):
@@ -59,6 +59,14 @@ class TestTileView(TestCase):
             )
             self.assertEqual(response.status_code, 200)
 
+    def test_view_region_iframe(self):
+        for tile in World.objects.get(id=2).tile_set.all():
+            response = self.client.get(
+                reverse('world:tile_iframe', kwargs={'tile_id': tile.id}),
+                follow=True
+            )
+            self.assertEqual(response.status_code, 200)
+
 
 class TestWorldView(TestCase):
     fixtures = ['simple_world']
@@ -79,6 +87,11 @@ class TestWorldView(TestCase):
         response = self.client.get(world.get_absolute_url())
         self.assertEqual(response.status_code, 200)
 
+    def test_view_character(self):
+        character = Character.objects.get(id=2)
+        response = self.client.get(character.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+
     def test_view_world_iframe(self):
         response = self.client.get(reverse('world:world_iframe', kwargs={'world_id': 2}))
         self.assertEqual(response.status_code, 200)
@@ -89,6 +102,10 @@ class TestWorldView(TestCase):
 
     def test_travel_view(self):
         response = self.client.get(reverse('world:travel'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_travel_step2_view(self):
+        response = self.client.get(reverse('world:travel', kwargs={'settlement_id': 1008}))
         self.assertEqual(response.status_code, 200)
 
     def test_travel_iframe_view(self):

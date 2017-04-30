@@ -2,7 +2,7 @@ from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 
 from decorators import inchar_required
-from world.views import CharacterCreationView, activate_character, character_home, setup_battle, world_view, \
+from world.views import CharacterCreationView, activate_character, character_home, world_view, \
     create_character, minimap_view, world_view_iframe, RecruitmentView, travel_view_iframe, TravelView, unit_view, \
     unit_rename, unit_transfer, unit_disband, character_view, tile_view, \
     tile_view_iframe, unit_battle_settings, unit_status_change, unit_battle_orders, unit_conquest_action
@@ -15,7 +15,6 @@ urlpatterns = [
     url(r'^travel/(?P<settlement_id>[0-9]+)?$', inchar_required(TravelView.as_view()), name='travel'),
     url(r'^travel_iframe/(?P<settlement_id>[0-9]+)?$', travel_view_iframe, name='travel_iframe'),
     url(r'^recruit$', inchar_required(RecruitmentView.as_view()), name='recruit'),
-    url(r'^setup_battle/(?P<rival_char_id>[0-9]+)?$', setup_battle, name='setup_battle'),
     url(r'^tile/(?P<tile_id>[0-9]+)$', tile_view, name='tile'),
     url(r'^tile_iframe/(?P<tile_id>[0-9]+)$', tile_view_iframe, name='tile_iframe'),
     url(r'^world/(?P<world_id>[0-9]+)$', world_view, name='world'),

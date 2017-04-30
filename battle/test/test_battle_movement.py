@@ -324,3 +324,76 @@ class TestBattleMovement(TestCase):
         self.assertEqual(contub3.x_pos, 101)
         self.assertEqual(contub3.z_pos, 100)
         self.assertTrue(contub3.moved_this_turn)
+
+    def test_move_while_unit_blocks(self):
+        unit1 = WorldUnit.objects.get(id=1)
+        unit3 = WorldUnit.objects.get(id=3)
+
+        unit3.battle_line = 2
+        unit3.save()
+
+        start_battle(self.battle)
+        battle_unit1 = BattleUnit.objects.get(world_unit=unit1)
+        battle_unit3 = BattleUnit.objects.get(world_unit=unit3)
+        battle_unit3.orders.clear()
+        order3 = Order.objects.create(what=Order.STAND)
+        OrderListElement.objects.create(order=order3, battle_unit=battle_unit3, position=0)
+
+        battle_tick(self.battle)
+
+        unit1_contubernia = BattleContuberniumInTurn.objects.filter(
+            battle_turn=self.battle.get_latest_turn(),
+            battle_contubernium__battle_unit=battle_unit1
+        )
+
+        for bcuit in unit1_contubernia:
+            self.assertEqual(bcuit.z_pos, bcuit.battle_contubernium.starting_z_pos - 1)
+
+        battle_tick(self.battle)
+
+        unit1_contubernia = BattleContuberniumInTurn.objects.filter(
+            battle_turn=self.battle.get_latest_turn(),
+            battle_contubernium__battle_unit=battle_unit1
+        )
+
+        for bcuit in unit1_contubernia:
+            self.assertEqual(bcuit.z_pos, bcuit.battle_contubernium.starting_z_pos - 2)
+
+        battle_tick(self.battle)
+
+        unit1_contubernia = BattleContuberniumInTurn.objects.filter(
+            battle_turn=self.battle.get_latest_turn(),
+            battle_contubernium__battle_unit=battle_unit1
+        )
+
+        for bcuit in unit1_contubernia:
+            self.assertEqual(bcuit.z_pos, bcuit.battle_contubernium.starting_z_pos - 2)
+
+        battle_tick(self.battle)
+
+        unit1_contubernia = BattleContuberniumInTurn.objects.filter(
+            battle_turn=self.battle.get_latest_turn(),
+            battle_contubernium__battle_unit=battle_unit1
+        )
+
+        # DONT TEST HERE BECAUSE OF MIXED STATE
+
+        battle_tick(self.battle)
+
+        unit1_contubernia = BattleContuberniumInTurn.objects.filter(
+            battle_turn=self.battle.get_latest_turn(),
+            battle_contubernium__battle_unit=battle_unit1
+        )
+
+        for bcuit in unit1_contubernia:
+            self.assertEqual(bcuit.z_pos, bcuit.battle_contubernium.starting_z_pos - 3)
+
+        battle_tick(self.battle)
+
+        unit1_contubernia = BattleContuberniumInTurn.objects.filter(
+            battle_turn=self.battle.get_latest_turn(),
+            battle_contubernium__battle_unit=battle_unit1
+        )
+
+        for bcuit in unit1_contubernia:
+            self.assertEqual(bcuit.z_pos, bcuit.battle_contubernium.starting_z_pos - 4)

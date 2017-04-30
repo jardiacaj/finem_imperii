@@ -1,5 +1,8 @@
 import math
 
+import django
+from django.db import transaction
+
 from battle.models import Battle, BattleCharacterInTurn, BattleUnitInTurn, BattleContuberniumInTurn, \
     BattleSoldierInTurn, Coordinates, Order, BattleUnit
 
@@ -59,8 +62,7 @@ def optimistic_move_desire_resolving(battle: Battle):
             if desired_position_occupier.desires_pos:  # test if mutually desiring position
                 for desirer in contubernia_desiring_position:
                     if desirer.coordinates() == desired_position_occupier.desired_coordinates():
-                        grant_position_desire(desirer)
-                        grant_position_desire(desired_position_occupier)
+                        grant_position_swap(desirer, desired_position_occupier)
                         continue
                 # TODO: try to move blocking contubernium before giving up
                 contubernia_desiring_position.update(desires_pos=False)
@@ -71,6 +73,13 @@ def optimistic_move_desire_resolving(battle: Battle):
             desire_getter = get_highest_priority_desire(contubernia_desiring_position)
             grant_position_desire(desire_getter)
             contubernia_desiring_position.update(desires_pos=False)
+
+
+def grant_position_swap(contubernium1: BattleContuberniumInTurn, contubernium2: BattleContuberniumInTurn):
+    contubernium1.x_pos = 31337
+    contubernium1.save()
+    grant_position_desire(contubernium2)
+    grant_position_desire(contubernium1)
 
 
 def grant_position_desire(desire_getter: BattleContuberniumInTurn):
@@ -175,8 +184,10 @@ def optimistic_move_desire_formulation(battle_contubernium_in_turn: BattleContub
 
 
 def safe_move(battle_contubernium_in_turn: BattleContuberniumInTurn, target: Coordinates):
+    turn = battle_contubernium_in_turn.battle_turn
+
     def tile_availability_test(coords: Coordinates):
-        return True if battle_contubernium_in_turn.battle_turn.get_contubernium_in_position(coords) is None else False
+        return True if turn.get_contubernium_in_position(coords) is None else False
 
     if euclidean_distance(battle_contubernium_in_turn.coordinates(), target) > 0:
         path = find_path(battle_contubernium_in_turn, target, tile_availability_test)
@@ -184,7 +195,13 @@ def safe_move(battle_contubernium_in_turn: BattleContuberniumInTurn, target: Coo
             battle_contubernium_in_turn.moved_this_turn = True
             battle_contubernium_in_turn.x_pos = path[1].x
             battle_contubernium_in_turn.z_pos = path[1].z
-            battle_contubernium_in_turn.save()
+            #TODO WARNING: HORRIBLE HACK STARTS HERE
+            #(to avoid unique constraint errors when contubs overlap for some reason)
+            with transaction.atomic():
+                try:
+                    battle_contubernium_in_turn.save()
+                except django.db.utils.IntegrityError as e:
+                    pass
 
 
 def euclidean_distance(start: Coordinates, goal: Coordinates):

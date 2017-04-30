@@ -198,7 +198,7 @@ class BattleContubernium(models.Model):
 
 class BattleContuberniumInTurn(models.Model):
     class Meta:
-        index_together = [
+        unique_together = [
             ["battle_turn", "x_pos", "z_pos"],
         ]
     battle_contubernium = models.ForeignKey(BattleContubernium)

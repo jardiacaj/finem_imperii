@@ -19,5 +19,5 @@ class TestViews(TestCase):
 
     def test_view(self):
         for org in Organization.objects.all():
-            respose = self.client.get(org.get_absolute_url())
-            self.assertEqual(respose.status_code, 200)
+            response = self.client.get(org.get_absolute_url())
+            self.assertEqual(response.status_code, 200)

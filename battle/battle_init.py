@@ -137,36 +137,101 @@ class LineFormation:
     def __init__(self, battle_side, formation_object):
         self.formation_object = formation_object
         self.battle_side = battle_side
-        self.lines = [
-            Line(formation_object.element_size),
-            Line(formation_object.element_size),
-            Line(formation_object.element_size),
-            Line(formation_object.element_size),
-            Line(formation_object.element_size),
+        self.main_lines = [
+            self.new_line(), self.new_line(), self.new_line(),
+            self.new_line(), self.new_line(),
         ]
+        self.flanks = [
+            [self.new_line(), self.new_line(), self.new_line(),
+             self.new_line(), self.new_line(), ],
+            [self.new_line(), self.new_line(), self.new_line(),
+             self.new_line(), self.new_line(), ],
+        ]
+        self.far_flanks = [
+            [self.new_line(), self.new_line(), self.new_line(),
+             self.new_line(), self.new_line(), ],
+            [self.new_line(), self.new_line(), self.new_line(),
+             self.new_line(), self.new_line(), ],
+        ]
+
+    def new_line(self):
+        return Line(self.formation_object.element_size)
 
     def make_formation(self):
         for line_index in range(5):
             for side_index in [0, 1, -1, 2, -2, 3, -3]:
-                units = BattleUnit.objects.filter(
-                    battle_side=self.battle_side,
-                    world_unit__battle_line=line_index,
-                    world_unit__battle_side_pos=side_index
+                units = self.get_battle_units_by_battle_settings(
+                    line_index, side_index
                 )
                 for unit in units:
-                    self.lines[line_index].push_unit(unit, side_index)
-        #TODO flanks
+                    self.main_lines[line_index].push_unit(unit, side_index)
+
+            for side_index in [-4, 4]:
+                far_flank_index = 0 if side_index < 0 else 1
+                units = self.get_battle_units_by_battle_settings(
+                    line_index, side_index
+                )
+                for unit in units:
+                    self.flanks[far_flank_index][line_index].push_unit(unit, 0)
+
+            for side_index in [-5, 5]:
+                far_flank_index = 0 if side_index < 0 else 1
+                units = self.get_battle_units_by_battle_settings(
+                    line_index, side_index
+                )
+                for unit in units:
+                    self.far_flanks[far_flank_index][line_index].push_unit(
+                        unit, 0
+                    )
+
+    def get_battle_units_by_battle_settings(self, line_index, side_index):
+        return BattleUnit.objects.filter(
+            battle_side=self.battle_side,
+            world_unit__battle_line=line_index,
+            world_unit__battle_side_pos=side_index
+        )
 
     def output_formation(self):
-        widest_line_width = max([line.width for line in self.lines])
+        widest_main_line_width = max([line.width for line in self.main_lines])
         full_size_of_line = (self.formation_object.element_size +
                              self.formation_object.spacing)
-        for line_index, line in enumerate(self.lines):
+        flanks_x_offset = round(widest_main_line_width / 2) + \
+                                self.formation_object.spacing
+        min_x = 0
+        max_x = 0
+
+        for line_index, line in enumerate(self.main_lines):
             for col_index, column in enumerate(line.columns):
                 for contub_index, contub in enumerate(column):
                     x = col_index - round(line.width / 2)
                     z = line_index * full_size_of_line + contub_index
                     yield Coordinates(x, z), contub
+
+        for flank_index, flank in enumerate(self.flanks):
+            x_multiplier = -1 if flank_index == 0 else 1
+            x_offset = flanks_x_offset * x_multiplier
+            for line_index, line in enumerate(flank):
+                for col_index, column in enumerate(line.columns):
+                    for contub_index, contub in enumerate(column):
+                        x = x_offset + col_index * x_multiplier
+                        z = line_index * full_size_of_line + contub_index
+                        min_x = min(x, min_x)
+                        max_x = max(x, max_x)
+                        yield Coordinates(x, z), contub
+
+        for far_flank_index, far_flank in enumerate(self.far_flanks):
+            if far_flank_index == 0:
+                x_multiplier = -1
+                x_offset = min_x - self.formation_object.spacing * 2
+            else:
+                x_multiplier = 1
+                x_offset = max_x + self.formation_object.spacing * 2
+            for line_index, line in enumerate(far_flank):
+                for col_index, column in enumerate(line.columns):
+                    for contub_index, contub in enumerate(column):
+                        x = x_offset + col_index * x_multiplier
+                        z = line_index * full_size_of_line + contub_index
+                        yield Coordinates(x, z), contub
 
 
 def initialize_battle_positioning(battle):

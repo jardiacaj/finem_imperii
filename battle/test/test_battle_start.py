@@ -159,3 +159,17 @@ class TestBattleStart(TestCase):
         )
 
         self.assertEqual(self.battle.get_latest_turn().num, 2)
+
+    def test_start_units_in_flank(self):
+
+        unit1 = WorldUnit.objects.get(id=1)
+        unit1.battle_side_pos = -4
+        unit1.save()
+        unit2 = WorldUnit.objects.get(id=2)
+        unit2.battle_side_pos = 5
+        unit2.save()
+        unit3 = WorldUnit.objects.get(id=3)
+        unit3.battle_side_pos = -5
+        unit3.save()
+
+        start_battle(self.battle)

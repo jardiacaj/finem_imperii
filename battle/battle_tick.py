@@ -1,4 +1,5 @@
 import math
+import random
 
 import django
 from django.db import transaction
@@ -23,33 +24,55 @@ def create_next_turn(battle: Battle):
                 bcit.save()
 
                 for unit in character.battleunit_set.all():
-                    buit = BattleUnitInTurn.objects.get(battle_unit=unit, battle_turn=prev_turn)
-                    buit.id = None
-                    buit.battle_turn = new_turn
-                    buit.battle_character_in_turn = bcit
-                    buit.order = buit.battle_unit.get_turn_order()
-                    buit.save()
+                    try:
+                        buit = BattleUnitInTurn.objects.get(battle_unit=unit, battle_turn=prev_turn)
+                        if not buit.battlecontuberniuminturn_set.exists():
+                            continue
+                        if not BattleSoldierInTurn.objects.filter(
+                            battle_contubernium_in_turn__battle_unit_in_turn=buit,
+                            wound_status__lt=BattleSoldierInTurn.DEAD
+                        ).exists():
+                            continue
+                        buit.id = None
+                        buit.battle_turn = new_turn
+                        buit.battle_character_in_turn = bcit
+                        buit.order = buit.battle_unit.get_turn_order()
+                        buit.save()
+                    except BattleUnitInTurn.DoesNotExist:
+                        pass
 
                     for contubernium in unit.battlecontubernium_set.all():
-                        bcontubit = BattleContuberniumInTurn.objects.get(
-                            battle_contubernium=contubernium, battle_turn=prev_turn
-                        )
-                        bcontubit.id = None
-                        bcontubit.moved_this_turn = False
-                        bcontubit.desires_pos = False
-                        bcontubit.battle_turn = new_turn
-                        bcontubit.battle_unit_in_turn = buit
-                        bcontubit.save()
+                        try:
+                            bcontubit = BattleContuberniumInTurn.objects.get(
+                                battle_contubernium=contubernium, battle_turn=prev_turn
+                            )
+                            if not bcontubit.battlesoldierinturn_set.filter(
+                                wound_status__lt=BattleSoldierInTurn.DEAD
+                            ).exists():
+                                continue
+                            bcontubit.id = None
+                            bcontubit.moved_this_turn = False
+                            bcontubit.desires_pos = False
+                            bcontubit.battle_turn = new_turn
+                            bcontubit.battle_unit_in_turn = buit
+                            bcontubit.save()
+                        except BattleContuberniumInTurn.DoesNotExist:
+                            pass
 
                         for soldier in contubernium.battlesoldier_set.all():
-                            bsit = BattleSoldierInTurn.objects.get(
-                                battle_turn=prev_turn,
-                                battle_soldier=soldier
-                            )
-                            bsit.id = None
-                            bsit.battle_turn = new_turn
-                            bsit.battle_contubernium_in_turn = bcontubit
-                            bsit.save()
+                            try:
+                                bsit = BattleSoldierInTurn.objects.get(
+                                    battle_turn=prev_turn,
+                                    battle_soldier=soldier
+                                )
+                                if bsit.wound_status == BattleSoldierInTurn.DEAD:
+                                    continue
+                                bsit.id = None
+                                bsit.battle_turn = new_turn
+                                bsit.battle_contubernium_in_turn = bcontubit
+                                bsit.save()
+                            except BattleSoldierInTurn.DoesNotExist:
+                                pass
 
 
 def optimistic_move_desire_resolving(battle: Battle):
@@ -316,14 +339,64 @@ def find_path(battle_contubernium_in_turn: BattleContuberniumInTurn, target_dist
     return []
 
 
+def unit_attack(battle: Battle):
+    contubernia = list(BattleContuberniumInTurn.objects.filter(
+        battle_turn=battle.get_latest_turn()
+    ))
+    random.shuffle(contubernia)
+    for contubernium in contubernia:
+        enemy_contubernia = BattleContuberniumInTurn.objects.filter(
+            battle_turn=contubernium.battle_turn
+        ).exclude(
+            battle_contubernium__battle_unit__battle_side=
+            contubernium.battle_contubernium.battle_unit.battle_side
+        )
+        target_contubernium, distance = \
+            closest_in_set(contubernium.coordinates(), enemy_contubernia)
+        if target_contubernium is not None and distance < 2:
+            for soldier in contubernium.battlesoldierinturn_set.all():
+                target_soldier = random.choice(
+                    target_contubernium.battlesoldierinturn_set.all()[:]
+                )
+                while (random.random() <
+                       0.5 * soldier.attack_chance_multiplier()):
+                    if target_soldier.wound_status < BattleSoldierInTurn.DEAD:
+                        target_soldier.wound_status += 1
+                target_soldier.save()
+
+
 def check_end(battle: Battle):
-    pass
+    for side in battle.battleside_set.all():
+        if not BattleSoldierInTurn.objects.filter(
+            battle_turn=battle.get_latest_turn(),
+            battle_contubernium_in_turn__battle_contubernium__battle_unit__battle_side=side,
+            wound_status__lt=BattleSoldierInTurn.DEAD
+        ).exists():
+            return True
+    side_0_contubs = BattleContuberniumInTurn.objects.filter(
+        battle_turn=battle.get_latest_turn(),
+        battle_contubernium__battle_unit__battle_side__z=False
+    )
+    side_1_contubs = BattleContuberniumInTurn.objects.filter(
+        battle_turn=battle.get_latest_turn(),
+        battle_contubernium__battle_unit__battle_side__z=False
+    )
+    for contub in side_0_contubs:
+        closest, distance = closest_in_set(
+            contub.coordinates(), side_1_contubs
+        )
+        if distance is not None and distance < 40:
+            return False
+    return True
 
 
 def battle_tick(battle: Battle):
     create_next_turn(battle)
     unit_movement(battle)
-    check_end(battle)
+    unit_attack(battle)
+    if check_end(battle):
+        battle.current = False
+        battle.save()
 
 
 def battle_turn(battle: Battle):

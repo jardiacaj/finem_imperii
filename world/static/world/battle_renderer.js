@@ -48,8 +48,13 @@ function BattleRenderer(battle_data) {
         var material = zis.get_contubernium_default_material(contubernium);
         var mesh = new THREE.Mesh( zis.contubernium_geometry, material );
 
-        mesh.position.x = contubernium_in_turn.x_pos;
-        mesh.position.z = contubernium_in_turn.z_pos;
+        if (contubernium_in_turn == undefined) {
+            mesh.position.x = 1000;
+            mesh.position.z = 1000;
+        } else {
+            mesh.position.x = contubernium_in_turn.x_pos;
+            mesh.position.z = contubernium_in_turn.z_pos;
+        }
         mesh.position.y = 0.5;
 
         mesh.contubernium = contubernium;
@@ -83,8 +88,8 @@ function BattleRenderer(battle_data) {
                 if (contubernium.mesh === undefined) {
                     zis.add_contubernium(contubernium, contubernium_in_turn);
                 } else {
-                    contubernium.mesh.position.x = contubernium_in_turn.x_pos;
-                    contubernium.mesh.position.z = contubernium_in_turn.z_pos;
+                    contubernium.mesh.position.x = contubernium_in_turn === undefined ? 1000 : contubernium_in_turn.x_pos;
+                    contubernium.mesh.position.z = contubernium_in_turn === undefined ? 1000 : contubernium_in_turn.z_pos;
                 }
 
             }

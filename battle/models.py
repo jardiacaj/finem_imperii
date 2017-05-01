@@ -226,9 +226,36 @@ class BattleSoldier(models.Model):
 
 
 class BattleSoldierInTurn(models.Model):
+    UNINJURED = 0
+    LIGHT_WOUND = 1
+    MEDIUM_WOUND = 2
+    HEAVY_WOUND = 3
+    DEAD = 4
+    WOUND_STATUS_CHOICES = (
+       (UNINJURED, UNINJURED),
+       (LIGHT_WOUND, LIGHT_WOUND),
+       (MEDIUM_WOUND, MEDIUM_WOUND),
+       (HEAVY_WOUND, HEAVY_WOUND),
+       (DEAD, DEAD),
+    )
+
+    ATTACK_CHANGE_MULTIPLIERS = {
+        UNINJURED: 1,
+        LIGHT_WOUND: 0.75,
+        MEDIUM_WOUND: 0.4,
+        HEAVY_WOUND: 0.1,
+        DEAD: 0,
+    }
+
     battle_soldier = models.ForeignKey(BattleSoldier)
     battle_contubernium_in_turn = models.ForeignKey(BattleContuberniumInTurn)
     battle_turn = models.ForeignKey(BattleTurn)
+    wound_status = models.SmallIntegerField(
+        choices=WOUND_STATUS_CHOICES, default=UNINJURED
+    )
+
+    def attack_chance_multiplier(self):
+        return self.ATTACK_CHANGE_MULTIPLIERS[self.wound_status]
 
 
 class Order(models.Model):

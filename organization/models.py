@@ -134,7 +134,16 @@ class Organization(models.Model):
         return list(self.character_members.all())[0]
 
     def get_relationship_to(self, organization):
-        return OrganizationRelationship.objects.get_or_create(from_organization=self, to_organization=organization)[0]
+        return OrganizationRelationship.objects.get_or_create(
+            defaults={
+                'relationship': (OrganizationRelationship.WAR
+                                 if organization.barbaric or
+                                 self.barbaric else
+                                 OrganizationRelationship.PEACE)
+            },
+            from_organization=self,
+            to_organization=organization
+        )[0]
 
     def get_relationship_from(self, organization):
         return organization.get_relationship_to(self)
@@ -657,9 +666,11 @@ class OrganizationRelationship(models.Model):
     @transaction.atomic
     def set_relationship(self, target_relationship):
         self.relationship = target_relationship
+        self.desired_relationship = None
         self.save()
         reverse_relation = self.reverse_relation()
         reverse_relation.relationship = target_relationship
+        reverse_relation.desired_relationship = None
         reverse_relation.save()
 
     def default_military_stance(self):

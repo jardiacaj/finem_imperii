@@ -382,8 +382,12 @@ class DocumentCapabilityView(View):
 
 class DiplomacyCapabilityView(View):
     def get(self, request, capability_id, target_organization_id):
-        capability = get_object_or_404(Capability, id=capability_id, type=Capability.DIPLOMACY)
-        target_organization = get_object_or_404(Organization, id=target_organization_id)
+        capability = get_object_or_404(
+            Capability, id=capability_id, type=Capability.DIPLOMACY
+        )
+        target_organization = get_object_or_404(
+            Organization, id=target_organization_id, barbaric=False
+        )
 
         context = {
             'capability': capability,
@@ -396,8 +400,12 @@ class DiplomacyCapabilityView(View):
 
     @transaction.atomic
     def post(self, request, capability_id, target_organization_id):
-        capability = get_object_or_404(Capability, id=capability_id, type=Capability.DIPLOMACY)
-        target_organization = get_object_or_404(Organization, id=target_organization_id)
+        capability = get_object_or_404(
+            Capability, id=capability_id, type=Capability.DIPLOMACY
+        )
+        target_organization = get_object_or_404(
+            Organization, id=target_organization_id, barbaric=False
+        )
 
         target_relationship = request.POST.get('target_relationship')
 
@@ -438,10 +446,7 @@ class DiplomacyCapabilityView(View):
             messages.success(request, "A vote has been started regarding your action", "success")
         else:
             messages.success(request, "Done!", "success")
-        return redirect(reverse(
-            'organization:diplomacy_capability',
-            kwargs={'capability_id': capability_id, 'target_organization_id': target_organization_id})
-        )
+        return redirect(capability.organization.get_absolute_url())
 
 
 class MilitaryStanceCapabilityView(View):

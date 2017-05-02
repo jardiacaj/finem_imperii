@@ -29,12 +29,16 @@
                         {% endif %}
                     </td>
                     <td>
-                        <a
-                                href="{% url 'organization:diplomacy_capability' capability.id state.id %}"
-                                class="btn btn-sm btn-primary"
-                        >
-                            Conduct diplomacy
-                        </a>
+                        {% if state.barbaric %}
+                            <span class="small">- locked -</span>
+                        {% else %}
+                            <a
+                                    href="{% url 'organization:diplomacy_capability' capability.id state.id %}"
+                                    class="btn btn-sm btn-primary"
+                            >
+                                Conduct diplomacy
+                            </a>
+                        {% endif %}
                     </td>
                 </tr>
             {% empty %}

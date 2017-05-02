@@ -94,19 +94,20 @@ Allocated: 4 days (vacation!)
  - Battle formations (1 day)
  - Battle damage (1 day)
  - Battle end (1 day)
- - Battle restrictions on travel, time and recruitment (1 day)
  - Conquest. (1 day)
 
-Allocated: 6 days
+Allocated: 5 days
 
 ## Week 10
 
+ - Battle restrictions on travel, time and recruitment (1 day)
  - Barbarians. (2 days)
+ - Taxation (1 day)
  - Sieges. (1 day)
+ - Secession and rebellion. (1 day)
  - Character pause and deletion
  - Emortuus
  - Organization creation
- - Professional units and mercenaries
 
 ## Week 11
  
@@ -118,10 +119,8 @@ Allocated: 6 days
  - Final delivery preparation
  - Character creation limit
  - Missing notifications
- - Taxation (1 day)
  - Building production (1 day)
  - Trade (1,5 days)
- - Secession and rebellion. (1 day)
  - PAC3 delivery
  
 ## Week 13
@@ -133,6 +132,7 @@ Allocated: 6 days
  - Help system
  - Character/player prestige
  - Character start page
+ - Professional units and mercenaries
  
 ## Week 14
 

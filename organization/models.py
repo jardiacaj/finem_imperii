@@ -36,6 +36,7 @@ class Organization(models.Model):
     world = models.ForeignKey('world.World')
     name = models.CharField(max_length=100)
     color = models.CharField(max_length=6, default="FFFFFF", help_text="Format: RRGGBB (hex)")
+    barbaric = models.BooleanField(default=False)
     description = models.TextField()
     is_position = models.BooleanField()
     position_type = models.CharField(max_length=15, choices=POSITION_TYPE_CHOICES, blank=True, default='')

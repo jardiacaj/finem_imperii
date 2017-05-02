@@ -98,11 +98,7 @@
                         <td>Location</td>
                         <td>
                             {{ unit.location }} ({{ unit.location.tile.get_html_link|safe }},
-                            {% if unit.location.tile.controlled_by %}
-                                {{ unit.location.tile.controlled_by.get_html_link|safe }}
-                            {% else %}
-                                barbaric
-                            {% endif %}
+                            {{ unit.location.tile.controlled_by.get_html_link|safe }}
                             )
                         </td>
                     </tr>

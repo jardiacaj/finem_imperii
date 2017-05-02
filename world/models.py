@@ -88,9 +88,7 @@ class Tile(models.Model):
     name = models.CharField(max_length=100)
     world = models.ForeignKey(World)
     region = models.ForeignKey(Region)
-    controlled_by = models.ForeignKey(
-        'organization.Organization', null=True, blank=True
-    )
+    controlled_by = models.ForeignKey('organization.Organization')
     x_pos = models.IntegerField()
     y_pos = models.FloatField()
     z_pos = models.IntegerField()

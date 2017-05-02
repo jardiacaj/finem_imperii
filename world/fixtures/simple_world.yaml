@@ -127,6 +127,14 @@
     location_id: 1003
     owner_user_id: 1
 
+- model: world.Character
+  pk: 9
+  fields:
+    name: Barbarian
+    world_id: 2
+    location_id: 1003
+    owner_user_id: 1
+
 
 - model: world.World
   pk: 2
@@ -625,6 +633,41 @@
     to_organization: 112
     relationship: war
 
+- model: organization.Organization
+  pk: 114
+  fields:
+    world_id: 2
+    name: "Barbarians of Parvus"
+    barbaric: true
+    color: "111111"
+    description: "Barbarians of Parvus"
+    is_position: false
+    owner_and_leader_locked: false
+    violence_monopoly: true
+    decision_taking: distributed
+    membership_type: character
+    character_members:
+      - 9
+- model: organization.Capability
+  fields:
+    organization_id: 114
+    type: 'conscript'
+    applying_to: 114
+- model: organization.Capability
+  fields:
+    organization_id: 114
+    type: 'military orders'
+    applying_to: 114
+- model: organization.Capability
+  fields:
+    organization_id: 114
+    type: 'battle formation'
+    applying_to: 114
+- model: organization.Capability
+  fields:
+    organization_id: 114
+    type: 'occupy region'
+    applying_to: 114
 
 - model: world.Region
   pk: 101
@@ -647,6 +690,7 @@
     z_pos: -1
     y_pos: 0
     type: deepsea
+    controlled_by: 114
 - model: world.Tile
   pk: 102
   fields:
@@ -680,6 +724,7 @@
     z_pos: 0
     y_pos: 0.1
     type: shore
+    controlled_by: 114
 - model: world.Tile
   pk: 105
   fields:
@@ -713,6 +758,7 @@
     z_pos: 1
     y_pos: 0.15
     type: forest
+    controlled_by: 114
 - model: world.Tile
   pk: 108
   fields:
@@ -734,6 +780,7 @@
     z_pos: 1
     y_pos: 0
     type: deepsea
+    controlled_by: 114
 
 
 - model: world.Settlement

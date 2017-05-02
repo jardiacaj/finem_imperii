@@ -76,10 +76,7 @@ function MapRenderer(world_data) {
         var organization = zis.organizations[region.controlled_by];
         var radius = Math.sqrt(settlement.population) * 0.001;
         var settlement_geometry = new THREE.CylinderGeometry( radius, radius, 0.01, 16 );
-        if (organization !== undefined)
-            var cylinder = new THREE.Mesh( settlement_geometry, organization.settlement_material );
-        else
-            var cylinder = new THREE.Mesh( settlement_geometry, zis.settlement_material_barbarian );
+        var cylinder = new THREE.Mesh( settlement_geometry, organization.settlement_material );
         cylinder.position.x = (region.x_pos - 1) - 0.5 + settlement.x_pos/100;
         cylinder.position.z = (region.z_pos - 1) - 0.5 + settlement.z_pos/100;
         cylinder.position.y = region.y_pos + 0.51;
@@ -189,7 +186,6 @@ function MapRenderer(world_data) {
         "mountain": new THREE.MeshLambertMaterial({color: 0x837D71, shading: THREE.SmoothShading})
     };
     zis.settlement_material_highlighted = new THREE.MeshBasicMaterial( {color: 0xFFFFFF} );
-    zis.settlement_material_barbarian = new THREE.MeshBasicMaterial( {color: 0x000000} );
 
     zis.region_tags_enabled = false;
     zis.settlement_tags_enabled = false;

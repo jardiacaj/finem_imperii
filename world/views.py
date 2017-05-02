@@ -100,30 +100,34 @@ class CharacterCreationView(View):
 
         try:
             state_id = request.POST.get('state_id')
-            state = None if state_id == '0' else Organization.objects.get(id=state_id)
+            state = Organization.objects.get(id=state_id)
         except Organization.DoesNotExist:
-            return self.fail_post_with_error(request, world_id, "Select a valid state")
+            return self.fail_post_with_error(
+                request, world_id, "Select a valid state"
+            )
 
         name = request.POST.get('name')
         surname = request.POST.get('surname')
 
         if name not in get_names() or surname not in get_surnames():
-            return self.fail_post_with_error(request, world_id, "Select a valid name/surname")
+            return self.fail_post_with_error(
+                request, world_id, "Select a valid name/surname"
+            )
 
         character = Character.objects.create(
             name=name + ' ' + surname,
             world=world,
             location=random.choice(
-                Settlement.objects.filter(tile__in=state.get_all_controlled_tiles()) if state is not None
-                else Settlement.objects.filter(tile__world=world)
+                Settlement.objects.filter(
+                    tile__in=state.get_all_controlled_tiles()
+                )
             ),
-            oath_sworn_to=None if state is None else state if state.leader is None else state.leader,
+            oath_sworn_to=state if state.leader is None else state.leader,
             owner_user=request.user,
             cash=0
         )
 
-        if state:
-            state.character_members.add(character)
+        state.character_members.add(character)
 
         return redirect(character.activation_url)
 

@@ -1,66 +1,98 @@
+from enum import Enum
+
 from django.db.models.query_utils import Q
 
 from world.models import NPC
 
 
-def build_population_query(request, prefix):
-    candidates = request.hero.location.npc_set.filter(able=True, unit=None)
-    men_allowed = request.POST.get('{}men'.format(prefix))
-    women_allowed = request.POST.get('{}women'.format(prefix))
+class Gender(Enum):
+    FEMALE, MALE = range(2)
 
-    if men_allowed and women_allowed:
-        pass
-    elif men_allowed and not women_allowed:
-        candidates = candidates.filter(male=True)
-    elif not men_allowed and women_allowed:
-        candidates = candidates.filter(male=False)
-    elif not men_allowed and not women_allowed:
-        raise Exception("You must choose at least one gender.")
 
-    trained_allowed = request.POST.get('{}trained'.format(prefix))
-    untrained_allowed = request.POST.get('{}untrained'.format(prefix))
+class Training(Enum):
+    TRAINED, UNTRAINED = range(2)
 
-    if trained_allowed and untrained_allowed:
-        pass
-    elif trained_allowed and not untrained_allowed:
-        candidates = candidates.filter(trained_soldier=True)
-    elif not trained_allowed and untrained_allowed:
-        candidates = candidates.filter(trained_soldier=False)
-    elif not trained_allowed and not untrained_allowed:
-        raise Exception("You must choose at least one training group.")
 
-    skill_queries = []
-    if request.POST.get('{}skill_high'.format(prefix)):
-        skill_queries.append(Q(skill_fighting__gte=NPC.TOP_SKILL_LIMIT))
-    if request.POST.get('{}skill_medium'.format(prefix)):
-        skill_queries.append(Q(skill_fighting__gte=NPC.MEDIUM_SKILL_LIMIT, skill_fighting__lt=NPC.TOP_SKILL_LIMIT))
-    if request.POST.get('{}skill_low'.format(prefix)):
-        skill_queries.append(Q(skill_fighting__lt=NPC.MEDIUM_SKILL_LIMIT))
-    if len(skill_queries) == 0:
-        raise Exception("You must choose at least one skill group")
+class Skill(Enum):
+    HIGH, MEDIUM, LOW = range(3)
 
-    # See https://stackoverflow.com/questions/852414/how-to-dynamically-compose-an-or-query-filter-in-django
-    query = skill_queries.pop()
-    for item in skill_queries:
-        query |= item
-    candidates.filter(query)
 
-    age_queries = []
-    if request.POST.get('{}age_old'.format(prefix)):
-        age_queries.append(Q(age_months__gte=NPC.OLD_AGE_LIMIT))
-    if request.POST.get('{}age_middle'.format(prefix)):
-        age_queries.append(Q(age_months__gte=NPC.MIDDLE_AGE_LIMIT, age_months__lt=NPC.OLD_AGE_LIMIT))
-    if request.POST.get('{}age_young'.format(prefix)):
-        age_queries.append(Q(age_months__gte=NPC.YOUNG_AGE_LIMIT, age_months__lt=NPC.MIDDLE_AGE_LIMIT))
-    if request.POST.get('{}age_very_young'.format(prefix)):
-        age_queries.append(Q(age_months__gte=NPC.VERY_YOUNG_AGE_LIMIT, age_months__lt=NPC.YOUNG_AGE_LIMIT))
-    if len(skill_queries) == 0:
-        raise Exception("You must choose at least one age group")
+class Age(Enum):
+    VERY_YOUNG, YOUNG, MIDDLE, OLD = range(4)
 
-    # See https://stackoverflow.com/questions/852414/how-to-dynamically-compose-an-or-query-filter-in-django
-    query = age_queries.pop()
-    for item in age_queries:
-        query |= item
-    candidates.filter(query)
+flag_types = {
+    'gender': Gender,
+    'training': Training,
+    'skill': Skill,
+    'age': Age
+}
 
+flag_queries = {
+    Gender.FEMALE: Q(male=False),
+    Gender.MALE: Q(male=True),
+    Training.TRAINED: Q(trained_soldier=True),
+    Training.UNTRAINED: Q(trained_soldier=False),
+    Skill.HIGH: Q(skill_fighting__gte=NPC.TOP_SKILL_LIMIT),
+    Skill.MEDIUM: Q(
+        skill_fighting__gte=NPC.MEDIUM_SKILL_LIMIT,
+        skill_fighting__lt=NPC.TOP_SKILL_LIMIT),
+    Skill.LOW: Q(skill_fighting__lt=NPC.MEDIUM_SKILL_LIMIT),
+    Age.VERY_YOUNG: Q(
+        age_months__gte=NPC.VERY_YOUNG_AGE_LIMIT,
+        age_months__lt=NPC.YOUNG_AGE_LIMIT),
+    Age.YOUNG: Q(
+        age_months__gte=NPC.YOUNG_AGE_LIMIT,
+        age_months__lt=NPC.MIDDLE_AGE_LIMIT),
+    Age.MIDDLE: Q(
+        age_months__gte=NPC.MIDDLE_AGE_LIMIT,
+        age_months__lt=NPC.OLD_AGE_LIMIT),
+    Age.OLD: Q(age_months__gte=NPC.OLD_AGE_LIMIT)
+}
+
+request_fields = {
+    Gender.FEMALE: 'women',
+    Gender.MALE: 'men',
+    Training.TRAINED: 'trained',
+    Training.UNTRAINED: 'untrained',
+    Skill.HIGH: 'skill_high',
+    Skill.MEDIUM: 'skill_medium',
+    Skill.LOW: 'skill_low',
+    Age.VERY_YOUNG: 'age_very_young',
+    Age.YOUNG: 'age_young',
+    Age.MIDDLE: 'age_middle',
+    Age.OLD: 'age_old',
+}
+
+
+class BadPopulation(Exception):
+    pass
+
+
+def build_population_query_from_request(request, prefix, location):
+    args = {}
+    for arg_name, arg_type in flag_types.items():
+        arg = []
+        for arg_element in arg_type:
+            request_field = '{}{}'.format(prefix, request_fields[arg_element])
+            if request.POST.get(request_field) is not None:
+                arg.append(arg_element)
+        args[arg_name] = arg
+    return build_population_query(location, **args)
+
+
+def build_population_query(location, **kwargs):
+    candidates = location.npc_set.filter(able=True, unit=None)
+
+    for arg_name, arg_values in kwargs.items():
+        qs = []
+        for arg_element in arg_values:
+            qs.append(flag_queries[arg_element])
+
+        if len(qs) == 0:
+            raise BadPopulation('No {} selected'.format(arg_name))
+
+        query = qs.pop()
+        for item in qs:
+            query |= item
+        candidates = candidates.filter(query)
     return candidates

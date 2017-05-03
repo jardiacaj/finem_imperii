@@ -4,18 +4,19 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from django.db.models.query_utils import Q
 from django.http.response import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from django.views.generic.base import View
 
-from battle.models import Battle, Order
+from battle.models import Order
 from decorators import inchar_required
 from name_generator.name_generator import get_names, get_surnames
 from organization.models import Organization
-from world.models import Character, World, Settlement, WorldUnit, WorldUnitStatusChangeException, NPC, Tile, TileEvent
-from world.recruitment import build_population_query
+from world.models import Character, World, Settlement, WorldUnit, \
+    WorldUnitStatusChangeException, Tile, TileEvent
+from world.recruitment import build_population_query_from_request, \
+    BadPopulation
 from world.renderer import render_world_for_view
 from world.templatetags.extra_filters import nice_hours
 
@@ -198,12 +199,13 @@ class RecruitmentView(View):
                 )
 
             # get candidates
+
             try:
-                candidates = build_population_query(
-                    request, prefix
+                candidates = build_population_query_from_request(
+                    request, prefix, request.hero.location
                 )
-            except Exception as e:
-                return RecruitmentView.fail_post_with_error(request, str(e))
+            except BadPopulation as e:
+                return RecruitmentView.fail_post_with_error(request, e)
 
             if candidates.count() == 0:
                 return RecruitmentView.fail_post_with_error(

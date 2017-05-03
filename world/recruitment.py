@@ -114,7 +114,7 @@ def recruit_unit(name, owner, location, soldiers, recruitment_type, unit_type):
         owner_character=owner,
         world=location.tile.world,
         location=location,
-        name="New unit from {}".format(location),
+        name=name,
         recruitment_type=recruitment_type,
         type=unit_type,
         status=WorldUnit.STANDING,

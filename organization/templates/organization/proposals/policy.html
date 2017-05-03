@@ -14,5 +14,5 @@
 {% if not proposal_content.delete %}
     <h4>{{ proposal_content.title }}</h4>
     <p>{% if proposal_content.public %}Public{% else %}Private{% endif %} document.</p>
-    <pre style="white-space: pre-wrap;">{{ proposal_content.body }}</pre>
+    <pre class="wrapping">{{ proposal_content.body }}</pre>
 {% endif %}

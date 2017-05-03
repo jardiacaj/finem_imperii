@@ -16,7 +16,7 @@
         })
     </script>
 
-    <div style="position: absolute; top: 10px; left: 10px">
+    <div class="minimap_travel_button">
         {% if request.hero.travel_destination %}
             <a href="{% url 'world:travel' %}" class="btn btn-default" target="_parent">Travelling to {{ request.hero.travel_destination }}</a>
         {% else %}

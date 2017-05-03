@@ -95,16 +95,9 @@ function MapRenderer(world_data) {
 
         if (pos.x < window.innerWidth && pos.y < window.innerHeight) {
             var region_tag = document.createElement('div');
-            region_tag.style.position = 'absolute';
-            region_tag.style.width = "100px";
-            region_tag.style.textAlign = "center";
-            region_tag.style.height = 100;
-            region_tag.style.background = "transparent";
-            region_tag.style.fontWeight = "bold";
-            region_tag.style.textDecoration = "underline";
             region_tag.innerHTML = region.name;
             region_tag.style.top = pos.y + 'px';
-            region_tag.style.left = (pos.x - 50) + 'px';
+            region_tag.style.left = (pos.x - 75) + 'px';
             region_tag.className = 'region_tag';
             document.body.appendChild(region_tag);
         }
@@ -117,11 +110,6 @@ function MapRenderer(world_data) {
 
         if (pos.x < window.innerWidth && pos.y < window.innerHeight) {
             var settlement_tag = document.createElement('div');
-            settlement_tag.style.position = 'absolute';
-            settlement_tag.style.width = "100px";
-            settlement_tag.style.textAlign = "center";
-            settlement_tag.style.height = 100;
-            settlement_tag.style.background = "transparent";
             settlement_tag.innerHTML = settlement.name;
             settlement_tag.style.top = pos.y + 'px';
             settlement_tag.style.left = (pos.x - 50) + 'px';
@@ -179,11 +167,11 @@ function MapRenderer(world_data) {
     zis.region_geometry = new THREE.CubeGeometry(1, 1, 1);
     zis.region_edges_geometry = new THREE.EdgesGeometry( zis.region_geometry );
     zis.region_materials = {
-        "plains": new THREE.MeshLambertMaterial({color: 0x90CD00, shading: THREE.SmoothShading}),
-        "forest": new THREE.MeshLambertMaterial({color: 0x207F07, shading: THREE.SmoothShading}),
-        "shore": new THREE.MeshLambertMaterial({color: 0x0D81CD, shading: THREE.SmoothShading}),
-        "deepsea": new THREE.MeshLambertMaterial({color: 0x000E85, shading: THREE.SmoothShading}),
-        "mountain": new THREE.MeshLambertMaterial({color: 0x837D71, shading: THREE.SmoothShading})
+        "plains": new THREE.MeshLambertMaterial({color: 0x7D802A, shading: THREE.SmoothShading}),
+        "forest": new THREE.MeshLambertMaterial({color: 0x0A5906, shading: THREE.SmoothShading}),
+        "shore": new THREE.MeshLambertMaterial({color: 0x0D3E6C, shading: THREE.SmoothShading}),
+        "deepsea": new THREE.MeshLambertMaterial({color: 0x000E59, shading: THREE.SmoothShading}),
+        "mountain": new THREE.MeshLambertMaterial({color: 0x5C564A, shading: THREE.SmoothShading})
     };
     zis.settlement_material_highlighted = new THREE.MeshBasicMaterial( {color: 0xFFFFFF} );
 

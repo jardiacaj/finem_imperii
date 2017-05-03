@@ -1,0 +1,25 @@
+.region_tag {
+    position: absolute;
+    width: 150px;
+    text-align: center;
+    background: transparent;
+    font-weight: bold;
+    text-decoration: underline;
+    font-size: 130%;
+    color: #000000;
+    text-shadow: #FFF 0px 0px 2px;
+    -webkit-font-smoothing: antialiased;
+}
+
+.settlement_tag {
+    position: absolute;
+    width: 100px;
+    text-align: center;
+    background: transparent;
+    font-weight: bold;
+    text-decoration: underline;
+    font-size: 110%;
+    color: #000000;
+    text-shadow: #FFF 0px 0px 2px;
+    -webkit-font-smoothing: antialiased;
+}

@@ -5,9 +5,11 @@ from battle.models import Battle
 from organization.models import Organization
 from world.admin import pass_turn
 from world.initialization import initialize_unit
-from world.models import Tile, WorldUnit, World, TileEvent
-from world.turn import organizations_with_battle_ready_units, battle_ready_units_in_tile, \
-    opponents_in_organization_list, get_largest_conflict_in_list, create_battle_from_conflict, TurnProcessor
+from world.models import Tile, WorldUnit, World, TileEvent, Settlement
+from world.turn import organizations_with_battle_ready_units, \
+    battle_ready_units_in_tile, \
+    opponents_in_organization_list, get_largest_conflict_in_list, \
+    create_battle_from_conflict, TurnProcessor, do_settlement_barbarians
 
 
 class TestTurn(TestCase):
@@ -142,3 +144,14 @@ class TestTurn(TestCase):
         tile_event.refresh_from_db()
         self.assertEqual(tile_event.end_turn, 0)
         self.assertNotEqual(tile_event.end_turn, None)
+
+    def test_barbarian_non_creation_in_occupied_settlement(self):
+        settlement = Settlement.objects.get(name="Small Fynkah")
+
+        for unit in settlement.worldunit_set.all():
+            initialize_unit(unit)
+
+        do_settlement_barbarians(settlement)
+        self.assertFalse(
+            settlement.worldunit_set.filter(owner_character__isnull=True).exists()
+        )

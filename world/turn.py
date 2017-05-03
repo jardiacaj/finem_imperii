@@ -169,7 +169,7 @@ def do_settlement_barbarians(settlement):
             return
         if settlement.population < 20:
             return
-        recruitment_size = random.randrange(10, settlement.population // 2)
+        recruitment_size = random.randrange(10, settlement.population // 3)
         soldiers = world.recruitment.sample_candidates(
             world.recruitment.all_recruitable_soldiers_in_settlement(settlement),
             recruitment_size

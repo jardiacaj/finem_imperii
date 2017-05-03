@@ -20,10 +20,10 @@ def initialize_world(world):
         raise AlreadyInitializedException("World {} already initialized!".format(world))
     for organization in world.organization_set.all():
         initialize_organization(organization)
-    for tile in world.tile_set.all():
-        initialize_tile(tile)
     for unit in world.worldunit_set.all():
         initialize_unit(unit)
+    for tile in world.tile_set.all():
+        initialize_tile(tile)
     world.initialized = True
     world.save()
 
@@ -97,7 +97,8 @@ def initialize_settlement(settlement):
             skill_fighting=random.randint(0, 80)
         )
 
-    do_settlement_barbarians(settlement)
+    if settlement.tile.controlled_by.barbaric:
+        do_settlement_barbarians(settlement)
 
 
 def initialize_unit(unit):
@@ -113,7 +114,7 @@ def initialize_unit(unit):
             workplace=None,
             unit=unit,
             trained_soldier=random.getrandbits(4) == 0,
-            skill_fighting = random.randint(0, 80)
+            skill_fighting=random.randint(0, 80)
         )
 
     unit.generation_size = 0

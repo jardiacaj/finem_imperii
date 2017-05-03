@@ -1,8 +1,10 @@
+import random
 from enum import Enum
 
 from django.db.models.query_utils import Q
 
-from world.models import NPC
+from battle.models import Order
+from world.models import NPC, WorldUnit
 
 
 class Gender(Enum):
@@ -96,3 +98,33 @@ def build_population_query(location, **kwargs):
             query |= item
         candidates = candidates.filter(query)
     return candidates
+
+
+def sample_candidates(candidates, target_soldier_count):
+    if target_soldier_count < candidates.count():
+        return random.sample(list(candidates), target_soldier_count)
+    else:
+        return list(candidates)
+
+
+def recruit_unit(name, owner, location, soldiers, recruitment_type, unit_type):
+    orders = Order.objects.create(what=Order.STAND)
+
+    unit = WorldUnit.objects.create(
+        owner_character=owner,
+        world=location.tile.world,
+        location=location,
+        name="New unit from {}".format(location),
+        recruitment_type=recruitment_type,
+        type=unit_type,
+        status=WorldUnit.STANDING,
+        mobilization_status_since=location.tile.world.current_turn - 1,
+        current_status_since=location.tile.world.current_turn - 1,
+        default_battle_orders=orders
+    )
+
+    for soldier in soldiers:
+        soldier.unit = unit
+        soldier.save()
+
+    return unit

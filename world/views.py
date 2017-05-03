@@ -16,7 +16,7 @@ from organization.models import Organization
 from world.models import Character, World, Settlement, WorldUnit, \
     WorldUnitStatusChangeException, Tile, TileEvent
 from world.recruitment import build_population_query_from_request, \
-    BadPopulation
+    BadPopulation, sample_candidates, recruit_unit
 from world.renderer import render_world_for_view
 from world.templatetags.extra_filters import nice_hours
 
@@ -214,32 +214,21 @@ class RecruitmentView(View):
                     " you want".format(request.hero.location)
                 )
 
+            soldiers = sample_candidates(candidates, target_soldier_count)
+
+            unit = recruit_unit(
+                "{}'s new unit".format(request.hero),
+                request.hero,
+                request.hero.location,
+                soldiers,
+                recruitment_type,
+                unit_type
+            )
+
             request.hero.hours_in_turn_left -= conscription_time
             request.hero.save()
 
-            orders = Order.objects.create(what=Order.STAND)
 
-            unit = WorldUnit.objects.create(
-                owner_character=request.hero,
-                world=request.hero.world,
-                location=request.hero.location,
-                name="New unit from {}".format(request.hero.location),
-                recruitment_type=recruitment_type,
-                type=unit_type,
-                status=WorldUnit.STANDING,
-                mobilization_status_since=request.hero.world.current_turn,
-                current_status_since=request.hero.world.current_turn,
-                default_battle_orders=orders
-            )
-
-            if target_soldier_count < candidates.count():
-                soldiers = random.sample(list(candidates), target_soldier_count)
-            else:
-                soldiers = list(candidates)
-
-            for soldier in soldiers:
-                soldier.unit = unit
-                soldier.save()
 
             messages.success(
                 request,

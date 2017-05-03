@@ -15,6 +15,7 @@ from decorators import inchar_required
 from name_generator.name_generator import get_names, get_surnames
 from organization.models import Organization
 from world.models import Character, World, Settlement, WorldUnit, WorldUnitStatusChangeException, NPC, Tile, TileEvent
+from world.recruitment import build_population_query
 from world.renderer import render_world_for_view
 from world.templatetags.extra_filters import nice_hours
 
@@ -143,66 +144,10 @@ class RecruitmentView(View):
 
     @staticmethod
     def fail_post_with_error(request, message):
-        messages.add_message(request, messages.ERROR, message, extra_tags='danger')
+        messages.add_message(
+            request, messages.ERROR, message, extra_tags='danger'
+        )
         return redirect('world:recruit')
-
-    @staticmethod
-    def build_population_query(request, prefix):
-
-        candidates = request.hero.location.npc_set.filter(able=True, unit=None)
-        if request.POST.get('{}men'.format(prefix)) and request.POST.get('{}women'.format(prefix)):
-            pass
-        elif request.POST.get('{}men'.format(prefix)) and not request.POST.get('{}women'.format(prefix)):
-            candidates = candidates.filter(male=True)
-        elif not request.POST.get('{}men'.format(prefix)) and request.POST.get('{}women'.format(prefix)):
-            candidates = candidates.filter(male=False)
-        elif not request.POST.get('{}men'.format(prefix)) and not request.POST.get('{}women'.format(prefix)):
-            raise Exception("You must choose at least one gender.")
-
-        if request.POST.get('{}trained'.format(prefix)) and request.POST.get('{}untrained'.format(prefix)):
-            pass
-        elif request.POST.get('{}trained'.format(prefix)) and not request.POST.get('{}untrained'.format(prefix)):
-            candidates = candidates.filter(trained_soldier=True)
-        elif not request.POST.get('{}trained'.format(prefix)) and request.POST.get('{}untrained'.format(prefix)):
-            candidates = candidates.filter(trained_soldier=False)
-        elif not request.POST.get('{}trained'.format(prefix)) and not request.POST.get('{}untrained'.format(prefix)):
-            raise Exception("You must choose at least one training group.")
-
-        skill_queries = []
-        if request.POST.get('{}skill_high'.format(prefix)):
-            skill_queries.append(Q(skill_fighting__gte=NPC.TOP_SKILL_LIMIT))
-        if request.POST.get('{}skill_medium'.format(prefix)):
-            skill_queries.append(Q(skill_fighting__gte=NPC.MEDIUM_SKILL_LIMIT, skill_fighting__lt=NPC.TOP_SKILL_LIMIT))
-        if request.POST.get('{}skill_low'.format(prefix)):
-            skill_queries.append(Q(skill_fighting__lt=NPC.MEDIUM_SKILL_LIMIT))
-        if len(skill_queries) == 0:
-            raise Exception("You must choose at least one skill group")
-
-        # See https://stackoverflow.com/questions/852414/how-to-dynamically-compose-an-or-query-filter-in-django
-        query = skill_queries.pop()
-        for item in skill_queries:
-            query |= item
-        candidates.filter(query)
-
-        age_queries = []
-        if request.POST.get('{}age_old'.format(prefix)):
-            age_queries.append(Q(age_months__gte=NPC.OLD_AGE_LIMIT))
-        if request.POST.get('{}age_middle'.format(prefix)):
-            age_queries.append(Q(age_months__gte=NPC.MIDDLE_AGE_LIMIT, age_months__lt=NPC.OLD_AGE_LIMIT))
-        if request.POST.get('{}age_young'.format(prefix)):
-            age_queries.append(Q(age_months__gte=NPC.YOUNG_AGE_LIMIT, age_months__lt=NPC.MIDDLE_AGE_LIMIT))
-        if request.POST.get('{}age_very_young'.format(prefix)):
-            age_queries.append(Q(age_months__gte=NPC.VERY_YOUNG_AGE_LIMIT, age_months__lt=NPC.YOUNG_AGE_LIMIT))
-        if len(skill_queries) == 0:
-            raise Exception("You must choose at least one age group")
-
-        # See https://stackoverflow.com/questions/852414/how-to-dynamically-compose-an-or-query-filter-in-django
-        query = age_queries.pop()
-        for item in age_queries:
-            query |= item
-        candidates.filter(query)
-
-        return candidates
 
     @transaction.atomic
     def post(self, request, *args, **kwargs):
@@ -215,19 +160,25 @@ class RecruitmentView(View):
 
             # get soldier count
             try:
-                target_soldier_count = int(request.POST.get('{}count'.format(prefix)))
+                target_soldier_count = \
+                    int(request.POST.get('{}count'.format(prefix)))
                 if not target_soldier_count > 0:
                     raise Exception
             except:
-                return RecruitmentView.fail_post_with_error(request, "Invalid number of soldiers.")
+                return RecruitmentView.fail_post_with_error(
+                    request, "Invalid number of soldiers."
+                )
 
             # calculate time
-            conscription_time = request.hero.location.conscription_time(target_soldier_count)
+            conscription_time = request.hero.location.conscription_time(
+                target_soldier_count
+            )
 
             if request.hero.hours_in_turn_left < conscription_time:
                 return RecruitmentView.fail_post_with_error(
                     request,
-                    "You would need {} to do this, but you don't have that much time left in this turn.".format(
+                    "You would need {} to do this, but you don't have that "
+                    "much time left in this turn.".format(
                         nice_hours(conscription_time)
                     )
                 )
@@ -235,23 +186,30 @@ class RecruitmentView(View):
             # check unit type
             unit_type = request.POST.get('{}unit_type'.format(prefix))
             if unit_type not in WorldUnit.get_unit_types(nice=True):
-                return RecruitmentView.fail_post_with_error(request, "Invalid unit type")
+                return RecruitmentView.fail_post_with_error(
+                    request, "Invalid unit type"
+                )
 
             # check payment
             pay = int(request.POST.get('{}pay'.format(prefix)))
             if pay not in range(1, 7):
-                return RecruitmentView.fail_post_with_error(request, "Invalid payment")
+                return RecruitmentView.fail_post_with_error(
+                    request, "Invalid payment"
+                )
 
             # get candidates
             try:
-                candidates = RecruitmentView.build_population_query(request, prefix)
+                candidates = build_population_query(
+                    request, prefix
+                )
             except Exception as e:
                 return RecruitmentView.fail_post_with_error(request, str(e))
 
             if candidates.count() == 0:
                 return RecruitmentView.fail_post_with_error(
                     request,
-                    "You seem unable to find anyone in {} matching the profile you want".format(request.hero.location)
+                    "You seem unable to find anyone in {} matching the profile"
+                    " you want".format(request.hero.location)
                 )
 
             request.hero.hours_in_turn_left -= conscription_time
@@ -283,7 +241,9 @@ class RecruitmentView(View):
 
             messages.success(
                 request,
-                "You formed a new unit of {} called {}".format(len(soldiers), unit.name),
+                "You formed a new unit of {} called {}".format(
+                    len(soldiers), unit.name
+                ),
                 "success"
             )
             return redirect(unit.get_absolute_url())

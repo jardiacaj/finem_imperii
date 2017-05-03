@@ -1,30 +1,32 @@
+from django.db.models.query_utils import Q
+
+from world.models import NPC
+
+
 def build_population_query(request, prefix):
     candidates = request.hero.location.npc_set.filter(able=True, unit=None)
-    if request.POST.get('{}men'.format(prefix)) and request.POST.get \
-            ('{}women'.format(prefix)):
+    men_allowed = request.POST.get('{}men'.format(prefix))
+    women_allowed = request.POST.get('{}women'.format(prefix))
+
+    if men_allowed and women_allowed:
         pass
-    elif request.POST.get('{}men'.format(prefix)) and not request.POST.get \
-            ('{}women'.format(prefix)):
+    elif men_allowed and not women_allowed:
         candidates = candidates.filter(male=True)
-    elif not request.POST.get('{}men'.format(prefix)) and request.POST.get \
-            ('{}women'.format(prefix)):
+    elif not men_allowed and women_allowed:
         candidates = candidates.filter(male=False)
-    elif not request.POST.get('{}men'.format(prefix)) and not request.POST.get \
-            ('{}women'.format(prefix)):
+    elif not men_allowed and not women_allowed:
         raise Exception("You must choose at least one gender.")
 
-    if request.POST.get('{}trained'.format(prefix)) and request.POST.get \
-            ('{}untrained'.format(prefix)):
+    trained_allowed = request.POST.get('{}trained'.format(prefix))
+    untrained_allowed = request.POST.get('{}untrained'.format(prefix))
+
+    if trained_allowed and untrained_allowed:
         pass
-    elif request.POST.get('{}trained'.format(prefix)) and not request.POST.get \
-            ('{}untrained'.format(prefix)):
+    elif trained_allowed and not untrained_allowed:
         candidates = candidates.filter(trained_soldier=True)
-    elif not request.POST.get('{}trained'.format(prefix)) and request.POST.get \
-            ('{}untrained'.format(prefix)):
+    elif not trained_allowed and untrained_allowed:
         candidates = candidates.filter(trained_soldier=False)
-    elif not request.POST.get \
-            ('{}trained'.format(prefix)) and not request.POST.get \
-            ('{}untrained'.format(prefix)):
+    elif not trained_allowed and not untrained_allowed:
         raise Exception("You must choose at least one training group.")
 
     skill_queries = []

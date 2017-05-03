@@ -35,7 +35,13 @@
                     </tr>
                     <tr>
                         <td>Owner</td>
-                        <td>{{ unit.owner_character.get_html_link|safe }}</td>
+                        <td>
+                            {% if unit.owner_character %}
+                                {{ unit.owner_character.get_html_link|safe }}
+                            {% else %}
+                                {{ unit.get_violence_monopoly.get_html_link|safe }}
+                            {% endif %}
+                        </td>
                     </tr>
                     <tr>
                         <td>Soldiers</td>

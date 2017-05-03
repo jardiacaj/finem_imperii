@@ -73,7 +73,16 @@
             <div class="panel-body">
                 <ul>
                     {% for unit in units %}
-                        <li>{{ unit }} - {{ unit.location }} - {{ unit.owner_character.get_html_link|safe }}</li>
+                        <li>
+                            {{ unit.get_fighting_soldiers.count }}
+                            {{ unit.type }}
+                            {{ unit }} - {{ unit.location }} -
+                            {% if unit.owner_character %}
+                                {{ unit.owner_character.get_html_link|safe }}
+                            {% else %}
+                                {{ unit.get_violence_monopoly.get_html_link|safe }}
+                            {% endif %}
+                        </li>
                     {% empty %}
                         <li class="small">None</li>
                     {% endfor %}

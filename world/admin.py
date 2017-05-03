@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from world.initialization import initialize_world
 from world.models import Region, Tile, Settlement, Building, NPC, Character, WorldUnit, World
+from world.turn import pass_turn as pass_turn_func
 
 admin.site.register(Region)
 admin.site.register(Tile)
@@ -20,7 +21,7 @@ initialize_world_admin_action.short_description = "Initialize world"
 
 def pass_turn(modeladmin, request, queryset):
     for world in queryset.all():
-        world.pass_turn()
+        pass_turn_func(world)
 pass_turn.short_description = "Pass turn"
 
 

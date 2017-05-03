@@ -1,3 +1,5 @@
+import random
+
 from django.db import transaction
 
 from battle.battle_init import initialize_from_conflict, start_battle
@@ -7,13 +9,16 @@ from messaging.helpers import send_notification_to_characters
 from messaging.models import CharacterMessage
 import world.models
 import organization.models
-
-months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November',
-          'December']
+import world.recruitment
 
 
-def turn_to_date(turn):
-    return "{} {} I.E.".format(months[turn % 12], turn//12 + 815)
+def pass_turn(world):
+    world.blocked_for_turn = True
+    world.save()
+    turn_processor = TurnProcessor(world)
+    turn_processor.do_turn()
+    world.blocked_for_turn = False
+    world.save()
 
 
 class TurnProcessor:
@@ -28,9 +33,17 @@ class TurnProcessor:
         self.trigger_battles()
         self.do_elections()
         self.do_conquests()
+        self.do_barbarians()
 
         self.world.current_turn += 1
         self.world.save()
+
+    def do_barbarians(self):
+        world_settlements = world.models.Settlement.objects.filter(
+            tile__world=self.world
+        )
+        for settlement in world_settlements:
+            do_settlement_barbarians(settlement)
 
     def do_conquests(self):
         conquests_in_this_world = world.models.TileEvent.objects.filter(
@@ -45,9 +58,9 @@ class TurnProcessor:
             conquering_units = []
             defending_units = []
             for unit in present_mobilized_units:
-                if unit.owner_character.get_violence_monopoly() == conquest.organization:
+                if unit.get_violence_monopoly() == conquest.organization:
                     conquering_units.append(unit)
-                if unit.owner_character.get_violence_monopoly() == conquest.tile.controlled_by.get_violence_monopoly():
+                if unit.get_violence_monopoly() == conquest.tile.controlled_by.get_violence_monopoly():
                     defending_units.append(unit)
 
             # stop conquest if no more units present
@@ -117,7 +130,7 @@ class TurnProcessor:
 
     def trigger_battles(self):
         for tile in self.world.tile_set.all():
-            tile.trigger_battles()
+            trigger_battles_in_tile(tile)
 
     def battle_turns(self):
         for battle in Battle.objects.filter(tile__world=self.world, current=True):
@@ -126,10 +139,55 @@ class TurnProcessor:
             battle_turn(battle)
 
 
+def trigger_battles_in_tile(tile):
+    conflicts = opponents_in_organization_list(
+        organizations_with_battle_ready_units(tile),
+        tile
+    )
+    conflict = get_largest_conflict_in_list(conflicts, tile)
+    if conflict:
+        return create_battle_from_conflict(conflict, tile)
+
+
+def do_settlement_barbarians(settlement):
+    pure_barbarian_units = world.models.WorldUnit.objects.filter(
+        location=settlement,
+        owner_character__isnull=True
+    )
+    non_pure_barbarian_units = world.models.WorldUnit.objects.filter(
+        location=settlement,
+        owner_character__isnull=False
+    )
+    non_pure_barbarian_soldiers = sum(
+        [unit.soldier.count() for unit in non_pure_barbarian_units]
+    )
+    if non_pure_barbarian_soldiers < settlement.population / 10:
+        barbarian_soldiers = sum(
+            [unit.soldier.count() for unit in pure_barbarian_units]
+        )
+        if barbarian_soldiers >= settlement.population / 3:
+            return
+        if settlement.population < 20:
+            return
+        recruitment_size = random.randrange(10, settlement.population // 2)
+        soldiers = world.recruitment.sample_candidates(
+            world.recruitment.all_recruitable_soldiers_in_settlement(settlement),
+            recruitment_size
+        )
+        world.recruitment.recruit_unit(
+            "Barbarians of {}".format(settlement),
+            None,
+            settlement,
+            soldiers,
+            world.models.WorldUnit.CONSCRIPTION,
+            world.models.WorldUnit.INFANTRY
+        )
+
+
 def organizations_with_battle_ready_units(tile):
     result = []
     for unit in battle_ready_units_in_tile(tile):
-        violence_monopoly = unit.owner_character.get_violence_monopoly()
+        violence_monopoly = unit.get_violence_monopoly()
         if violence_monopoly and violence_monopoly not in result:
             result.append(violence_monopoly)
     return result
@@ -157,7 +215,7 @@ def get_largest_conflict_in_list(conflicts, tile):
     for conflict in conflicts:
         soldiers = 0
         for unit in battle_ready_units_in_tile(tile):
-            if unit.owner_character.get_violence_monopoly() in conflict:
+            if unit.get_violence_monopoly() in conflict:
                 soldiers += unit.get_fighting_soldiers().count()
         if soldiers > max_soldiers:
             result = conflict

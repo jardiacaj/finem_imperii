@@ -6,6 +6,7 @@ from django.db import transaction
 from name_generator.name_generator import generate_name
 from organization.models import Organization
 from world.models import Building, NPC
+from world.turn import do_settlement_barbarians
 
 
 class AlreadyInitializedException(Exception):
@@ -95,6 +96,8 @@ def initialize_settlement(settlement):
             trained_soldier=(random.getrandbits(4) == 0) if age_months >= NPC.VERY_YOUNG_AGE_LIMIT else False,
             skill_fighting=random.randint(0, 80)
         )
+
+    do_settlement_barbarians(settlement)
 
 
 def initialize_unit(unit):

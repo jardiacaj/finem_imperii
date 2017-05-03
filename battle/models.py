@@ -130,7 +130,7 @@ class BattleOrganization(models.Model):
     organization = models.ForeignKey('organization.Organization')
 
     def get_initial_manpower(self):
-        return BattleUnit.objects.filter(owner__battle_organization=self).\
+        return BattleUnit.objects.filter(battle_organization=self).\
             aggregate(Sum('starting_manpower'))['starting_manpower__sum']
 
 
@@ -147,7 +147,8 @@ class BattleCharacterInTurn(models.Model):
 class BattleUnit(models.Model):
     orders = models.ManyToManyField(through='OrderListElement', to='Order')
     battle_side = models.ForeignKey(BattleSide)
-    owner = models.ForeignKey(BattleCharacter)
+    owner = models.ForeignKey(BattleCharacter, blank=True, null=True)
+    battle_organization = models.ForeignKey(BattleOrganization)
     world_unit = models.ForeignKey('world.WorldUnit')
     starting_x_pos = models.IntegerField(default=0)
     starting_z_pos = models.IntegerField(default=0)

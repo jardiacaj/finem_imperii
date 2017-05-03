@@ -228,8 +228,6 @@ class RecruitmentView(View):
             request.hero.hours_in_turn_left -= conscription_time
             request.hero.save()
 
-
-
             messages.success(
                 request,
                 "You formed a new unit of {} called {}".format(

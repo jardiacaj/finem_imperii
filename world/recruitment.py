@@ -82,8 +82,12 @@ def build_population_query_from_request(request, prefix, location):
     return build_population_query(location, **args)
 
 
+def all_recruitable_soldiers_in_settlement(location):
+    return location.npc_set.filter(able=True, unit=None)
+
+
 def build_population_query(location, **kwargs):
-    candidates = location.npc_set.filter(able=True, unit=None)
+    candidates = all_recruitable_soldiers_in_settlement(location)
 
     for arg_name, arg_values in kwargs.items():
         qs = []

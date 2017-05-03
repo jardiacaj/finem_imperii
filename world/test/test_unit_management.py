@@ -6,6 +6,7 @@ from django.urls.base import reverse
 from battle.models import Order
 from world.initialization import initialize_unit
 from world.models import World, WorldUnit
+from world.turn import pass_turn
 
 
 class TestUnitManagement(TestCase):
@@ -168,7 +169,7 @@ class TestUnitManagement(TestCase):
 
     def test_unit_set_status_in_battle(self):
         self.assertEqual(self.my_unit.status, WorldUnit.FOLLOWING)
-        self.my_unit.world.pass_turn()
+        pass_turn(self.my_unit.world)
         response = self.client.post(
             reverse('world:unit_status_change', kwargs={'unit_id': self.my_unit.id, 'new_status': WorldUnit.NOT_MOBILIZED}),
             follow=True

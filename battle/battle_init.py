@@ -37,7 +37,7 @@ def initialize_from_conflict(battle, conflict, tile):
         )
         z = True
     for unit in tile.get_units():
-        violence_monopoly = unit.owner_character.get_violence_monopoly()
+        violence_monopoly = unit.get_violence_monopoly()
         if violence_monopoly in conflict:
             battle_organization = BattleOrganization.objects.get(
                 side__battle=battle,
@@ -48,6 +48,7 @@ def initialize_from_conflict(battle, conflict, tile):
                 character=unit.owner_character,
             )[0]
             battle_unit = BattleUnit.objects.create(
+                battle_organization=battle_organization,
                 owner=battle_character,
                 world_unit=unit,
                 starting_manpower=unit.get_fighting_soldiers().count(),

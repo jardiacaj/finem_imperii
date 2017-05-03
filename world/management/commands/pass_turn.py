@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand, CommandError
 
 from context_managers import perf_timer
 from world.models import World
+from world.turn import pass_turn
 
 
 class Command(BaseCommand):
@@ -18,6 +19,6 @@ class Command(BaseCommand):
                 raise CommandError('World with id "%s" does not exist' % world_id)
 
             with perf_timer('World "%s" turn' % world_id):
-                world.pass_turn()
+                pass_turn(world)
 
             self.stdout.write(self.style.SUCCESS('Passed turn in world "%s"' % world_id))

@@ -11,6 +11,7 @@ from battle.models import Battle, BattleCharacter, BattleUnit, BattleContuberniu
 from organization.models import Organization
 from world.initialization import initialize_unit
 from world.models import Tile, WorldUnit, NPC
+from world.turn import trigger_battles_in_tile
 
 
 class MiscTests(TestCase):
@@ -18,7 +19,7 @@ class MiscTests(TestCase):
 
     def test_conflict_creation_on_region_without_able_soldiers(self):
         tile = Tile.objects.get(id=108)
-        tile.trigger_battles()
+        trigger_battles_in_tile(tile)
         self.assertFalse(Battle.objects.exists())
 
 

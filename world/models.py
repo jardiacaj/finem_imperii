@@ -11,10 +11,8 @@ from django.db.models.aggregates import Avg
 
 from battle.models import BattleUnit
 from messaging.models import CharacterMessage, MessageRecipient
-from organization.models import Organization
-from world.templatetags.extra_filters import nice_hours
-from world.turn import TurnProcessor, turn_to_date, organizations_with_battle_ready_units, \
-    opponents_in_organization_list, get_largest_conflict_in_list, create_battle_from_conflict
+import organization.models
+from world.templatetags.extra_filters import nice_hours, turn_to_date
 
 Point = namedtuple('Point', ['x', 'z'])
 
@@ -35,6 +33,12 @@ class World(models.Model):
     def get_violence_monopolies(self):
         return self.organization_set.filter(violence_monopoly=True)
 
+    def get_barbaric_state(self):
+        return organization.models.Organization.objects.get(
+            world=self,
+            barbaric=True
+        )
+
     def __str__(self):
         return self.name
 
@@ -43,14 +47,6 @@ class World(models.Model):
 
     def get_absolute_url(self):
         return reverse('world:world', kwargs={'world_id': self.id})
-
-    def pass_turn(self):
-        self.blocked_for_turn = True
-        self.save()
-        turn_processor = TurnProcessor(self)
-        turn_processor.do_turn()
-        self.blocked_for_turn = False
-        self.save()
 
 
 class Region(models.Model):
@@ -121,15 +117,6 @@ class Tile(models.Model):
     def get_units(self):
         return WorldUnit.objects.filter(location__tile=self)
 
-    def trigger_battles(self):
-        conflicts = opponents_in_organization_list(
-            organizations_with_battle_ready_units(self),
-            self
-        )
-        conflict = get_largest_conflict_in_list(conflicts, self)
-        if conflict:
-            return create_battle_from_conflict(conflict, self)
-
     def get_current_battles(self):
         return self.battle_set.filter(current=True)
 
@@ -147,7 +134,7 @@ class TileEvent(models.Model):
 
     tile = models.ForeignKey(Tile)
     type = models.CharField(max_length=20, choices=TYPE_CHOICES, db_index=True)
-    organization = models.ForeignKey(Organization, blank=True, null=True)
+    organization = models.ForeignKey(organization.models.Organization, blank=True, null=True)
     counter = models.IntegerField(blank=True, null=True)
     start_turn = models.IntegerField()
     end_turn = models.IntegerField(blank=True, null=True)
@@ -397,8 +384,8 @@ class Character(models.Model):
     def get_violence_monopoly(self):
         try:
             return self.organization_set.get(violence_monopoly=True)
-        except (Organization.DoesNotExist,
-                Organization.MultipleObjectsReturned):
+        except (organization.models.Organization.DoesNotExist,
+                organization.models.Organization.MultipleObjectsReturned):
             return None
 
     def unread_messages(self):
@@ -580,3 +567,9 @@ class WorldUnit(models.Model):
             return in_battle.battle_side.battle
         except BattleUnit.DoesNotExist:
             pass
+
+    def get_violence_monopoly(self):
+        if self.owner_character:
+            return self.owner_character.get_violence_monopoly()
+        else:
+            return self.world.get_barbaric_state()

@@ -2,14 +2,19 @@ from collections import namedtuple
 
 from django import template
 
-from world.turn import turn_to_date
-
 register = template.Library()
+
+months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November',
+          'December']
 
 
 @register.filter
 def subtract(value, arg):
     return value - arg
+
+
+def turn_to_date(turn):
+    return "{} {} I.E.".format(months[turn % 12], turn//12 + 815)
 
 
 @register.filter

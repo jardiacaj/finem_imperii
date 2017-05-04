@@ -35,9 +35,9 @@ def capability_required_decorator(func):
             return redirect(args[0].META.get('HTTP_REFERER', reverse('world:character_home')))
         capability_id = kwargs.get('capability_id')
         if capability_id is None:
-            capability_id = args[0].GET.get('capability_id')
-        if capability_id is None:
             capability_id = args[0].POST.get('capability_id')
+        if capability_id is None:
+            capability_id = args[0].GET.get('capability_id')
         capability = get_object_or_404(Capability, id=capability_id)
         if not capability.organization.character_can_use_capabilities(args[0].hero):
             return fail_the_request(*args, **kwargs)

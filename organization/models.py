@@ -221,8 +221,10 @@ class Organization(models.Model):
 
     def get_bootstrap_icon(self):
         template = '<span style="color: #{color}" class="glyphicon glyphicon-{icon}" aria-hidden="true"></span>'
-        if self.violence_monopoly:
+        if self.violence_monopoly and not self.barbaric:
             icon = "tower"
+        elif self.violence_monopoly and self.barbaric:
+            icon = "fire"
         elif self.leaded_organizations.filter(violence_monopoly=True).exists():
             icon = "king"
         elif self.get_violence_monopoly():

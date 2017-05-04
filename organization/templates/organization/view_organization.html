@@ -15,8 +15,11 @@
                 {{ organization.get_position_occupier.get_html_link|safe }}<br>
             {% endif %}
             {{ organization.name }}
-            {% if organization.violence_monopoly %}
+            {% if organization.violence_monopoly and not organization.barbaric %}
                 <br><b>Sovereign <span class="glyphicon glyphicon-tower" aria-hidden="true"></span></b>
+            {% endif %}
+            {% if organization.violence_monopoly and organization.barbaric %}
+                <br><b>Barbaric <span class="glyphicon glyphicon-fire" aria-hidden="true"></span></b>
             {% endif %}
             {% if organization.owner %}
                 <br>Owned by {{ organization.owner.get_html_link|safe }}

@@ -174,3 +174,13 @@ class TestBattleStart(TestCase):
         unit3.save()
 
         start_battle(self.battle)
+
+    def test_manpower(self):
+        start_battle(self.battle)
+
+        side0 = self.battle.battleside_set.get(z=False)
+        self.assertEqual(side0.get_manpower(), 30)
+        self.assertEqual(side0.get_proportional_strength(), 1/3)
+        side1 = self.battle.battleside_set.get(z=True)
+        self.assertEqual(side1.get_manpower(), 90)
+        self.assertEqual(side1.get_proportional_strength(), 3)

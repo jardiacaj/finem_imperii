@@ -23,56 +23,59 @@ def create_next_turn(battle: Battle):
                 bcit.battle_turn = new_turn
                 bcit.save()
 
-                for unit in character.battleunit_set.all():
+            for unit in organization.battleunit_set.all():
+                try:
+                    buit = BattleUnitInTurn.objects.get(battle_unit=unit, battle_turn=prev_turn)
+                    if not buit.battlecontuberniuminturn_set.exists():
+                        continue
+                    if not BattleSoldierInTurn.objects.filter(
+                        battle_contubernium_in_turn__battle_unit_in_turn=buit,
+                        wound_status__lt=BattleSoldierInTurn.DEAD
+                    ).exists():
+                        continue
+                    buit.id = None
+                    buit.battle_turn = new_turn
+                    buit.battle_character_in_turn = BattleCharacterInTurn.objects.get(
+                        battle_turn=new_turn,
+                        battle_character=buit.battle_character_in_turn.battle_character
+                    ) if buit.battle_character_in_turn is not None else None
+                    buit.order = buit.battle_unit.get_order()
+                    buit.save()
+                except BattleUnitInTurn.DoesNotExist:
+                    continue
+
+                for contubernium in unit.battlecontubernium_set.all():
                     try:
-                        buit = BattleUnitInTurn.objects.get(battle_unit=unit, battle_turn=prev_turn)
-                        if not buit.battlecontuberniuminturn_set.exists():
-                            continue
-                        if not BattleSoldierInTurn.objects.filter(
-                            battle_contubernium_in_turn__battle_unit_in_turn=buit,
+                        bcontubit = BattleContuberniumInTurn.objects.get(
+                            battle_contubernium=contubernium, battle_turn=prev_turn
+                        )
+                        if not bcontubit.battlesoldierinturn_set.filter(
                             wound_status__lt=BattleSoldierInTurn.DEAD
                         ).exists():
                             continue
-                        buit.id = None
-                        buit.battle_turn = new_turn
-                        buit.battle_character_in_turn = bcit
-                        buit.order = buit.battle_unit.get_order()
-                        buit.save()
-                    except BattleUnitInTurn.DoesNotExist:
+                        bcontubit.id = None
+                        bcontubit.moved_this_turn = False
+                        bcontubit.desires_pos = False
+                        bcontubit.battle_turn = new_turn
+                        bcontubit.battle_unit_in_turn = buit
+                        bcontubit.save()
+                    except BattleContuberniumInTurn.DoesNotExist:
                         pass
 
-                    for contubernium in unit.battlecontubernium_set.all():
+                    for soldier in contubernium.battlesoldier_set.all():
                         try:
-                            bcontubit = BattleContuberniumInTurn.objects.get(
-                                battle_contubernium=contubernium, battle_turn=prev_turn
+                            bsit = BattleSoldierInTurn.objects.get(
+                                battle_turn=prev_turn,
+                                battle_soldier=soldier
                             )
-                            if not bcontubit.battlesoldierinturn_set.filter(
-                                wound_status__lt=BattleSoldierInTurn.DEAD
-                            ).exists():
+                            if bsit.wound_status == BattleSoldierInTurn.DEAD:
                                 continue
-                            bcontubit.id = None
-                            bcontubit.moved_this_turn = False
-                            bcontubit.desires_pos = False
-                            bcontubit.battle_turn = new_turn
-                            bcontubit.battle_unit_in_turn = buit
-                            bcontubit.save()
-                        except BattleContuberniumInTurn.DoesNotExist:
+                            bsit.id = None
+                            bsit.battle_turn = new_turn
+                            bsit.battle_contubernium_in_turn = bcontubit
+                            bsit.save()
+                        except BattleSoldierInTurn.DoesNotExist:
                             pass
-
-                        for soldier in contubernium.battlesoldier_set.all():
-                            try:
-                                bsit = BattleSoldierInTurn.objects.get(
-                                    battle_turn=prev_turn,
-                                    battle_soldier=soldier
-                                )
-                                if bsit.wound_status == BattleSoldierInTurn.DEAD:
-                                    continue
-                                bsit.id = None
-                                bsit.battle_turn = new_turn
-                                bsit.battle_contubernium_in_turn = bcontubit
-                                bsit.save()
-                            except BattleSoldierInTurn.DoesNotExist:
-                                pass
 
 
 def optimistic_move_desire_resolving(battle: Battle):
@@ -82,7 +85,8 @@ def optimistic_move_desire_resolving(battle: Battle):
         desired_position_occupier = battle.get_latest_turn().get_contubernium_in_position(bcuit.desired_coordinates())
 
         if desired_position_occupier:
-            if desired_position_occupier.desires_pos:  # test if mutually desiring position
+            # test if mutually desiring positions
+            if desired_position_occupier.desires_pos:
                 for desirer in contubernia_desiring_position:
                     if desirer.coordinates() == desired_position_occupier.desired_coordinates():
                         grant_position_swap(desirer, desired_position_occupier)

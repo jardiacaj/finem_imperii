@@ -51,7 +51,7 @@ class Battle(models.Model):
         return turns[0]
 
     def get_units_in_battle(self):
-        return BattleUnit.objects.filter(owner__battle_organization__side__battle=self)
+        return BattleUnit.objects.filter(battle_side__battle=self)
 
     def get_side_a(self):
         return self.battleside_set.all()[0]
@@ -112,7 +112,7 @@ class BattleSide(models.Model):
     z = models.BooleanField(default=False)
 
     def get_largest_organization(self):
-        max_found = 0
+        max_found = -1
         result = None
         for organization in self.battleorganization_set.all():
             manpower = organization.get_initial_manpower()
@@ -123,6 +123,26 @@ class BattleSide(models.Model):
 
     def get_formation(self):
         return self.get_largest_organization().organization.get_default_formation_settings()
+
+    def get_manpower(self, turn: BattleTurn = None):
+        if turn is None:
+            turn = self.battle.get_latest_turn()
+
+        return BattleSoldierInTurn.objects.filter(
+            battle_turn=turn,
+            wound_status__lt=BattleSoldierInTurn.HEAVY_WOUND,
+            battle_contubernium_in_turn__battle_contubernium__battle_unit__battle_side=self
+        ).count()
+
+    def get_proportional_strength(self, turn: BattleTurn = None):
+        if turn is None:
+            turn = self.battle.get_latest_turn()
+        opponent_side = self.battle.battleside_set.get(z=not self.z)
+        own_manpower = self.get_manpower(turn)
+        opponent_manpower = opponent_side.get_manpower(turn)
+        if opponent_manpower == 0:
+            return None
+        return own_manpower / opponent_manpower
 
 
 class BattleOrganization(models.Model):
@@ -156,7 +176,25 @@ class BattleUnit(models.Model):
     type = models.CharField(max_length=30)
 
     def get_order(self):
-        return self.world_unit.default_battle_orders
+        if self.world_unit.owner_character:
+            return self.world_unit.default_battle_orders
+        else:
+            strength_proportion = self.battle_side.get_proportional_strength()
+            if strength_proportion is not None and strength_proportion < 0.6:
+                what = Order.FLEE
+            elif self.battle_side.battle.get_latest_turn().num < 10:
+                what = Order.ADVANCE_IN_FORMATION
+            else:
+                what = Order.CHARGE
+
+            if self.world_unit.default_battle_orders:
+                self.world_unit.default_battle_orders.what = what
+                self.world_unit.default_battle_orders.save()
+            else:
+                self.world_unit.default_battle_orders = Order.objects.create(
+                    what=what)
+                self.world_unit.save()
+            return self.world_unit.default_battle_orders
 
     def __str__(self):
         return self.world_unit.name
@@ -164,7 +202,8 @@ class BattleUnit(models.Model):
 
 class BattleUnitInTurn(models.Model):
     battle_unit = models.ForeignKey(BattleUnit)
-    battle_character_in_turn = models.ForeignKey(BattleCharacterInTurn)
+    battle_character_in_turn = models.ForeignKey(BattleCharacterInTurn,
+                                                 blank=True, null=True)
     battle_turn = models.ForeignKey(BattleTurn)
     x_pos = models.IntegerField()
     z_pos = models.IntegerField()

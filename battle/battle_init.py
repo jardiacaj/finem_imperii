@@ -43,10 +43,13 @@ def initialize_from_conflict(battle, conflict, tile):
                 side__battle=battle,
                 organization=violence_monopoly
             )
-            battle_character = BattleCharacter.objects.get_or_create(
-                battle_organization=battle_organization,
-                character=unit.owner_character,
-            )[0]
+            if unit.owner_character:
+                battle_character = BattleCharacter.objects.get_or_create(
+                    battle_organization=battle_organization,
+                    character=unit.owner_character,
+                )[0]
+            else:
+                battle_character = None
             battle_unit = BattleUnit.objects.create(
                 battle_organization=battle_organization,
                 owner=battle_character,
@@ -244,29 +247,42 @@ def generate_in_turn_objects(battle):
                     battle_character=character,
                     battle_turn=turn
                 )
-                for unit in character.battleunit_set.all():
-                    buit = BattleUnitInTurn.objects.create(
-                        battle_unit=unit,
-                        battle_character_in_turn=bcit,
-                        battle_turn=turn,
-                        x_pos=unit.starting_x_pos,
-                        z_pos=unit.starting_z_pos,
-                        order=unit.get_order(),
+            for unit in organization.battleunit_set.all():
+                if unit.world_unit.owner_character:
+                    owner_in_turn = BattleCharacterInTurn.objects.get(
+                        battle_character=unit.owner,
+                        battle_turn=turn
                     )
-                    for contubernium in unit.battlecontubernium_set.all():
-                        bcontubit = BattleContuberniumInTurn.objects.create(
-                            battle_contubernium=contubernium,
-                            battle_unit_in_turn=buit,
+                else:
+                    owner_in_turn = None
+                buit = BattleUnitInTurn.objects.create(
+                    battle_unit=unit,
+                    battle_character_in_turn=owner_in_turn,
+                    battle_turn=turn,
+                    x_pos=unit.starting_x_pos,
+                    z_pos=unit.starting_z_pos,
+                    order=unit.get_order(),
+                )
+                for contubernium in unit.battlecontubernium_set.all():
+                    bcontubit = BattleContuberniumInTurn.objects.create(
+                        battle_contubernium=contubernium,
+                        battle_unit_in_turn=buit,
+                        battle_turn=turn,
+                        x_pos=contubernium.starting_x_pos,
+                        z_pos=contubernium.starting_z_pos
+                    )
+                    for soldier in contubernium.battlesoldier_set.all():
+                        BattleSoldierInTurn.objects.create(
                             battle_turn=turn,
-                            x_pos=contubernium.starting_x_pos,
-                            z_pos=contubernium.starting_z_pos
-                        )
-                        for soldier in contubernium.battlesoldier_set.all():
-                            BattleSoldierInTurn.objects.create(
-                                battle_turn=turn,
-                                battle_contubernium_in_turn=bcontubit,
-                                battle_soldier=soldier
+                            battle_contubernium_in_turn=bcontubit,
+                            battle_soldier=soldier
                             )
+    for barbarian_unit in BattleUnitInTurn.objects.filter(
+        battle_unit__owner=None,
+        battle_turn=turn
+    ):
+        barbarian_unit.order = barbarian_unit.battle_unit.get_order()
+        barbarian_unit.save()
 
 
 class BattleAlreadyStartedException(Exception):

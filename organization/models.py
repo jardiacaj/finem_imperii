@@ -400,9 +400,9 @@ class CapabilityProposal(models.Model):
                 if proposal['delete']:
                     document.delete()
                 else:
-                    document.title = proposal['title']
-                    document.body = proposal['body']
-                    document.public = 'public' in proposal.keys()
+                    document.title = proposal.get('title')
+                    document.body = proposal.get('body')
+                    document.public = proposal.get('public') is not None
                     document.last_modified_turn = self.capability.organization.world.current_turn
                     document.save()
             except PolicyDocument.DoesNotExist:

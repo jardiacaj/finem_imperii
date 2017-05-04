@@ -36,7 +36,7 @@ def create_next_turn(battle: Battle):
                         buit.id = None
                         buit.battle_turn = new_turn
                         buit.battle_character_in_turn = bcit
-                        buit.order = buit.battle_unit.get_turn_order()
+                        buit.order = buit.battle_unit.get_order()
                         buit.save()
                     except BattleUnitInTurn.DoesNotExist:
                         pass
@@ -149,7 +149,7 @@ def unit_movement(battle: Battle):
 
 
 def check_if_order_done(battle_unit_in_turn: BattleUnitInTurn):
-    order = battle_unit_in_turn.battle_unit.get_turn_order()
+    order = battle_unit_in_turn.battle_unit.get_order()
     if order:
         if order.what == Order.STAND:
             pass
@@ -179,7 +179,7 @@ def closest_in_set(coords, contubernium_set):
 
 
 def get_target_distance_function(battle_contubernium_in_turn: BattleContuberniumInTurn):
-    order = battle_contubernium_in_turn.battle_unit_in_turn.battle_unit.get_turn_order()
+    order = battle_contubernium_in_turn.battle_unit_in_turn.battle_unit.get_order()
     enemy_contubernia = BattleContuberniumInTurn.objects.filter(
         battle_turn=battle_contubernium_in_turn.battle_turn
     ).exclude(

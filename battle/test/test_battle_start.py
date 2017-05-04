@@ -4,7 +4,7 @@ from django.urls.base import reverse
 from battle.battle_init import initialize_from_conflict, start_battle
 from battle.battle_tick import battle_tick
 from battle.models import Battle, BattleCharacter, BattleUnit, BattleContubernium, BattleSoldier, BattleOrganization, \
-    BattleContuberniumInTurn, BattleSoldierInTurn, BattleUnitInTurn, Order, OrderListElement
+    BattleContuberniumInTurn, BattleSoldierInTurn, BattleUnitInTurn, Order
 from organization.models import Organization
 from world.initialization import initialize_unit
 from world.models import Tile, WorldUnit, NPC

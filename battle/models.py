@@ -145,7 +145,6 @@ class BattleCharacterInTurn(models.Model):
 
 
 class BattleUnit(models.Model):
-    orders = models.ManyToManyField(through='OrderListElement', to='Order')
     battle_side = models.ForeignKey(BattleSide)
     owner = models.ForeignKey(BattleCharacter, blank=True, null=True)
     battle_organization = models.ForeignKey(BattleOrganization)
@@ -156,11 +155,8 @@ class BattleUnit(models.Model):
     name = models.CharField(max_length=100)
     type = models.CharField(max_length=30)
 
-    def get_turn_order(self):
-        try:
-            return OrderListElement.objects.filter(battle_unit=self, order__done=False).order_by('position')[0].order
-        except IndexError:
-            pass
+    def get_order(self):
+        return self.world_unit.default_battle_orders
 
     def __str__(self):
         return self.world_unit.name
@@ -290,16 +286,6 @@ class Order(models.Model):
 
     def target_location_coordinates(self):
         return Coordinates(self.target_location_x, self.target_location_z)
-
-
-class OrderListElement(models.Model):
-    class Meta:
-        unique_together = (
-            ("battle_unit", "position"),
-        )
-    order = models.ForeignKey(Order)
-    battle_unit = models.ForeignKey('BattleUnit')
-    position = models.SmallIntegerField()
 
 
 class BattleObject(models.Model):

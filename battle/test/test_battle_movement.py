@@ -6,11 +6,11 @@ from django.urls.base import reverse
 from battle.battle_init import initialize_from_conflict, start_battle
 from battle.battle_tick import battle_tick, optimistic_move_desire_formulation, optimistic_move_desire_resolving, \
     safe_move, euclidean_distance
-from battle.models import Battle, BattleCharacter, BattleUnit, BattleContubernium, BattleSoldier, BattleOrganization, \
-    BattleContuberniumInTurn, BattleSoldierInTurn, BattleUnitInTurn, Order, OrderListElement, Coordinates
+from battle.models import Battle, BattleUnit, \
+    BattleContuberniumInTurn, BattleUnitInTurn, Order, Coordinates
 from organization.models import Organization
 from world.initialization import initialize_unit
-from world.models import Tile, WorldUnit, NPC
+from world.models import Tile, WorldUnit
 from world.turn import trigger_battles_in_tile
 
 
@@ -43,17 +43,16 @@ class TestBattleMovement(TestCase):
         initialize_from_conflict(self.battle, [Organization.objects.get(id=105), Organization.objects.get(id=112)], tile)
 
     def test_unit_move(self):
-        start_battle(self.battle)
         unit = WorldUnit.objects.get(id=1)
+        start_battle(self.battle)
         battle_unit = BattleUnit.objects.get(world_unit=unit)
-        battle_unit.orders.clear()
         order = Order.objects.create(
             what=Order.MOVE,
             target_location_x=battle_unit.starting_x_pos,
             target_location_z=battle_unit.starting_z_pos - 1
         )
-        OrderListElement.objects.create(order=order, battle_unit=battle_unit, position=0)
-        battle_unit.refresh_from_db()
+        unit.default_battle_orders = order
+        unit.save()
 
         battle_tick(self.battle)
 
@@ -102,16 +101,14 @@ class TestBattleMovement(TestCase):
 
         start_battle(self.battle)
         battle_unit1 = BattleUnit.objects.get(world_unit=unit1)
-        battle_unit1.orders.clear()
         battle_unit3 = BattleUnit.objects.get(world_unit=unit3)
-        battle_unit3.orders.clear()
         order = Order.objects.create(
             what=Order.MOVE,
             target_location_x=battle_unit1.starting_x_pos,
             target_location_z=battle_unit1.starting_z_pos
         )
-        OrderListElement.objects.create(order=order, battle_unit=battle_unit3, position=0)
-        battle_unit3.refresh_from_db()
+        battle_unit3.world_unit.default_battle_orders = order
+        battle_unit3.world_unit.save()
 
         self.assertFalse(self.battle.get_latest_turn().test_contubernia_superposition())
         battle_tick(self.battle)
@@ -126,25 +123,23 @@ class TestBattleMovement(TestCase):
 
         start_battle(self.battle)
         battle_unit1 = BattleUnit.objects.get(world_unit=unit1)
-        battle_unit1.orders.clear()
         battle_unit3 = BattleUnit.objects.get(world_unit=unit3)
-        battle_unit3.orders.clear()
 
         order3 = Order.objects.create(
             what=Order.MOVE,
             target_location_x=battle_unit1.starting_x_pos,
             target_location_z=battle_unit1.starting_z_pos + 1
         )
-        OrderListElement.objects.create(order=order3, battle_unit=battle_unit3, position=0)
-        battle_unit3.refresh_from_db()
+        battle_unit3.world_unit.default_battle_orders = order3
+        battle_unit3.world_unit.save()
 
         order1 = Order.objects.create(
             what=Order.MOVE,
             target_location_x=battle_unit3.starting_x_pos,
             target_location_z=battle_unit3.starting_z_pos - 1
         )
-        OrderListElement.objects.create(order=order1, battle_unit=battle_unit1, position=0)
-        battle_unit1.refresh_from_db()
+        battle_unit1.world_unit.default_battle_orders = order1
+        battle_unit1.world_unit.save()
 
         for i in range(6):
             self.assertFalse(self.battle.get_latest_turn().test_contubernia_superposition())
@@ -336,15 +331,14 @@ class TestBattleMovement(TestCase):
         unit1 = WorldUnit.objects.get(id=1)
         unit3 = WorldUnit.objects.get(id=3)
 
+        order3 = Order.objects.create(what=Order.STAND)
         unit3.battle_line = 2
+        unit3.default_battle_orders = order3
         unit3.save()
 
         start_battle(self.battle)
         battle_unit1 = BattleUnit.objects.get(world_unit=unit1)
         battle_unit3 = BattleUnit.objects.get(world_unit=unit3)
-        battle_unit3.orders.clear()
-        order3 = Order.objects.create(what=Order.STAND)
-        OrderListElement.objects.create(order=order3, battle_unit=battle_unit3, position=0)
 
         battle_tick(self.battle)
 
@@ -407,11 +401,11 @@ class TestBattleMovement(TestCase):
 
     def test_move_charge(self):
         unit3 = WorldUnit.objects.get(id=3)
+        order3 = Order.objects.create(what=Order.CHARGE)
+        unit3.default_battle_orders = order3
+        unit3.default_battle_orders.save()
         start_battle(self.battle)
         battle_unit3 = BattleUnit.objects.get(world_unit=unit3)
-        battle_unit3.orders.clear()
-        order3 = Order.objects.create(what=Order.CHARGE)
-        OrderListElement.objects.create(order=order3, battle_unit=battle_unit3, position=0)
 
         battle_tick(self.battle)
 
@@ -425,11 +419,11 @@ class TestBattleMovement(TestCase):
 
     def test_move_flee(self):
         unit3 = WorldUnit.objects.get(id=3)
+        order3 = Order.objects.create(what=Order.FLEE)
+        unit3.default_battle_orders = order3
+        unit3.save()
         start_battle(self.battle)
         battle_unit3 = BattleUnit.objects.get(world_unit=unit3)
-        battle_unit3.orders.clear()
-        order3 = Order.objects.create(what=Order.FLEE)
-        OrderListElement.objects.create(order=order3, battle_unit=battle_unit3, position=0)
 
         battle_tick(self.battle)
 

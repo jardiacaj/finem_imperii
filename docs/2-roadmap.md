@@ -102,7 +102,8 @@ Allocated: 5 days
 
  - Barbarians. (2 days) (finished)
  - Character creation limit (1/2 day) (finished)
- - MUST Character view (1/2 day)
+ - Character view (1/2 day) (finished)
+ - World view (1/2 day) (finished)
 
  - MUST Taxation and economy (2 days)
  - MUST Battle restrictions on travel, time and recruitment (1 day)

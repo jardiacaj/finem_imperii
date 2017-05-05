@@ -10,7 +10,7 @@ from django.views.decorators.http import require_POST
 from django.views.generic.base import View
 
 from account.user_functions import can_create_character
-from battle.models import Order
+from battle.models import Order, Battle
 from decorators import inchar_required
 from messaging.models import MessageRelationship
 from name_generator.name_generator import get_names, get_surnames
@@ -28,6 +28,10 @@ def world_view(request, world_id):
     world = get_object_or_404(World, id=world_id)
     context = {
         'world': world,
+        'battles': Battle.objects.filter(
+            tile__world=world,
+            current=True
+        )
     }
     return render(request, 'world/view_world.html', context)
 

@@ -101,10 +101,9 @@ Allocated: 5 days
 ## Week 10
 
  - Barbarians. (2 days) (finished)
+ - Character creation limit (1/2 day) (finished)
 
- - MUST Character creation limit (1/2 day)
  - MUST Taxation and economy (2 days)
- - MUST Closed alpha release (1 day)
  - MUST Battle restrictions on travel, time and recruitment (1 day)
  - MUST Character view (1/2 day)
  - MUST Missing notifications (1/2 day)
@@ -112,6 +111,7 @@ Allocated: 5 days
  - MUST Game start/tutorial (2 days)
  - MUST Help system (1 day)
  - MUST Character start page (1/2 day)
+ - MUST Closed alpha release (1 day)
  - VNTH Character profiles (2 days)
  - VNTH Secession, rebellion and state founding. (2 days)
  - VNTH Character pause and deletion (1 day)

@@ -293,6 +293,11 @@ class BattleSoldierInTurn(models.Model):
     def attack_chance_multiplier(self):
         return self.ATTACK_CHANGE_MULTIPLIERS[self.wound_status]
 
+    def take_hit(self):
+        self.wound_status += 1
+        self.save()
+        self.battle_soldier.world_npc.take_hit()
+
 
 class Order(models.Model):
     STAND = 'stand'

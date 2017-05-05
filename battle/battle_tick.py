@@ -365,7 +365,7 @@ def unit_attack(battle: Battle):
                 while (random.random() <
                        0.5 * soldier.attack_chance_multiplier()):
                     if target_soldier.wound_status < BattleSoldierInTurn.DEAD:
-                        target_soldier.wound_status += 1
+                        target_soldier.take_hit()
                 target_soldier.save()
 
 

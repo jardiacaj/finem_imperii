@@ -9,7 +9,7 @@ from django.db import models, transaction
 from django.contrib.auth.models import User
 from django.db.models.aggregates import Avg
 
-from battle.models import BattleUnit
+from battle.models import BattleUnit, BattleSoldierInTurn
 from messaging.models import CharacterMessage, MessageRecipient
 import organization.models
 from world.templatetags.extra_filters import nice_hours, turn_to_date
@@ -312,9 +312,34 @@ class NPC(models.Model):
     )
     trained_soldier = models.BooleanField(default=None)
     skill_fighting = models.IntegerField()
+    wound_status = models.SmallIntegerField(
+        choices=BattleSoldierInTurn.WOUND_STATUS_CHOICES,
+        default=BattleSoldierInTurn.UNINJURED
+    )
 
     def __str__(self):
         return self.name
+
+    def take_hit(self):
+        self.wound_status += 1
+        self.save()
+        if self.wound_status == BattleSoldierInTurn.DEAD:
+            self.die()
+        elif self.wound_status == BattleSoldierInTurn.MEDIUM_WOUND:
+            if random.getrandbits(3) == 0:
+                self.able = False
+                self.save()
+        elif self.wound_status == BattleSoldierInTurn.HEAVY_WOUND:
+            if random.getrandbits(1) == 0:
+                self.able = False
+                self.save()
+
+    def die(self):
+        self.location = None
+        self.residence = None
+        self.unit = None
+        self.able = False
+        self.save()
 
 
 class Character(models.Model):

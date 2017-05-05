@@ -61,79 +61,85 @@ Allocated: 3 days (vacation!)
 
  - Messaging. (1 day) (finished)
  - CI and Dockerization (1 day) (finished)
- - Battle rework. (1 day)
+ - Battle rework. (1 day) (finished)
 
 Allocated: 4 days
  
 ## Week 6
 
- - Region view. (1/2 day)
- - Character view. (1/2 day)
- - Battle rendering. (1,5 days)
- - Battle orders. (2 days)
+ - Region view. (1/2 day) (finished)
+ - Character view. (1/2 day) (finished)
+ - Battle rendering. (1,5 days) (finished)
+ - Battle orders. (2 days) (finished)
 
 Allocated: 5,5 days
 
 ## Week 7 
 
- - Battle movement (2 days)
+ - Battle movement (2 days) (finished)
  
 Allocated: 2 days (vacation!)
  
 ## Week 8 
 
- - Battle movement (1,5 days)
- - Battle rendering (1,5 days)
- - PAC 2 (1 day)
+ - Battle movement (1,5 days) (finished)
+ - Battle rendering (1,5 days) (finished)
+ - PAC 2 (1 day) (finished)
 
 Allocated: 4 days (vacation!)
 
 ## Week 9
 
- - Battle orders (1 day)
- - Battle formations (1 day)
- - Battle damage (1 day)
- - Battle end (1 day)
- - Conquest. (1 day)
+ - Battle orders (1 day) (finished)
+ - Battle formations (1 day) (finished)
+ - Battle damage (1 day) (finished)
+ - Battle end (1 day) (finished)
+ - Conquest. (1 day) (finished)
 
 Allocated: 5 days
 
 ## Week 10
 
- - Battle restrictions on travel, time and recruitment (1 day)
- - Barbarians. (2 days)
- - Taxation (1 day)
- - Sieges. (1 day)
- - Secession and rebellion. (1 day)
- - Character pause and deletion
- - Emortuus
- - Organization creation
+ - Barbarians. (2 days) (finished)
+
+ - MUST Character creation limit (1/2 day)
+ - MUST Taxation and economy (2 days)
+ - MUST Closed alpha release (1 day)
+ - MUST Battle restrictions on travel, time and recruitment (1 day)
+ - MUST Character view (1/2 day)
+ - MUST Missing notifications (1/2 day)
+ - MUST Emortuus (2 days)
+ - MUST Game start/tutorial (2 days)
+ - MUST Help system (1 day)
+ - MUST Character start page (1/2 day)
+ - VNTH Character profiles (2 days)
+ - VNTH Secession, rebellion and state founding. (2 days)
+ - VNTH Character pause and deletion (1 day)
 
 ## Week 11
- 
- - PAC3 (1/2 day)
- - Final delivery preparation
+
  
 ## Week 12
 
  - Final delivery preparation
- - Character creation limit
- - Missing notifications
- - Building production (1 day)
- - Trade (1,5 days)
+ - PAC3 (1/2 day)
  - PAC3 delivery
  
 ## Week 13
- 
+
  - Final delivery preparation
- - Test environment setup (1/2 day)
- - Closed alpha release (1 day)
- - Game start/tutorial (2 days)
- - Help system
- - Character/player prestige
- - Character start page
- - Professional units and mercenaries
  
 ## Week 14
 
-Final delivery
+ - Final delivery: document
+ - Final delivery: self-assessment
+ - Final delivery: presentation
+
+## Optional / kick out candidates
+
+ - NTH Population evolution (1 day)
+ - NTH Building production (1 day)
+ - NTH Trade (1,5 days)
+ - NTH Professional units and mercenaries
+ - NTH Sieges. (1 day)
+ - NTH Character/player prestige

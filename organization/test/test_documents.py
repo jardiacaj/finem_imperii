@@ -199,7 +199,7 @@ class TestDocuments(TestCase):
                     'document_id': 1
                 }
             ),
-            data={'delete': '1',},
+            data={'delete': '1', },
             follow=True
         )
 

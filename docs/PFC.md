@@ -62,6 +62,8 @@ See the [Server setup guide](https://github.com/jardiacaj/finem_imperii/blob/mas
 
 # Design
 
+## The organization system
+
 # Lore and content
 
 # Development

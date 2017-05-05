@@ -91,17 +91,4 @@
         </div>
     </div>
 
-
-    {% include "world/renderer.html" %}
-
-    <script>
-        function region_callback(region) {
-            $("#region_type").text(region ? region.type : '');
-            $("#region_name").text(region ? region.name : '');
-        }
-        function settlement_callback(settlement) {
-            $("#settlement_name").text(settlement ? settlement.name : '');
-        }
-    </script>
-
 {% endblock %}

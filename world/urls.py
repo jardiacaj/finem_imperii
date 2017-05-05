@@ -2,10 +2,13 @@ from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 
 from decorators import inchar_required
-from world.views import CharacterCreationView, activate_character, character_home, world_view, \
-    create_character, minimap_view, world_view_iframe, RecruitmentView, travel_view_iframe, TravelView, unit_view, \
+from world.views import CharacterCreationView, activate_character, \
+    character_home, world_view, \
+    create_character, minimap_view, world_view_iframe, RecruitmentView, \
+    travel_view_iframe, TravelView, unit_view, \
     unit_rename, unit_transfer, unit_disband, character_view, tile_view, \
-    tile_view_iframe, unit_battle_settings, unit_status_change, unit_battle_orders, unit_conquest_action
+    tile_view_iframe, unit_battle_settings, unit_status_change, \
+    unit_battle_orders, unit_conquest_action, character_view_iframe
 
 urlpatterns = [
     url(r'^create_character$', create_character, name='create_character'),
@@ -20,6 +23,7 @@ urlpatterns = [
     url(r'^world/(?P<world_id>[0-9]+)$', world_view, name='world'),
     url(r'^world_iframe/(?P<world_id>[0-9]+)$', world_view_iframe, name='world_iframe'),
     url(r'^character/(?P<character_id>[0-9]+)$', character_view, name='character'),
+    url(r'^character_iframe/(?P<character_id>[0-9]+)$', character_view_iframe, name='character_iframe'),
     url(r'^unit/(?P<unit_id>[0-9]+)$', unit_view, name='unit'),
     url(r'^unit/(?P<unit_id>[0-9]+)/rename$', unit_rename, name='rename_unit'),
     url(r'^unit/(?P<unit_id>[0-9]+)/battle_settings', unit_battle_settings, name='battle_settings_unit'),

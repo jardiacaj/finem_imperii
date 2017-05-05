@@ -36,6 +36,11 @@ function MapRenderer(world_data) {
         zis.renderer.render();
     };
 
+    zis.link_click_to_view_callback = function (region, settlement) {
+        if (region !== undefined)
+            window.parent.location = '/tile/' + region.region.id;
+    };
+
     /* INTERNALS */
 
     zis.mouse_click_listener_notifier = function (event) {

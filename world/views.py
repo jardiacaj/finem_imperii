@@ -12,6 +12,7 @@ from django.views.generic.base import View
 from account.user_functions import can_create_character
 from battle.models import Order
 from decorators import inchar_required
+from messaging.models import MessageRelationship
 from name_generator.name_generator import get_names, get_surnames
 from organization.models import Organization
 from world.models import Character, World, Settlement, WorldUnit, \
@@ -48,7 +49,8 @@ def tile_view(request, tile_id):
         'tile': tile,
         'characters': Character.objects.filter(location__tile=tile),
         'units': WorldUnit.objects.filter(location__tile=tile),
-        'conquests': TileEvent.objects.filter(tile=tile, type=TileEvent.CONQUEST, end_turn__isnull=True)
+        'conquests': TileEvent.objects.filter(
+            tile=tile, type=TileEvent.CONQUEST, end_turn__isnull=True)
     }
     return render(request, 'world/view_tile.html', context)
 
@@ -77,7 +79,8 @@ def create_character(request):
     context = {
         'worlds': World.objects.all()
     }
-    return render(request, 'world/create_character_step1.html', context=context)
+    return render(
+        request, 'world/create_character_step1.html', context=context)
 
 
 class CharacterCreationView(View):
@@ -95,7 +98,8 @@ class CharacterCreationView(View):
 
     @staticmethod
     def fail_post_with_error(request, world_id, message):
-        messages.add_message(request, messages.ERROR, message, extra_tags='danger')
+        messages.add_message(
+            request, messages.ERROR, message, extra_tags='danger')
         return redirect('world:create_character', world_id=world_id)
 
     @transaction.atomic
@@ -168,14 +172,13 @@ class RecruitmentView(View):
                 prefix = 'conscript_'
             elif recruitment_type == 'professional':
                 prefix = 'professional_'
+            else:
+                raise Http404()
 
             # get soldier count
-            try:
-                target_soldier_count = \
-                    int(request.POST.get('{}count'.format(prefix)))
-                if not target_soldier_count > 0:
-                    raise Exception
-            except:
+            target_soldier_count = \
+                int(request.POST.get('{}count'.format(prefix)))
+            if not target_soldier_count > 0:
                 return RecruitmentView.fail_post_with_error(
                     request, "Invalid number of soldiers."
                 )
@@ -268,7 +271,11 @@ class TravelView(View):
 
     def get(self, request, settlement_id=None):
         if settlement_id is not None:
-            target_settlement = get_object_or_404(Settlement, id=settlement_id, tile__world_id=request.hero.world_id)
+            target_settlement = get_object_or_404(
+                Settlement,
+                id=settlement_id,
+                tile__world_id=request.hero.world_id
+            )
 
             check_result = request.hero.check_travelability(target_settlement)
             if check_result is not None:
@@ -299,7 +306,8 @@ class TravelView(View):
 
         travel_time = request.hero.travel_time(target_settlement)
 
-        if request.hero.location.tile == target_settlement.tile and travel_time <= request.hero.hours_in_turn_left:
+        if request.hero.location.tile == target_settlement.tile and \
+                        travel_time <= request.hero.hours_in_turn_left:
             # travel instantly
             message = request.hero.perform_travel(target_settlement)
             messages.success(request, message, extra_tags="success")
@@ -307,7 +315,8 @@ class TravelView(View):
         else:
             messages.success(
                 request,
-                "You you will reach {} when the turn ends.".format(target_settlement),
+                "You you will reach {} when the turn ends.".format(
+                    target_settlement),
                 extra_tags="success"
             )
             request.hero.travel_destination = target_settlement
@@ -318,7 +327,11 @@ class TravelView(View):
 @inchar_required
 def travel_view_iframe(request, settlement_id=None):
     if settlement_id is not None:
-        target_settlement = get_object_or_404(Settlement, id=settlement_id, tile__world_id=request.hero.world_id)
+        target_settlement = get_object_or_404(
+            Settlement,
+            id=settlement_id,
+            tile__world_id=request.hero.world_id
+        )
     else:
         target_settlement = None
 
@@ -337,14 +350,22 @@ def unit_view(request, unit_id):
     context = {
         'unit': unit,
         'origins': unit.soldier.origin_distribution(),
-        'conquests': TileEvent.objects.filter(tile=unit.location.tile, type=TileEvent.CONQUEST, end_turn__isnull=True)
+        'conquests': TileEvent.objects.filter(
+            tile=unit.location.tile,
+            type=TileEvent.CONQUEST,
+            end_turn__isnull=True
+        )
     }
     return render(request, 'world/view_unit.html', context)
 
 
 @inchar_required
 def unit_rename(request, unit_id):
-    unit = get_object_or_404(WorldUnit, id=unit_id, owner_character=request.hero)
+    unit = get_object_or_404(
+        WorldUnit,
+        id=unit_id,
+        owner_character=request.hero
+    )
     if request.POST.get('name'):
         unit.name = request.POST.get('name')
         unit.save()
@@ -354,7 +375,11 @@ def unit_rename(request, unit_id):
 @inchar_required
 @require_POST
 def unit_battle_settings(request, unit_id):
-    unit = get_object_or_404(WorldUnit, id=unit_id, owner_character=request.hero)
+    unit = get_object_or_404(
+        WorldUnit,
+        id=unit_id,
+        owner_character=request.hero
+    )
     battle_line = int(request.POST['battle_line'])
     battle_side_pos = int(request.POST['battle_side_pos'])
     if not 0 <= battle_line < 5 or not -5 <= battle_side_pos <= 5:
@@ -368,7 +393,11 @@ def unit_battle_settings(request, unit_id):
 @inchar_required
 @require_POST
 def unit_battle_orders(request, unit_id):
-    unit = get_object_or_404(WorldUnit, id=unit_id, owner_character=request.hero)
+    unit = get_object_or_404(
+        WorldUnit,
+        id=unit_id,
+        owner_character=request.hero
+    )
     battle_orders = request.POST['battle_orders']
     if battle_orders not in [order[0] for order in Order.WHAT_CHOICES]:
         raise Http404("Invalid orders")
@@ -380,7 +409,11 @@ def unit_battle_orders(request, unit_id):
 @inchar_required
 @require_POST
 def unit_status_change(request, unit_id, new_status):
-    unit = get_object_or_404(WorldUnit, id=unit_id, owner_character=request.hero)
+    unit = get_object_or_404(
+        WorldUnit,
+        id=unit_id,
+        owner_character=request.hero
+    )
     try:
         unit.change_status(new_status)
     except WorldUnitStatusChangeException as e:
@@ -391,7 +424,11 @@ def unit_status_change(request, unit_id, new_status):
 @inchar_required
 @require_POST
 def unit_conquest_action(request, unit_id):
-    unit = get_object_or_404(WorldUnit, id=unit_id, owner_character=request.hero)
+    unit = get_object_or_404(
+        WorldUnit,
+        id=unit_id,
+        owner_character=request.hero
+    )
     tile_event = get_object_or_404(
         TileEvent,
         end_turn__isnull=True,
@@ -424,18 +461,51 @@ def unit_conquest_action(request, unit_id):
 
 @inchar_required
 def unit_disband(request, unit_id):
-    unit = get_object_or_404(WorldUnit, id=unit_id, owner_character=request.hero)
+    unit = get_object_or_404(
+        WorldUnit,
+        id=unit_id,
+        owner_character=request.hero
+    )
     return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
 
 
 @inchar_required
 def unit_transfer(request, unit_id):
-    unit = get_object_or_404(WorldUnit, id=unit_id, owner_character=request.hero)
+    unit = get_object_or_404(
+        WorldUnit,
+        id=unit_id,
+        owner_character=request.hero
+    )
     return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
 
 
 @inchar_required
 def character_view(request, character_id):
-    character = get_object_or_404(Character, id=character_id, world=request.hero.world)
-    context = {'character': character}
+    character = get_object_or_404(
+        Character,
+        id=character_id,
+        world=request.hero.world
+    )
+    favourite = MessageRelationship.objects.filter(
+        from_character=request.hero,
+        to_character=character
+    ).exists()
+    context = {
+        'character': character,
+        'favourite': favourite
+    }
     return render(request, 'world/view_character.html', context=context)
+
+
+@inchar_required
+def character_view_iframe(request, character_id):
+    character = get_object_or_404(
+        Character,
+        id=character_id,
+        world=request.hero.world
+    )
+    context = {
+        'character': character,
+        'regions': render_world_for_view(character.world),
+    }
+    return render(request, 'world/view_character_iframe.html', context)

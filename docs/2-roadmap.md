@@ -102,10 +102,10 @@ Allocated: 5 days
 
  - Barbarians. (2 days) (finished)
  - Character creation limit (1/2 day) (finished)
+ - MUST Character view (1/2 day)
 
  - MUST Taxation and economy (2 days)
  - MUST Battle restrictions on travel, time and recruitment (1 day)
- - MUST Character view (1/2 day)
  - MUST Missing notifications (1/2 day)
  - MUST Emortuus (2 days)
  - MUST Game start/tutorial (2 days)

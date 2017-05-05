@@ -4,8 +4,75 @@
 
     <h1 class="page-header">{{ character.get_html_name|safe }}</h1>
 
-    <a href="{% url 'messaging:compose_character' character.id %}" class="btn btn-primary">Send message</a>
-    <a href="{% url 'messaging:add_contact' character.id %}" class="btn btn-primary">Add to contacts</a>
-    <a href="{% url 'messaging:remove_contact' character.id %}" class="btn btn-primary">Remove from contacts</a>
+    <div class="col-md-6">
+
+        <a href="{% url 'messaging:compose_character' character.id %}" class="btn btn-primary">
+            <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+            Message
+        </a>
+
+        {% if favourite %}
+            <a href="{% url 'messaging:remove_contact' character.id %}" class="btn btn-primary">
+            <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                Remove from contacts
+            </a>
+        {% else %}
+            <a href="{% url 'messaging:add_contact' character.id %}" class="btn btn-primary">
+            <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+                Add to contacts
+            </a>
+        {% endif %}
+
+
+        <h3>Position</h3>
+
+        <ul>
+            {% for organization in character.organization_set.all %}
+                <li>
+                    {% if not organization.is_position %}Member of{% endif %}
+                    {{ organization.get_html_link|safe }}
+                </li>
+            {% empty %}
+                <li>No positions or memberships.</li>
+            {% endfor %}
+        </ul>
+
+        <h3>Units</h3>
+
+        <ul>
+            {% for unit in character.worldunit_set.all %}
+                <li>
+                    <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
+                    {{ unit.descriptor }} in
+                    {{ unit.location }}:
+                    <a href="{{ unit.get_absolute_url }}">{{ unit }}</a>
+                    {% if unit.get_current_battle %}
+                        <a
+                                href="{{ unit.get_current_battle.get_absolute_url }}"
+                                class="btn btn-danger btn-sm"
+                        >Battle</a>
+                    {% endif %}
+                </li>
+            {% empty %}
+                <li>None</li>
+            {% endfor %}
+        </ul>
+
+    </div>
+
+    <div class="col-md-6">
+
+        <h3>Location</h3>
+        <p>
+            {{ character.location }} in
+            {{ character.location.tile.get_html_link|safe }}
+        </p>
+        <iframe
+                id="tile_map"
+                class="placeholder character_view_iframe"
+                scrolling="no"
+                src="{% url 'world:character_iframe' character.id %}"
+        ></iframe>
+    </div>
 
 {% endblock %}

@@ -34,6 +34,7 @@ class TurnProcessor:
         self.do_elections()
         self.do_conquests()
         self.do_barbarians()
+        # self.do_population_updates()
 
         self.world.current_turn += 1
         self.world.save()

@@ -54,10 +54,6 @@ class TestUnitActions(TestCase):
         self.assertEqual(unit.soldier.filter(male=True).exists(), True)
         self.assertEqual(unit.soldier.filter(male=False).exists(), False)
         self.assertEqual(
-            unit.soldier.filter(trained_soldier=True).exists(), True)
-        self.assertEqual(
-            unit.soldier.filter(trained_soldier=False).exists(), True)
-        self.assertEqual(
             unit.soldier.filter(age_months__gt=NPC.OLD_AGE_LIMIT).exists(),
             False)
         self.assertEqual(

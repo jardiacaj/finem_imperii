@@ -50,6 +50,13 @@ pre.wrapping {
     border: 0;
 }
 
+.character_view_iframe {
+    height: 500px;
+    width: 100%;
+    padding: 0;
+    border: 0;
+}
+
 .world_map_iframe {
     height: 600px;
     width: 100%;

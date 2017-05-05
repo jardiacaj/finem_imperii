@@ -20,12 +20,6 @@
                         scrolling="no"
                         src="{% url 'world:minimap' %}"
                 ></iframe>
-                <script>
-                    function minimap_click_callback(region, settlement) {
-                        if (region !== undefined)
-                            window.location = '/tile/' + region.region.id;
-                    }
-                </script>
 
                 <p class="text-center">
                     {{ request.hero.location.tile.get_html_link|safe }} is
@@ -84,12 +78,6 @@
 
                 <h5>Your position</h5>
                 <ul>
-                    {% if request.hero.oath_sworn_to %}
-                        <li>Sworn oath to {{ request.hero.oath_sworn_to.get_html_link|safe }}</li>
-                    {% else %}
-                        <li>No allegiance sworn.</li>
-                    {% endif %}
-
                     {% for organization in request.hero.organization_set.all %}
                         <li>
                             {% if not organization.is_position %}Member of{% endif %}

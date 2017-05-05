@@ -9,6 +9,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from django.views.generic.base import View
 
+from account.user_functions import can_create_character
 from battle.models import Order
 from decorators import inchar_required
 from name_generator.name_generator import get_names, get_surnames
@@ -70,6 +71,9 @@ def minimap_view(request):
 
 @login_required
 def create_character(request):
+    if not can_create_character(request.user):
+        raise Http404()
+
     context = {
         'worlds': World.objects.all()
     }
@@ -80,6 +84,9 @@ class CharacterCreationView(View):
     template_name = 'world/create_character.html'
 
     def get(self, request, *args, **kwargs):
+        if not can_create_character(request.user):
+            raise Http404()
+
         return render(request, self.template_name, {
             'world': get_object_or_404(World, id=kwargs['world_id']),
             'names': get_names(limit=100),
@@ -93,6 +100,9 @@ class CharacterCreationView(View):
 
     @transaction.atomic
     def post(self, request, *args, **kwargs):
+        if not can_create_character(request.user):
+            raise Http404()
+
         try:
             world_id = kwargs['world_id']
             world = World.objects.get(id=world_id)

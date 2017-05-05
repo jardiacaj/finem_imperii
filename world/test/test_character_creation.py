@@ -16,6 +16,8 @@ class TestCharacterCreation(TestCase):
             {'username': 'alice', 'password': 'test'},
         )
         user = auth.get_user(self.client)
+        user.is_superuser = True
+        user.save()
         self.assertEqual(User.objects.get(id=1), user)
 
     def test_step1_view(self):

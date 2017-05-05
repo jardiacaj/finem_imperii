@@ -62,7 +62,16 @@
 
         </table>
 
-        <p><a class="btn btn-primary" href="{% url 'world:create_character' %}">Create a new character</a></p>
+        <p class="text-center">
+            {% if can_create_character %}
+                <a class="btn btn-primary"
+                   href="{% url 'world:create_character' %}">
+                    Create a new character
+                </a>
+            {% else %}
+                You reached the character limit
+            {% endif %}
+        </p>
     </div>
 
 {% endblock %}

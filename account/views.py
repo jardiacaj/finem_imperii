@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
 
+from account.user_functions import can_create_character
 from messaging.models import ServerMOTD
 
 
@@ -86,6 +87,8 @@ def logout_view(request):
 @login_required
 def home(request):
     context = {
-        'server_messages': ServerMOTD.objects.all() if request.user.is_staff else ServerMOTD.objects.filter(draft=False)
+        'server_messages': ServerMOTD.objects.all() if request.user.is_staff
+                           else ServerMOTD.objects.filter(draft=False),
+        'can_create_character': can_create_character(request.user)
     }
     return render(request, 'account/home.html', context=context)

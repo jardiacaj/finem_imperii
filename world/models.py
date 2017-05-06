@@ -191,6 +191,12 @@ class Settlement(models.Model):
         self.population = self.npc_set.all().count()
         self.save()
 
+    def get_default_granary(self):
+        return self.building_set.get(
+            type=Building.GRANARY,
+            owner=None
+        )
+
 
 class Building(models.Model):
     GRAIN_FIELD = 'grain field'
@@ -227,6 +233,16 @@ class Building(models.Model):
 
     def max_surplus_workers(self):
         return self.max_workers() - self.max_ideal_workers()
+
+    def add_bushels(self, bushels_to_add):
+        bushel_object = InventoryItem.objects.get_or_create(
+            type=InventoryItem.GRAIN,
+            owner_character=None,
+            location=self,
+            defaults={'quantity': 0}
+        )[0]
+        bushel_object.quantity += bushels_to_add
+        bushel_object.save()
 
 
 class NPCManager(models.Manager):
@@ -604,3 +620,17 @@ class WorldUnit(models.Model):
             return self.owner_character.get_violence_monopoly()
         else:
             return self.world.get_barbaric_state()
+
+
+class InventoryItem(models.Model):
+    GRAIN = 'grain'
+    CART = 'cart'
+    TYPE_CHOICES = (
+        (GRAIN, GRAIN),
+        (CART, CART),
+    )
+
+    type = models.CharField(max_length=20, choices=TYPE_CHOICES)
+    quantity = models.PositiveIntegerField(default=1)
+    owner_character = models.ForeignKey(Character, blank=True, null=True)
+    location = models.ForeignKey(Building, blank=True, null=True)

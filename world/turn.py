@@ -65,23 +65,35 @@ class TurnProcessor:
             (ideal_workers / building.max_ideal_workers()) +
             (surplus_workers / building.max_surplus_workers()) * 0.5,
             1.5)
-        if work_input <= 0:
-            return
         if building.type == Building.GRAIN_FIELD and building.level > 0:
             current_month = self.world.current_turn % 12
-            if current_month in field_output_months:
-                portion = \
+
+            if current_month in field_output_months and work_input > 0:
+                time_portion = \
                     field_output_multipliers[current_month] / \
                     sum(field_output_multipliers.values())
-                production_counter_remove = work_input * portion * 1000
+                production_counter_remove = min(
+                    work_input * time_portion * 1000,
+                    building.field_production_counter
+                )
                 building.field_production_counter -= production_counter_remove
                 building.save()
+                bushel_output = (
+                    building.quantity
+                    * production_counter_remove / 1000
+                    * 2.4
+                )
+                building.settlement.get_default_granary().add_bushels(
+                    round(bushel_output)
+                )
+
             if current_month == field_production_reset_month:
                 building.field_production_counter = 0
                 building.save()
-            if current_month in field_input_months:
-                portion = 1 / len(field_input_months)
-                production_counter_add = work_input * portion * 1000
+
+            if current_month in field_input_months and work_input > 0:
+                time_portion = 1 / len(field_input_months)
+                production_counter_add = work_input * time_portion * 1000
                 building.field_production_counter += production_counter_add
                 building.save()
 

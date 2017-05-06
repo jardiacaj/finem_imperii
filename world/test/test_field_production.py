@@ -1,7 +1,7 @@
 import math
 from django.test import TestCase
 
-from world.models import Building, NPC, Settlement
+from world.models import Building, NPC, Settlement, InventoryItem
 from world.turn import TurnProcessor
 
 
@@ -107,3 +107,94 @@ class TestFieldProduction(TestCase):
             buildings.field_production_counter,
             112
         )
+
+    def test_field_input_excessive_workload(self):
+        settlement = Settlement.objects.get(name="Small Valley")
+        buildings = Building.objects.get(
+            type=Building.GRAIN_FIELD, settlement=settlement
+        )
+        buildings.quantity = 10
+        buildings.save()
+
+        for i in range(20):
+            NPC.objects.create(
+                name="foo",
+                male=False,
+                able=True,
+                age_months=20*12,
+                residence=None,
+                origin=settlement,
+                location=settlement,
+                workplace=buildings,
+                unit=None,
+                trained_soldier=False,
+                skill_fighting=0
+            )
+
+        turn_processor = TurnProcessor(settlement.tile.world)
+        turn_processor.do_building_production(buildings)
+
+        buildings.refresh_from_db()
+        self.assertEqual(buildings.quantity, 10)
+        self.assertEqual(buildings.worker.count(), 20)
+        self.assertEqual(
+            buildings.field_production_counter,
+            150
+        )
+
+    def test_field_output_after_ideal_input(self):
+        settlement = Settlement.objects.get(name="Small Valley")
+        buildings = Building.objects.get(
+            type=Building.GRAIN_FIELD, settlement=settlement
+        )
+        buildings.quantity = 100
+        buildings.field_production_counter = 1000
+        buildings.save()
+        settlement.tile.world.current_turn = 6
+        settlement.tile.world.save()
+
+        for i in range(10):
+            NPC.objects.create(
+                name="foo",
+                male=False,
+                able=True,
+                age_months=20*12,
+                residence=None,
+                origin=settlement,
+                location=settlement,
+                workplace=buildings,
+                unit=None,
+                trained_soldier=False,
+                skill_fighting=0
+            )
+
+        turn_processor = TurnProcessor(settlement.tile.world)
+        turn_processor.do_building_production(buildings)
+
+        buildings.refresh_from_db()
+        self.assertEqual(buildings.quantity, 100)
+        self.assertEqual(buildings.worker.count(), 10)
+        self.assertEqual(
+            buildings.field_production_counter,
+            math.floor(1000 * 6/7)
+        )
+        bushel_object = settlement.get_default_granary().inventoryitem_set.get(
+            type=InventoryItem.GRAIN
+        )
+        self.assertEqual(bushel_object.quantity, math.floor(100 * 1/7 * 2.4))
+
+    def test_reset_production(self):
+        settlement = Settlement.objects.get(name="Small Valley")
+        buildings = Building.objects.get(
+            type=Building.GRAIN_FIELD, settlement=settlement
+        )
+        buildings.field_production_counter = 1000
+        buildings.save()
+        settlement.tile.world.current_turn = 8
+        settlement.tile.world.save()
+
+        turn_processor = TurnProcessor(settlement.tile.world)
+        turn_processor.do_building_production(buildings)
+
+        buildings.refresh_from_db()
+        self.assertEqual(buildings.field_production_counter, 0)

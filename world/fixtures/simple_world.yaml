@@ -803,6 +803,12 @@
     level: 2
     quantity: 2378
     settlement_id: 1001
+- model: world.Building
+  fields:
+    type: granary
+    level: 2
+    quantity: 1
+    settlement_id: 1001
 
 
 - model: world.Settlement

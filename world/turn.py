@@ -46,6 +46,7 @@ class TurnProcessor:
         # self.do_trade()
         self.do_food_consumption()
         # self.do_population_updates()
+        # self.do_food_spoilage()
 
         self.world.current_turn += 1
         self.world.save()

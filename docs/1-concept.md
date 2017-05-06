@@ -32,7 +32,7 @@ The different states in the fictional world are all opposed to the barbaric regi
 form their relationships with each other, for example by declaring war, making peace and forming alliances.
 
 Hierarchies and political organizations are a core part of the realms in the game. And, as in the real world, a good
-ruler will need to delegate it's powers to his subordinates if he want to rule efficiently. As such, trust and treason
+ruler will need to delegate it's powers to his subordinates if he wants to rule efficiently. As such, trust and treason
 are aspects to consider.
 
 Players may form armies by raising local levies, training professional soldiers or hiring mercenaries. When opposing
@@ -62,7 +62,7 @@ happened in just a few decades: the Empire fell.
 profoundly decimated the population. Trust in leaders became trait to be exploited. The future looked grim. But now new 
 states and rulers are starting to rise again, bringing the people the hope of seeing order and peace restored.
 >
-> Who will be able to bring hope and dignity to the world? Will you help bringing the golden days of the Empire back?
+> Who will be able to bring hope and dignity to the world? Will you help bringing back the golden days of the Empire?
 
 This is a screenshot of the current "travel" page.
 

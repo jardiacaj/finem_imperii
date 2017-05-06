@@ -84,9 +84,6 @@ def document_view(request, document_id):
 @capability_required_decorator
 def capability_view(request, capability_id):
     capability = get_object_or_404(Capability, id=capability_id)
-    if not capability.organization.character_can_use_capabilities(request.hero):
-        messages.error(request, "You cannot do that", "danger")
-        return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
 
     context = {
         'capability': capability,

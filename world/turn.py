@@ -10,7 +10,7 @@ from messaging.models import CharacterMessage
 import world.models
 import organization.models
 import world.recruitment
-from world.models import Building
+from world.models import Building, Settlement
 
 
 def pass_turn(world):
@@ -41,13 +41,30 @@ class TurnProcessor:
         self.do_elections()
         self.do_conquests()
         self.do_barbarians()
+        # self.do_job_updates()
         self.do_production()
         # self.do_trade()
-        # self.do_food_consumption()
+        self.do_food_consumption()
         # self.do_population_updates()
 
         self.world.current_turn += 1
         self.world.save()
+
+    def do_food_consumption(self):
+        for settlement in Settlement.objects.filter(
+            tile__world=self.world
+        ):
+            self.do_settlement_food_consumption(settlement)
+
+    def do_settlement_food_consumption(self, settlement: Settlement):
+        mouths = settlement.population
+        granary = settlement.get_default_granary()
+        bushels_to_consume = min(
+            mouths,
+            granary.population_consumable_bushels()
+        )
+        granary.consume_bushels(bushels_to_consume)
+        # TODO hunger
 
     def do_production(self):
         for building in Building.objects.filter(

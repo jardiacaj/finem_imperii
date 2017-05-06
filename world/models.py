@@ -198,6 +198,10 @@ class Settlement(models.Model):
         )
 
 
+class NotEnoughBushels(Exception):
+    pass
+
+
 class Building(models.Model):
     GRAIN_FIELD = 'grain field'
     RESIDENCE = 'residence'
@@ -235,14 +239,28 @@ class Building(models.Model):
         return self.max_workers() - self.max_ideal_workers()
 
     def add_bushels(self, bushels_to_add):
-        bushel_object = InventoryItem.objects.get_or_create(
+        bushel_object = self.get_public_bushels_object()
+        bushel_object.quantity += bushels_to_add
+        bushel_object.save()
+
+    def consume_bushels(self, bushels_to_consume):
+        bushel_object = self.get_public_bushels_object()
+        if bushels_to_consume > bushel_object.quantity:
+            raise NotEnoughBushels()
+        bushel_object.quantity -= bushels_to_consume
+        bushel_object.save()
+
+    def get_public_bushels_object(self):
+        return InventoryItem.objects.get_or_create(
             type=InventoryItem.GRAIN,
             owner_character=None,
             location=self,
             defaults={'quantity': 0}
         )[0]
-        bushel_object.quantity += bushels_to_add
-        bushel_object.save()
+
+    def population_consumable_bushels(self):
+        bushel_object = self.get_public_bushels_object()
+        return bushel_object.quantity
 
 
 class NPCManager(models.Manager):

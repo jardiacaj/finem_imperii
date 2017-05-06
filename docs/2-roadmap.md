@@ -80,7 +80,7 @@ Allocated: 5,5 days
  
 Allocated: 2 days (vacation!)
  
-## Week 8 
+## Week 8
 
  - Battle movement (1,5 days) (finished)
  - Battle rendering (1,5 days) (finished)
@@ -104,8 +104,8 @@ Allocated: 5 days
  - Character creation limit (1/2 day) (finished)
  - Character view (1/2 day) (finished)
  - World view (1/2 day) (finished)
-
- - MUST Taxation and economy (2 days)
+ - Taxation and economy (2 days)
+ - MUST Economy info in views (1/2 day)
  - MUST Battle restrictions on travel, time and recruitment (1 day)
  - MUST Missing notifications (1/2 day)
  - MUST Emortuus (2 days)

@@ -43,9 +43,9 @@ def initialize_settlement(settlement):
     logging.info("Initializing settlement {}".format(settlement))
     residences = settlement.building_set.filter(type=Building.RESIDENCE).all()
     fields = settlement.building_set.filter(type=Building.GRAIN_FIELD).all()
-    total_field_workplaces = sum(field.max_employment() for field in fields)
+    total_field_workplaces = sum(field.max_workers() for field in fields)
     other_workplaces = settlement.building_set.exclude(type__in=(Building.RESIDENCE, Building.GRAIN_FIELD)).all()
-    total_other_workplaces = sum(j.max_employment() for j in other_workplaces)
+    total_other_workplaces = sum(j.max_workers() for j in other_workplaces)
 
     assigned_workers = 0
 
@@ -70,7 +70,7 @@ def initialize_settlement(settlement):
                 pos = random.randint(0, total_field_workplaces)
                 cumulative = 0
                 for field in fields:
-                    cumulative += field.max_employment()
+                    cumulative += field.max_workers()
                     if pos < cumulative:
                         break
                 workplace = field
@@ -78,7 +78,7 @@ def initialize_settlement(settlement):
                 pos = random.randint(0, total_other_workplaces)
                 cumulative = 0
                 for other_workplace in other_workplaces:
-                    cumulative += other_workplace.max_employment()
+                    cumulative += other_workplace.max_workers()
                     if pos < cumulative:
                         break
                 workplace = other_workplace

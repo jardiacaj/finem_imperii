@@ -10,6 +10,7 @@ from messaging.models import CharacterMessage
 import world.models
 import organization.models
 import world.recruitment
+from world.models import Building
 
 
 def pass_turn(world):
@@ -19,6 +20,12 @@ def pass_turn(world):
     turn_processor.do_turn()
     world.blocked_for_turn = False
     world.save()
+
+
+field_input_months = (0, 1, 2, 3, 4, 5, 8, 9, 10, 11)
+field_output_months = (4, 5, 6, 7, 8)
+field_output_multipliers = {4: 0.5, 5: 1, 6: 0.5, 7: 1, 8: 0.5}
+field_production_reset_month = 8
 
 
 class TurnProcessor:
@@ -34,10 +41,49 @@ class TurnProcessor:
         self.do_elections()
         self.do_conquests()
         self.do_barbarians()
+        self.do_production()
+        # self.do_trade()
+        # self.do_food_consumption()
         # self.do_population_updates()
 
         self.world.current_turn += 1
         self.world.save()
+
+    def do_production(self):
+        for building in Building.objects.filter(
+                settlement__tile__world=self.world):
+            self.do_building_production(building)
+
+    def do_building_production(self, building: Building):
+        workers = building.worker
+        ideal_workers = min(building.max_ideal_workers(), workers.count())
+        surplus_workers = max(
+            0,
+            workers.count() - building.max_ideal_workers()
+        )
+        work_input = min(
+            (ideal_workers / building.max_ideal_workers()) +
+            (surplus_workers / building.max_surplus_workers()) * 0.5,
+            1.5)
+        if work_input <= 0:
+            return
+        if building.type == Building.GRAIN_FIELD and building.level > 0:
+            current_month = self.world.current_turn % 12
+            if current_month in field_output_months:
+                portion = \
+                    field_output_multipliers[current_month] / \
+                    sum(field_output_multipliers.values())
+                production_counter_remove = work_input * portion * 1000
+                building.field_production_counter -= production_counter_remove
+                building.save()
+            if current_month == field_production_reset_month:
+                building.field_production_counter = 0
+                building.save()
+            if current_month in field_input_months:
+                portion = 1 / len(field_input_months)
+                production_counter_add = work_input * portion * 1000
+                building.field_production_counter += production_counter_add
+                building.save()
 
     def do_barbarians(self):
         world_settlements = world.models.Settlement.objects.filter(

@@ -213,14 +213,20 @@ class Building(models.Model):
     type = models.CharField(max_length=15, choices=TYPE_CHOICES)
     quantity = models.IntegerField(default=1)
     settlement = models.ForeignKey(Settlement)
+    field_production_counter = models.IntegerField(default=0)
     owner = models.ForeignKey(
         'organization.Organization', null=True, blank=True,
         help_text="NULL means 'owned by local population'"
     )
 
-    def max_employment(self):
-        if self.type:
-            return math.ceil(self.quantity / 2)
+    def max_workers(self):
+        return math.floor(self.quantity / 2)
+
+    def max_ideal_workers(self):
+        return math.ceil(self.quantity / 10)
+
+    def max_surplus_workers(self):
+        return self.max_workers() - self.max_ideal_workers()
 
 
 class NPCManager(models.Manager):

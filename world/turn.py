@@ -65,7 +65,12 @@ class TurnProcessor:
             granary.population_consumable_bushels()
         )
         granary.consume_bushels(bushels_to_consume)
-        # TODO hunger
+
+        hunger = mouths - bushels_to_consume
+        if hunger > 0 and settlement.npc_set.exists():
+            for npc in random.sample(list(settlement.npc_set.all()), hunger):
+                npc.hunger += 1
+                npc.save()
 
     def do_production(self):
         for building in Building.objects.filter(

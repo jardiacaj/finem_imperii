@@ -356,6 +356,7 @@ class NPC(models.Model):
         choices=BattleSoldierInTurn.WOUND_STATUS_CHOICES,
         default=BattleSoldierInTurn.UNINJURED
     )
+    hunger = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.name

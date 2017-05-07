@@ -58,3 +58,32 @@ class TestFieldProduction(TestCase):
         self.assertEqual(bushels.quantity, 0)
 
         self.assertEqual(settlement.npc_set.filter(hunger__gt=0).count(), 7)
+
+    def test_unhunger(self):
+        settlement = Settlement.objects.get(name="Small Valley")
+        settlement.population = 10
+        granary = settlement.get_default_granary()
+        bushels = granary.get_public_bushels_object()
+        bushels.quantity = 20
+        bushels.save()
+
+        initialize_settlement(settlement)
+
+        settlement.npc_set.all().update(hunger=2)
+        self.assertEqual(settlement.npc_set.filter(hunger=2).count(), 10)
+
+        turn_processor = TurnProcessor(settlement.tile.world)
+        turn_processor.do_settlement_food_consumption(settlement)
+
+        bushels.refresh_from_db()
+        self.assertEqual(bushels.quantity, 10)
+
+        self.assertEqual(settlement.npc_set.filter(hunger=1).count(), 10)
+
+        turn_processor = TurnProcessor(settlement.tile.world)
+        turn_processor.do_settlement_food_consumption(settlement)
+
+        bushels.refresh_from_db()
+        self.assertEqual(bushels.quantity, 0)
+
+        self.assertEqual(settlement.npc_set.filter(hunger=0).count(), 10)

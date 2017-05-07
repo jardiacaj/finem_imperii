@@ -188,7 +188,9 @@ class Settlement(models.Model):
         )
 
     def update_population(self):
-        self.population = self.npc_set.all().count()
+        self.population = NPC.objects.filter(
+            residence__settlement=self
+        ).count()
         self.save()
 
     def get_default_granary(self):

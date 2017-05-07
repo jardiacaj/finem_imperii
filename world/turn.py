@@ -1,6 +1,7 @@
 import random
 
 from django.db import transaction
+from django.db.models.expressions import F
 
 from battle.battle_init import initialize_from_conflict, start_battle
 from battle.battle_tick import battle_turn
@@ -41,15 +42,24 @@ class TurnProcessor:
         self.do_elections()
         self.do_conquests()
         self.do_barbarians()
+        self.do_population_updates()
         # self.do_job_updates()
         self.do_production()
         # self.do_trade()
         self.do_food_consumption()
-        # self.do_population_updates()
         # self.do_food_spoilage()
 
         self.world.current_turn += 1
         self.world.save()
+
+    def do_population_updates(self):
+        for settlement in Settlement.objects.filter(
+            tile__world=self.world
+        ):
+            self.do_settlement_population_updates(settlement)
+
+    def do_settlement_population_updates(self, settlement: Settlement):
+        settlement.update_population()
 
     def do_food_consumption(self):
         for settlement in Settlement.objects.filter(
@@ -71,6 +81,11 @@ class TurnProcessor:
             for npc in random.sample(list(settlement.npc_set.all()), hunger):
                 npc.hunger += 1
                 npc.save()
+
+        if hunger == 0 and settlement.npc_set.filter(hunger__gt=0).exists():
+            settlement.npc_set.filter(hunger__gt=0).update(
+                hunger=F('hunger')-1
+            )
 
     def do_production(self):
         for building in Building.objects.filter(

@@ -84,10 +84,18 @@
                 </h3></div>
                 <div class="panel-body">
                     <h6>Buildings</h6>
+
+                    <p class="{% if settlement.get_hunger_percentage > 15 %}text-danger lead{% endif %}">
+                    Hunger: {{ settlement.get_hunger_percentage }}%
+                    </p>
+
                     <ul>
                         {% for building in settlement.building_set.all %}
                             <li>
                                 {{ building }}
+                                {% if building.type == 'granary' %}
+                                    ({{ building.get_public_bushels_object.quantity }} bushels)
+                                {% endif %}
                             </li>
                         {% endfor %}
                     </ul>

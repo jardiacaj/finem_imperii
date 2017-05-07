@@ -188,15 +188,24 @@ class Settlement(models.Model):
         )
 
     def update_population(self):
-        self.population = NPC.objects.filter(
-            residence__settlement=self
-        ).count()
+        self.population = self.get_residents().count()
         self.save()
+
+    def get_residents(self):
+        return NPC.objects.filter(residence__settlement=self)
 
     def get_default_granary(self):
         return self.building_set.get(
             type=Building.GRANARY,
             owner=None
+        )
+
+    def get_hunger_percentage(self):
+        return round(
+            (
+                self.get_residents().filter(hunger__gt=0).count() /
+                self.get_residents().count()
+            ) * 100
         )
 
 

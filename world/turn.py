@@ -56,10 +56,7 @@ class TurnProcessor:
         for settlement in Settlement.objects.filter(
             tile__world=self.world
         ):
-            self.do_settlement_population_updates(settlement)
-
-    def do_settlement_population_updates(self, settlement: Settlement):
-        settlement.update_population()
+            settlement.update_population()
 
     def do_food_consumption(self):
         for settlement in Settlement.objects.filter(
@@ -86,6 +83,14 @@ class TurnProcessor:
             settlement.npc_set.filter(hunger__gt=0).update(
                 hunger=F('hunger')-1
             )
+
+        for npc in settlement.npc_set.filter(hunger__gt=3):
+            if random.getrandbits(3) == 0:
+                npc.take_hit()
+            if npc.hunger > 5:
+                npc.take_hit()
+
+        settlement.update_population()
 
     def do_production(self):
         for building in Building.objects.filter(

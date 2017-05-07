@@ -364,6 +364,8 @@ class NPC(models.Model):
         return self.name
 
     def take_hit(self):
+        if self.wound_status == BattleSoldierInTurn.DEAD:
+            return
         self.wound_status += 1
         self.save()
         if self.wound_status == BattleSoldierInTurn.DEAD:

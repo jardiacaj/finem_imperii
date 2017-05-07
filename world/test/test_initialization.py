@@ -2,7 +2,8 @@ from django.test import TestCase
 
 import world.initialization
 from organization.models import Organization, PositionElection
-from world.models import WorldUnit, Settlement
+from world.initialization import initialize_world
+from world.models import WorldUnit, Settlement, World
 
 
 class TestInitialization(TestCase):
@@ -29,3 +30,13 @@ class TestInitialization(TestCase):
         organization.character_members.clear()
         world.initialization.initialize_organization(organization)
         self.assertFalse(PositionElection.objects.filter(position=organization, closed=False).exists())
+
+    def test_world_initialization(self):
+        initialize_world(World.objects.get(id=2))
+
+
+class TestEmortuusInitialization(TestCase):
+    fixtures = ['world1']
+
+    def test_initialization(self):
+        initialize_world(World.objects.get(id=1))

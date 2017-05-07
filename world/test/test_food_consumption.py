@@ -16,7 +16,7 @@ class TestFieldProduction(TestCase):
         bushels = granary.get_public_bushels_object()
         bushels.quantity = 200
         bushels.save()
-        
+
         initialize_settlement(settlement)
 
         turn_processor = TurnProcessor(settlement.tile.world)

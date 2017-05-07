@@ -410,8 +410,16 @@ class CapabilityProposal(models.Model):
 
         elif self.capability.type == Capability.BAN:
             try:
-                character_to_ban = world.models.Character.objects.get(id=proposal['character_id'])
-                self.capability.applying_to.character_members.remove(character_to_ban)
+                character_to_ban = world.models.Character.objects.get(
+                    id=proposal['character_id']
+                )
+                self.capability.applying_to.character_members.remove(
+                    character_to_ban
+                )
+                if character_to_ban.get_violence_monopoly() is None:
+                    character_to_ban.world.get_barbaric_state().character_members.add(
+                        character_to_ban
+                    )
             except world.models.Character.DoesNotExist:
                 pass
 

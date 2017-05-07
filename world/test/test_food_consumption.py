@@ -11,11 +11,13 @@ class TestFieldProduction(TestCase):
 
     def test_food_consumption(self):
         settlement = Settlement.objects.get(name="Small Valley")
-        settlement.population = 100
+        settlement.population_default = 100
         granary = settlement.get_default_granary()
         bushels = granary.get_public_bushels_object()
         bushels.quantity = 200
         bushels.save()
+        
+        initialize_settlement(settlement)
 
         turn_processor = TurnProcessor(settlement.tile.world)
         turn_processor.do_settlement_food_consumption(settlement)
@@ -25,7 +27,7 @@ class TestFieldProduction(TestCase):
 
     def test_hunger(self):
         settlement = Settlement.objects.get(name="Small Valley")
-        settlement.population = 10
+        settlement.population_default = 10
         granary = settlement.get_default_granary()
         bushels = granary.get_public_bushels_object()
         bushels.quantity = 9
@@ -43,7 +45,7 @@ class TestFieldProduction(TestCase):
 
     def test_hunger2(self):
         settlement = Settlement.objects.get(name="Small Valley")
-        settlement.population = 10
+        settlement.population_default = 10
         granary = settlement.get_default_granary()
         bushels = granary.get_public_bushels_object()
         bushels.quantity = 3
@@ -61,7 +63,7 @@ class TestFieldProduction(TestCase):
 
     def test_unhunger(self):
         settlement = Settlement.objects.get(name="Small Valley")
-        settlement.population = 10
+        settlement.population_default = 10
         granary = settlement.get_default_granary()
         bushels = granary.get_public_bushels_object()
         bushels.quantity = 20

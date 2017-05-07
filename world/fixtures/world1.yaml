@@ -1546,7 +1546,7 @@
   fields:
     name: Iadar
     tile_id: 15
-    population: 355
+    population_default: 355
     x_pos: 14
     z_pos: 5
 - model: world.Building
@@ -1568,7 +1568,7 @@
   fields:
     name: Diorynnhavn
     tile_id: 15
-    population: 4010
+    population_default: 4010
     x_pos: 5
     z_pos: 60
 - model: world.Building
@@ -1601,7 +1601,7 @@
   fields:
     name: Diorynn
     tile_id: 15
-    population: 1300
+    population_default: 1300
     x_pos: 43
     z_pos: 73
 - model: world.Building
@@ -1633,7 +1633,7 @@
   fields:
     name: Upcreek
     tile_id: 16
-    population: 1600
+    population_default: 1600
     x_pos: 43
     z_pos: 40
 - model: world.Building
@@ -1665,7 +1665,7 @@
   fields:
     name: Valley
     tile_id: 16
-    population: 900
+    population_default: 900
     x_pos: 15
     z_pos: 73
 - model: world.Building
@@ -1695,7 +1695,7 @@
   fields:
     name: Shaax
     tile_id: 54
-    population: 2666
+    population_default: 2666
     x_pos: 29
     z_pos: 31
 - model: world.Building
@@ -1727,7 +1727,7 @@
   fields:
     name: Fynkah
     tile_id: 54
-    population: 812
+    population_default: 812
     x_pos: 61
     z_pos: 50
 - model: world.Building
@@ -1755,7 +1755,7 @@
   fields:
     name: Dipak
     tile_id: 55
-    population: 5300
+    population_default: 5300
     x_pos: 33
     z_pos: 8
 - model: world.Building
@@ -1787,7 +1787,7 @@
   fields:
     name: Kalyana
     tile_id: 55
-    population: 2100
+    population_default: 2100
     x_pos: 40
     z_pos: 53
 - model: world.Building

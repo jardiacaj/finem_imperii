@@ -143,7 +143,8 @@ class TileEvent(models.Model):
 class Settlement(models.Model):
     name = models.CharField(max_length=100)
     tile = models.ForeignKey(Tile)
-    population = models.IntegerField()
+    population = models.IntegerField(default=0)
+    population_default = models.IntegerField()
     x_pos = models.IntegerField()
     z_pos = models.IntegerField()
 

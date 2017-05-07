@@ -47,6 +47,9 @@ def initialize_settlement(settlement):
     other_workplaces = settlement.building_set.exclude(type__in=(Building.RESIDENCE, Building.GRAIN_FIELD)).all()
     total_other_workplaces = sum(j.max_workers() for j in other_workplaces)
 
+    settlement.population = settlement.population_default
+    settlement.save()
+
     assigned_workers = 0
 
     for i in range(settlement.population):

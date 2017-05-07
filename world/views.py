@@ -513,3 +513,8 @@ def character_view_iframe(request, character_id):
         'regions': render_world_for_view(character.world),
     }
     return render(request, 'world/view_character_iframe.html', context)
+
+
+@inchar_required
+def inventory_view(request):
+    return render(request, 'world/view_inventory.html')

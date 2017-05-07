@@ -71,6 +71,11 @@
                     </tbody>
                 </table>
 
+                <span class="pull-right">
+                    <a href="{% url 'world:inventory' %}" class="btn btn-sm btn-primary">
+                        Manage
+                    </a>
+                </span>
                 <h5>Your inventory</h5>
                 <p>{{ request.hero.cash }} silver coins</p>
 

@@ -201,12 +201,15 @@ class Settlement(models.Model):
         )
 
     def get_hunger_percentage(self):
-        return round(
-            (
-                self.get_residents().filter(hunger__gt=0).count() /
-                self.get_residents().count()
-            ) * 100
-        )
+        try:
+            return round(
+                (
+                    self.get_residents().filter(hunger__gt=0).count() /
+                    self.get_residents().count()
+                ) * 100
+            )
+        except ZeroDivisionError:
+            return 0
 
 
 class NotEnoughBushels(Exception):

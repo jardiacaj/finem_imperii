@@ -221,6 +221,37 @@ class Building(models.Model):
         (PRISON, PRISON),
     )
 
+    LEVEL_DESCRIPTORS = {
+        GRAIN_FIELD:
+            [
+                ('barren land', '{qty} barren lands'),
+                ('open field', '{qty} open fields'),
+                ('fenced field', '{qty} fenced fields'),
+            ],
+        RESIDENCE:
+            [
+                ('shack', '{qty} shacks'),
+                ('low quality house', '{qty} low quality houses'),
+                ('simple house', '{qty} simple houses'),
+            ],
+        SAWMILL:
+            [],
+        IRON_MINE:
+            [],
+        GRANARY:
+            [
+                ('open heap', '{} open heaps'),
+                ('basic granary', '{} basic granaries'),
+                ('proper granary', '{} proper granaries'),
+            ],
+        PRISON:
+            [
+                ('prisoner cage', '{} prisoner cages'),
+                ('jail', '{} jails'),
+                ('simple prison', '{} simple prisons'),
+            ],
+    }
+
     level = models.SmallIntegerField(default=1, help_text="Go from 1 to 5")
     type = models.CharField(max_length=15, choices=TYPE_CHOICES)
     quantity = models.IntegerField(default=1)
@@ -263,6 +294,11 @@ class Building(models.Model):
     def population_consumable_bushels(self):
         bushel_object = self.get_public_bushels_object()
         return bushel_object.quantity
+
+    def __str__(self):
+        return self.LEVEL_DESCRIPTORS[self.type][self.level][
+            0 if self.quantity == 1 else 1
+        ].format(qty=self.quantity)
 
 
 class NPCManager(models.Manager):

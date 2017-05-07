@@ -52,7 +52,7 @@
                             {% endif %} -
                             <a href="{{ unit.get_absolute_url }}">{{ unit }}</a>
                             <br>
-                            {{ unit.location }}
+                            &nbsp;&nbsp;&nbsp;&nbsp;{{ unit.location }}
                         </p>
                     {% empty %}
                         None
@@ -74,18 +74,26 @@
 
     <hr>
 
-            <h4>Local settlements</h4>
+    <h2>Settlements</h2>
 
-            <ul>
-                {% for settlement in tile.settlement_set.all %}
-                    <li>
-                        {{ settlement|safe }}: {{ settlement.population }} inhabitants
-                    </li>
-                {% empty %}
-                    <li>None</li>
-                {% endfor %}
-            </ul>
-
-
+    {% for settlement in tile.settlement_set.all %}
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h3 class="panel-title">
+                    {{ settlement }} (pop. {{ settlement.population }})
+                </h3></div>
+                <div class="panel-body">
+                    <h6>Buildings</h6>
+                    <ul>
+                        {% for building in settlement.building_set.all %}
+                            <li>
+                                {{ building }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
 
 {% endblock %}

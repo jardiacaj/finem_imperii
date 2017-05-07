@@ -104,8 +104,12 @@ Allocated: 5 days
  - Character creation limit (1/2 day) (finished)
  - Character view (1/2 day) (finished)
  - World view (1/2 day) (finished)
- - Taxation and economy (2 days)
- - MUST Economy info in views (1/2 day)
+ - Food production and consumption (1 day) (finished)
+ - Economy info in views (1/2 day) (finished)
+
+## Week 11
+
+ - Taxation and economy (1 day)
  - MUST Battle restrictions on travel, time and recruitment (1 day)
  - MUST Missing notifications (1/2 day)
  - MUST Emortuus (2 days)
@@ -117,9 +121,6 @@ Allocated: 5 days
  - VNTH Secession, rebellion and state founding. (2 days)
  - VNTH Character pause and deletion (1 day)
 
-## Week 11
-
- 
 ## Week 12
 
  - Final delivery preparation

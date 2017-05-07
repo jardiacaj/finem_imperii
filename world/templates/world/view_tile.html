@@ -12,7 +12,7 @@
     </h1>
 
     <div class="row">
-        <div class="col-lg-3">
+        <div class="col-lg-6">
             {% for battle in tile.get_current_battles %}
                 <p class="alert alert-danger text-center">
                     <a href="{{ battle.get_absolute_url }}">
@@ -27,20 +27,42 @@
                 </p>
             {% endfor %}
 
-            <h4>Local settlements</h4>
 
-            <ul>
-                {% for settlement in tile.settlement_set.all %}
-                    <li>
-                        {{ settlement|safe }}: {{ settlement.population }} inhabitants
-                    </li>
-                {% empty %}
-                    <li>None</li>
-                {% endfor %}
-            </ul>
+            <div class="panel panel-default">
+                <div class="panel-heading"><h3 class="panel-title">Characters here</h3></div>
+                <div class="panel-body">
+                    {% for character in characters.all %}
+                        {{ character.get_html_link|safe }} - {{ character.location }}<br>
+                    {% empty %}
+                        No one
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading"><h3 class="panel-title">Troops here</h3></div>
+                <div class="panel-body">
+                    {% for unit in units %}
+                        <p>
+                            <b>{{ unit.descriptor }}</b>:
+                            {% if unit.owner_character %}
+                                {{ unit.owner_character.get_html_link|safe }}
+                            {% else %}
+                                {{ unit.get_violence_monopoly.get_html_link|safe }}
+                            {% endif %} -
+                            <a href="{{ unit.get_absolute_url }}">{{ unit }}</a>
+                            <br>
+                            {{ unit.location }}
+                        </p>
+                    {% empty %}
+                        None
+                    {% endfor %}
+                </div>
+            </div>
+
         </div>
 
-        <div class="col-lg-9 col-md-12 placeholder">
+        <div class="col-lg-6 col-md-12 placeholder">
             <iframe
                     id="tile_map"
                     class="placeholder tile_view_iframe"
@@ -52,43 +74,18 @@
 
     <hr>
 
-    <div class="col-md-4">
-        <div class="panel panel-default">
-            <div class="panel-heading"><h3 class="panel-title">Characters here</h3></div>
-            <div class="panel-body">
-                <ul>
-                    {% for character in characters.all %}
-                        <li>{{ character.get_html_link|safe }} - {{ character.location }}</li>
-                    {% empty %}
-                        <li>No one</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-    </div>
+            <h4>Local settlements</h4>
 
-    <div class="col-md-4">
-        <div class="panel panel-default">
-            <div class="panel-heading"><h3 class="panel-title">Troops here</h3></div>
-            <div class="panel-body">
-                <ul>
-                    {% for unit in units %}
-                        <li>
-                            {{ unit.get_fighting_soldiers.count }}
-                            {{ unit.type }}
-                            {{ unit }} - {{ unit.location }} -
-                            {% if unit.owner_character %}
-                                {{ unit.owner_character.get_html_link|safe }}
-                            {% else %}
-                                {{ unit.get_violence_monopoly.get_html_link|safe }}
-                            {% endif %}
-                        </li>
-                    {% empty %}
-                        <li class="small">None</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-    </div>
+            <ul>
+                {% for settlement in tile.settlement_set.all %}
+                    <li>
+                        {{ settlement|safe }}: {{ settlement.population }} inhabitants
+                    </li>
+                {% empty %}
+                    <li>None</li>
+                {% endfor %}
+            </ul>
+
+
 
 {% endblock %}

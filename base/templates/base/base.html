@@ -8,7 +8,8 @@
         {% if request.hero %}
             <div class="col-xs-12 col-md-3 well">
                 <p class="text-center">
-                    It's {{ request.hero.world.get_current_date }}
+                    It's {{ request.hero.world.get_current_date }} in
+                    <a href="{{ request.hero.world.get_absolute_url }}">{{ request.hero.world }}</a>.
                 </p>
                 <p class="text-center">
                     You are in {{ request.hero.location }}, a {{ request.hero.location.size_name }} in
@@ -22,13 +23,9 @@
                 ></iframe>
 
                 <p class="text-center">
-                    {{ request.hero.location.tile.get_html_link|safe }} is
-                    {% if request.hero.location.tile.controlled_by %}
-                        part of {{ request.hero.location.tile.controlled_by.get_html_link|safe }}
-                    {% else %}
-                        a barbaric region
-                    {% endif %}in
-                    <a href="{{ request.hero.world.get_absolute_url }}">{{ request.hero.world }}</a>.
+                    {{ request.hero.location.tile.get_html_link|safe }}
+                    is controlled by
+                    {{ request.hero.location.tile.controlled_by.get_violence_monopoly.get_html_link|safe }}.
                 </p>
 
                 {% for battle in request.hero.location.tile.get_current_battles %}

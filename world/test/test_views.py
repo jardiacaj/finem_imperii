@@ -99,19 +99,3 @@ class TestWorldView(TestCase):
     def test_view_minimap_iframe(self):
         response = self.client.get(reverse('world:minimap'))
         self.assertEqual(response.status_code, 200)
-
-    def test_travel_view(self):
-        response = self.client.get(reverse('world:travel'))
-        self.assertEqual(response.status_code, 200)
-
-    def test_travel_step2_view(self):
-        response = self.client.get(reverse('world:travel', kwargs={'settlement_id': 1008}))
-        self.assertEqual(response.status_code, 200)
-
-    def test_travel_iframe_view(self):
-        response = self.client.get(reverse('world:travel_iframe'))
-        self.assertEqual(response.status_code, 200)
-
-    def test_travel_iframe_view_with_destination(self):
-        response = self.client.get(reverse('world:travel_iframe', kwargs={'settlement_id': 1001}))
-        self.assertEqual(response.status_code, 200)

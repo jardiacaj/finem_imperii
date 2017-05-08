@@ -22,3 +22,4 @@ class TestInventory(TestCase):
     def test_view_inventory(self):
         response = self.client.get(reverse('world:inventory'))
         self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Take grain from granary")

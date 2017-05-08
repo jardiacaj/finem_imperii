@@ -375,7 +375,17 @@ class Capability(models.Model):
             proposal.issue_vote(character, CapabilityVote.YEA)
 
     def is_passive(self):
-        return self.type in (self.CONSCRIPT, )
+        return self.type in (self.CONSCRIPT, self.TAKE_GRAIN, )
+
+    def __str__(self):
+        return "{} can {} in {}{}".format(
+            self.organization,
+            self.get_type_display(),
+            self.applying_to,
+            "" if self.stemming_from is None else " (delegated by {})".format(
+                self.stemming_from
+            )
+        )
 
 
 class CapabilityProposal(models.Model):

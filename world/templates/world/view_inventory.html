@@ -4,4 +4,32 @@
 
     <h1 class="page-header">Inventory</h1>
 
+    <p>
+        {{ request.hero.cash }} silver coins.
+    </p>
+
+    {% for item in request.hero.inventoryitem_set.all %}
+        <p>
+            {{ item }}
+        </p>
+    {% endfor %}
+
+    <h3>
+        Local granary in {{ request.hero.location }}
+        <small>
+            {{ request.hero.location.get_default_granary.get_public_bushels_object.quantity }}
+            bushels
+        </small>
+    </h3>
+
+    {% if can_take_grain %}
+        <p>
+            Take grain from granary
+        </p>
+    {% endif %}
+
+    <p>
+        Unload grain at granary
+    </p>
+
 {% endblock %}

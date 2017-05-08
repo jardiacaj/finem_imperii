@@ -14,7 +14,7 @@ from battle.models import Order, Battle
 from decorators import inchar_required
 from messaging.models import MessageRelationship
 from name_generator.name_generator import get_names, get_surnames
-from organization.models import Organization
+from organization.models import Organization, Capability
 from world.models import Character, World, Settlement, WorldUnit, \
     WorldUnitStatusChangeException, Tile, TileEvent
 from world.recruitment import build_population_query_from_request, \
@@ -517,4 +517,24 @@ def character_view_iframe(request, character_id):
 
 @inchar_required
 def inventory_view(request):
-    return render(request, 'world/view_inventory.html')
+    local_violence_monopoly = \
+        request.hero.location.tile.controlled_by.get_violence_monopoly()
+
+    can_take_grain = (
+        local_violence_monopoly
+        .organizations_character_can_apply_capabilities_to_this_with(
+            request.hero,
+            Capability.TAKE_GRAIN
+        ) is not None
+        or
+        request.hero.location.tile.controlled_by
+        .organizations_character_can_apply_capabilities_to_this_with(
+            request.hero,
+            Capability.TAKE_GRAIN
+        ) is not None
+    )
+
+    context = {
+        'can_take_grain': can_take_grain
+    }
+    return render(request, 'world/view_inventory.html', context=context)

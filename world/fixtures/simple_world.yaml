@@ -196,6 +196,30 @@
     type: 'conscript'
     applying_to: 101
 - model: organization.Capability
+  pk: 102
+  fields:
+    organization_id: 102
+    type: 'take grain'
+    applying_to: 101
+- model: organization.Capability
+  fields:
+    organization_id: 101
+    stemming_from: 102
+    type: 'take grain'
+    applying_to: 101
+- model: organization.Capability
+  fields:
+    organization_id: 109
+    stemming_from: 102
+    type: 'take grain'
+    applying_to: 109
+- model: organization.Capability
+  fields:
+    organization_id: 110
+    stemming_from: 102
+    type: 'take grain'
+    applying_to: 110
+- model: organization.Capability
   fields:
     organization_id: 101
     stemming_from: 101
@@ -209,17 +233,7 @@
 - model: organization.Capability
   fields:
     organization_id: 102
-    type: 'dissolve'
-    applying_to: 101
-- model: organization.Capability
-  fields:
-    organization_id: 102
     type: 'suborganizations'
-    applying_to: 101
-- model: organization.Capability
-  fields:
-    organization_id: 102
-    type: 'secede'
     applying_to: 101
 - model: organization.Capability
   fields:
@@ -368,16 +382,6 @@
 - model: organization.Capability
   fields:
     organization_id: 105
-    type: 'dissolve'
-    applying_to: 105
-- model: organization.Capability
-  fields:
-    organization_id: 105
-    type: 'secede'
-    applying_to: 105
-- model: organization.Capability
-  fields:
-    organization_id: 105
     type: 'memberships'
     applying_to: 105
 - model: organization.Capability
@@ -444,6 +448,11 @@
     organization_id: 106
     type: 'occupy region'
     applying_to: 105
+- model: organization.Capability
+  fields:
+    organization_id: 106
+    type: 'take grain'
+    applying_to: 105
 
 - model: organization.Organization
   pk: 107
@@ -487,17 +496,7 @@
 - model: organization.Capability
   fields:
     organization_id: 107
-    type: 'dissolve'
-    applying_to: 107
-- model: organization.Capability
-  fields:
-    organization_id: 107
     type: 'suborganizations'
-    applying_to: 107
-- model: organization.Capability
-  fields:
-    organization_id: 107
-    type: 'secede'
     applying_to: 107
 - model: organization.Capability
   fields:
@@ -533,6 +532,11 @@
   fields:
     organization_id: 107
     type: 'occupy region'
+    applying_to: 107
+- model: organization.Capability
+  fields:
+    organization_id: 107
+    type: 'take grain'
     applying_to: 107
 
 - model: organization.Organization
@@ -600,6 +604,11 @@
   fields:
     organization_id: 112
     type: 'battle formation'
+    applying_to: 112
+- model: organization.Capability
+  fields:
+    organization_id: 112
+    type: 'take grain'
     applying_to: 112
 
 - model: organization.Organization

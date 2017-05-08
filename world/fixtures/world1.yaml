@@ -66,17 +66,7 @@
 - model: organization.Capability
   fields:
     organization_id: 2
-    type: 'dissolve'
-    applying_to: 1
-- model: organization.Capability
-  fields:
-    organization_id: 2
     type: 'suborganizations'
-    applying_to: 1
-- model: organization.Capability
-  fields:
-    organization_id: 2
-    type: 'secede'
     applying_to: 1
 - model: organization.Capability
   fields:
@@ -92,6 +82,11 @@
   fields:
     organization_id: 2
     type: 'battle formation'
+    applying_to: 1
+- model: organization.Capability
+  fields:
+    organization_id: 2
+    type: 'take grain'
     applying_to: 1
 
 - model: organization.Organization
@@ -161,16 +156,6 @@
 - model: organization.Capability
   fields:
     organization_id: 5
-    type: 'dissolve'
-    applying_to: 5
-- model: organization.Capability
-  fields:
-    organization_id: 5
-    type: 'secede'
-    applying_to: 5
-- model: organization.Capability
-  fields:
-    organization_id: 5
     type: 'memberships'
     applying_to: 5
 - model: organization.Capability
@@ -230,6 +215,11 @@
     organization_id: 6
     type: 'battle formation'
     applying_to: 5
+- model: organization.Capability
+  fields:
+    organization_id: 6
+    type: 'take grain'
+    applying_to: 5
 
 - model: organization.Organization
   pk: 7
@@ -269,17 +259,7 @@
 - model: organization.Capability
   fields:
     organization_id: 7
-    type: 'dissolve'
-    applying_to: 7
-- model: organization.Capability
-  fields:
-    organization_id: 7
     type: 'suborganizations'
-    applying_to: 7
-- model: organization.Capability
-  fields:
-    organization_id: 7
-    type: 'secede'
     applying_to: 7
 - model: organization.Capability
   fields:
@@ -310,6 +290,11 @@
   fields:
     organization_id: 7
     type: 'battle formation'
+    applying_to: 7
+- model: organization.Capability
+  fields:
+    organization_id: 7
+    type: 'take grain'
     applying_to: 7
 
 - model: organization.Organization

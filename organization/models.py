@@ -326,9 +326,7 @@ class Capability(models.Model):
     POLICY_DOCUMENT = 'policy'
     CONSCRIPT = 'conscript'
     DIPLOMACY = 'diplomacy'
-    DISSOLVE = 'dissolve'
     MANAGE_SUBORGANIZATIONS = 'suborganizations'
-    SECEDE = 'secede'
     MEMBERSHIPS = 'memberships'
     HEIR = 'heir'
     ELECT = 'elect'
@@ -337,15 +335,14 @@ class Capability(models.Model):
     MILITARY_STANCE = 'military stance'
     BATTLE_FORMATION = 'battle formation'
     CONQUEST = 'occupy region'
+    TAKE_GRAIN = 'take grain'
 
     TYPE_CHOICES = (
         (BAN, 'ban'),
         (POLICY_DOCUMENT, 'write policy and law'),
         (DIPLOMACY, 'conduct diplomacy'),
         (CONSCRIPT, 'conscript troops'),
-        (DISSOLVE, 'dissolve'),
         (MANAGE_SUBORGANIZATIONS, 'manage subordinate organizations'),
-        (SECEDE, 'secede'),
         (MEMBERSHIPS, 'manage memberships'),
         (HEIR, 'set heir'),
         (ELECT, 'elect'),
@@ -354,6 +351,7 @@ class Capability(models.Model):
         (MILITARY_STANCE, 'military orders'),
         (BATTLE_FORMATION, 'battle formation'),
         (CONQUEST, 'occupy region'),
+        (TAKE_GRAIN, 'take grain'),
     )
 
     organization = models.ForeignKey(Organization)

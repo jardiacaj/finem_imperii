@@ -43,7 +43,7 @@
                 {% for character in user.character_set.all %}
                     <tr>
                         <td style="vertical-align: middle">
-                            {{ character.name }}
+                            {{ character.get_html_name|safe }}
                             {% if character.unread_messages.exists %}
                                 <span class="badge">{{ character.unread_messages.count }}</span>
                             {% endif %}

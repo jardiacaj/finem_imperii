@@ -517,6 +517,24 @@ class CapabilityProposal(models.Model):
             except (world.models.Tile.DoesNotExist, world.models.TileEvent.DoesNotExist):
                 pass
 
+        elif self.capability.type == Capability.GUILDS:
+            try:
+                settlement = world.models.Settlement.objects.get(
+                    id=proposal['settlement_id']
+                )
+                if (
+                        (settlement.tile in
+                         self.capability.applying_to.get_all_controlled_tiles())
+                        and
+                        (proposal['option'] in
+                         [choice[0] for choice in world.models.Settlement
+                                 .GUILDS_CHOICES])
+                ):
+                    settlement.guilds_setting = proposal['option']
+                    settlement.save()
+            except world.models.Settlement.DoesNotExist:
+                pass
+
         else:
             raise Exception("Executing unknown capability action_type '{}'".format(self.capability.type))
 

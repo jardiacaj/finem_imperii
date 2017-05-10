@@ -1,10 +1,14 @@
 from django.conf.urls import url
 
 from decorators import inchar_required
-from organization.views import organization_view, document_view, capability_view, \
-    DocumentCapabilityView, ProposalView, election_convoke_view, capability_required_decorator, \
-    banning_view, candidacy_view, elect_view, election_view, election_list_view, DiplomacyCapabilityView, \
-    MilitaryStanceCapabilityView, formation_view, conquest_view
+from organization.views import organization_view, document_view, \
+    capability_view, \
+    DocumentCapabilityView, ProposalView, election_convoke_view, \
+    capability_required_decorator, \
+    banning_view, candidacy_view, elect_view, election_view, \
+    election_list_view, DiplomacyCapabilityView, \
+    MilitaryStanceCapabilityView, formation_view, conquest_view, \
+    guilds_settings_view
 
 urlpatterns = [
     url(r'^(?P<organization_id>[0-9]+)$', organization_view, name='view'),
@@ -15,6 +19,7 @@ urlpatterns = [
     url(r'^capability/(?P<capability_id>[0-9]+)$', capability_view, name='capability'),
     url(r'^capability/(?P<capability_id>[0-9]+)/ban$', banning_view, name='banning_capability'),
     url(r'^capability/(?P<capability_id>[0-9]+)/conquer', conquest_view, name='conquest_capability'),
+    url(r'^capability/(?P<capability_id>[0-9]+)/guilds', guilds_settings_view, name='guilds_capability'),
     url(r'^capability/(?P<capability_id>[0-9]+)/formation', formation_view, name='battle_formation_capability'),
     url(r'^capability/(?P<capability_id>[0-9]+)/convoke_elections', election_convoke_view, name='election_convoke_capability'),
     url(r'^capability/(?P<capability_id>[0-9]+)/candidacy', candidacy_view, name='candidacy_capability'),

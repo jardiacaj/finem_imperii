@@ -2,13 +2,13 @@
     <p>
         {{ proposal.proposing_character }} wants to
 
-        {% if porposal.type == 'take back' %}
+        {% if proposal_content.type == 'take back' %}
             take back the proposal of
-        {% elif porposal.type == 'accept' %}
+        {% elif proposal_content.type == 'accept' %}
             accept to the proposal of
-        {% elif porposal.type == 'refuse' %}
+        {% elif proposal_content.type == 'refuse' %}
             refuse to the proposal of
-        {% elif porposal.type == 'propose' %}
+        {% elif proposal_content.type == 'propose' %}
             propose
         {% endif %}
 

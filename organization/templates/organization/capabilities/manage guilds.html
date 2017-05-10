@@ -14,21 +14,21 @@
         <div class="panel-body">
 
             {% for settlement in tile.settlement_set.all %}
-                <form class="" role="form" method="post" action="">
+                <form class="" role="form" method="post" action="{% url 'organization:guilds_capability' capability.id %}">
                     {% csrf_token %}
-                    <input type="hidden" name="tile_to_conquest_id" value="{{ tile.id }}">
+                    <input type="hidden" name="settlement_id" value="{{ settlement.id }}">
                     <span class="form-group form-inline">
                         <select name="option" id="option">
-                            <option value="prohibit" {% if settlement.guilds_setting == 'prohibit guilds' %}selected{% endif %}>
+                            <option value="prohibit guilds" {% if settlement.guilds_setting == 'prohibit guilds' %}selected{% endif %}>
                                 Prohibit guilds
                             </option>
-                            <option value="restrict" {% if settlement.guilds_setting == 'restrict guilds' %}selected{% endif %}>
+                            <option value="restrict guilds" {% if settlement.guilds_setting == 'restrict guilds' %}selected{% endif %}>
                                 Restrict guilds
                             </option>
-                            <option value="keep" {% if settlement.guilds_setting == 'keep guilds' %}selected{% endif %}>
+                            <option value="keep guilds" {% if settlement.guilds_setting == 'keep guilds' %}selected{% endif %}>
                                 Keep guilds as they are
                             </option>
-                            <option value="promote" {% if settlement.guilds_setting == 'promote guilds' %}selected{% endif %}>
+                            <option value="promote guilds" {% if settlement.guilds_setting == 'promote guilds' %}selected{% endif %}>
                                 Promote guilds
                             </option>
                         </select>

@@ -12,7 +12,7 @@ from battle.models import BattleFormation
 from decorators import inchar_required
 from organization.models import Organization, PolicyDocument, Capability, CapabilityProposal, CapabilityVote, \
     PositionCandidacy, PositionElectionVote, PositionElection, OrganizationRelationship, MilitaryStance
-from world.models import Character, Tile, TileEvent
+from world.models import Character, Tile, TileEvent, Settlement
 
 
 @inchar_required
@@ -269,6 +269,36 @@ def conquest_view(request, capability_id):
     proposal = {
         'tile_id': tile_to_conquer.id,
         'stop': request.POST.get('stop')
+    }
+
+    capability.create_proposal(request.hero, proposal)
+
+    if capability.organization.decision_taking == Organization.DEMOCRATIC:
+        messages.success(request, "A vote has been started regarding your action", "success")
+    else:
+        messages.success(request, "Done!", "success")
+    return redirect(capability.get_absolute_url())
+
+
+@require_POST
+@capability_required_decorator
+def guilds_settings_view(request, capability_id):
+    capability = get_object_or_404(
+        Capability, id=capability_id, type=Capability.GUILDS)
+    settlement = get_object_or_404(
+        Settlement, id=request.POST.get('settlement_id'))
+    target_option = request.POST.get('option')
+
+    if target_option not in [choice[0] for choice in Settlement.GUILDS_CHOICES]:
+        raise Http404("Chosen option not valid")
+
+    if (settlement.tile not in
+            capability.applying_to.get_all_controlled_tiles()):
+        raise Http404("Settlement not under control")
+
+    proposal = {
+        'settlement_id': settlement.id,
+        'option': target_option
     }
 
     capability.create_proposal(request.hero, proposal)
@@ -547,6 +577,11 @@ class ProposalView(View):
 
         elif proposal.capability.type == Capability.CONQUEST:
             context['target_tile'] = Tile.objects.get(id=proposal_content['tile_id'])
+
+        elif proposal.capability.type == Capability.GUILDS:
+            context['settlement'] = Settlement.objects.get(
+                id=proposal_content['settlement_id']
+            )
 
         return render(request, 'organization/proposal.html', context)
 

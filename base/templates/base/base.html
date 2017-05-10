@@ -74,7 +74,13 @@
                     </a>
                 </span>
                 <h5>Your inventory</h5>
-                <p>{{ request.hero.cash }} silver coins</p>
+
+                <ul>
+                    <li>{{ request.hero.cash }} silver coins</li>
+                    {% for item in request.hero.inventoryitem_set.all %}
+                        <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
 
                 <hr>
 

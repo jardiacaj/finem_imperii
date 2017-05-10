@@ -93,6 +93,11 @@
     organization_id: 2
     type: 'manage guilds'
     applying_to: 1
+- model: organization.Capability
+  fields:
+    organization_id: 2
+    type: 'manage taxation'
+    applying_to: 1
 
 - model: organization.Organization
   pk: 3
@@ -230,6 +235,11 @@
     organization_id: 6
     type: 'manage guilds'
     applying_to: 5
+- model: organization.Capability
+  fields:
+    organization_id: 6
+    type: 'manage taxation'
+    applying_to: 5
 
 - model: organization.Organization
   pk: 7
@@ -310,6 +320,11 @@
   fields:
     organization_id: 7
     type: 'manage guilds'
+    applying_to: 7
+- model: organization.Capability
+  fields:
+    organization_id: 7
+    type: 'manage taxation'
     applying_to: 7
 
 - model: organization.Organization

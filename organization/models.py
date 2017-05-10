@@ -337,6 +337,7 @@ class Capability(models.Model):
     CONQUEST = 'occupy region'
     TAKE_GRAIN = 'take grain'
     GUILDS = 'manage guilds'
+    TAXES = 'manage taxation'
 
     TYPE_CHOICES = (
         (BAN, 'ban'),
@@ -354,6 +355,7 @@ class Capability(models.Model):
         (CONQUEST, 'occupy region'),
         (TAKE_GRAIN, 'take grain'),
         (GUILDS, 'manage guilds'),
+        (TAXES, 'manage taxation'),
     )
 
     organization = models.ForeignKey(Organization)
@@ -378,6 +380,9 @@ class Capability(models.Model):
 
     def is_passive(self):
         return self.type in (self.CONSCRIPT, self.TAKE_GRAIN, )
+
+    def is_individual_action(self):
+        return self.is_passive() or self.type in (self.ELECT, self.CANDIDACY)
 
     def __str__(self):
         return "{} can {} in {}{}".format(

@@ -141,12 +141,24 @@ class TileEvent(models.Model):
 
 
 class Settlement(models.Model):
+    GUILDS_PROHIBIT = 'prohibit guilds'
+    GUILDS_RESTRICT = 'restrict guilds'
+    GUILDS_KEEP = 'keep guilds'
+    GUILDS_PROMOTE = 'promote guilds'
+    GUILDS_CHOICES = (
+        (GUILDS_PROHIBIT, GUILDS_PROHIBIT),
+        (GUILDS_RESTRICT, GUILDS_RESTRICT),
+        (GUILDS_KEEP, GUILDS_KEEP),
+        (GUILDS_PROMOTE, GUILDS_PROMOTE),
+    )
+
     name = models.CharField(max_length=100)
     tile = models.ForeignKey(Tile)
     population = models.IntegerField(default=0)
     population_default = models.IntegerField()
     x_pos = models.IntegerField()
     z_pos = models.IntegerField()
+    guilds_setting = models.CharField(max_length=20, default=GUILDS_KEEP)
 
     def size_name(self):
         if self.population < 10:

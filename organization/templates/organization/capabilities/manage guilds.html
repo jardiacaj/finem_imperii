@@ -1,0 +1,49 @@
+<p>
+    You have been granted the power the guilds in {{ capability.applying_to }}.
+</p>
+
+{% for tile in capability.applying_to.get_all_controlled_tiles %}
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {{ tile.get_html_link|safe }}
+            </h3>
+        </div>
+
+        <div class="panel-body">
+
+            {% for settlement in tile.settlement_set.all %}
+                <form class="" role="form" method="post" action="">
+                    {% csrf_token %}
+                    <input type="hidden" name="tile_to_conquest_id" value="{{ tile.id }}">
+                    <span class="form-group form-inline">
+                        <select name="option" id="option">
+                            <option value="prohibit" {% if settlement.guilds_setting == 'prohibit guilds' %}selected{% endif %}>
+                                Prohibit guilds
+                            </option>
+                            <option value="restrict" {% if settlement.guilds_setting == 'restrict guilds' %}selected{% endif %}>
+                                Restrict guilds
+                            </option>
+                            <option value="keep" {% if settlement.guilds_setting == 'keep guilds' %}selected{% endif %}>
+                                Keep guilds as they are
+                            </option>
+                            <option value="promote" {% if settlement.guilds_setting == 'promote guilds' %}selected{% endif %}>
+                                Promote guilds
+                            </option>
+                        </select>
+                        in
+                        {{ settlement }}
+                        <button type="submit" class="btn btn-primary btn-sm" onclick="return confirm('Are you sure?')">
+                            Save
+                        </button>
+                    </span>
+                </form>
+                {% if not forloop.last %}<hr>{% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+{% empty %}
+    <p>{{ capability.applying_to }} controls no regions.</p>
+{% endfor %}

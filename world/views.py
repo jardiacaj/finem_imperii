@@ -1,5 +1,6 @@
 import random
 
+import math
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
@@ -16,7 +17,7 @@ from messaging.models import MessageRelationship
 from name_generator.name_generator import get_names, get_surnames
 from organization.models import Organization, Capability
 from world.models import Character, World, Settlement, WorldUnit, \
-    WorldUnitStatusChangeException, Tile, TileEvent
+    WorldUnitStatusChangeException, Tile, TileEvent, InventoryItem
 from world.recruitment import build_population_query_from_request, \
     BadPopulation, sample_candidates, recruit_unit
 from world.renderer import render_world_for_view
@@ -515,26 +516,66 @@ def character_view_iframe(request, character_id):
     return render(request, 'world/view_character_iframe.html', context)
 
 
-@inchar_required
-def inventory_view(request):
-    local_violence_monopoly = \
-        request.hero.location.tile.controlled_by.get_violence_monopoly()
+class InventoryView(View):
+    template_name = 'world/view_inventory.html'
 
-    can_take_grain = (
-        local_violence_monopoly
-        .organizations_character_can_apply_capabilities_to_this_with(
-            request.hero,
-            Capability.TAKE_GRAIN
-        ) is not None
-        or
-        request.hero.location.tile.controlled_by
-        .organizations_character_can_apply_capabilities_to_this_with(
-            request.hero,
-            Capability.TAKE_GRAIN
-        ) is not None
-    )
+    def get(self, request):
 
-    context = {
-        'can_take_grain': can_take_grain
-    }
-    return render(request, 'world/view_inventory.html', context=context)
+        context = {
+            'can_take_grain': request.hero.
+                can_take_grain_from_public_granary(),
+            'carrying_grain': request.hero.carrying_quantity(
+                InventoryItem.GRAIN
+            ),
+            'takeable_grain': request.hero.takeable_grain_from_public_granary()
+        }
+        return render(request, 'world/view_inventory.html', context=context)
+
+    @staticmethod
+    def fail_post_with_error(request, message):
+        messages.add_message(
+            request, messages.ERROR, message, extra_tags='danger'
+        )
+        return redirect('world:inventory')
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        action = request.POST.get('action')
+        bushels_to_transfer = int(request.POST.get('bushels'))
+        if request.hero.hours_in_turn_left * 2 < bushels_to_transfer:
+            return self.fail_post_with_error(
+                request, "You don't have enough time left this turn.")
+        if bushels_to_transfer < 1:
+            raise Http404()
+        if action == 'load':
+            if bushels_to_transfer > request.hero.takeable_grain_from_public_granary():
+                return self.fail_post_with_error(
+                    request, "You can't take that many bushels")
+            granary_bushels = request.hero.location.get_default_granary().\
+                get_public_bushels_object()
+            granary_bushels.quantity -= bushels_to_transfer
+            granary_bushels.save()
+            request.hero.add_to_inventory(
+                InventoryItem.GRAIN, bushels_to_transfer
+            )
+        elif action == 'unload':
+            if bushels_to_transfer > request.hero.carrying_quantity(
+                InventoryItem.GRAIN
+            ):
+                return self.fail_post_with_error(
+                    request, "You don't have that many bushels")
+            hero_inv_obj = request.hero.inventory_object(InventoryItem.GRAIN)
+            hero_inv_obj.quantity -= bushels_to_transfer
+            if hero_inv_obj.quantity == 0:
+                hero_inv_obj.delete()
+            else:
+                hero_inv_obj.save()
+            granary_bushels = request.hero.location.get_default_granary(). \
+                get_public_bushels_object()
+            granary_bushels.quantity += bushels_to_transfer
+            granary_bushels.save()
+        else:
+            raise Http404()
+        request.hero.hours_in_turn_left -= math.ceil(bushels_to_transfer / 2)
+        request.hero.save()
+        return redirect('world:inventory')

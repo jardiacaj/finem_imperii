@@ -297,6 +297,8 @@ class Building(models.Model):
         bushel_object.save()
 
     def get_public_bushels_object(self):
+        if not self.type == self.GRANARY:
+            return
         return InventoryItem.objects.get_or_create(
             type=InventoryItem.GRAIN,
             owner_character=None,
@@ -528,6 +530,83 @@ class Character(models.Model):
         return '<a href="{}">{}</a>'.format(
             self.get_absolute_url(), self.get_html_name()
         )
+
+    def total_carrying_capacity(self):
+        return 100
+
+    def remaining_carrying_capacity(self):
+        return self.total_carrying_capacity() - self.carrying_weight()
+
+    def carrying_items(self):
+        return InventoryItem.objects.filter(
+            owner_character=self,
+            location=None
+        )
+
+    def carrying_weight(self):
+        weight = 0
+        for item in self.carrying_items():
+            weight += item.quantity
+        return weight
+
+    def can_take_grain_from_public_granary(self):
+        local_violence_monopoly = \
+            self.location.tile.controlled_by.get_violence_monopoly()
+
+        return (
+            local_violence_monopoly
+            .organizations_character_can_apply_capabilities_to_this_with(
+                self,
+                organization.models.Capability.TAKE_GRAIN
+            ) is not None
+            or
+            self.location.tile.controlled_by
+            .organizations_character_can_apply_capabilities_to_this_with(
+                self,
+                organization.models.Capability.TAKE_GRAIN
+            ) is not None
+        )
+
+    def takeable_grain_from_public_granary(self):
+        if not self.can_take_grain_from_public_granary():
+            return 0
+
+        return min(
+            self.remaining_carrying_capacity(),
+            self.hours_in_turn_left * 2,
+
+            self.location.get_default_granary().
+            get_public_bushels_object().quantity
+        )
+
+    def inventory_object(self, type):
+        try:
+            return InventoryItem.objects.get(
+                type=type,
+                owner_character=self,
+                location=None
+            )
+        except InventoryItem.DoesNotExist:
+            return None
+
+    def carrying_quantity(self, type):
+        inventory_object = self.inventory_object(type)
+        if inventory_object is None:
+            return 0
+        else:
+            return inventory_object.quantity
+
+    def add_to_inventory(self, type, quantity):
+        inventory_object = self.inventory_object(type)
+        if inventory_object is None:
+            InventoryItem.objects.create(
+                type=type,
+                owner_character=self,
+                quantity=quantity
+            )
+        else:
+            inventory_object.quantity += quantity
+            inventory_object.save()
 
 
 class WorldUnitStatusChangeException(Exception):

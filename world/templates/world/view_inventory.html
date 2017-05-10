@@ -22,14 +22,78 @@
         </small>
     </h3>
 
-    {% if can_take_grain %}
-        <p>
-            Take grain from granary
-        </p>
+    {% if carrying_grain %}
+        <div class="col-sm-6">
+            <form class="form-horizontal" method="post">
+                <fieldset>
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="unload">
+
+                    <legend>Unload grain at local granary</legend>
+
+                    <div class="form-group">
+                        <label for="bushels_to_unload" class="col-lg-2 control-label">
+                            Bushels
+                        </label>
+                        <div class="col-lg-10">
+                            <input class="form-control"
+                                   id="bushels_to_unload"
+                                   name="bushels"
+                                   placeholder="max {{ carrying_grain }}"
+                                   type="number"
+                                   max="{{ carrying_grain }}"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-lg-10 col-lg-offset-2">
+                            <button type="submit" class="btn btn-primary">
+                                Unload grain
+                            </button> 2 bushels per hour
+                        </div>
+                    </div>
+
+                </fieldset>
+            </form>
+        </div>
     {% endif %}
 
-    <p>
-        Unload grain at granary
-    </p>
+    {% if can_take_grain and takeable_grain %}
+        <div class="col-sm-6">
+            <form class="form-horizontal" method="post">
+                <fieldset>
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="load">
+
+                    <legend>Take grain from granary</legend>
+
+                    <div class="form-group">
+                        <label for="bushels_to_load" class="col-lg-2 control-label">
+                            Bushels
+                        </label>
+                        <div class="col-lg-10">
+                            <input class="form-control"
+                                   id="bushels_to_load"
+                                   name="bushels"
+                                   placeholder="max {{ takeable_grain }}"
+                                   type="number"
+                                   max="{{ takeable_grain }}"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-lg-10 col-lg-offset-2">
+                            <button type="submit" class="btn btn-primary">
+                                Take grain
+                            </button> 2 bushels per hour
+                        </div>
+                    </div>
+
+                </fieldset>
+            </form>
+        </div>
+    {% endif %}
 
 {% endblock %}

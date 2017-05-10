@@ -2,7 +2,7 @@ from django.contrib import auth
 from django.test import TestCase
 from django.urls.base import reverse
 
-from world.models import World, Character
+from world.models import World, Character, InventoryItem
 
 
 class TestInventory(TestCase):
@@ -20,6 +20,64 @@ class TestInventory(TestCase):
         )
 
     def test_view_inventory(self):
+        character = Character.objects.get(id=1)
+        granary_bushels_object = character.location.get_default_granary()\
+            .get_public_bushels_object()
+        granary_bushels_object.quantity = 100
+        granary_bushels_object.save()
+
         response = self.client.get(reverse('world:inventory'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Take grain from granary")
+
+    def test_take_grain(self):
+        character = Character.objects.get(id=1)
+        bushels_object = character.location.get_default_granary()\
+            .get_public_bushels_object()
+        bushels_object.quantity = 100
+        bushels_object.save()
+
+        response = self.client.post(
+            reverse('world:inventory'),
+            data={
+                'action': 'load',
+                'bushels': 99
+            }
+        )
+        self.assertRedirects(response, reverse('world:inventory'))
+
+        bushels_object.refresh_from_db()
+        self.assertEqual(bushels_object.quantity, 1)
+
+        inv_bush = character.inventory_object(InventoryItem.GRAIN)
+        self.assertEqual(inv_bush.quantity, 99)
+
+        character.refresh_from_db()
+        self.assertEqual(character.hours_in_turn_left, 15*24 - 100/2)
+
+    def test_unload_grain(self):
+        character = Character.objects.get(id=1)
+        character_bushels_object = InventoryItem.objects.create(
+            type=InventoryItem.GRAIN,
+            quantity=100,
+            owner_character=character
+        )
+
+        response = self.client.post(
+            reverse('world:inventory'),
+            data={
+                'action': 'unload',
+                'bushels': 99
+            }
+        )
+        self.assertRedirects(response, reverse('world:inventory'))
+
+        character_bushels_object.refresh_from_db()
+        self.assertEqual(character_bushels_object.quantity, 1)
+
+        granary_bushels_object = character.location.get_default_granary()\
+            .get_public_bushels_object()
+        self.assertEqual(granary_bushels_object.quantity, 99)
+
+        character.refresh_from_db()
+        self.assertEqual(character.hours_in_turn_left, 15*24 - 100/2)

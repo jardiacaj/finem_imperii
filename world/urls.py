@@ -9,7 +9,7 @@ from world.views import CharacterCreationView, activate_character, \
     unit_rename, unit_transfer, unit_disband, character_view, tile_view, \
     tile_view_iframe, unit_battle_settings, unit_status_change, \
     unit_battle_orders, unit_conquest_action, character_view_iframe, \
-    inventory_view
+    InventoryView
 
 urlpatterns = [
     url(r'^create_character$', create_character, name='create_character'),
@@ -23,7 +23,7 @@ urlpatterns = [
     url(r'^tile_iframe/(?P<tile_id>[0-9]+)$', tile_view_iframe, name='tile_iframe'),
     url(r'^world/(?P<world_id>[0-9]+)$', world_view, name='world'),
     url(r'^world_iframe/(?P<world_id>[0-9]+)$', world_view_iframe, name='world_iframe'),
-    url(r'^inventory$', inventory_view, name='inventory'),
+    url(r'^inventory$', inchar_required(InventoryView.as_view()), name='inventory'),
     url(r'^character/(?P<character_id>[0-9]+)$', character_view, name='character'),
     url(r'^character_iframe/(?P<character_id>[0-9]+)$', character_view_iframe, name='character_iframe'),
     url(r'^unit/(?P<unit_id>[0-9]+)$', unit_view, name='unit'),

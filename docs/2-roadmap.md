@@ -109,7 +109,7 @@ Allocated: 5 days
 
 ## Week 11
 
- - Taxation and economy (1 day)
+ - Taxation and economy (4 days)
  - MUST Battle restrictions on travel, time and recruitment (1 day)
  - MUST Missing notifications (1/2 day)
  - MUST Emortuus (2 days)

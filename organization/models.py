@@ -336,6 +336,7 @@ class Capability(models.Model):
     BATTLE_FORMATION = 'battle formation'
     CONQUEST = 'occupy region'
     TAKE_GRAIN = 'take grain'
+    GUILDS = 'manage guilds'
 
     TYPE_CHOICES = (
         (BAN, 'ban'),
@@ -352,6 +353,7 @@ class Capability(models.Model):
         (BATTLE_FORMATION, 'battle formation'),
         (CONQUEST, 'occupy region'),
         (TAKE_GRAIN, 'take grain'),
+        (GUILDS, 'manage guilds'),
     )
 
     organization = models.ForeignKey(Organization)

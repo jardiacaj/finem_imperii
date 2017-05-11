@@ -52,10 +52,8 @@ class TestBattleFormation(TestCase):
             follow=True
         )
 
-        self.assertEqual(len(response.redirect_chain), 1)
-        self.assertEqual(response.redirect_chain[0][1], 302)
-        self.assertEqual(response.redirect_chain[0][0], capability.get_absolute_url())
-        self.assertEqual(response.status_code, 200)
+        self.assertRedirects(response,
+                             capability.organization.get_absolute_url())
 
         self.assertEqual(BattleFormation.objects.count(), 1)
         self.assertTrue(BattleFormation.objects.filter(battle=None, organization_id=101).exists())
@@ -86,10 +84,8 @@ class TestBattleFormation(TestCase):
             follow=True
         )
 
-        self.assertEqual(len(response.redirect_chain), 1)
-        self.assertEqual(response.redirect_chain[0][1], 302)
-        self.assertEqual(response.redirect_chain[0][0], capability.get_absolute_url())
-        self.assertEqual(response.status_code, 200)
+        self.assertRedirects(response,
+                             capability.organization.get_absolute_url())
 
         self.assertEqual(CapabilityProposal.objects.count(), 1)
         proposal = CapabilityProposal.objects.get(id=1)

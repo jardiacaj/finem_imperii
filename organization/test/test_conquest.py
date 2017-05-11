@@ -52,7 +52,8 @@ class TestConquest(TestCase):
             follow=True
         )
 
-        self.assertRedirects(response, capability.get_absolute_url())
+        self.assertRedirects(response,
+                             capability.organization.get_absolute_url())
 
         self.assertEqual(TileEvent.objects.count(), 1)
         event = TileEvent.objects.get(id=1)
@@ -91,7 +92,8 @@ class TestConquest(TestCase):
             data={'tile_to_conquest_id': tile.id, 'stop': '1', },
             follow=True
         )
-        self.assertRedirects(response, capability.get_absolute_url())
+        self.assertRedirects(response,
+                             capability.organization.get_absolute_url())
         self.assertEqual(TileEvent.objects.count(), 1)
         event = TileEvent.objects.get(id=1)
         self.assertEqual(event.tile, tile)
@@ -116,7 +118,8 @@ class TestConquest(TestCase):
             follow=True
         )
 
-        self.assertRedirects(response, capability.get_absolute_url())
+        self.assertRedirects(response,
+                             capability.organization.get_absolute_url())
 
         self.assertEqual(TileEvent.objects.count(), 2)
         event = TileEvent.objects.get(id=2)
@@ -164,7 +167,8 @@ class TestConquest(TestCase):
             follow=True
         )
 
-        self.assertRedirects(response, capability.get_absolute_url())
+        self.assertRedirects(response,
+                             capability.organization.get_absolute_url())
 
         self.assertEqual(CapabilityProposal.objects.count(), 1)
         proposal = CapabilityProposal.objects.get(id=1)

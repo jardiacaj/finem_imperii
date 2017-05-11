@@ -47,6 +47,7 @@ class TestGuildSetting(TestCase):
             },
             follow=True
         )
-        self.assertRedirects(response, capability.get_absolute_url())
+        self.assertRedirects(response,
+                             capability.organization.get_absolute_url())
         settlement = Settlement.objects.get(id=1003)
         self.assertEqual(settlement.guilds_setting, Settlement.GUILDS_PROHIBIT)

@@ -93,9 +93,15 @@
                     <ul>
                         {% for building in settlement.building_set.all %}
                             <li>
-                                {{ building }}
+                                {{ building|capfirst }}
                                 {% if building.type == 'granary' %}
-                                    ({{ building.get_public_bushels_object.quantity }} bushels)
+                                    - {{ building.get_public_bushels_object.quantity }} bushels
+                                {% elif building.type == 'residence' %}
+                                    - {{ building.resident.count }} residents
+                                {% elif building.type == 'grain field' %}
+                                    - {{ building.worker.count }} workers
+                                {% elif building.type == 'guild' %}
+                                    - {{ building.worker.count }} workers
                                 {% endif %}
                             </li>
                         {% endfor %}

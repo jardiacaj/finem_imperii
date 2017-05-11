@@ -232,18 +232,16 @@ class NotEnoughBushels(Exception):
 class Building(models.Model):
     GRAIN_FIELD = 'grain field'
     RESIDENCE = 'residence'
-    SAWMILL = 'sawmill'
-    IRON_MINE = 'iron mine'
     GRANARY = 'granary'
+    GUILD = 'guild'
     PRISON = 'prison'
 
     TYPE_CHOICES = (
         (GRAIN_FIELD, GRAIN_FIELD),
         (RESIDENCE, RESIDENCE),
-        (SAWMILL, SAWMILL),
-        (IRON_MINE, IRON_MINE),
         (GRANARY, GRANARY),
         (PRISON, PRISON),
+        (GUILD, GUILD),
     )
 
     LEVEL_DESCRIPTORS = {
@@ -259,10 +257,6 @@ class Building(models.Model):
                 ('low quality house', '{qty} low quality houses'),
                 ('simple house', '{qty} simple houses'),
             ],
-        SAWMILL:
-            [],
-        IRON_MINE:
-            [],
         GRANARY:
             [
                 ('open heap', '{} open heaps'),
@@ -274,6 +268,12 @@ class Building(models.Model):
                 ('prisoner cage', '{} prisoner cages'),
                 ('jail', '{} jails'),
                 ('simple prison', '{} simple prisons'),
+            ],
+        GUILD:
+            [
+                ('informal guild', '{} informal guilds'),
+                ('organized guild', '{} organized guilds'),
+                ('guild confraternity', '{} guild confraternity'),
             ],
     }
 
@@ -288,10 +288,20 @@ class Building(models.Model):
     )
 
     def max_workers(self):
-        return math.floor(self.quantity / 2)
+        if self.type == self.GUILD:
+            return self.quantity * 10000
+        elif self.type == self.GRAIN_FIELD:
+            return math.floor(self.quantity / 2)
+        else:
+            return 0
 
     def max_ideal_workers(self):
-        return math.ceil(self.quantity / 10)
+        if self.type == self.GUILD:
+            return self.quantity * 10000
+        elif self.type == self.GRAIN_FIELD:
+            return math.ceil(self.quantity / 10)
+        else:
+            return 0
 
     def max_surplus_workers(self):
         return self.max_workers() - self.max_ideal_workers()

@@ -120,6 +120,7 @@ Allocated: 5 days
  - VNTH Character profiles (2 days)
  - VNTH Secession, rebellion and state founding. (2 days)
  - VNTH Character pause and deletion (1 day)
+ - VNTH Imprisoning (1 day)
 
 ## Week 12
 

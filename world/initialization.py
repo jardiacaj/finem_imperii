@@ -67,8 +67,8 @@ def initialize_settlement(settlement):
         if able:
             assigned_workers += 1
 
-            # we assign 75% of population to fields
-            if assigned_workers < settlement.population / 4 or total_other_workplaces == 0:
+            # we assign 90% of population to fields
+            if assigned_workers < (settlement.population // 10 * 9) or total_other_workplaces == 0:
                 # we do a weighted assignment
                 pos = random.randint(0, total_field_workplaces)
                 cumulative = 0

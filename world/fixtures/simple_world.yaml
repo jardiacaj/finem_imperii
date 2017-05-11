@@ -858,6 +858,12 @@
     level: 2
     quantity: 1
     settlement_id: 1001
+- model: world.Building
+  fields:
+    type: guild
+    level: 1
+    quantity: 1
+    settlement_id: 1001
 
 
 - model: world.Settlement
@@ -892,6 +898,12 @@
     level: 2
     quantity: 1
     settlement_id: 1002
+- model: world.Building
+  fields:
+    type: guild
+    level: 1
+    quantity: 1
+    settlement_id: 1002
 
 - model: world.Settlement
   pk: 1003
@@ -921,6 +933,12 @@
 - model: world.Building
   fields:
     type: granary
+    level: 2
+    quantity: 1
+    settlement_id: 1003
+- model: world.Building
+  fields:
+    type: guild
     level: 2
     quantity: 1
     settlement_id: 1003
@@ -956,6 +974,12 @@
     level: 2
     quantity: 1
     settlement_id: 1004
+- model: world.Building
+  fields:
+    type: guild
+    level: 0
+    quantity: 1
+    settlement_id: 1004
 
 - model: world.Settlement
   pk: 1005
@@ -980,6 +1004,12 @@
 - model: world.Building
   fields:
     type: granary
+    level: 2
+    quantity: 1
+    settlement_id: 1005
+- model: world.Building
+  fields:
+    type: guild
     level: 2
     quantity: 1
     settlement_id: 1005
@@ -1018,6 +1048,12 @@
     level: 2
     quantity: 1
     settlement_id: 1006
+- model: world.Building
+  fields:
+    type: guild
+    level: 1
+    quantity: 1
+    settlement_id: 1006
 
 - model: world.Settlement
   pk: 1007
@@ -1043,6 +1079,12 @@
   fields:
     type: granary
     level: 2
+    quantity: 1
+    settlement_id: 1007
+- model: world.Building
+  fields:
+    type: guild
+    level: 1
     quantity: 1
     settlement_id: 1007
 
@@ -1078,6 +1120,12 @@
     level: 2
     quantity: 1
     settlement_id: 1008
+- model: world.Building
+  fields:
+    type: guild
+    level: 2
+    quantity: 1
+    settlement_id: 1008
 
 - model: world.Settlement
   pk: 1009
@@ -1102,6 +1150,12 @@
 - model: world.Building
   fields:
     type: granary
+    level: 1
+    quantity: 1
+    settlement_id: 1009
+- model: world.Building
+  fields:
+    type: guild
     level: 1
     quantity: 1
     settlement_id: 1009

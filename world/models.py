@@ -254,6 +254,7 @@ class Settlement(models.Model):
         except ZeroDivisionError:
             return 0
 
+
 class NotEnoughBushels(Exception):
     pass
 

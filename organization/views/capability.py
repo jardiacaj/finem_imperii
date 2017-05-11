@@ -321,6 +321,17 @@ class DiplomacyCapabilityView(View):
         }
         return render(request, 'organization/capability.html', context)
 
+    def fail_post_with_error(self, capability_id, request,
+                             target_organization_id,
+                             message="You cannot do that"):
+        messages.error(request, message, "danger")
+        return redirect(reverse(
+            'organization:diplomacy_capability',
+            kwargs={
+                'capability_id': capability_id,
+                'target_organization_id': target_organization_id}
+        ))
+
     @transaction.atomic
     def post(self, request, capability_id, target_organization_id):
         capability = get_object_or_404(
@@ -333,51 +344,35 @@ class DiplomacyCapabilityView(View):
         target_relationship = request.POST.get('target_relationship')
 
         if target_relationship in ("accept", "refuse"):
-            if not target_organization.get_relationship_to(capability.applying_to).is_proposal():
-                messages.error(request, "You cannot do that (1)", "danger")
-                return redirect(reverse(
-                    'organization:diplomacy_capability',
-                    kwargs={
-                        'capability_id': capability_id,
-                        'target_organization_id': target_organization_id}
-                ))
+            if not target_organization.get_relationship_to(
+                    capability.applying_to).is_proposal():
+                return self.fail_post_with_error(
+                    capability_id, request, target_organization_id)
             proposal = {
                 'type': target_relationship,
                 'target_organization_id': target_organization.id,
                 'target_relationship': target_organization.get_relationship_to(capability.applying_to).desired_relationship
             }
         elif target_relationship == "take back":
-            if not capability.applying_to.get_relationship_to(target_organization).is_proposal():
-                messages.error(request, "You cannot do that (2)", "danger")
-                return redirect(reverse(
-                    'organization:diplomacy_capability',
-                    kwargs={
-                        'capability_id': capability_id,
-                        'target_organization_id': target_organization_id}
-                ))
+            if not capability.applying_to.get_relationship_to(
+                    target_organization).is_proposal():
+                return self.fail_post_with_error(
+                    capability_id, request, target_organization_id)
             proposal = {
                 'type': target_relationship,
                 'target_organization_id': target_organization.id,
-                'target_relationship': capability.applying_to.get_relationship_to(target_organization).desired_relationship
+                'target_relationship':
+                    capability.applying_to.get_relationship_to(
+                        target_organization).desired_relationship
             }
         else:
-            if capability.applying_to.get_relationship_to(target_organization).is_proposal():
-                messages.error(request, "You cannot do that", "danger")
-                return redirect(reverse(
-                    'organization:diplomacy_capability',
-                    kwargs={
-                        'capability_id': capability_id,
-                        'target_organization_id': target_organization_id}
-                ))
+            if capability.applying_to.get_relationship_to(
+                    target_organization).is_proposal():
+                return self.fail_post_with_error(
+                    capability_id, request, target_organization_id)
             if target_relationship not in [choice[0] for choice in OrganizationRelationship.RELATIONSHIP_CHOICES]:
-                messages.error(request, "You cannot do that (3)", "danger")
-                return redirect(reverse(
-                    'organization:diplomacy_capability',
-                    kwargs={
-                        'capability_id': capability_id,
-                        'target_organization_id': target_organization_id
-                    })
-                )
+                return self.fail_post_with_error(
+                    capability_id, request, target_organization_id)
             proposal = {
                 'type': 'propose',
                 'target_organization_id': target_organization.id,

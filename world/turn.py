@@ -134,10 +134,17 @@ class TurnProcessor:
             0,
             workers.count() - building.max_ideal_workers()
         )
-        work_input = min(
-            (ideal_workers / building.max_ideal_workers()) +
-            (surplus_workers / building.max_surplus_workers()) * 0.5,
-            1.5)
+
+        work_input = 0
+        if building.max_ideal_workers():
+            work_input += min(
+                (ideal_workers / building.max_ideal_workers()),
+                1)
+        if building.max_surplus_workers():
+            work_input += min(
+                (surplus_workers / building.max_surplus_workers()) * 0.5,
+                0.5)
+
         if building.type == Building.GRAIN_FIELD and building.level > 0:
             current_month = self.world.current_turn % 12
 

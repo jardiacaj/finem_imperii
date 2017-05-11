@@ -64,6 +64,7 @@ def initialize_settlement(settlement):
             age_months = random.randint(0, 60 * 12)
             able = (random.getrandbits(7) != 0)
 
+        workplace = None
         if able and age_months > NPC.VERY_YOUNG_AGE_LIMIT:
             assigned_workers += 1
 
@@ -94,7 +95,7 @@ def initialize_settlement(settlement):
             residence=residences[i % residences.count()],
             origin=settlement,
             location=settlement,
-            workplace=workplace if able else None,
+            workplace=workplace,
             unit=None,
             trained_soldier=(random.getrandbits(4) == 0) if age_months >= NPC.VERY_YOUNG_AGE_LIMIT else False,
             skill_fighting=random.randint(0, 80)

@@ -225,25 +225,34 @@ class Settlement(models.Model):
             return 0
 
     def disability_percentage(self):
-        return int(
-            self.get_residents().filter(able=False).count() /
-            self.get_residents().count()
-            * 100
-        )
+        try:
+            return int(
+                self.get_residents().filter(able=False).count() /
+                self.get_residents().count()
+                * 100
+            )
+        except ZeroDivisionError:
+            return 0
 
     def female_percentage(self):
-        return int(
-            self.get_residents().filter(male=False).count() /
-            self.get_residents().count()
-            * 100
-        )
+        try:
+            return int(
+                self.get_residents().filter(male=False).count() /
+                self.get_residents().count()
+                * 100
+            )
+        except ZeroDivisionError:
+            return 0
 
     def male_percentage(self):
-        return int(
-            self.get_residents().filter(male=True).count() /
-            self.get_residents().count()
-            * 100
-        )
+        try:
+            return int(
+                self.get_residents().filter(male=True).count() /
+                self.get_residents().count()
+                * 100
+            )
+        except ZeroDivisionError:
+            return 0
 
 class NotEnoughBushels(Exception):
     pass
@@ -309,7 +318,7 @@ class Building(models.Model):
 
     def max_workers(self):
         if self.type == self.GUILD:
-            return self.quantity * 10000
+            return self.quantity * 20000
         elif self.type == self.GRAIN_FIELD:
             return math.floor(self.quantity / 2)
         else:

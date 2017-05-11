@@ -140,6 +140,18 @@ class TileEvent(models.Model):
     end_turn = models.IntegerField(blank=True, null=True)
 
 
+settlement_size_names = [
+    (lambda x: x < 10, "dwelling"),
+    (lambda x: x < 100, "hamlet"),
+    (lambda x: x < 1000, "village"),
+    (lambda x: x < 5000, "town"),
+    (lambda x: x < 10000, "large town"),
+    (lambda x: x < 50000, "city"),
+    (lambda x: x < 200000, "large city"),
+    (lambda x: True, "metropolis"),
+]
+
+
 class Settlement(models.Model):
     GUILDS_PROHIBIT = 'prohibit guilds'
     GUILDS_RESTRICT = 'restrict guilds'
@@ -161,21 +173,9 @@ class Settlement(models.Model):
     guilds_setting = models.CharField(max_length=20, default=GUILDS_KEEP)
 
     def size_name(self):
-        if self.population < 10:
-            return "dwelling"
-        if self.population < 100:
-            return "hamlet"
-        if self.population < 1000:
-            return "village"
-        if self.population < 5000:
-            return "town"
-        if self.population < 10000:
-            return "large town"
-        if self.population < 50000:
-            return "city"
-        if self.population < 200000:
-            return "large city"
-        return "metropolis"
+        for size in settlement_size_names:
+            if size[0](self.population):
+                return size[1]
 
     def __str__(self):
         return self.name

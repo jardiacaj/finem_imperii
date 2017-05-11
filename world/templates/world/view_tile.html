@@ -84,11 +84,12 @@
                     pop. {{ settlement.population }}
                 </h3></div>
                 <div class="panel-body">
-                    <h6>Buildings</h6>
 
                     <p class="{% if settlement.get_hunger_percentage > 15 %}text-danger lead{% endif %}">
                     Hunger: {{ settlement.get_hunger_percentage }}%
                     </p>
+
+                    <h6>Buildings</h6>
 
                     <ul>
                         {% for building in settlement.building_set.all %}
@@ -106,6 +107,16 @@
                             </li>
                         {% endfor %}
                     </ul>
+
+                    <p>
+                        {{ settlement.disability_percentage }}% disabled
+                        population
+                    </p>
+
+                    <p>
+                        {{ settlement.female_percentage }}% female -
+                        {{ settlement.male_percentage }}% male
+                    </p>
                 </div>
             </div>
         </div>

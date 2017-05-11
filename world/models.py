@@ -224,6 +224,26 @@ class Settlement(models.Model):
         except ZeroDivisionError:
             return 0
 
+    def disability_percentage(self):
+        return int(
+            self.get_residents().filter(able=False).count() /
+            self.get_residents().count()
+            * 100
+        )
+
+    def female_percentage(self):
+        return int(
+            self.get_residents().filter(male=False).count() /
+            self.get_residents().count()
+            * 100
+        )
+
+    def male_percentage(self):
+        return int(
+            self.get_residents().filter(male=True).count() /
+            self.get_residents().count()
+            * 100
+        )
 
 class NotEnoughBushels(Exception):
     pass

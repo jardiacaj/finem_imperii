@@ -14,19 +14,43 @@ from organization.views.decorator import capability_required_decorator
 from world.models import Character, Tile, TileEvent, Settlement
 
 
+def capability_success(capability, request):
+    if capability.organization.decision_taking == Organization.DEMOCRATIC:
+        messages.success(
+            request,
+            "A proposal has been created.",
+            "success"
+        )
+    else:
+        messages.success(request, "Done!", "success")
+    return redirect(capability.organization.get_absolute_url())
+
+
 @require_POST
 @capability_required_decorator
 def elect_view(request, capability_id):
-    capability = get_object_or_404(Capability, id=capability_id, type=Capability.ELECT)
+    capability = get_object_or_404(
+        Capability, id=capability_id, type=Capability.ELECT)
 
     election = capability.applying_to.current_election
 
     if not election:
-        messages.error(request, "There is no election in progress for {}".format(capability.applying_to), "danger")
+        messages.error(
+            request,
+            "There is no election in progress for {}".format(
+                capability.applying_to
+            ),
+            "danger"
+        )
         return redirect(capability.get_absolute_url())
 
-    if capability.applying_to.current_election.positionelectionvote_set.filter(voter=request.hero).exists():
-        messages.error(request, "You already issued a vote before.".format(capability.applying_to), "danger")
+    if capability.applying_to.current_election.positionelectionvote_set.filter(
+            voter=request.hero).exists():
+        messages.error(
+            request,
+            "You already issued a vote before.".format(capability.applying_to),
+            "danger"
+        )
         return redirect(capability.get_absolute_url())
 
     try:
@@ -36,7 +60,8 @@ def elect_view(request, capability_id):
             retired=False
         )
     except PositionCandidacy.DoesNotExist:
-        messages.error(request, "That is not a valid candidacy to vote for.", "danger")
+        messages.error(
+            request, "That is not a valid candidacy to vote for.", "danger")
         return redirect(capability.get_absolute_url())
 
     PositionElectionVote.objects.create(
@@ -45,29 +70,32 @@ def elect_view(request, capability_id):
         candidacy=candidacy
     )
 
-    messages.success(request, "You have issued your vote for {}".format(candidacy.candidate), "success")
+    messages.success(
+        request,
+        "You have issued your vote for {}".format(candidacy.candidate),
+        "success"
+    )
     return redirect(capability.get_absolute_url())
 
 
 @require_POST
 @capability_required_decorator
 def election_convoke_view(request, capability_id):
-    capability = get_object_or_404(Capability, id=capability_id, type=Capability.CONVOKE_ELECTIONS)
+    capability = get_object_or_404(
+        Capability, id=capability_id, type=Capability.CONVOKE_ELECTIONS)
 
     months_to_election = int(request.POST.get('months_to_election'))
     if not 6 <= months_to_election <= 16:
-        messages.error(request, "The time period must be between 6 and 18 months", "danger")
+        messages.error(
+            request,
+            "The time period must be between 6 and 18 months",
+            "danger"
+        )
         return redirect(capability.get_absolute_url())
 
     proposal = {'months_to_election': months_to_election}
-
     capability.create_proposal(request.hero, proposal)
-
-    if capability.organization.decision_taking == Organization.DEMOCRATIC:
-        messages.success(request, "A vote has been started regarding your action", "success")
-    else:
-        messages.success(request, "Done!", "success")
-    return redirect(capability.organization.get_absolute_url())
+    return capability_success(capability, request)
 
 
 @require_POST
@@ -94,9 +122,11 @@ def candidacy_view(request, capability_id):
     else:
         candidacy.description = description
         if new:
-            messages.success(request, "Your candidacy has been created.", "success")
+            messages.success(
+                request, "Your candidacy has been created.", "success")
         else:
-            messages.success(request, "Your candidacy has been updated.", "success")
+            messages.success(
+                request, "Your candidacy has been updated.", "success")
     candidacy.save()
 
     return redirect(capability.get_absolute_url())
@@ -105,28 +135,26 @@ def candidacy_view(request, capability_id):
 @require_POST
 @capability_required_decorator
 def banning_view(request, capability_id):
-    capability = get_object_or_404(Capability, id=capability_id, type=Capability.BAN)
+    capability = get_object_or_404(
+        Capability, id=capability_id, type=Capability.BAN)
 
-    character_to_ban = get_object_or_404(Character, id=request.POST.get('character_to_ban_id'))
+    character_to_ban = get_object_or_404(
+        Character, id=request.POST.get('character_to_ban_id'))
     if character_to_ban not in capability.applying_to.character_members.all():
         messages.error(request, "You cannot do that", "danger")
-        return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
+        return redirect(request.META.get('HTTP_REFERER',
+                                         reverse('world:character_home')))
 
     proposal = {'character_id': character_to_ban.id}
-
     capability.create_proposal(request.hero, proposal)
-
-    if capability.organization.decision_taking == Organization.DEMOCRATIC:
-        messages.success(request, "A vote has been started regarding your action", "success")
-    else:
-        messages.success(request, "Done!", "success")
-    return redirect(capability.organization.get_absolute_url())
+    return capability_success(capability, request)
 
 
 @require_POST
 @capability_required_decorator
 def conquest_view(request, capability_id):
-    capability = get_object_or_404(Capability, id=capability_id, type=Capability.CONQUEST)
+    capability = get_object_or_404(
+        Capability, id=capability_id, type=Capability.CONQUEST)
     tile_to_conquer = get_object_or_404(Tile, id=request.POST.get('tile_to_conquest_id'))
 
     if request.POST.get('stop'):
@@ -146,14 +174,8 @@ def conquest_view(request, capability_id):
         'tile_id': tile_to_conquer.id,
         'stop': request.POST.get('stop')
     }
-
     capability.create_proposal(request.hero, proposal)
-
-    if capability.organization.decision_taking == Organization.DEMOCRATIC:
-        messages.success(request, "A vote has been started regarding your action", "success")
-    else:
-        messages.success(request, "Done!", "success")
-    return redirect(capability.get_absolute_url())
+    return capability_success(capability, request)
 
 
 @require_POST
@@ -176,20 +198,15 @@ def guilds_settings_view(request, capability_id):
         'settlement_id': settlement.id,
         'option': target_option
     }
-
     capability.create_proposal(request.hero, proposal)
-
-    if capability.organization.decision_taking == Organization.DEMOCRATIC:
-        messages.success(request, "A vote has been started regarding your action", "success")
-    else:
-        messages.success(request, "Done!", "success")
-    return redirect(capability.get_absolute_url())
+    return capability_success(capability, request)
 
 
 @require_POST
 @capability_required_decorator
 def formation_view(request, capability_id):
-    capability = get_object_or_404(Capability, id=capability_id, type=Capability.BATTLE_FORMATION)
+    capability = get_object_or_404(
+        Capability, id=capability_id, type=Capability.BATTLE_FORMATION)
 
     new_formation = request.POST['new_formation']
     if new_formation == BattleFormation.LINE:
@@ -225,19 +242,14 @@ def formation_view(request, capability_id):
         'spacing': spacing,
         'element_size': element_size
     }
-
     capability.create_proposal(request.hero, proposal)
-
-    if capability.organization.decision_taking == Organization.DEMOCRATIC:
-        messages.success(request, "A vote has been started regarding your action", "success")
-    else:
-        messages.success(request, "Done!", "success")
-    return redirect(capability.get_absolute_url())
+    return capability_success(capability, request)
 
 
 class DocumentCapabilityView(View):
     def get(self, request, capability_id, document_id=None):
-        capability = get_object_or_404(Capability, id=capability_id, type=Capability.POLICY_DOCUMENT)
+        capability = get_object_or_404(
+            Capability, id=capability_id, type=Capability.POLICY_DOCUMENT)
         if document_id is None:
             document = PolicyDocument(organization=capability.applying_to)
             new_document = True
@@ -256,9 +268,11 @@ class DocumentCapabilityView(View):
     def post(self, request, capability_id, document_id=None):
         if 'delete' in request.POST.keys() and document_id is None:
             messages.error(request, "You cannot do that", "danger")
-            return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
+            return redirect(request.META.get('HTTP_REFERER',
+                                             reverse('world:character_home')))
 
-        capability = get_object_or_404(Capability, id=capability_id, type=Capability.POLICY_DOCUMENT)
+        capability = get_object_or_404(
+            Capability, id=capability_id, type=Capability.POLICY_DOCUMENT)
         if document_id is None:
             new_document = True
         else:
@@ -273,14 +287,8 @@ class DocumentCapabilityView(View):
             'body': request.POST.get('body'),
             'public': request.POST.get('public'),
         }
-
         capability.create_proposal(request.hero, proposal)
-
-        if capability.organization.decision_taking == Organization.DEMOCRATIC:
-            messages.success(request, "A vote has been started regarding your action", "success")
-        else:
-            messages.success(request, "Done!", "success")
-        return redirect(capability.organization.get_absolute_url())
+        return capability_success(capability, request)
 
 
 class DiplomacyCapabilityView(View):
@@ -295,8 +303,10 @@ class DiplomacyCapabilityView(View):
         context = {
             'capability': capability,
             'target_organization': target_organization,
-            'relationship_out': capability.applying_to.get_relationship_to(target_organization),
-            'relationship_in': capability.applying_to.get_relationship_from(target_organization),
+            'relationship_out': capability.applying_to.get_relationship_to(
+                target_organization),
+            'relationship_in': capability.applying_to.get_relationship_from(
+                target_organization),
             'subtemplate': 'organization/capabilities/diplomacy_target.html',
         }
         return render(request, 'organization/capability.html', context)
@@ -315,7 +325,12 @@ class DiplomacyCapabilityView(View):
         if target_relationship in ("accept", "refuse"):
             if not target_organization.get_relationship_to(capability.applying_to).is_proposal():
                 messages.error(request, "You cannot do that (1)", "danger")
-                return redirect(reverse('organization:diplomacy_capability', kwargs={'capability_id': capability_id, 'target_organization_id': target_organization_id}))
+                return redirect(reverse(
+                    'organization:diplomacy_capability',
+                    kwargs={
+                        'capability_id': capability_id,
+                        'target_organization_id': target_organization_id}
+                ))
             proposal = {
                 'type': target_relationship,
                 'target_organization_id': target_organization.id,
@@ -324,7 +339,12 @@ class DiplomacyCapabilityView(View):
         elif target_relationship == "take back":
             if not capability.applying_to.get_relationship_to(target_organization).is_proposal():
                 messages.error(request, "You cannot do that (2)", "danger")
-                return redirect(reverse('organization:diplomacy_capability', kwargs={'capability_id': capability_id, 'target_organization_id': target_organization_id}))
+                return redirect(reverse(
+                    'organization:diplomacy_capability',
+                    kwargs={
+                        'capability_id': capability_id,
+                        'target_organization_id': target_organization_id}
+                ))
             proposal = {
                 'type': target_relationship,
                 'target_organization_id': target_organization.id,
@@ -333,10 +353,21 @@ class DiplomacyCapabilityView(View):
         else:
             if capability.applying_to.get_relationship_to(target_organization).is_proposal():
                 messages.error(request, "You cannot do that", "danger")
-                return redirect(reverse('organization:diplomacy_capability', kwargs={'capability_id': capability_id, 'target_organization_id': target_organization_id}))
+                return redirect(reverse(
+                    'organization:diplomacy_capability',
+                    kwargs={
+                        'capability_id': capability_id,
+                        'target_organization_id': target_organization_id}
+                ))
             if target_relationship not in [choice[0] for choice in OrganizationRelationship.RELATIONSHIP_CHOICES]:
                 messages.error(request, "You cannot do that (3)", "danger")
-                return redirect(reverse('organization:diplomacy_capability', kwargs={'capability_id': capability_id, 'target_organization_id': target_organization_id}))
+                return redirect(reverse(
+                    'organization:diplomacy_capability',
+                    kwargs={
+                        'capability_id': capability_id,
+                        'target_organization_id': target_organization_id
+                    })
+                )
             proposal = {
                 'type': 'propose',
                 'target_organization_id': target_organization.id,
@@ -344,30 +375,32 @@ class DiplomacyCapabilityView(View):
             }
 
         capability.create_proposal(request.hero, proposal)
-
-        if capability.organization.decision_taking == Organization.DEMOCRATIC:
-            messages.success(request, "A vote has been started regarding your action", "success")
-        else:
-            messages.success(request, "Done!", "success")
-        return redirect(capability.organization.get_absolute_url())
+        return capability_success(capability, request)
 
 
 class MilitaryStanceCapabilityView(View):
     def get(self, request, capability_id, target_organization_id):
-        capability = get_object_or_404(Capability, id=capability_id, type=Capability.MILITARY_STANCE)
-        target_organization = get_object_or_404(Organization, id=target_organization_id, violence_monopoly=True)
+        capability = get_object_or_404(
+            Capability, id=capability_id, type=Capability.MILITARY_STANCE)
+        target_organization = get_object_or_404(
+            Organization, id=target_organization_id, violence_monopoly=True)
         regions = list(
-            capability.applying_to.world.tile_set.exclude(type__in=(Tile.DEEPSEA, Tile.SHORE)).order_by('name')
+            capability.applying_to.world.tile_set.exclude(
+                type__in=(Tile.DEEPSEA, Tile.SHORE)
+            ).order_by('name')
         )
         for region in regions:
-            region.stance = capability.applying_to.get_region_stance_to(target_organization, region)
+            region.stance = capability.applying_to.get_region_stance_to(
+                target_organization, region)
 
         context = {
             'capability': capability,
             'target_organization': target_organization,
-            'stance': capability.applying_to.get_default_stance_to(target_organization),
+            'stance': capability.applying_to.get_default_stance_to(
+                target_organization),
             'regions': regions,
-            'subtemplate': 'organization/capabilities/military stance_target.html',
+            'subtemplate': 'organization/capabilities/'
+                           'military stance_target.html',
         }
         return render(request, 'organization/capability.html', context)
 
@@ -394,18 +427,21 @@ class MilitaryStanceCapabilityView(View):
         }
 
         if 'region_id' in request.POST.keys():
-            region = get_object_or_404(Tile, id=request.POST['region_id'], world=capability.applying_to.world)
+            region = get_object_or_404(
+                Tile,
+                id=request.POST['region_id'],
+                world=capability.applying_to.world
+            )
             if not region.is_on_ground():
                 raise Http404()
             proposal['region_id'] = region.id
 
         capability.create_proposal(request.hero, proposal)
-
-        if capability.organization.decision_taking == Organization.DEMOCRATIC:
-            messages.success(request, "A vote has been started regarding your action", "success")
-        else:
-            messages.success(request, "Done!", "success")
+        capability_success(capability, request)
         return redirect(reverse(
             'organization:military_stance_capability',
-            kwargs={'capability_id': capability_id, 'target_organization_id': target_organization_id})
+            kwargs={
+                'capability_id': capability_id,
+                'target_organization_id': target_organization_id
+            })
         )

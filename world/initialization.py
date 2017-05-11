@@ -64,7 +64,7 @@ def initialize_settlement(settlement):
             age_months = random.randint(0, 60 * 12)
             able = (random.getrandbits(7) != 0)
 
-        if able:
+        if able and age_months > NPC.VERY_YOUNG_AGE_LIMIT:
             assigned_workers += 1
 
             # we assign 90% of population to fields

@@ -11,7 +11,7 @@ from messaging.models import CharacterMessage
 import world.models
 import organization.models
 import world.recruitment
-from world.models import Building, Settlement
+from world.models import Building, Settlement, NPC
 
 
 def pass_turn(world):
@@ -43,7 +43,7 @@ class TurnProcessor:
         self.do_conquests()
         self.do_barbarians()
         self.do_population_updates()
-        # self.do_job_updates()
+        self.do_job_updates()
         self.do_production()
         # self.do_trade()
         self.do_food_consumption()
@@ -51,6 +51,36 @@ class TurnProcessor:
 
         self.world.current_turn += 1
         self.world.save()
+
+    def do_job_updates(self):
+        for settlement in Settlement.objects.filter(
+            tile__world=self.world
+        ):
+            self.do_settlement_job_updates(settlement)
+
+    def do_settlement_job_updates(self, settlement: Settlement):
+        settlement.get_residents().filter(able=False).update(workplace=None)
+        npcs_looking_for_a_job = settlement.get_residents().filter(
+            workplace=None,
+            age_months__gt=NPC.VERY_YOUNG_AGE_LIMIT
+        )
+        fields = list(settlement.building_set.filter(
+            type=Building.GRAIN_FIELD,
+            owner=None
+        ))
+        for jobseeker in npcs_looking_for_a_job:
+            jobseeker.workplace = random.choice(fields)
+            jobseeker.save()
+
+        if not settlement.tile.controlled_by.get_violence_monopoly().barbaric:
+            if settlement.guilds_setting == Settlement.GUILDS_PROHIBIT:
+                pass
+            elif settlement.guilds_setting == Settlement.GUILDS_RESTRICT:
+                pass
+            elif settlement.guilds_setting == Settlement.GUILDS_KEEP:
+                pass
+            elif settlement.guilds_setting == Settlement.GUILDS_PROMOTE:
+                pass
 
     def do_population_updates(self):
         for settlement in Settlement.objects.filter(

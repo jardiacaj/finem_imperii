@@ -4,7 +4,7 @@ from django.test import TestCase
 
 from organization.models import Organization
 from world.initialization import initialize_settlement
-from world.models import Building, Settlement
+from world.models import Building, Settlement, Character
 from world.turn import TurnProcessor
 
 
@@ -24,7 +24,6 @@ class TestTaxation(TestCase):
 
     def test_basic_tax(self):
         settlement = Settlement.objects.get(name="Small Valley")
-        settlement.population_default = 100
         guild = settlement.building_set.get(type=Building.GUILD)
         guild.field_production_counter = 100
         guild.save()
@@ -34,3 +33,8 @@ class TestTaxation(TestCase):
 
         state = settlement.tile.controlled_by.get_violence_monopoly()
         self.assertEqual(state.tax_countdown, 12)
+
+        char1 = Character.objects.get(id=4)
+        self.assertEqual(char1.cash, 50)
+        char2 = Character.objects.get(id=8)
+        self.assertEqual(char2.cash, 50)

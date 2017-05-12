@@ -1,5 +1,6 @@
 import random
 
+import math
 from django.db import transaction
 from django.db.models.expressions import F
 
@@ -62,8 +63,29 @@ class TurnProcessor:
                 state.tax_countdown = 12
                 state.save()
 
-    def do_state_taxes(self, state):
-        pass
+    def do_state_taxes(self, state: organization.models.Organization):
+        settlement_input = []
+        total_input = 0
+        for tile in state.get_all_controlled_tiles():
+            for settlement in tile.settlement_set.all():
+                t = 0
+                for guild in settlement.building_set.filter(
+                        type=Building.GUILD):
+                    t += guild.field_production_counter
+                    total_input += guild.field_production_counter
+                    guild.field_production_counter = 0
+                    guild.save()
+
+                settlement_input.append(
+                    (settlement, t)
+                )
+
+        member_share = math.floor(
+            total_input / state.character_members.count()
+        )
+        for member in state.character_members.all():
+            member.cash += member_share
+            member.save()
 
     def do_job_updates(self):
         for settlement in Settlement.objects.filter(

@@ -404,7 +404,7 @@ def battle_tick(battle: Battle):
 
 
 def battle_turn(battle: Battle):
-    for i in range(10):
+    for i in range(15):
         battle.refresh_from_db()
         if battle.current:
             battle_tick(battle)

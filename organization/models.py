@@ -36,26 +36,41 @@ class Organization(models.Model):
 
     world = models.ForeignKey('world.World')
     name = models.CharField(max_length=100)
-    color = models.CharField(max_length=6, default="FFFFFF", help_text="Format: RRGGBB (hex)")
+    color = models.CharField(
+        max_length=6, default="FFFFFF", help_text="Format: RRGGBB (hex)")
     barbaric = models.BooleanField(default=False)
     description = models.TextField()
     is_position = models.BooleanField()
-    position_type = models.CharField(max_length=15, choices=POSITION_TYPE_CHOICES, blank=True, default='')
-    owner = models.ForeignKey('Organization', null=True, blank=True, related_name='owned_organizations')
-    leader = models.ForeignKey('Organization', null=True, blank=True, related_name='leaded_organizations')
+    position_type = models.CharField(
+        max_length=15, choices=POSITION_TYPE_CHOICES, blank=True, default='')
+    owner = models.ForeignKey(
+        'Organization', null=True, blank=True,
+        related_name='owned_organizations')
+    leader = models.ForeignKey(
+        'Organization', null=True, blank=True,
+        related_name='leaded_organizations')
     owner_and_leader_locked = models.BooleanField(
-        help_text="If set, this organization will have always the same leader as it's owner."
+        help_text="If set, this organization will have always the same "
+                  "leader as it's owner."
     )
     violence_monopoly = models.BooleanField(default=False)
-    decision_taking = models.CharField(max_length=15, choices=DECISION_TAKING_CHOICES)
-    membership_type = models.CharField(max_length=15, choices=MEMBERSHIP_TYPE_CHOICES)
+    decision_taking = models.CharField(
+        max_length=15, choices=DECISION_TAKING_CHOICES)
+    membership_type = models.CharField(
+        max_length=15, choices=MEMBERSHIP_TYPE_CHOICES)
     character_members = models.ManyToManyField('world.Character', blank=True)
     organization_members = models.ManyToManyField('Organization', blank=True)
     election_period_months = models.IntegerField(default=0)
-    current_election = models.ForeignKey('PositionElection', blank=True, null=True, related_name='+')
-    last_election = models.ForeignKey('PositionElection', blank=True, null=True, related_name='+')
-    heir_first = models.ForeignKey('world.Character', blank=True, null=True, related_name='first_heir_to')
-    heir_second = models.ForeignKey('world.Character', blank=True, null=True, related_name='second_heir_to')
+    current_election = models.ForeignKey(
+        'PositionElection', blank=True, null=True, related_name='+')
+    last_election = models.ForeignKey(
+        'PositionElection', blank=True, null=True, related_name='+')
+    heir_first = models.ForeignKey(
+        'world.Character', blank=True, null=True,
+        related_name='first_heir_to')
+    heir_second = models.ForeignKey(
+        'world.Character', blank=True, null=True,
+        related_name='second_heir_to')
     tax_countdown = models.SmallIntegerField(default=0)
 
     def get_descendants_list(self, including_self=False):
@@ -76,11 +91,14 @@ class Organization(models.Model):
         if character in self.character_members.all():
             return True
 
-    def organizations_character_can_apply_capabilities_to_this_with(self, character, capability_type):
+    def organizations_character_can_apply_capabilities_to_this_with(
+            self, character, capability_type):
         result = []
-        capabilities = Capability.objects.filter(applying_to=self, type=capability_type)
+        capabilities = Capability.objects.filter(
+            applying_to=self, type=capability_type)
         for capability in capabilities:
-            if capability.organization.character_can_use_capabilities(character):
+            if capability.organization.character_can_use_capabilities(
+                    character):
                 result.append(capability.organization)
         return result
 
@@ -104,7 +122,8 @@ class Organization(models.Model):
         candidate_tiles = world.models.Tile.objects \
             .filter(world=self.world) \
             .exclude(controlled_by=self) \
-            .exclude(type__in=(world.models.Tile.SHORE, world.models.Tile.DEEPSEA))
+            .exclude(type__in=(world.models.Tile.SHORE,
+                               world.models.Tile.DEEPSEA))
         result = []
         for tile in candidate_tiles:
             conquest_tile_event = tile.tileevent_set.filter(
@@ -125,7 +144,9 @@ class Organization(models.Model):
         return CapabilityProposal.objects.filter(capability__organization=self, closed=False)
 
     def get_all_controlled_tiles(self):
-        return world.models.Tile.objects.filter(controlled_by__in=self.get_descendants_list(including_self=True)).all()
+        return world.models.Tile.objects.filter(
+            controlled_by__in=self.get_descendants_list(including_self=True)
+        )
 
     def external_capabilities_to_this(self):
         return self.capabilities_to_this.exclude(organization=self)
@@ -203,7 +224,10 @@ class Organization(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('organization:view', kwargs={'organization_id': self.id})
+        return reverse(
+            'organization:view',
+            kwargs={'organization_id': self.id}
+        )
 
     def get_html_name(self):
         template = '{name}{icon}{suffix}'
@@ -222,7 +246,9 @@ class Organization(models.Model):
         )
 
     def get_bootstrap_icon(self):
-        template = '<span style="color: #{color}" class="glyphicon glyphicon-{icon}" aria-hidden="true"></span>'
+        template = '<span style="color: #{color}" ' \
+                   'class="glyphicon glyphicon-{icon}" ' \
+                   'aria-hidden="true"></span>'
         if self.violence_monopoly and not self.barbaric:
             icon = "tower"
         elif self.violence_monopoly and self.barbaric:
@@ -243,7 +269,10 @@ class Organization(models.Model):
         )
 
     def get_html_link(self):
-        return '<a href="{}">{}</a>'.format(self.get_absolute_url(), self.get_html_name())
+        return '<a href="{}">{}</a>'.format(
+            self.get_absolute_url(),
+            self.get_html_name()
+        )
 
     def current_elections_can_vote_in(self):
         result = []
@@ -255,6 +284,7 @@ class Organization(models.Model):
             if capability.applying_to.current_election is not None:
                 result.append(capability)
         return result
+
 
 class PositionElection(models.Model):
     position = models.ForeignKey(Organization)
@@ -269,7 +299,8 @@ class PositionElection(models.Model):
         return self.turn - 3
 
     def can_present_candidacy(self):
-        return self.position.world.current_turn <= self.last_turn_to_present_candidacy()
+        return self.position.world.current_turn <= \
+               self.last_turn_to_present_candidacy()
 
     @transaction.atomic
     def resolve(self):
@@ -289,7 +320,8 @@ class PositionElection(models.Model):
             winning_candidacy = winners[0]
             winning_candidate = winning_candidacy.candidate
             self.winner = winning_candidacy
-            self.position.character_members.remove(self.position.get_position_occupier())
+            self.position.character_members.remove(
+                self.position.get_position_occupier())
             self.position.character_members.add(winning_candidate)
 
         self.position.last_election = self
@@ -299,11 +331,15 @@ class PositionElection(models.Model):
         self.save()
 
     def get_results(self):
-        return self.positioncandidacy_set.all().annotate(num_votes=Count('positionelectionvote'))\
+        return self.positioncandidacy_set.all().annotate(
+            num_votes=Count('positionelectionvote'))\
             .order_by('-num_votes')
 
     def get_absolute_url(self):
-        return reverse('organization:election', kwargs={'election_id': self.id})
+        return reverse(
+            'organization:election',
+            kwargs={'election_id': self.id}
+        )
 
     def __str__(self):
         return "{} election for {}".format(
@@ -438,9 +474,11 @@ class CapabilityProposal(models.Model):
         if self.capability.type == Capability.POLICY_DOCUMENT:
             try:
                 if proposal['new']:
-                    document = PolicyDocument(organization=self.capability.applying_to)
+                    document = PolicyDocument(
+                        organization=self.capability.applying_to)
                 else:
-                    document = PolicyDocument.objects.get(id=proposal['document_id'])
+                    document = PolicyDocument.objects.get(
+                        id=proposal['document_id'])
 
                 if proposal['delete']:
                     document.delete()
@@ -448,7 +486,8 @@ class CapabilityProposal(models.Model):
                     document.title = proposal.get('title')
                     document.body = proposal.get('body')
                     document.public = proposal.get('public') is not None
-                    document.last_modified_turn = self.capability.organization.world.current_turn
+                    document.last_modified_turn = self.capability.\
+                        organization.world.current_turn
                     document.save()
             except PolicyDocument.DoesNotExist:
                 pass
@@ -462,39 +501,48 @@ class CapabilityProposal(models.Model):
                     character_to_ban
                 )
                 if character_to_ban.get_violence_monopoly() is None:
-                    character_to_ban.world.get_barbaric_state().character_members.add(
+                    character_to_ban.world.get_barbaric_state().\
+                        character_members.add(
                         character_to_ban
                     )
             except world.models.Character.DoesNotExist:
                 pass
 
             leader_organization = self.capability.applying_to.leader
-            if leader_organization and character_to_ban in leader_organization.character_members.all():
+            if leader_organization and character_to_ban in \
+                    leader_organization.character_members.all():
                 leader_organization.character_members.remove(character_to_ban)
 
         elif self.capability.type == Capability.CONVOKE_ELECTIONS:
             if self.capability.applying_to.current_election is None:
                 months_to_election = proposal['months_to_election']
-                self.capability.applying_to.convoke_elections(months_to_election)
+                self.capability.applying_to.convoke_elections(
+                    months_to_election)
 
         elif self.capability.type == Capability.DIPLOMACY:
             try:
-                target_organization = Organization.objects.get(id=proposal['target_organization_id'])
+                target_organization = Organization.objects.get(
+                    id=proposal['target_organization_id'])
                 target_relationship = proposal['target_relationship']
-                changing_relationship = self.capability.applying_to.get_relationship_to(target_organization)
+                changing_relationship = self.capability.applying_to.\
+                    get_relationship_to(target_organization)
                 reverse_relationship = changing_relationship.reverse_relation()
                 action_type = proposal['type']
                 if action_type == 'propose':
                     changing_relationship.desire(target_relationship)
                 elif action_type == 'accept':
-                    if reverse_relationship.desired_relationship == target_relationship:
-                        changing_relationship.set_relationship(target_relationship)
+                    if reverse_relationship.desired_relationship == \
+                            target_relationship:
+                        changing_relationship.set_relationship(
+                            target_relationship)
                 elif action_type == 'take back':
-                    if changing_relationship.desired_relationship == target_relationship:
+                    if changing_relationship.desired_relationship == \
+                            target_relationship:
                         changing_relationship.desired_relationship = None
                         changing_relationship.save()
                 elif action_type == 'refuse':
-                    if reverse_relationship.desired_relationship == target_relationship:
+                    if reverse_relationship.desired_relationship == \
+                            target_relationship:
                         reverse_relationship.desired_relationship = None
                         reverse_relationship.save()
 
@@ -503,12 +551,16 @@ class CapabilityProposal(models.Model):
 
         elif self.capability.type == Capability.MILITARY_STANCE:
             try:
-                target_organization = Organization.objects.get(id=proposal['target_organization_id'])
+                target_organization = Organization.objects.get(
+                    id=proposal['target_organization_id'])
                 if 'region_id' in proposal.keys():
-                    region = world.models.Tile.objects.get(id=proposal['region_id'])
-                    target_stance = self.capability.applying_to.get_region_stance_to(target_organization, region)
+                    region = world.models.Tile.objects.get(
+                        id=proposal['region_id'])
+                    target_stance = self.capability.applying_to.\
+                        get_region_stance_to(target_organization, region)
                 else:
-                    target_stance = self.capability.applying_to.get_default_stance_to(target_organization)
+                    target_stance = self.capability.applying_to.\
+                        get_default_stance_to(target_organization)
                 target_stance.stance_type = proposal.get('target_stance')
                 target_stance.save()
             except (world.models.Tile.DoesNotExist, Organization.DoesNotExist):
@@ -516,9 +568,11 @@ class CapabilityProposal(models.Model):
 
         elif self.capability.type == Capability.BATTLE_FORMATION:
             try:
-                formation = BattleFormation.objects.get(organization=self.capability.applying_to, battle=None)
+                formation = BattleFormation.objects.get(
+                    organization=self.capability.applying_to, battle=None)
             except BattleFormation.DoesNotExist:
-                formation = BattleFormation(organization=self.capability.applying_to, battle=None)
+                formation = BattleFormation(
+                    organization=self.capability.applying_to, battle=None)
             formation.formation = proposal['formation']
             formation.spacing = proposal['spacing']
             formation.element_size = proposal['element_size']
@@ -533,18 +587,22 @@ class CapabilityProposal(models.Model):
                         organization=self.capability.applying_to,
                         end_turn__isnull=True
                     )
-                    tile_event.end_turn = self.capability.applying_to.world.current_turn
+                    tile_event.end_turn = self.capability.applying_to.\
+                        world.current_turn
                     tile_event.save()
                 else:
-                    if tile in self.capability.applying_to.conquestable_tiles():
+                    if tile in \
+                            self.capability.applying_to.conquestable_tiles():
                         world.models.TileEvent.objects.create(
                             tile=tile,
                             type=world.models.TileEvent.CONQUEST,
                             organization=self.capability.applying_to,
                             counter=0,
-                            start_turn=self.capability.applying_to.world.current_turn
+                            start_turn=self.capability.applying_to.world.
+                                current_turn
                         )
-            except (world.models.Tile.DoesNotExist, world.models.TileEvent.DoesNotExist):
+            except (world.models.Tile.DoesNotExist,
+                    world.models.TileEvent.DoesNotExist):
                 pass
 
         elif self.capability.type == Capability.GUILDS:
@@ -689,21 +747,27 @@ class OrganizationRelationship(models.Model):
         ALLIANCE: 5
     }
 
-    from_organization = models.ForeignKey(Organization, related_name='relationships_stemming')
-    to_organization = models.ForeignKey(Organization, related_name='relationships_receiving')
-    relationship = models.CharField(max_length=20, choices=RELATIONSHIP_CHOICES, default=PEACE)
-    desired_relationship = models.CharField(max_length=20, choices=RELATIONSHIP_CHOICES, blank=True, null=True)
+    from_organization = models.ForeignKey(
+        Organization, related_name='relationships_stemming')
+    to_organization = models.ForeignKey(
+        Organization, related_name='relationships_receiving')
+    relationship = models.CharField(
+        max_length=20, choices=RELATIONSHIP_CHOICES, default=PEACE)
+    desired_relationship = models.CharField(
+        max_length=20, choices=RELATIONSHIP_CHOICES, blank=True, null=True)
 
     def reverse_relation(self):
         return self.to_organization.get_relationship_to(self.from_organization)
 
     @staticmethod
     def _get_badge_type(relationship):
-        if relationship in (OrganizationRelationship.WAR, OrganizationRelationship.BANNED):
+        if relationship in (OrganizationRelationship.WAR,
+                            OrganizationRelationship.BANNED):
             return 'danger'
         elif relationship == OrganizationRelationship.FRIENDSHIP:
             return 'success'
-        elif relationship in (OrganizationRelationship.DEFENSIVE_ALLIANCE, OrganizationRelationship.ALLIANCE):
+        elif relationship in (OrganizationRelationship.DEFENSIVE_ALLIANCE,
+                              OrganizationRelationship.ALLIANCE):
             return 'info'
         else:
             return 'default'
@@ -755,7 +819,8 @@ class OrganizationRelationship(models.Model):
     def default_military_stance(self):
         if self.relationship in (OrganizationRelationship.PEACE,):
             return MilitaryStance.DEFENSIVE
-        if self.relationship in (OrganizationRelationship.WAR, OrganizationRelationship.BANNED):
+        if self.relationship in (OrganizationRelationship.WAR,
+                                 OrganizationRelationship.BANNED):
             return MilitaryStance.AGGRESSIVE
         return MilitaryStance.AVOID_BATTLE
 
@@ -780,18 +845,24 @@ class MilitaryStance(models.Model):
         (AGGRESSIVE, AGGRESSIVE),
     )
 
-    from_organization = models.ForeignKey(Organization, related_name='mil_stances_stemming')
-    to_organization = models.ForeignKey(Organization, related_name='mil_stances_receiving')
-    region = models.ForeignKey('world.Tile', related_name='+', null=True, blank=True)
-    stance_type = models.CharField(max_length=20, choices=STANCE_CHOICES, default=DEFAULT)
+    from_organization = models.ForeignKey(
+        Organization, related_name='mil_stances_stemming')
+    to_organization = models.ForeignKey(
+        Organization, related_name='mil_stances_receiving')
+    region = models.ForeignKey(
+        'world.Tile', related_name='+', null=True, blank=True)
+    stance_type = models.CharField(
+        max_length=20, choices=STANCE_CHOICES, default=DEFAULT)
 
     def get_stance(self):
         if self.stance_type != MilitaryStance.DEFAULT:
             return self.stance_type
         if self.region:
-            return self.from_organization.get_default_stance_to(self.to_organization).get_stance()
+            return self.from_organization.get_default_stance_to(
+                self.to_organization).get_stance()
         else:
-            return self.from_organization.get_relationship_to(self.to_organization).default_military_stance()
+            return self.from_organization.get_relationship_to(
+                self.to_organization).default_military_stance()
 
     def get_html_stance(self):
         stance = self.get_stance()
@@ -806,5 +877,5 @@ class MilitaryStance(models.Model):
 
         return '<span class="label label-{bootstrap_type}">{stance}</span>'.format(
             bootstrap_type=bootstrap_type,
-            stance =stance
+            stance=stance
         )

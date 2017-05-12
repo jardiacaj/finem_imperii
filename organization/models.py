@@ -9,6 +9,7 @@ from django.urls.base import reverse
 from django.utils.html import escape
 
 from battle.models import BattleFormation
+from messaging import shortcuts
 
 
 class Organization(models.Model):
@@ -371,22 +372,27 @@ class Capability(models.Model):
 
     organization = models.ForeignKey(Organization)
     type = models.CharField(max_length=20, choices=TYPE_CHOICES)
-    applying_to = models.ForeignKey(Organization, related_name='capabilities_to_this')
-    stemming_from = models.ForeignKey('Capability', null=True, blank=True, related_name='transfers')
+    applying_to = models.ForeignKey(
+        Organization, related_name='capabilities_to_this')
+    stemming_from = models.ForeignKey(
+        'Capability', null=True, blank=True, related_name='transfers')
 
     def get_absolute_url(self):
         return reverse('organization:capability', kwargs={'capability_id': self.id})
 
     def create_proposal(self, character, proposal_dict):
+        voted_proposal = self.organization.is_position or self.organization.decision_taking == Organization.DISTRIBUTED
         proposal = CapabilityProposal.objects.create(
             proposing_character=character,
             capability=self,
             proposal_json=json.dumps(proposal_dict),
             vote_end_turn=self.organization.world.current_turn + 2,
+            democratic=voted_proposal
         )
-        if self.organization.is_position or self.organization.decision_taking == Organization.DISTRIBUTED:
+        if voted_proposal:
             proposal.execute()
         else:
+            proposal.announce()
             proposal.issue_vote(character, CapabilityVote.YEA)
 
     def is_passive(self):
@@ -413,6 +419,18 @@ class CapabilityProposal(models.Model):
     vote_end_turn = models.IntegerField()
     executed = models.BooleanField(default=False)
     closed = models.BooleanField(default=False)
+    democratic = models.BooleanField()
+
+    def announce(self):
+        message = shortcuts.create_message(
+            "New {}".format(self),
+            self.capability.organization.world,
+            link=self.get_absolute_url()
+        )
+        shortcuts.add_organization_recipient(
+            message, self.capability.applying_to)
+        shortcuts.add_organization_recipient(
+            message, self.capability.organization)
 
     def execute(self):
         proposal = self.get_proposal_json_content()
@@ -602,6 +620,12 @@ class CapabilityProposal(models.Model):
 
     def get_absolute_url(self):
         return reverse('organization:proposal', kwargs={'proposal_id': self.id})
+
+    def __str__(self):
+        return "{} proposal by {}".format(
+            self.capability.get_type_display(),
+            self.proposing_character
+        )
 
 
 class CapabilityVote(models.Model):

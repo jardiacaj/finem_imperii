@@ -74,7 +74,8 @@ class ComposeView(View):
             category=None,
             world=request.hero.world,
             safe=False,
-            content=message_body
+            content=message_body,
+            link=None
         )
 
         if reply_to:

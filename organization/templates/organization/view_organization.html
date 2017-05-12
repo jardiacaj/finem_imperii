@@ -166,9 +166,8 @@
             <ul>
                 {% for proposal in organization.get_open_proposals.all %}
                     <li>
-                        {{ proposal.capability.get_type_display|capfirst }} proposal by
-                        {{ proposal.proposing_character }}
-                        <a href="{{ proposal.get_absolute_url }}" class="btn btn-sm btn-primary">Open</a>
+                        {{ proposal|capfirst }}
+                        <a href="{{ proposal.get_absolute_url }}" class="btn btn-sm btn-primary">View</a>
                     </li>
                 {% empty %}
                     <li>Currently nothing to vote.</li>

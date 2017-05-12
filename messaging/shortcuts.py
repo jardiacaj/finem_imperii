@@ -2,20 +2,23 @@ from messaging.models import CharacterMessage, MessageRecipient, \
     MessageRecipientGroup
 
 
-def create_message(sender, category, world, safe, content):
+def create_message(
+        content, world, sender=None, category=None, safe=False, link=None
+):
     return CharacterMessage.objects.create(
         content=content,
         creation_turn=world.current_turn,
         sender=sender,
         safe=safe,
-        category=category
+        category=category,
+        link=link
     )
 
 
-def add_character_recipient(message, character, group=None):
+def add_character_recipient(message: CharacterMessage, character, group=None):
     try:
-        recipient = MessageRecipient.objects.get(
-            message=message, character=character)
+        recipient = MessageRecipient.objects.get_or_create(
+            message=message, character=character)[0]
         if recipient.group and not group:
             recipient.group = None
             recipient.save()
@@ -24,26 +27,19 @@ def add_character_recipient(message, character, group=None):
             message=message, character=character, group=group)
 
 
-def add_organization_recipient(message, organization):
-    group = MessageRecipientGroup.objects.create(
+def add_organization_recipient(message: CharacterMessage, organization):
+    group = MessageRecipientGroup.objects.get_or_create(
         message=message,
         organization=organization
-    )
+    )[0]
     for character in organization.character_members.all():
         add_character_recipient(message, character, group)
 
 
-def add_recipients_for_reply(message, reply_to):
+def add_recipients_for_reply(
+        message: CharacterMessage, reply_to: MessageRecipient):
     for original_group in reply_to.message.messagerecipientgroup_set.all():
-        new_group = MessageRecipientGroup.objects.create(
-            message=message,
-            organization=original_group.organization
-        )
-        for character in original_group.organization.character_members.all():
-            MessageRecipient.objects.create(message=message,
-                                            character=character,
-                                            group=new_group)
+        add_organization_recipient(message, original_group.organization)
     for recipient in reply_to.message.messagerecipient_set.filter(
             group=None):
-        MessageRecipient.objects.create(message=message,
-                                        character=recipient.character)
+        add_character_recipient(message, recipient.character)

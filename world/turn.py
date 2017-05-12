@@ -48,9 +48,22 @@ class TurnProcessor:
         # self.do_trade()
         self.do_food_consumption()
         # self.do_food_spoilage()
+        self.do_taxes()
 
         self.world.current_turn += 1
         self.world.save()
+
+    def do_taxes(self):
+        for state in self.world.get_violence_monopolies():
+            state.tax_countdown -= 1
+            state.save()
+            if state.tax_countdown <= 0:
+                self.do_state_taxes(state)
+                state.tax_countdown = 12
+                state.save()
+
+    def do_state_taxes(self, state):
+        pass
 
     def do_job_updates(self):
         for settlement in Settlement.objects.filter(
@@ -178,6 +191,7 @@ class TurnProcessor:
                 building.save()
 
         if building.type == Building.GUILD:
+            building.field_production_counter *= 0.9
             building.field_production_counter += workers.count()
             building.save()
 

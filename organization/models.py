@@ -55,6 +55,7 @@ class Organization(models.Model):
     last_election = models.ForeignKey('PositionElection', blank=True, null=True, related_name='+')
     heir_first = models.ForeignKey('world.Character', blank=True, null=True, related_name='first_heir_to')
     heir_second = models.ForeignKey('world.Character', blank=True, null=True, related_name='second_heir_to')
+    tax_countdown = models.SmallIntegerField(default=0)
 
     def get_descendants_list(self, including_self=False):
         descendants = list()

@@ -3,7 +3,7 @@ from messaging.models import CharacterMessage, MessageRecipient, \
 
 
 def create_message(
-        content, world, sender=None, category=None, safe=False, link=None
+        content, world, category, sender=None, safe=False, link=None
 ):
     return CharacterMessage.objects.create(
         content=content,

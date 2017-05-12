@@ -425,7 +425,8 @@ class CapabilityProposal(models.Model):
         message = shortcuts.create_message(
             "New {}".format(self),
             self.capability.organization.world,
-            link=self.get_absolute_url()
+            category="proposal",
+            link=self.get_absolute_url(),
         )
         shortcuts.add_organization_recipient(
             message, self.capability.applying_to)

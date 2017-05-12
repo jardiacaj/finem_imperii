@@ -18,9 +18,13 @@ class CharacterMessage(models.Model):
 
     TRAVEL = 'travel'
     CONQUEST = 'conquest'
+    TURN = 'turn'
+    PROPOSAL = 'proposal'
     CATEGORY_CHOICES = (
         (TRAVEL, TRAVEL),
         (CONQUEST, CONQUEST),
+        (TURN, "new turn"),
+        (PROPOSAL, "action proposal"),
     )
 
     content = models.TextField()

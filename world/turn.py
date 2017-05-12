@@ -7,12 +7,14 @@ from django.db.models.expressions import F
 from battle.battle_init import initialize_from_conflict, start_battle
 from battle.battle_tick import battle_turn
 from battle.models import Battle
+from messaging import shortcuts
 from messaging.helpers import send_notification_to_characters
 from messaging.models import CharacterMessage
 import world.models
 import organization.models
 import world.recruitment
 from world.models import Building, Settlement, NPC
+from world.templatetags.extra_filters import nice_turn
 
 
 def pass_turn(world):
@@ -53,6 +55,17 @@ class TurnProcessor:
 
         self.world.current_turn += 1
         self.world.save()
+
+        new_turn_message = shortcuts.create_message(
+            "It is now {} in {}.".format(
+                nice_turn(self.world.current_turn),
+                self.world
+            ),
+            self.world,
+            'turn'
+        )
+        for character in self.world.character_set.all():
+            shortcuts.add_character_recipient(new_turn_message, character)
 
     def do_taxes(self):
         for state in self.world.get_violence_monopolies():

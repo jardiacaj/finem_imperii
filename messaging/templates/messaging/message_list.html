@@ -25,7 +25,7 @@
                                 {% if recipient.message.sender %}
                                     Message from {{ recipient.message.sender.get_html_link|safe }}
                                 {% else %}
-                                    {{ recipient.message.category|capfirst }}
+                                    {{ recipient.message.get_category_display|capfirst }}
                                 {% endif %}
                             </span>
                             {% if recipient.message.sender %}
@@ -52,13 +52,15 @@
                         </div>
                         <div class="panel-body">
                             <div class="col-sm-9">
-                                <p class="small">
-                                    For
-                                    {% for message_recipient in recipient.message.get_nice_recipient_list %}{% if not forloop.first and forloop.last %} and {% elif not forloop.first %}, {% endif %}{{ message_recipient.get_html_link|safe }}{% if forloop.last %}.{% endif %}
-                                    {% empty %}
-                                        NOONE?.
-                                    {% endfor %}
-                                </p>
+                                {% if recipient.message.sender %}
+                                    <p class="small">
+                                        For
+                                        {% for message_recipient in recipient.message.get_nice_recipient_list %}{% if not forloop.first and forloop.last %} and {% elif not forloop.first %}, {% endif %}{{ message_recipient.get_html_link|safe }}{% if forloop.last %}.{% endif %}
+                                        {% empty %}
+                                            NOONE?.
+                                        {% endfor %}
+                                    </p>
+                                {% endif %}
                             </div>
                             <div class="col-sm-3">
                                 <p class="small">

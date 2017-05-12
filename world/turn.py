@@ -177,6 +177,10 @@ class TurnProcessor:
                 building.field_production_counter += production_counter_add
                 building.save()
 
+        if building.type == Building.GUILD:
+            building.field_production_counter += workers.count()
+            building.save()
+
     def do_barbarians(self):
         world_settlements = world.models.Settlement.objects.filter(
             tile__world=self.world

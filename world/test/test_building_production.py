@@ -198,3 +198,36 @@ class TestFieldProduction(TestCase):
 
         buildings.refresh_from_db()
         self.assertEqual(buildings.field_production_counter, 0)
+
+
+class TestGuildProduction(TestCase):
+    fixtures = ['simple_world']
+
+    def test_guild_input(self):
+        settlement = Settlement.objects.get(name="Small Valley")
+        guild = Building.objects.get(
+            type=Building.GUILD, settlement=settlement
+        )
+
+        for i in range(10):
+            NPC.objects.create(
+                name="foo",
+                male=False,
+                able=True,
+                age_months=20*12,
+                residence=None,
+                origin=settlement,
+                location=settlement,
+                workplace=guild,
+                unit=None,
+                trained_soldier=False,
+                skill_fighting=0
+            )
+
+        turn_processor = TurnProcessor(settlement.tile.world)
+        turn_processor.do_building_production(guild)
+
+        guild.refresh_from_db()
+        self.assertEqual(guild.quantity, 1)
+        self.assertEqual(guild.worker.count(), 10)
+        self.assertEqual(guild.field_production_counter, 10)

@@ -6,6 +6,8 @@ from django.views.generic.base import View
 
 from decorators import inchar_required
 from messaging.models import MessageRecipient, MessageRelationship, CharacterMessage, MessageRecipientGroup
+from messaging.shortcuts import create_message, add_character_recipient, \
+    add_recipients_for_reply, add_organization_recipient
 from organization.models import Organization
 from world.models import Character
 
@@ -67,15 +69,16 @@ class ComposeView(View):
                 request, reply_to, message_body, error_message="You must choose at least one recipient."
             )
 
-        message = CharacterMessage.objects.create(
-            content=message_body,
-            creation_turn=request.hero.world.current_turn,
+        message = create_message(
             sender=request.hero,
-            safe=False
+            category=None,
+            world=request.hero.world,
+            safe=False,
+            content=message_body
         )
 
         if reply_to:
-            message.add_recipients_for_reply(reply_to)
+            add_recipients_for_reply(message, reply_to)
         else:
             try:
                 self.create_recipients_from_post_data(request, message)
@@ -102,21 +105,19 @@ class ComposeView(View):
             if split[0] == 'settlement':
                 for character in request.hero.location.character_set.all():
                     character_count += 1
-                    message.add_recipient(character)
+                    add_character_recipient(message, character)
             elif split[0] == 'region':
                 for character in Character.objects.filter(location__tile=request.hero.location.tile):
                     character_count += 1
-                    message.add_recipient(character)
+                    add_character_recipient(message, character)
             elif split[0] == 'organization':
                 organization_count += 1
                 organization = get_object_or_404(Organization, id=split[1])
-                group = MessageRecipientGroup.objects.create(message=message, organization=organization)
-                for character in organization.character_members.all():
-                    message.add_recipient(character, group)
+                add_organization_recipient(message, organization)
             elif split[0] == 'character':
                 character_count += 1
                 character = get_object_or_404(Character, id=split[1])
-                message.add_recipient(character)
+                add_character_recipient(message, character)
             else:
                 message.delete()
                 raise ComposeView.RecipientBuildingException("Invalid recipient.")

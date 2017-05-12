@@ -30,15 +30,6 @@ class CharacterMessage(models.Model):
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, blank=True, null=True)
     safe = models.BooleanField(default=False)
 
-    def add_recipient(self, character, group=None):
-        try:
-            recipient = MessageRecipient.objects.get(message=self, character=character)
-            if recipient.group and not group:
-                recipient.group = None
-                recipient.save()
-        except MessageRecipient.DoesNotExist:
-            MessageRecipient.objects.create(message=self, character=character, group=group)
-
     def get_nice_recipient_list(self):
         return (
             [group.organization for group in self.messagerecipientgroup_set.all()]
@@ -52,14 +43,6 @@ class CharacterMessage(models.Model):
             +
             ["character_{}".format(recipient.character.id) for recipient in self.messagerecipient_set.filter(group=None)]
         )
-
-    def add_recipients_for_reply(self, reply_to):
-        for original_group in reply_to.message.messagerecipientgroup_set.all():
-            new_group = MessageRecipientGroup.objects.create(message=self, organization=original_group.organization)
-            for character in original_group.organization.character_members.all():
-                MessageRecipient.objects.create(message=self, character=character, group=new_group)
-        for recipient in reply_to.message.messagerecipient_set.filter(group=None):
-            MessageRecipient.objects.create(message=self, character=recipient.character)
 
 
 class MessageRecipientGroup(models.Model):

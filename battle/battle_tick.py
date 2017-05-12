@@ -408,3 +408,13 @@ def battle_turn(battle: Battle):
         battle.refresh_from_db()
         if battle.current:
             battle_tick(battle)
+
+    battle.tile.world.broadcast(
+        (
+            "The battle in {} continues".format(battle.tile)
+            if battle.current else
+            "The battle in {} has ended".format(battle.tile)
+        ),
+        'battle',
+        battle.get_absolute_url()
+    )

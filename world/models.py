@@ -10,9 +10,11 @@ from django.contrib.auth.models import User
 from django.db.models.aggregates import Avg
 
 from battle.models import BattleUnit, BattleSoldierInTurn
+from messaging import shortcuts
 from messaging.models import CharacterMessage, MessageRecipient
 import organization.models
-from world.templatetags.extra_filters import nice_hours, turn_to_date
+from world.templatetags.extra_filters import nice_hours, turn_to_date, \
+    nice_turn
 
 Point = namedtuple('Point', ['x', 'z'])
 
@@ -29,6 +31,16 @@ class World(models.Model):
     blocked_for_turn = models.BooleanField(
         default=False, help_text="True during turn processing"
     )
+
+    def broadcast(self, content, category, link=None):
+        new_turn_message = shortcuts.create_message(
+            content,
+            self,
+            category,
+            link=link
+        )
+        for character in self.character_set.all():
+            shortcuts.add_character_recipient(new_turn_message, character)
 
     def get_violence_monopolies(self):
         return self.organization_set.filter(violence_monopoly=True)

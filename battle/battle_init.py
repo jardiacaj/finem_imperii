@@ -3,9 +3,11 @@ import math
 from django.db import transaction
 from django.db.models.aggregates import Avg
 
-from battle.models import BattleFormation, BattleUnit, BattleContubernium, BattleSoldier, BattleOrganization, \
-    BattleSide, BattleCharacter, Coordinates, BattleTurn, BattleCharacterInTurn, BattleUnitInTurn, \
-    BattleContuberniumInTurn, BattleSoldierInTurn
+from battle.models import BattleFormation, BattleUnit, BattleContubernium, \
+    BattleSoldier, BattleOrganization, \
+    BattleSide, BattleCharacter, Coordinates, BattleTurn, \
+    BattleCharacterInTurn, BattleUnitInTurn, \
+    BattleContuberniumInTurn, BattleSoldierInTurn, Battle
 
 
 def create_contubernia(unit):
@@ -290,7 +292,7 @@ class BattleAlreadyStartedException(Exception):
 
 
 @transaction.atomic
-def start_battle(battle):
+def start_battle(battle: Battle):
     if battle.started:
         raise BattleAlreadyStartedException(
             "Battle {} already started!".format(battle.id)

@@ -56,16 +56,10 @@ class TurnProcessor:
         self.world.current_turn += 1
         self.world.save()
 
-        new_turn_message = shortcuts.create_message(
-            "It is now {} in {}.".format(
-                nice_turn(self.world.current_turn),
-                self.world
-            ),
-            self.world,
+        self.world.broadcast(
+            "It is now {}.".format(nice_turn(self.world.current_turn)),
             'turn'
         )
-        for character in self.world.character_set.all():
-            shortcuts.add_character_recipient(new_turn_message, character)
 
     def do_taxes(self):
         for state in self.world.get_violence_monopolies():
@@ -308,12 +302,11 @@ class TurnProcessor:
             travel_check = character.check_travelability(character.travel_destination)
             if travel_check is not None:
                 pass
-                # TODO add notification!
             else:
                 message = character.perform_travel(character.travel_destination)
-                character.travel_destination = None
-                character.save()
                 character.add_notification(CharacterMessage.TRAVEL, message)
+            character.travel_destination = None
+            character.save()
 
     def restore_hours(self):
         for character in self.world.character_set.all():
@@ -421,4 +414,11 @@ def create_battle_from_conflict(conflict, tile):
         start_turn=tile.world.current_turn
     )
     initialize_from_conflict(battle, conflict, tile)
+
+    battle.tile.world.broadcast(
+        "A battle has started in {}".format(battle.tile),
+        'battle',
+        battle.get_absolute_url()
+    )
+
     return battle

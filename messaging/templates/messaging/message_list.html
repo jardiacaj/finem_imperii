@@ -51,21 +51,31 @@
 
                         </div>
                         <div class="panel-body">
-                            <div class="col-sm-9">
-                                {% if recipient.message.sender %}
+                            <div class="row">
+                                <div class="col-sm-9">
+                                    {% if recipient.message.sender %}
+                                        <p class="small">
+                                            For
+                                            {% for message_recipient in recipient.message.get_nice_recipient_list %}{% if not forloop.first and forloop.last %} and {% elif not forloop.first %}, {% endif %}{{ message_recipient.get_html_link|safe }}{% if forloop.last %}.{% endif %}
+                                            {% empty %}
+                                                NOONE?.
+                                            {% endfor %}
+                                        </p>
+                                    {% endif %}
+                                    {% if recipient.message.link %}
+                                        <a
+                                                href="{{ recipient.message.link }}"
+                                                class="btn btn-primary btn-sm"
+                                        >
+                                            View
+                                        </a>
+                                    {% endif %}
+                                </div>
+                                <div class="col-sm-3">
                                     <p class="small">
-                                        For
-                                        {% for message_recipient in recipient.message.get_nice_recipient_list %}{% if not forloop.first and forloop.last %} and {% elif not forloop.first %}, {% endif %}{{ message_recipient.get_html_link|safe }}{% if forloop.last %}.{% endif %}
-                                        {% empty %}
-                                            NOONE?.
-                                        {% endfor %}
+                                        {{ recipient.message.creation_time }}
                                     </p>
-                                {% endif %}
-                            </div>
-                            <div class="col-sm-3">
-                                <p class="small">
-                                    {{ recipient.message.creation_time }}
-                                </p>
+                                </div>
                             </div>
                             {% include 'messaging/message_body.html' with message=recipient.message %}
                         </div>

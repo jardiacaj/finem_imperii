@@ -64,15 +64,34 @@
             </ul>
         {% endif %}
 
-        {% if organization.current_election or organization.last_election %}
+        {% if organization.current_election or organization.last_election or organization.current_elections_can_vote_in %}
             <h4>Elections</h4>
             {% if organization.current_election %}
-                <a href="{{ organization.current_election.get_absolute_url }}">View current election</a>
-            {% else %}
-                <a href="{{ organization.last_election.get_absolute_url }}">View last election</a>
+                <a href="{{ organization.current_election.get_absolute_url }}" class="lead">
+                    Current election for this position
+                </a>
+                <br>
             {% endif %}
-            <br>
-            <a href="{% url 'organization:election_list' organization.id %}">View past elections</a>
+            {% if organization.last_election %}
+                <a href="{{ organization.last_election.get_absolute_url }}">
+                    Last election for this position
+                </a>
+                <br>
+            {% endif %}
+            {% if organization.current_election or organization.last_election %}
+                <a href="{% url 'organization:election_list' organization.id %}">
+                    Past elections for this position
+                </a>
+                <br>
+            {% endif %}
+            {% for election in organization.current_elections_can_vote_in %}
+                Can currently vote for new {{ election.applying_to.get_html_link|safe }}
+                {% if can_use_capabilities %}
+                    <a class="btn btn-primary" href="{{ election.get_absolute_url }}">
+                        Vote
+                    </a>
+                {% endif %}
+            {% endfor %}
         {% endif %}
 
         {% if organization.policydocument_set.all %}

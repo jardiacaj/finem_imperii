@@ -244,6 +244,16 @@ class Organization(models.Model):
     def get_html_link(self):
         return '<a href="{}">{}</a>'.format(self.get_absolute_url(), self.get_html_name())
 
+    def current_elections_can_vote_in(self):
+        result = []
+        elect_capabilities = Capability.objects.filter(
+            type=Capability.ELECT,
+            organization=self
+        )
+        for capability in elect_capabilities:
+            if capability.applying_to.current_election is not None:
+                result.append(capability)
+        return result
 
 class PositionElection(models.Model):
     position = models.ForeignKey(Organization)

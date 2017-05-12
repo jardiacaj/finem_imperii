@@ -13,8 +13,10 @@ def organization_view(request, organization_id):
     context = {
         'organization': organization,
         'hero_is_member': organization.character_is_member(request.hero),
-        'can_use_capabilities': organization.character_can_use_capabilities(request.hero),
-        'relationships': organization.relationships_stemming.exclude(relationship=OrganizationRelationship.PEACE),
+        'can_use_capabilities': organization.character_can_use_capabilities(
+            request.hero),
+        'relationships': organization.relationships_stemming.exclude(
+            relationship=OrganizationRelationship.PEACE),
     }
     return render(request, 'organization/view_organization.html', context)
 

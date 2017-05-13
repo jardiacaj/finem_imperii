@@ -182,7 +182,8 @@ class Settlement(models.Model):
     population_default = models.IntegerField()
     x_pos = models.IntegerField()
     z_pos = models.IntegerField()
-    guilds_setting = models.CharField(max_length=20, default=GUILDS_KEEP)
+    guilds_setting = models.CharField(
+        max_length=20, default=GUILDS_KEEP, choices=GUILDS_CHOICES)
 
     def size_name(self):
         for size in settlement_size_names:

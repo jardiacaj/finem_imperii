@@ -21,12 +21,28 @@ class CharacterMessage(models.Model):
     TURN = 'turn'
     PROPOSAL = 'proposal'
     BATTLE = 'battle'
+    POLICY = 'policy'
+    BAN = 'ban'
+    ELECTIONS = 'elections'
+    DIPLOMACY = 'diplomacy'
+    MILITARY_STANCE = 'military stance'
+    BATTLE_FORMATION = 'battle formation'
+    CONQUEST = 'conquest'
+    GUILDS = 'guilds'
     CATEGORY_CHOICES = (
         (TRAVEL, TRAVEL),
         (CONQUEST, CONQUEST),
         (TURN, "new turn"),
         (PROPOSAL, "action proposal"),
         (BATTLE, BATTLE),
+        (POLICY, "policy and law"),
+        (BAN, "ban"),
+        (ELECTIONS, "elections"),
+        (DIPLOMACY, "diplomacy"),
+        (MILITARY_STANCE, "military stance"),
+        (BATTLE_FORMATION, "battle formation"),
+        (CONQUEST, "conquest"),
+        (GUILDS, "conquest"),
     )
 
     content = models.TextField()

@@ -219,6 +219,7 @@ class Organization(models.Model):
                 candidate=self.get_position_occupier(),
                 description="Auto-generated candidacy for incumbent character."
             )
+        return election
 
     def __str__(self):
         return self.name
@@ -428,7 +429,7 @@ class Capability(models.Model):
         if voted_proposal:
             proposal.execute()
         else:
-            proposal.announce()
+            proposal.announce_proposal()
             proposal.issue_vote(character, CapabilityVote.YEA)
 
     def is_passive(self):
@@ -457,7 +458,7 @@ class CapabilityProposal(models.Model):
     closed = models.BooleanField(default=False)
     democratic = models.BooleanField()
 
-    def announce(self):
+    def announce_proposal(self):
         message = shortcuts.create_message(
             "New {}".format(self),
             self.capability.organization.world,
@@ -468,6 +469,24 @@ class CapabilityProposal(models.Model):
             message, self.capability.applying_to)
         shortcuts.add_organization_recipient(
             message, self.capability.organization)
+
+    def announce_execution(self, text, category, link=None):
+        message = shortcuts.create_message(
+            (
+                "{}'s proposal passed: {}"
+                if self.democratic
+                else "Action by {}: {}"
+            ).format(self.proposing_character, text),
+            self.capability.organization.world,
+            category=category,
+            link=(self.get_absolute_url() if link is None and self.democratic
+                  else link),
+        )
+        shortcuts.add_organization_recipient(
+            message, self.capability.applying_to)
+        shortcuts.add_organization_recipient(
+            message, self.capability.organization)
+        return message
 
     def execute(self):
         proposal = self.get_proposal_json_content()
@@ -481,6 +500,10 @@ class CapabilityProposal(models.Model):
                         id=proposal['document_id'])
 
                 if proposal['delete']:
+                    self.announce_execution(
+                        "The document {} has been deleted".format(document),
+                        "policy"
+                    )
                     document.delete()
                 else:
                     document.title = proposal.get('title')
@@ -489,6 +512,17 @@ class CapabilityProposal(models.Model):
                     document.last_modified_turn = self.capability.\
                         organization.world.current_turn
                     document.save()
+
+                    self.announce_execution(
+                        (
+                            "A new document titled {} has been created"
+                            if proposal['new'] else
+                            "The document {} has been edited"
+                        ).format(document),
+                        "policy",
+                        link=document.get_absolute_url()
+                    )
+
             except PolicyDocument.DoesNotExist:
                 pass
 
@@ -513,11 +547,27 @@ class CapabilityProposal(models.Model):
                     leader_organization.character_members.all():
                 leader_organization.character_members.remove(character_to_ban)
 
+            self.announce_execution(
+                "{} has been banned from {}".format(
+                    character_to_ban, self.capability.applying_to
+                ),
+                'ban'
+            )
+
         elif self.capability.type == Capability.CONVOKE_ELECTIONS:
             if self.capability.applying_to.current_election is None:
                 months_to_election = proposal['months_to_election']
-                self.capability.applying_to.convoke_elections(
+                election = self.capability.applying_to.convoke_elections(
                     months_to_election)
+
+                self.announce_execution(
+                    "Elections have been convoked in {}. "
+                    "They will take place in {} months.".format(
+                        self.capability.applying_to, months_to_election
+                    ),
+                    'elections',
+                    link=election.get_absolute_url()
+                )
 
         elif self.capability.type == Capability.DIPLOMACY:
             try:
@@ -563,6 +613,23 @@ class CapabilityProposal(models.Model):
                         get_default_stance_to(target_organization)
                 target_stance.stance_type = proposal.get('target_stance')
                 target_stance.save()
+
+                self.announce_execution(
+                    (
+                        "The general military stance of {from_} towards {to} "
+                        "is now {stance}"
+                        if target_stance.region is None else
+                        "The military stance of {from_} towards {to} "
+                        "in {region} is now {stance}"
+                    ).format(
+                        from_=target_stance.from_organization,
+                        to=target_stance.to_organization,
+                        stance=target_stance.get_stance_type_display(),
+                        region=target_stance.region,
+                    ),
+                    'military stance'
+                )
+
             except (world.models.Tile.DoesNotExist, Organization.DoesNotExist):
                 pass
 
@@ -577,6 +644,14 @@ class CapabilityProposal(models.Model):
             formation.spacing = proposal['spacing']
             formation.element_size = proposal['element_size']
             formation.save()
+
+            self.announce_execution(
+                "The battle formation of {} has been changed ({})".format(
+                    self.capability.applying_to,
+                    formation.formation
+                ),
+                'battle formation'
+            )
 
         elif self.capability.type == Capability.CONQUEST:
             try:
@@ -601,6 +676,14 @@ class CapabilityProposal(models.Model):
                             start_turn=self.capability.applying_to.world.
                                 current_turn
                         )
+                        tile.world.broadcast(
+                            "{} has started conquering {}!".format(
+                                self.capability.applying_to,
+                                tile
+                            ),
+                            'conquest',
+                            tile.get_absolute_url()
+                        )
             except (world.models.Tile.DoesNotExist,
                     world.models.TileEvent.DoesNotExist):
                 pass
@@ -620,6 +703,14 @@ class CapabilityProposal(models.Model):
                 ):
                     settlement.guilds_setting = proposal['option']
                     settlement.save()
+                    self.announce_execution(
+                        "{} in {}".format(
+                            settlement.get_guilds_setting_display(),
+                            settlement
+                        ),
+                        'guilds',
+                        settlement.tile.get_absolute_url()
+                    )
             except world.models.Settlement.DoesNotExist:
                 pass
 
@@ -800,6 +891,11 @@ class OrganizationRelationship(models.Model):
 
     @transaction.atomic
     def desire(self, target_relationship):
+        if target_relationship == self.WAR:
+            self.to_organization.world.broadcast(
+                "{} declared war on {}!", "diplomacy"
+            )
+
         if self.RELATIONSHIP_LEVEL[target_relationship] < self.RELATIONSHIP_LEVEL[self.relationship]:
             self.set_relationship(target_relationship)
         else:
@@ -815,6 +911,17 @@ class OrganizationRelationship(models.Model):
         reverse_relation.relationship = target_relationship
         reverse_relation.desired_relationship = None
         reverse_relation.save()
+
+        if target_relationship != self.WAR:
+            self.to_organization.world.broadcast(
+                "{} and {} now have the following diplomatic relationship: {}"
+                "".format(
+                    self.from_organization,
+                    self.to_organization,
+                    self.relationship
+                ),
+                "diplomacy"
+            )
 
     def default_military_stance(self):
         if self.relationship in (OrganizationRelationship.PEACE,):

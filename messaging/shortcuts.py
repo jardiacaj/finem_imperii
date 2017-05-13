@@ -18,7 +18,10 @@ def create_message(
 def add_character_recipient(message: CharacterMessage, character, group=None):
     try:
         recipient = MessageRecipient.objects.get_or_create(
-            message=message, character=character)[0]
+            message=message,
+            character=character,
+            defaults={'group': group}
+        )[0]
         if recipient.group and not group:
             recipient.group = None
             recipient.save()

@@ -27,6 +27,14 @@
                                 {% else %}
                                     {{ recipient.message.get_category_display|capfirst }}
                                 {% endif %}
+                                {% if recipient.message.link %}
+                                    <a
+                                            href="{{ recipient.message.link }}"
+                                            class="btn btn-primary btn-sm"
+                                    >
+                                        View
+                                    </a>
+                                {% endif %}
                             </span>
                             {% if recipient.message.sender %}
                                 <a
@@ -61,14 +69,6 @@
                                                 NOONE?.
                                             {% endfor %}
                                         </p>
-                                    {% endif %}
-                                    {% if recipient.message.link %}
-                                        <a
-                                                href="{{ recipient.message.link }}"
-                                                class="btn btn-primary btn-sm"
-                                        >
-                                            View
-                                        </a>
                                     {% endif %}
                                 </div>
                                 <div class="col-sm-3">

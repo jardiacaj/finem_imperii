@@ -112,7 +112,7 @@ Allocated: 5 days
  - Taxation and economy (4 days) (finished)
  - Missing notifications (1/2 day) (finished)
  - Battle end (1/2 day) (finished)
- - MUST Battle join (1/2 day)
+ - Battle join (1/2 day) (finished)
  - MUST Unit payment (1/2 day)
  - MUST Economy balancing (1/2 day)
  - MUST Invitation system (1/2 day)

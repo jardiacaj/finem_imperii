@@ -4,10 +4,10 @@ import math
 from django.db import transaction
 from django.db.models.expressions import F
 
-from battle.battle_init import initialize_from_conflict, start_battle
-from battle.battle_tick import battle_turn, battle_joins
-from battle.models import Battle
-from messaging import shortcuts
+from battle.battle_init import initialize_from_conflict, start_battle, \
+    add_unit_to_battle
+from battle.battle_tick import battle_turn
+from battle.models import Battle, BattleOrganization
 from messaging.helpers import send_notification_to_characters
 from messaging.models import CharacterMessage
 import world.models
@@ -339,7 +339,6 @@ class TurnProcessor:
         ):
             battle_joins(battle)
 
-
     def battle_turns(self):
         for battle in Battle.objects.filter(
                 tile__world=self.world, current=True
@@ -431,11 +430,16 @@ def add_allies(conflict, tile):
             if candidate in conflict_side or candidate in other_conflict_side:
                 continue
             aggressive_to_all_in_other_side = True
-            for state in conflict_side:
+            for state in other_conflict_side:
                 if candidate.get_region_stance_to(state, tile).get_stance != organization.models.MilitaryStance.AGGRESSIVE:
                     aggressive_to_all_in_other_side = False
                     break
-            if aggressive_to_all_in_other_side:
+            aggressive_to_own_side = False
+            for state in conflict_side:
+                if candidate.get_region_stance_to(state, tile).get_stance != organization.models.MilitaryStance.AGGRESSIVE:
+                    aggressive_to_own_side = True
+                    break
+            if aggressive_to_all_in_other_side and not aggressive_to_own_side:
                 conflict[i].append(candidate)
 
 
@@ -468,3 +472,34 @@ def create_battle_from_conflict(conflict, tile):
     )
 
     return battle
+
+
+def battle_joins(battle: Battle):
+    for candidate_unit in battle_ready_units_in_tile(battle.tile):
+        candidate_vm = candidate_unit.get_violence_monopoly()
+        try:
+            battle_org = BattleOrganization.objects.get(
+                battle_side__battle=battle,
+                organization=candidate_vm
+            )
+            add_unit_to_battle(battle, battle_org, candidate_unit)
+        except BattleOrganization.DoesNotExist:
+            sides = list(battle.battleside_set.all())
+            for i, side in enumerate(sides):
+                other_side = side[0 if i == 1 else 1]
+                aggressive_to_all_in_other_side = True
+                for state in other_side.battle_organization_set.all():
+                    if candidate_vm.get_region_stance_to(state, battle.tile).get_stance != organization.models.MilitaryStance.AGGRESSIVE:
+                        aggressive_to_all_in_other_side = False
+                        break
+                aggressive_to_own_side = False
+                for state in side.battle_organization_set.all():
+                    if candidate_vm.get_region_stance_to(state, battle.tile).get_stance != organization.models.MilitaryStance.AGGRESSIVE:
+                        aggressive_to_own_side = True
+                        break
+                if aggressive_to_all_in_other_side and not aggressive_to_own_side:
+                    battle_org = BattleOrganization.objects.create(
+                        side=side,
+                        organization=candidate_vm
+                    )
+                    add_unit_to_battle(battle, battle_org, candidate_vm)

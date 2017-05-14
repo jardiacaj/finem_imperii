@@ -8,6 +8,7 @@ from battle.models import BattleFormation, BattleUnit, BattleContubernium, \
     BattleSide, BattleCharacter, Coordinates, BattleTurn, \
     BattleCharacterInTurn, BattleUnitInTurn, \
     BattleContuberniumInTurn, BattleSoldierInTurn, Battle
+from world.models import WorldUnit
 
 
 def create_contubernia(unit):
@@ -288,6 +289,14 @@ def generate_in_turn_objects(battle):
     ):
         barbarian_unit.order = barbarian_unit.battle_unit.get_order()
         barbarian_unit.save()
+
+
+def add_unit_to_battle(
+        battle: Battle,
+        battle_organization: BattleOrganization,
+        world_unit: WorldUnit
+):
+    pass
 
 
 class BattleAlreadyStartedException(Exception):

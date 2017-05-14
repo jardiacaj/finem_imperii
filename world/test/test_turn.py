@@ -37,8 +37,8 @@ class TestTurn(TestCase):
         result = opponents_in_organization_list(organizations_with_battle_ready_units(tile), tile)
         self.assertEqual(len(result), 1)
         opponents = result[0]
-        self.assertIn(Organization.objects.get(id=105), opponents)
-        self.assertIn(Organization.objects.get(id=112), opponents)
+        self.assertIn(Organization.objects.get(id=105), opponents[0])
+        self.assertIn(Organization.objects.get(id=112), opponents[1])
         self.assertEqual(len(opponents), 2)
 
     def test_get_largest_conflict_in_list(self):
@@ -48,8 +48,8 @@ class TestTurn(TestCase):
         conflicts = opponents_in_organization_list(organizations_with_battle_ready_units(tile), tile)
         result = get_largest_conflict_in_list(conflicts, tile)
         self.assertEqual(len(result), 2)
-        self.assertIn(Organization.objects.get(id=105), result)
-        self.assertIn(Organization.objects.get(id=112), result)
+        self.assertIn(Organization.objects.get(id=105), result[0])
+        self.assertIn(Organization.objects.get(id=112), result[1])
         self.assertEqual(len(result), 2)
 
     def test_create_battle_from_conflict(self):
@@ -59,7 +59,13 @@ class TestTurn(TestCase):
         organization1 = Organization.objects.get(id=105)
         organization2 = Organization.objects.get(id=112)
 
-        battle = create_battle_from_conflict([organization1, organization2], tile)
+        battle = create_battle_from_conflict(
+            [
+                [organization1],
+                [organization2]
+            ],
+            tile
+        )
         self.assertEqual(battle.tile, tile)
 
     def test_create_only_one_conflict(self):

@@ -37,7 +37,14 @@ class TestBattleStart(TestCase):
         initialize_unit(WorldUnit.objects.get(id=3))
         tile = Tile.objects.get(id=108)
         self.battle = Battle.objects.create(tile=tile, start_turn=0)
-        initialize_from_conflict(self.battle, [Organization.objects.get(id=105), Organization.objects.get(id=112)], tile)
+        initialize_from_conflict(
+            self.battle,
+            [
+                [Organization.objects.get(id=105)],
+                [Organization.objects.get(id=112)]
+            ],
+            tile
+        )
 
     def test_battle_create_from_conflict(self):
         self.assertEqual(self.battle.battleside_set.count(), 2)

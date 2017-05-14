@@ -5,7 +5,7 @@ from django.db import transaction
 from django.db.models.expressions import F
 
 from battle.battle_init import initialize_from_conflict, start_battle
-from battle.battle_tick import battle_turn
+from battle.battle_tick import battle_turn, battle_joins
 from battle.models import Battle
 from messaging import shortcuts
 from messaging.helpers import send_notification_to_characters
@@ -41,6 +41,7 @@ class TurnProcessor:
         self.do_travels()
         self.restore_hours()
         self.do_unit_maintenance()
+        self.battle_joins()
         self.battle_turns()
         self.trigger_battles()
         self.do_elections()
@@ -332,21 +333,20 @@ class TurnProcessor:
                     end_turn=self.world.current_turn).exists():
                 trigger_battles_in_tile(tile)
 
+    def battle_joins(self):
+        for battle in Battle.objects.filter(
+                tile__world=self.world, current=True
+        ):
+            battle_joins(battle)
+
+
     def battle_turns(self):
-        for battle in Battle.objects.filter(tile__world=self.world, current=True):
+        for battle in Battle.objects.filter(
+                tile__world=self.world, current=True
+        ):
             if not battle.started:
                 start_battle(battle)
             battle_turn(battle)
-
-
-def trigger_battles_in_tile(tile):
-    conflicts = opponents_in_organization_list(
-        organizations_with_battle_ready_units(tile),
-        tile
-    )
-    conflict = get_largest_conflict_in_list(conflicts, tile)
-    if conflict:
-        return create_battle_from_conflict(conflict, tile)
 
 
 def do_settlement_barbarians(settlement):
@@ -384,6 +384,18 @@ def do_settlement_barbarians(settlement):
         )
 
 
+def trigger_battles_in_tile(tile):
+    conflicts = opponents_in_organization_list(
+        organizations_with_battle_ready_units(tile),
+        tile
+    )
+    for conflict in conflicts:
+        add_allies(conflict, tile)
+    conflict = get_largest_conflict_in_list(conflicts, tile)
+    if conflict:
+        return create_battle_from_conflict(conflict, tile)
+
+
 def organizations_with_battle_ready_units(tile):
     result = []
     for unit in battle_ready_units_in_tile(tile):
@@ -408,8 +420,23 @@ def opponents_in_organization_list(organizations, tile):
         i = input_list.pop()
         for j in input_list:
             if i.get_region_stance_to(j, tile).get_stance() == organization.models.MilitaryStance.AGGRESSIVE:
-                potential_conflicts.append([i, j])
+                potential_conflicts.append([[i, ], [j, ]])
     return potential_conflicts
+
+
+def add_allies(conflict, tile):
+    for i, conflict_side in enumerate(conflict):
+        other_conflict_side = conflict[0 if i == 1 else 1]
+        for candidate in organizations_with_battle_ready_units(tile):
+            if candidate in conflict_side or candidate in other_conflict_side:
+                continue
+            aggressive_to_all_in_other_side = True
+            for state in conflict_side:
+                if candidate.get_region_stance_to(state, tile).get_stance != organization.models.MilitaryStance.AGGRESSIVE:
+                    aggressive_to_all_in_other_side = False
+                    break
+            if aggressive_to_all_in_other_side:
+                conflict[i].append(candidate)
 
 
 def get_largest_conflict_in_list(conflicts, tile):
@@ -417,8 +444,9 @@ def get_largest_conflict_in_list(conflicts, tile):
     max_soldiers = 0
     for conflict in conflicts:
         soldiers = 0
+        conflicting_states = conflict[0] + conflict[1]
         for unit in battle_ready_units_in_tile(tile):
-            if unit.get_violence_monopoly() in conflict:
+            if unit.get_violence_monopoly() in conflicting_states:
                 soldiers += unit.get_fighting_soldiers().count()
         if soldiers > max_soldiers:
             result = conflict

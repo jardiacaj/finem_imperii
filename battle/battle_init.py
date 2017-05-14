@@ -30,17 +30,20 @@ def create_contubernia(unit):
 
 @transaction.atomic
 def initialize_from_conflict(battle, conflict, tile):
-    z = False
-    for organization in conflict:
-        battle_side = BattleSide.objects.create(battle=battle, z=z)
-        BattleOrganization.objects.create(
-            side=battle_side,
-            organization=organization
-        )
-        z = True
+    for i, conflict_side in enumerate(conflict):
+        for organization in conflict_side:
+            battle_side = BattleSide.objects.create(
+                battle=battle,
+                z=i
+            )
+            BattleOrganization.objects.create(
+                side=battle_side,
+                organization=organization
+            )
+    conflicting_states = conflict[0] + conflict[1]
     for unit in tile.get_units():
         violence_monopoly = unit.get_violence_monopoly()
-        if violence_monopoly in conflict:
+        if violence_monopoly in conflicting_states:
             battle_organization = BattleOrganization.objects.get(
                 side__battle=battle,
                 organization=violence_monopoly

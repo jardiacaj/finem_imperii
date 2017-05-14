@@ -445,3 +445,7 @@ def battle_turn(battle: Battle):
         'battle',
         battle.get_absolute_url()
     )
+
+
+def battle_joins(battle: Battle):
+    pass

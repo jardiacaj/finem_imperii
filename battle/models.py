@@ -174,6 +174,7 @@ class BattleUnit(models.Model):
     starting_manpower = models.IntegerField()
     name = models.CharField(max_length=100)
     type = models.CharField(max_length=30)
+    in_battle = models.BooleanField(default=True)
 
     def get_order(self):
         if self.world_unit.owner_character:

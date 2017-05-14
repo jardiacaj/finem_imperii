@@ -13,7 +13,7 @@ from messaging.models import CharacterMessage
 import world.models
 import organization.models
 import world.recruitment
-from world.models import Building, Settlement, NPC
+from world.models import Building, Settlement, NPC, WorldUnit
 from world.templatetags.extra_filters import nice_turn
 
 
@@ -40,6 +40,7 @@ class TurnProcessor:
     def do_turn(self):
         self.do_travels()
         self.restore_hours()
+        self.do_unit_maintenance()
         self.battle_turns()
         self.trigger_battles()
         self.do_elections()
@@ -60,6 +61,17 @@ class TurnProcessor:
             "It is now {}.".format(nice_turn(self.world.current_turn)),
             'turn'
         )
+
+    def do_unit_maintenance(self):
+        for unit in self.world.worldunit_set.all():
+            if unit.status == WorldUnit.REGROUPING:
+                if (
+                        unit.owner_character is not None and
+                        unit.location == unit.owner_character.location):
+                    unit.status = WorldUnit.FOLLOWING
+                else:
+                    unit.status = WorldUnit.STANDING
+                unit.save()
 
     def do_taxes(self):
         for state in self.world.get_violence_monopolies():
@@ -315,7 +327,10 @@ class TurnProcessor:
 
     def trigger_battles(self):
         for tile in self.world.tile_set.all():
-            trigger_battles_in_tile(tile)
+            if not Battle.objects.filter(
+                    tile=tile,
+                    end_turn=self.world.current_turn).exists():
+                trigger_battles_in_tile(tile)
 
     def battle_turns(self):
         for battle in Battle.objects.filter(tile__world=self.world, current=True):
@@ -379,7 +394,10 @@ def organizations_with_battle_ready_units(tile):
 
 
 def battle_ready_units_in_tile(tile):
-    return tile.get_units().exclude(status=world.models.WorldUnit.NOT_MOBILIZED).exclude(battleunit__battle_side__battle__current=True)
+    return tile.get_units().\
+        exclude(status=world.models.WorldUnit.NOT_MOBILIZED).\
+        exclude(status=world.models.WorldUnit.REGROUPING).\
+        exclude(battleunit__battle_side__battle__current=True)
 
 
 def opponents_in_organization_list(organizations, tile):

@@ -6,6 +6,7 @@ from django.db import transaction
 
 from battle.models import Battle, BattleCharacterInTurn, BattleUnitInTurn, BattleContuberniumInTurn, \
     BattleSoldierInTurn, Coordinates, Order, BattleUnit
+from world.models import WorldUnit
 
 
 def create_next_turn(battle: Battle):
@@ -18,20 +19,39 @@ def create_next_turn(battle: Battle):
     for side in battle.battleside_set.all():
         for organization in side.battleorganization_set.all():
             for character in organization.battlecharacter_set.all():
-                bcit = BattleCharacterInTurn.objects.get(battle_character=character, battle_turn=prev_turn)
+                bcit = BattleCharacterInTurn.objects.get(
+                    battle_character=character,
+                    battle_turn=prev_turn
+                )
                 bcit.id = None
                 bcit.battle_turn = new_turn
                 bcit.save()
 
             for unit in organization.battleunit_set.all():
                 try:
-                    buit = BattleUnitInTurn.objects.get(battle_unit=unit, battle_turn=prev_turn)
-                    if not buit.battlecontuberniuminturn_set.exists():
+                    buit = BattleUnitInTurn.objects.get(
+                        battle_unit=unit,
+                        battle_turn=prev_turn
+                    )
+                    if not buit.battlecontuberniuminturn_set.filter(
+                        x_pos__gte=-50, x_pos__lte=50,
+                        z_pos__gte=-50, z_pos__lte=50,
+                    ).exists():
+                        buit.battle_unit.in_battle = False
+                        buit.battle_unit.save()
+                        buit.battle_unit.world_unit.status = \
+                            WorldUnit.REGROUPING
+                        buit.battle_unit.world_unit.save()
                         continue
                     if not BattleSoldierInTurn.objects.filter(
                         battle_contubernium_in_turn__battle_unit_in_turn=buit,
                         wound_status__lt=BattleSoldierInTurn.DEAD
                     ).exists():
+                        buit.battle_unit.in_battle = False
+                        buit.battle_unit.save()
+                        buit.battle_unit.world_unit.status = \
+                            WorldUnit.REGROUPING
+                        buit.battle_unit.world_unit.save()
                         continue
                     buit.id = None
                     buit.battle_turn = new_turn
@@ -45,13 +65,20 @@ def create_next_turn(battle: Battle):
                     continue
 
                 for contubernium in unit.battlecontubernium_set.all():
+
                     try:
                         bcontubit = BattleContuberniumInTurn.objects.get(
-                            battle_contubernium=contubernium, battle_turn=prev_turn
+                            battle_contubernium=contubernium,
+                            battle_turn=prev_turn
                         )
                         if not bcontubit.battlesoldierinturn_set.filter(
                             wound_status__lt=BattleSoldierInTurn.DEAD
                         ).exists():
+                            continue
+                        if (
+                                    not -50 <= bcontubit.x_pos <= 50 or
+                                    not -50 <= bcontubit.z_pos <= 50
+                        ):
                             continue
                         bcontubit.id = None
                         bcontubit.moved_this_turn = False

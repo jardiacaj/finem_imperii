@@ -710,6 +710,7 @@ class WorldUnit(models.Model):
     STANDING = 'standing'
     FOLLOWING = 'following'
     CUSTOMER_SEARCH = 'customer search'
+    REGROUPING = 'regrouping'
     STATUS_CHOICES = (
         (NOT_MOBILIZED, NOT_MOBILIZED),
         (TRAINING, TRAINING),
@@ -825,7 +826,9 @@ class WorldUnit(models.Model):
     def get_current_battle(self):
         try:
             in_battle = BattleUnit.objects.get(
-                world_unit=self, battle_side__battle__current=True
+                world_unit=self,
+                battle_side__battle__current=True,
+                in_battle=True
             )
             return in_battle.battle_side.battle
         except BattleUnit.DoesNotExist:

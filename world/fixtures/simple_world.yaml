@@ -36,6 +36,7 @@
     owner_character_id: 2
     world: 2
     location_id: 1001
+    origin_id: 1001
     name: Unit of Kingdom Member
     recruitment_type: conscript
     type: infantry
@@ -90,6 +91,7 @@
     owner_character_id: 5
     world: 2
     location_id: 1007
+    origin_id: 1007
     name: Unit of Warrior
     recruitment_type: conscript
     type: infantry
@@ -108,6 +110,7 @@
     owner_character_id: 5
     world: 2
     location_id: 1007
+    origin_id: 1007
     name: Second Unit of Warrior
     recruitment_type: conscript
     type: infantry
@@ -135,6 +138,7 @@
     owner_character_id: 6
     world: 2
     location_id: 1007
+    origin_id: 1007
     name: Unit of Commonwealth Warrior
     recruitment_type: conscript
     type: infantry

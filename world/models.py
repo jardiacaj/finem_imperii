@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse
 from django.db import models, transaction
 from django.contrib.auth.models import User
 from django.db.models.aggregates import Avg
+from django.db.models.expressions import F
 
 from battle.models import BattleUnit, BattleSoldierInTurn
 from messaging import shortcuts
@@ -748,6 +749,7 @@ class WorldUnit(models.Model):
     owner_character = models.ForeignKey(Character, blank=True, null=True)
     world = models.ForeignKey(World)
     location = models.ForeignKey(Settlement)
+    origin = models.ForeignKey(Settlement, related_name='units_originating')
     name = models.CharField(max_length=100)
     recruitment_type = models.CharField(
         max_length=30, choices=RECTRUITMENT_CHOICES
@@ -829,10 +831,17 @@ class WorldUnit(models.Model):
         self.save()
 
     def mobilize(self):
-        pass
+        self.soldier.update(
+            residence=None,
+            location=None,
+            workplace=None
+        )
 
     def demobilize(self):
         self.status = WorldUnit.NOT_MOBILIZED
+        self.soldier.update(
+            location=F('origin'),
+        )
         self.save()
 
     def get_fighting_soldiers(self):
@@ -854,6 +863,11 @@ class WorldUnit(models.Model):
             return self.owner_character.get_violence_monopoly()
         else:
             return self.world.get_barbaric_state()
+
+    def disband(self):
+        self.demobilize()
+        self.soldier.update(unit=None)
+        self.delete()
 
 
 class InventoryItem(models.Model):

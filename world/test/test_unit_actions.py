@@ -28,6 +28,19 @@ class TestUnitActions(TestCase):
         initialize_unit(self.my_unit)
         initialize_unit(self.not_my_unit)
 
+    def test_disband(self):
+        response = self.client.post(
+            reverse('world:unit_disband', kwargs={'unit_id': 2})
+        )
+
+        self.assertRedirects(
+            response,
+            reverse('world:character_home')
+        )
+        self.assertFalse(
+            WorldUnit.objects.filter(id=2).exists()
+        )
+
     def test_support_conquest(self):
         tile = Tile.objects.get(name="More mountains")
         conqueror = Organization.objects.get(id=105)

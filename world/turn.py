@@ -48,6 +48,7 @@ class TurnProcessor:
         self.do_conquests()
         self.do_barbarians()
         self.do_population_updates()
+        # self.do_residence_assignment()
         self.do_job_updates()
         self.do_production()
         # self.do_trade()
@@ -155,7 +156,7 @@ class TurnProcessor:
 
         if not settlement.tile.controlled_by.get_violence_monopoly().barbaric:
             if settlement.guilds_setting == Settlement.GUILDS_PROHIBIT:
-                pass
+                settlement.get_residents()
             elif settlement.guilds_setting == Settlement.GUILDS_RESTRICT:
                 pass
             elif settlement.guilds_setting == Settlement.GUILDS_KEEP:

@@ -109,6 +109,14 @@
                         </td>
                     </tr>
                     <tr>
+                        <td>Origin</td>
+                        <td>
+                            {{ unit.origin }} ({{ unit.origin.tile.get_html_link|safe }},
+                            {{ unit.origin.tile.controlled_by.get_html_link|safe }}
+                            )
+                        </td>
+                    </tr>
+                    <tr>
                         <td>Average skill</td>
                         <td>{{ unit.average_fighting_skill }}%</td>
                     </tr>

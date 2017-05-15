@@ -117,6 +117,7 @@ def recruit_unit(name, owner, location, soldiers, recruitment_type, unit_type):
     unit = WorldUnit.objects.create(
         owner_character=owner,
         world=location.tile.world,
+        origin=location,
         location=location,
         name=name,
         recruitment_type=recruitment_type,

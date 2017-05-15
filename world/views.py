@@ -486,6 +486,8 @@ def unit_disband(request, unit_id):
         id=unit_id,
         owner_character=request.hero
     )
+    unit.disband()
+    messages.success(request, 'Your unit has been disbanded.', 'success')
     return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
 
 

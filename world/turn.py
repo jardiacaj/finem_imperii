@@ -481,22 +481,24 @@ def battle_joins(battle: Battle):
         candidate_vm = candidate_unit.get_violence_monopoly()
         try:
             battle_org = BattleOrganization.objects.get(
-                battle_side__battle=battle,
+                side__battle=battle,
                 organization=candidate_vm
             )
             add_unit_to_battle_in_progress(battle_org, candidate_unit)
         except BattleOrganization.DoesNotExist:
             sides = list(battle.battleside_set.all())
             for i, side in enumerate(sides):
-                other_side = side[0 if i == 1 else 1]
+                other_side = sides[0 if i == 1 else 1]
                 aggressive_to_all_in_other_side = True
-                for state in other_side.battle_organization_set.all():
-                    if candidate_vm.get_region_stance_to(state, battle.tile).get_stance != organization.models.MilitaryStance.AGGRESSIVE:
+                for battle_state in other_side.battleorganization_set.all():
+                    state = battle_state.organization
+                    if candidate_vm.get_region_stance_to(state, battle.tile).get_stance() != organization.models.MilitaryStance.AGGRESSIVE:
                         aggressive_to_all_in_other_side = False
                         break
                 aggressive_to_own_side = False
-                for state in side.battle_organization_set.all():
-                    if candidate_vm.get_region_stance_to(state, battle.tile).get_stance != organization.models.MilitaryStance.AGGRESSIVE:
+                for battle_state in side.battleorganization_set.all():
+                    state = battle_state.organization
+                    if candidate_vm.get_region_stance_to(state, battle.tile).get_stance() == organization.models.MilitaryStance.AGGRESSIVE:
                         aggressive_to_own_side = True
                         break
                 if aggressive_to_all_in_other_side and not aggressive_to_own_side:
@@ -504,4 +506,4 @@ def battle_joins(battle: Battle):
                         side=side,
                         organization=candidate_vm
                     )
-                    add_unit_to_battle_in_progress(battle_org, candidate_vm)
+                    add_unit_to_battle_in_progress(battle_org, candidate_unit)

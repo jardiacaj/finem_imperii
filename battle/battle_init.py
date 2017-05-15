@@ -300,7 +300,7 @@ def generate_in_turn_objects_for_unit(turn, unit):
 
 
 def joining_contubernium_position_generator():
-    for z in range(48, 30):
+    for z in range(30, 48):
         for x in range(20):
             for multiplier in (-1, 1):
                 yield Coordinates(x=x*multiplier, z=z)
@@ -310,11 +310,16 @@ def add_unit_to_battle_in_progress(
         battle_organization: BattleOrganization,
         world_unit: WorldUnit
 ):
+    battle = battle_organization.side.battle
     if world_unit.owner_character:
         battle_character = BattleCharacter.objects.get_or_create(
             battle_organization=battle_organization,
             character=world_unit.owner_character,
         )[0]
+        battle_character_in_turn = BattleCharacterInTurn.objects.get_or_create(
+            battle_character=battle_character,
+            battle_turn=battle.get_latest_turn()
+        )
     else:
         battle_character = None
     battle_unit = BattleUnit.objects.create(
@@ -332,7 +337,7 @@ def add_unit_to_battle_in_progress(
 
     for contub in battle_unit.battlecontubernium_set.all():
         coords = next(position_generator)
-        while battle_organization.side.battle.get_latest_turn().get_contubernium_in_position(position_generator) is not None:
+        while battle.get_latest_turn().get_contubernium_in_position(coords) is not None:
             coords = next(position_generator)
 
         contub.x_offset_to_formation = coords.x

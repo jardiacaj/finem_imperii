@@ -17,7 +17,7 @@ from messaging.models import MessageRelationship
 from name_generator.name_generator import get_names, get_surnames
 from organization.models import Organization, Capability
 from world.models import Character, World, Settlement, WorldUnit, \
-    WorldUnitStatusChangeException, Tile, TileEvent, InventoryItem
+    WorldUnitStatusChangeException, Tile, TileEvent, InventoryItem, unit_cost
 from world.recruitment import build_population_query_from_request, \
     BadPopulation, sample_candidates, recruit_unit
 from world.renderer import render_world_for_view
@@ -188,6 +188,18 @@ class RecruitmentView(View):
                     request, "Invalid number of soldiers."
                 )
 
+            # check cash
+            if request.hero.cash < unit_cost(target_soldier_count):
+                return RecruitmentView.fail_post_with_error(
+                    request,
+                    "You need {} silver coins to recruit a unit of {} "
+                    "and you don't have that much.".format(
+                        target_soldier_count,
+                        target_soldier_count
+                    )
+                )
+
+
             # calculate time
             conscription_time = request.hero.location.conscription_time(
                 target_soldier_count
@@ -196,9 +208,10 @@ class RecruitmentView(View):
             if request.hero.hours_in_turn_left < conscription_time:
                 return RecruitmentView.fail_post_with_error(
                     request,
-                    "You would need {} to do this, but you don't have that "
-                    "much time left in this turn.".format(
-                        nice_hours(conscription_time)
+                    "You need {} to recruit a unit of {}, but you don't have "
+                    "that much time left in this turn.".format(
+                        nice_hours(conscription_time),
+                        target_soldier_count
                     )
                 )
 
@@ -242,8 +255,10 @@ class RecruitmentView(View):
                 recruitment_type,
                 unit_type
             )
+            unit.mobilize()
 
             request.hero.hours_in_turn_left -= conscription_time
+            request.hero.cash -= unit.monthly_cost()
             request.hero.save()
 
             messages.success(

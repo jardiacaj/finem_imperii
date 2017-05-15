@@ -10,6 +10,8 @@ class TestUnitActions(TestCase):
 
     def setUp(self):
         self.character = Character.objects.get(id=1)
+        self.character.cash = 100000
+        self.character.save()
         self.client.post(
             reverse('account:login'),
             {'username': 'alice', 'password': 'test'},
@@ -59,6 +61,34 @@ class TestUnitActions(TestCase):
         self.assertEqual(
             unit.soldier.filter(age_months__lt=NPC.YOUNG_AGE_LIMIT).exists(),
             False)
+
+    def test_fail_because_not_enough_coins(self):
+        self.character.cash = 0
+        self.character.save()
+
+        response = self.client.post(
+            reverse('world:recruit'),
+            data={
+                "conscript_count": 30,
+                "conscript_unit_type": "infantry",
+                "conscript_pay": 3,
+                "conscript_men": "on",
+                "conscript_trained": "on",
+                "conscript_untrained": "on",
+                "conscript_skill_high": "on",
+                "conscript_skill_medium": "on",
+                "conscript_skill_low": "on",
+                "conscript_age_middle": "on",
+                "conscript_age_young": "on",
+                "recruitment_type": "conscription"
+            },
+            follow=True
+        )
+
+        self.assertFalse(
+            WorldUnit.objects.filter(owner_character=self.character).exists())
+        self.assertRedirects(response, reverse('world:recruit'))
+
 
     def test_fail_because_no_gender_selected(self):
         response = self.client.post(

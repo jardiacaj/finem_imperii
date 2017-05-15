@@ -15,6 +15,7 @@
     location_id: 1001
     oath_sworn_to_id: 102
     owner_user_id: 1
+    cash: 10000
 
 - model: world.Character
   pk: 2
@@ -24,6 +25,7 @@
     location_id: 1001
     oath_sworn_to_id: 102
     owner_user_id: 1
+    cash: 10000
 - model: battle.Order
   pk: 4
   fields:
@@ -50,6 +52,7 @@
     world_id: 2
     location_id: 1008
     owner_user_id: 1
+    cash: 10000
 
 - model: world.Character
   pk: 4
@@ -58,6 +61,7 @@
     world_id: 2
     location_id: 1005
     owner_user_id: 1
+    cash: 10000
 
 - model: world.Character
   pk: 8
@@ -66,6 +70,7 @@
     world_id: 2
     location_id: 1005
     owner_user_id: 1
+    cash: 10000
 
 - model: world.Character
   pk: 5
@@ -74,6 +79,7 @@
     world_id: 2
     location_id: 1007
     owner_user_id: 1
+    cash: 10000
 - model: battle.Order
   pk: 1
   fields:
@@ -118,6 +124,7 @@
     world_id: 2
     location_id: 1007
     owner_user_id: 1
+    cash: 10000
 - model: battle.Order
   pk: 2
   fields:
@@ -144,6 +151,7 @@
     world_id: 2
     location_id: 1003
     owner_user_id: 1
+    cash: 10000
 
 - model: world.Character
   pk: 9
@@ -152,6 +160,7 @@
     world_id: 2
     location_id: 1003
     owner_user_id: 1
+    cash: 10000
 
 
 - model: world.World

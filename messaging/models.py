@@ -29,6 +29,7 @@ class CharacterMessage(models.Model):
     BATTLE_FORMATION = 'battle formation'
     CONQUEST = 'conquest'
     GUILDS = 'guilds'
+    UNIT = 'unit'
     CATEGORY_CHOICES = (
         (TRAVEL, TRAVEL),
         (CONQUEST, CONQUEST),
@@ -43,6 +44,7 @@ class CharacterMessage(models.Model):
         (BATTLE_FORMATION, "battle formation"),
         (CONQUEST, "conquest"),
         (GUILDS, "conquest"),
+        (UNIT, "unit"),
     )
 
     content = models.TextField()

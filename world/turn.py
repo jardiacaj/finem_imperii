@@ -74,6 +74,32 @@ class TurnProcessor:
                     unit.status = WorldUnit.STANDING
                 unit.save()
 
+            if unit.owner_character and unit.status != WorldUnit.NOT_MOBILIZED:
+                cost = unit.soldier.count()
+                if unit.owner_character.cash < unit.monthly_cost():
+                    unit.demobilize()
+                    unit.owner_character.add_notification(
+                        'unit',
+                        "You don't have the {} coins your unit {} demands as"
+                        "payment. It has demobilized.".format(
+                            unit.monthly_cost(),
+                            unit,
+                            unit.owner_character.save()
+                        )
+                    )
+                else:
+                    unit.owner_character.cash -= unit.monthly_cost()
+                    unit.owner_character.save()
+                    unit.owner_character.add_notification(
+                        'unit',
+                        'You paid {} coins to your unit {}. You now have '
+                        '{} coins left.'.format(
+                            unit.monthly_cost(),
+                            unit,
+                            unit.owner_character.save()
+                        )
+                    )
+
     def do_taxes(self):
         for state in self.world.get_violence_monopolies():
             state.tax_countdown -= 1

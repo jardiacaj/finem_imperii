@@ -678,6 +678,10 @@ class WorldUnitStatusChangeException(Exception):
     pass
 
 
+def unit_cost(soldier_count):
+    return soldier_count
+
+
 class WorldUnit(models.Model):
     CONSCRIPTION = 'conscription'
     PROFESSIONAL = 'professional'
@@ -768,6 +772,9 @@ class WorldUnit(models.Model):
     def get_unit_states(nice=False):
         return (state[1 if nice else 0] for state in WorldUnit.STATUS_CHOICES)
 
+    def monthly_cost(self):
+        return unit_cost(self.soldier.count())
+
     def __str__(self):
         return self.name
 
@@ -812,12 +819,20 @@ class WorldUnit(models.Model):
                     "Cannot mobilize {} the same turn it has been"
                     " demobilized".format(self)
                 )
+            self.mobilize()
         if (new_status == WorldUnit.FOLLOWING
                 and self.owner_character.location != self.location):
             raise WorldUnitStatusChangeException(
                 "A unit can only follow you if you are in the same location."
             )
         self.status = new_status
+        self.save()
+
+    def mobilize(self):
+        pass
+
+    def demobilize(self):
+        self.status = WorldUnit.NOT_MOBILIZED
         self.save()
 
     def get_fighting_soldiers(self):

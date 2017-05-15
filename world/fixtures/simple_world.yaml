@@ -24,6 +24,24 @@
     location_id: 1001
     oath_sworn_to_id: 102
     owner_user_id: 1
+- model: battle.Order
+  pk: 4
+  fields:
+    what: flee
+- model: world.WorldUnit
+  pk: 4
+  fields:
+    owner_character_id: 2
+    world: 2
+    location_id: 1001
+    name: Unit of Kingdom Member
+    recruitment_type: conscript
+    type: infantry
+    status: following
+    mobilization_status_since: 0
+    current_status_since: 0
+    generation_size: 100
+    default_battle_orders: 4
 
 - model: world.Character
   pk: 3

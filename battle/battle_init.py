@@ -11,7 +11,7 @@ from battle.models import BattleFormation, BattleUnit, BattleContubernium, \
 from world.models import WorldUnit
 
 
-def create_contubernia(unit):
+def create_contubernia(unit: BattleUnit):
     soldiers = unit.world_unit.get_fighting_soldiers()
     num_contubernia = math.ceil(soldiers.count() / 8)
     rest = soldiers.count() % 8
@@ -32,11 +32,11 @@ def create_contubernia(unit):
 @transaction.atomic
 def initialize_from_conflict(battle, conflict, tile):
     for i, conflict_side in enumerate(conflict):
+        battle_side = BattleSide.objects.create(
+            battle=battle,
+            z=i
+        )
         for organization in conflict_side:
-            battle_side = BattleSide.objects.create(
-                battle=battle,
-                z=i
-            )
             BattleOrganization.objects.create(
                 side=battle_side,
                 organization=organization
@@ -91,12 +91,16 @@ def initialize_side_positioning(side: BattleSide):
         unit.starting_z_pos = math.floor(unit.avg_z)
         unit.save()
 
-        for contub in unit.battlecontubernium_set.all():
-            contub.x_offset_to_unit = contub.starting_x_pos - \
-                                      unit.starting_x_pos
-            contub.z_offset_to_unit = contub.starting_z_pos - \
-                                      unit.starting_z_pos
-            contub.save()
+        set_contubernia_starting_pos(unit)
+
+
+def set_contubernia_starting_pos(unit: BattleUnit):
+    for contub in unit.battlecontubernium_set.all():
+        contub.x_offset_to_unit = contub.starting_x_pos - \
+                                  unit.starting_x_pos
+        contub.z_offset_to_unit = contub.starting_z_pos - \
+                                  unit.starting_z_pos
+        contub.save()
 
 
 class Line:
@@ -254,35 +258,7 @@ def generate_in_turn_objects(battle):
                     battle_turn=turn
                 )
             for unit in organization.battleunit_set.all():
-                if unit.world_unit.owner_character:
-                    owner_in_turn = BattleCharacterInTurn.objects.get(
-                        battle_character=unit.owner,
-                        battle_turn=turn
-                    )
-                else:
-                    owner_in_turn = None
-                buit = BattleUnitInTurn.objects.create(
-                    battle_unit=unit,
-                    battle_character_in_turn=owner_in_turn,
-                    battle_turn=turn,
-                    x_pos=unit.starting_x_pos,
-                    z_pos=unit.starting_z_pos,
-                    order=unit.get_order(),
-                )
-                for contubernium in unit.battlecontubernium_set.all():
-                    bcontubit = BattleContuberniumInTurn.objects.create(
-                        battle_contubernium=contubernium,
-                        battle_unit_in_turn=buit,
-                        battle_turn=turn,
-                        x_pos=contubernium.starting_x_pos,
-                        z_pos=contubernium.starting_z_pos
-                    )
-                    for soldier in contubernium.battlesoldier_set.all():
-                        BattleSoldierInTurn.objects.create(
-                            battle_turn=turn,
-                            battle_contubernium_in_turn=bcontubit,
-                            battle_soldier=soldier
-                            )
+                generate_in_turn_objects_for_unit(turn, unit)
     for barbarian_unit in BattleUnitInTurn.objects.filter(
         battle_unit__owner=None,
         battle_turn=turn
@@ -291,12 +267,85 @@ def generate_in_turn_objects(battle):
         barbarian_unit.save()
 
 
-def add_unit_to_battle(
-        battle: Battle,
+def generate_in_turn_objects_for_unit(turn, unit):
+    if unit.world_unit.owner_character:
+        owner_in_turn = BattleCharacterInTurn.objects.get(
+            battle_character=unit.owner,
+            battle_turn=turn
+        )
+    else:
+        owner_in_turn = None
+    buit = BattleUnitInTurn.objects.create(
+        battle_unit=unit,
+        battle_character_in_turn=owner_in_turn,
+        battle_turn=turn,
+        x_pos=unit.starting_x_pos,
+        z_pos=unit.starting_z_pos,
+        order=unit.get_order(),
+    )
+    for contubernium in unit.battlecontubernium_set.all():
+        bcontubit = BattleContuberniumInTurn.objects.create(
+            battle_contubernium=contubernium,
+            battle_unit_in_turn=buit,
+            battle_turn=turn,
+            x_pos=contubernium.starting_x_pos,
+            z_pos=contubernium.starting_z_pos
+        )
+        for soldier in contubernium.battlesoldier_set.all():
+            BattleSoldierInTurn.objects.create(
+                battle_turn=turn,
+                battle_contubernium_in_turn=bcontubit,
+                battle_soldier=soldier
+            )
+
+
+def joining_contubernium_position_generator():
+    for z in range(48, 30):
+        for x in range(20):
+            for multiplier in (-1, 1):
+                yield Coordinates(x=x*multiplier, z=z)
+
+
+def add_unit_to_battle_in_progress(
         battle_organization: BattleOrganization,
         world_unit: WorldUnit
 ):
-    pass
+    if world_unit.owner_character:
+        battle_character = BattleCharacter.objects.get_or_create(
+            battle_organization=battle_organization,
+            character=world_unit.owner_character,
+        )[0]
+    else:
+        battle_character = None
+    battle_unit = BattleUnit.objects.create(
+        battle_organization=battle_organization,
+        owner=battle_character,
+        world_unit=world_unit,
+        starting_manpower=world_unit.get_fighting_soldiers().count(),
+        battle_side=battle_organization.side,
+        name=world_unit.name,
+        type=world_unit.type
+    )
+    create_contubernia(battle_unit)
+
+    position_generator = joining_contubernium_position_generator()
+
+    for contub in battle_unit.battlecontubernium_set.all():
+        coords = next(position_generator)
+        while battle_organization.side.battle.get_latest_turn().get_contubernium_in_position(position_generator) is not None:
+            coords = next(position_generator)
+
+        contub.x_offset_to_formation = coords.x
+        contub.z_offset_to_formation = coords.z
+        contub.starting_x_pos = coords.x if battle_organization.side.z else -coords.x
+        contub.starting_z_pos = coords.z + 10 if battle_organization.side.z else -coords.z - 10
+        contub.save()
+
+    battle_unit.starting_x_pos = math.floor(battle_unit.battlecontubernium_set.all().aggregate(Avg('starting_x_pos'))['starting_x_pos__avg'])
+    battle_unit.starting_z_pos = math.floor(battle_unit.battlecontubernium_set.all().aggregate(Avg('starting_z_pos'))['starting_z_pos__avg'])
+    battle_unit.save()
+
+    set_contubernia_starting_pos(battle_unit)
 
 
 class BattleAlreadyStartedException(Exception):

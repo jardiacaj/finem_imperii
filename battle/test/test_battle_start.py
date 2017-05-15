@@ -5,10 +5,10 @@ from battle.battle_init import initialize_from_conflict, start_battle
 from battle.battle_tick import battle_tick
 from battle.models import Battle, BattleCharacter, BattleUnit, BattleContubernium, BattleSoldier, BattleOrganization, \
     BattleContuberniumInTurn, BattleSoldierInTurn, BattleUnitInTurn, Order
-from organization.models import Organization
+from organization.models import Organization, MilitaryStance
 from world.initialization import initialize_unit
-from world.models import Tile, WorldUnit, NPC
-from world.turn import trigger_battles_in_tile
+from world.models import Tile, WorldUnit, NPC, Settlement, World
+from world.turn import trigger_battles_in_tile, TurnProcessor
 
 
 class MiscTests(TestCase):
@@ -191,3 +191,161 @@ class TestBattleStart(TestCase):
         side1 = self.battle.battleside_set.get(z=True)
         self.assertEqual(side1.get_manpower(), 90)
         self.assertEqual(side1.get_proportional_strength(), 3)
+
+
+class TestBattleStartWithAllies(TestCase):
+    fixtures = ['simple_world']
+
+    def setUp(self):
+        self.client.post(
+            reverse('account:login'),
+            {'username': 'alice', 'password': 'test'},
+        )
+        self.client.get(
+            reverse('world:activate_character', kwargs={'char_id': 5}),
+            follow=True
+        )
+        self.tile = Tile.objects.get(id=108)
+        self.unit_of_warrior = WorldUnit.objects.get(id=1)
+        initialize_unit(self.unit_of_warrior)
+        self.unit_of_commonwealth = WorldUnit.objects.get(id=2)
+        initialize_unit(self.unit_of_commonwealth)
+        self.unit_of_warrior2 = WorldUnit.objects.get(id=3)
+        initialize_unit(self.unit_of_warrior2)
+        self.unit_of_kingdom = WorldUnit.objects.get(id=4)
+        self.unit_of_kingdom.location = Settlement.objects.get(id=1007)
+        self.unit_of_kingdom.save()
+        initialize_unit(self.unit_of_kingdom)
+
+        self.kingdom = Organization.objects.get(id=101)
+        self.commonwealth = Organization.objects.get(id=105)
+        self.horde = Organization.objects.get(id=112)
+
+        stance = self.kingdom.get_region_stance_to(self.horde, self.tile)
+        stance.stance_type = MilitaryStance.AGGRESSIVE
+        stance.save()
+        stance = self.commonwealth.get_region_stance_to(self.horde, self.tile)
+        stance.stance_type = MilitaryStance.AGGRESSIVE
+        stance.save()
+
+    def test_battle_create_from_conflict_with_allies(self):
+        self.battle = Battle.objects.create(tile=self.tile, start_turn=0)
+        initialize_from_conflict(
+            self.battle,
+            [
+                [self.commonwealth, self.kingdom],
+                [self.horde]
+            ],
+            self.tile
+        )
+        
+        self.assertEqual(self.battle.battleside_set.count(), 2)
+
+        self.assertTrue(BattleOrganization.objects.filter(side__battle=self.battle, organization=self.kingdom).exists())
+        self.assertTrue(BattleOrganization.objects.filter(side__battle=self.battle, organization=self.horde).exists())
+        self.assertTrue(BattleOrganization.objects.filter(side__battle=self.battle, organization=self.commonwealth).exists())
+        self.assertEqual(BattleOrganization.objects.count(), 3)
+
+        self.assertTrue(
+            BattleOrganization.objects.get(organization=self.kingdom).side.z !=
+            BattleOrganization.objects.get(organization=self.horde).side.z
+        )
+        self.assertTrue(
+            BattleOrganization.objects.get(organization=self.commonwealth).side.z !=
+            BattleOrganization.objects.get(organization=self.horde).side.z
+        )
+
+        self.assertTrue(BattleCharacter.objects.exists())
+        self.assertTrue(BattleCharacter.objects.filter(
+            battle_organization__organization=self.kingdom,
+        ).exists())
+        self.assertTrue(BattleCharacter.objects.filter(
+            battle_organization__organization=self.horde,
+        ).exists())
+        self.assertTrue(BattleCharacter.objects.filter(
+            battle_organization__organization=self.commonwealth,
+        ).exists())
+        self.assertEqual(BattleCharacter.objects.count(), 3)
+
+        self.assertTrue(BattleUnit.objects.exists())
+        self.assertTrue(
+            BattleUnit.objects.filter(world_unit=self.unit_of_warrior, starting_manpower=30).exists()
+        )
+        self.assertTrue(
+            BattleUnit.objects.filter(world_unit=self.unit_of_commonwealth, starting_manpower=30).exists()
+        )
+        self.assertTrue(
+            BattleUnit.objects.filter(world_unit=self.unit_of_warrior2, starting_manpower=60).exists()
+        )
+        self.assertTrue(
+            BattleUnit.objects.filter(world_unit=self.unit_of_kingdom, starting_manpower=100).exists()
+        )
+        self.assertEqual(BattleUnit.objects.count(), 4)
+
+        response = self.client.get(self.battle.get_absolute_url(), follow=True)
+        self.assertEqual(response.status_code, 200)
+
+    def test_battle_create_from_units_with_allies(self):
+        turn_processor = TurnProcessor(World.objects.get(id=2))
+        turn_processor.trigger_battles()
+
+        self.assertTrue(Battle.objects.exists())
+
+        self.battle = Battle.objects.get(id=1)
+
+        self.assertEqual(self.battle.battleside_set.count(), 2)
+
+        self.assertTrue(
+            BattleOrganization.objects.filter(side__battle=self.battle,
+                                              organization=self.kingdom).exists())
+        self.assertTrue(
+            BattleOrganization.objects.filter(side__battle=self.battle,
+                                              organization=self.horde).exists())
+        self.assertTrue(
+            BattleOrganization.objects.filter(side__battle=self.battle,
+                                              organization=self.commonwealth).exists())
+        self.assertEqual(BattleOrganization.objects.count(), 3)
+
+        self.assertTrue(
+            BattleOrganization.objects.get(organization=self.kingdom).side.z !=
+            BattleOrganization.objects.get(organization=self.horde).side.z
+        )
+        self.assertTrue(
+            BattleOrganization.objects.get(
+                organization=self.commonwealth).side.z !=
+            BattleOrganization.objects.get(organization=self.horde).side.z
+        )
+
+        self.assertTrue(BattleCharacter.objects.exists())
+        self.assertTrue(BattleCharacter.objects.filter(
+            battle_organization__organization=self.kingdom,
+        ).exists())
+        self.assertTrue(BattleCharacter.objects.filter(
+            battle_organization__organization=self.horde,
+        ).exists())
+        self.assertTrue(BattleCharacter.objects.filter(
+            battle_organization__organization=self.commonwealth,
+        ).exists())
+        self.assertEqual(BattleCharacter.objects.count(), 3)
+
+        self.assertTrue(BattleUnit.objects.exists())
+        self.assertTrue(
+            BattleUnit.objects.filter(world_unit=self.unit_of_warrior,
+                                      starting_manpower=30).exists()
+        )
+        self.assertTrue(
+            BattleUnit.objects.filter(world_unit=self.unit_of_commonwealth,
+                                      starting_manpower=30).exists()
+        )
+        self.assertTrue(
+            BattleUnit.objects.filter(world_unit=self.unit_of_warrior2,
+                                      starting_manpower=60).exists()
+        )
+        self.assertTrue(
+            BattleUnit.objects.filter(world_unit=self.unit_of_kingdom,
+                                      starting_manpower=100).exists()
+        )
+        self.assertEqual(BattleUnit.objects.count(), 4)
+
+        response = self.client.get(self.battle.get_absolute_url(), follow=True)
+        self.assertEqual(response.status_code, 200)

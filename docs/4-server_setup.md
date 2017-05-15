@@ -16,7 +16,8 @@ port 80. You may do this with the following command:
 `sudo docker run -d -p 80:80 jardiacaj/finem_imperii`.
 
 You should now be able to access the Finem Imperii server at
-<http://localhost/>.
+<http://localhost/>. You may log in with the test user
+"alice" with the password "test".
 
 ## Django development server
 
@@ -34,7 +35,8 @@ asked the password for the admin user.
 - Run `python3 manage.py runserver` to start the development server.
 
 You should now be able to access your Django development server at
-<http://localhost:8000/>.
+<http://localhost:8000/>. You may log in with the test user
+"alice" with the password "test".
 
 For more information on the Django development server, refer to
 [its documentation][1].

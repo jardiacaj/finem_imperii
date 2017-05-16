@@ -53,19 +53,9 @@ def initialize_settlement(settlement):
     assigned_workers = 0
 
     for i in range(settlement.population):
-        male = random.getrandbits(1)
-        name = generate_name(male)
+        npc = generate_npc(i, residences, settlement)
 
-        over_sixty = (random.getrandbits(4) == 0)
-        if over_sixty:
-            age_months = random.randint(60 * 12, 90 * 12)
-            able = random.getrandbits(1)
-        else:
-            age_months = random.randint(0, 60 * 12)
-            able = (random.getrandbits(7) != 0)
-
-        workplace = None
-        if able and age_months > NPC.VERY_YOUNG_AGE_LIMIT:
+        if npc.able and npc.age_months > NPC.VERY_YOUNG_AGE_LIMIT:
             assigned_workers += 1
 
             # we assign 90% of population to fields
@@ -77,7 +67,7 @@ def initialize_settlement(settlement):
                     cumulative += field.max_workers()
                     if pos < cumulative:
                         break
-                workplace = field
+                npc.workplace = field
             else:
                 pos = random.randint(0, total_other_workplaces)
                 cumulative = 0
@@ -85,24 +75,39 @@ def initialize_settlement(settlement):
                     cumulative += other_workplace.max_workers()
                     if pos < cumulative:
                         break
-                workplace = other_workplace
+                npc.workplace = other_workplace
 
-        NPC.objects.create(
-            name=name,
-            male=male,
-            able=able,
-            age_months=age_months,
-            residence=residences[i % residences.count()],
-            origin=settlement,
-            location=settlement,
-            workplace=workplace,
-            unit=None,
-            trained_soldier=(random.getrandbits(4) == 0) if age_months >= NPC.VERY_YOUNG_AGE_LIMIT else False,
-            skill_fighting=random.randint(0, 80)
-        )
+        npc.save()
 
     if settlement.tile.controlled_by.barbaric:
         do_settlement_barbarians(settlement)
+
+
+def generate_npc(i, residences, settlement):
+    male = random.getrandbits(1)
+    name = generate_name(male)
+    over_sixty = (random.getrandbits(4) == 0)
+    if over_sixty:
+        age_months = random.randint(60 * 12, 90 * 12)
+        able = random.getrandbits(1)
+    else:
+        age_months = random.randint(0, 60 * 12)
+        able = (random.getrandbits(7) != 0)
+    npc = NPC.objects.create(
+        name=name,
+        male=male,
+        able=able,
+        age_months=age_months,
+        residence=residences[i % residences.count()],
+        origin=settlement,
+        location=settlement,
+        workplace=None,
+        unit=None,
+        trained_soldier=(random.getrandbits(
+            4) == 0) if age_months >= NPC.VERY_YOUNG_AGE_LIMIT else False,
+        skill_fighting=random.randint(0, 80)
+    )
+    return npc
 
 
 def initialize_unit(unit):

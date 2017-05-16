@@ -18,6 +18,15 @@ class TestTurn(TestCase):
     def test_pass_turn_admin_action(self):
         pass_turn(None, None, World.objects.all())
 
+    def test_population_generation_in_empty_settlement(self):
+        settlement = Settlement.objects.get(name="Small Fynkah")
+        settlement.npc_set.all().delete()
+        settlement.update_population()
+        self.assertEqual(settlement.population, 0)
+        processor = TurnProcessor(settlement.tile.world)
+        processor.do_settlement_population_changes(settlement)
+        self.assertEqual(settlement.population, 5)
+
     def test_organizations_with_battle_ready_units(self):
         tile = Tile.objects.get(id=108)
         result = organizations_with_battle_ready_units(tile)

@@ -13,6 +13,7 @@ from messaging.models import CharacterMessage
 import world.models
 import organization.models
 import world.recruitment
+import world.initialization
 from world.models import Building, Settlement, NPC, WorldUnit
 from world.templatetags.extra_filters import nice_turn
 
@@ -47,12 +48,12 @@ class TurnProcessor:
         self.do_elections()
         self.do_conquests()
         self.do_barbarians()
-        self.do_population_updates()
         # self.do_residence_assignment()
         self.do_job_updates()
         self.do_production()
         # self.do_trade()
         self.do_food_consumption()
+        self.do_population_changes()
         # self.do_food_spoilage()
         self.do_taxes()
 
@@ -63,6 +64,31 @@ class TurnProcessor:
             "It is now {}.".format(nice_turn(self.world.current_turn)),
             'turn'
         )
+
+    def do_population_changes(self):
+        for tile in self.world.tile_set.all():
+            for settlement in tile.settlement_set.all():
+                self.do_settlement_population_changes(settlement)
+
+    def do_settlement_population_changes(self, settlement):
+        settlement.update_population()
+        amount_to_generate = 0
+
+        if settlement.population < 50:
+            amount_to_generate += 5
+
+        if (
+                settlement.population < settlement.population_default and
+                settlement.get_hunger_percentage() < 3
+        ):
+            amount_to_generate += int(settlement.population * 0.05)
+
+        residences = settlement.building_set.filter(
+            type=Building.RESIDENCE).all()
+        for i in range(amount_to_generate):
+            world.initialization.generate_npc(i, residences, settlement)
+        if amount_to_generate > 0:
+            settlement.update_population()
 
     def do_unit_maintenance(self):
         for unit in self.world.worldunit_set.all():
@@ -163,12 +189,6 @@ class TurnProcessor:
                 pass
             elif settlement.guilds_setting == Settlement.GUILDS_PROMOTE:
                 pass
-
-    def do_population_updates(self):
-        for settlement in Settlement.objects.filter(
-            tile__world=self.world
-        ):
-            settlement.update_population()
 
     def do_food_consumption(self):
         for settlement in Settlement.objects.filter(

@@ -497,11 +497,15 @@ class NPC(models.Model):
                 self.save()
 
     def die(self):
+        unit = self.unit
         self.location = None
         self.residence = None
         self.unit = None
         self.able = False
         self.save()
+
+        if unit.soldier.count() == 0:
+            unit.disband()
 
 
 class Character(models.Model):

@@ -88,8 +88,10 @@
 
                 {%  else %}
 
+                    <!--
                     <li><a href="{% url 'account:register' %}">Join</a></li>
-                    <li><a href="{% url 'base:help' %}">About Finem Imperii</a></li>
+                    <li><a href="{% url 'help:about' %}">About Finem Imperii</a></li>
+                    -->
 
                 {% endif %}
 
@@ -106,7 +108,7 @@
                         </ul>
                     </li>
                 {% endif %}
-                <li><a href="{% url 'base:help' %}">Help</a></li>
+                <li><a href="{% url 'help:home' %}">Help</a></li>
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'account:logout' %}">Logout ({{ user }})</a></li>
                 {%  else %}

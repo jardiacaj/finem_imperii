@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^messaging/', include('messaging.urls', namespace='messaging'), name='messaging'),
     url(r'^organization/', include('organization.urls', namespace='organization'), name='organization'),
     url(r'^battle/', include('battle.urls', namespace='battle'), name='battle'),
+    url(r'^help/', include('help.urls', namespace='help'), name='help'),
 ]

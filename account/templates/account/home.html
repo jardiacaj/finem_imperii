@@ -5,6 +5,21 @@
     <h1 class="page-header">Hi {{ user.username|capfirst }}</h1>
 
     <div class="col-md-6 well well-lg">
+        {% if not user.character.exists %}
+            <h2>The fundamentals</h2>
+
+            {% include 'help/fundamental_content.html' %}
+
+            <p>
+                This information is shown here because you are a new player.
+                You may find it anytime in the
+                <a href="{% url 'help:fundamental' %}">help section</a>.
+            </p>
+
+            <hr>
+
+            <h2>Announcements</h2>
+        {% endif %}
         {% for message in server_messages %}
             <h2>{{ message.title }}</h2>
             {{ message.html_content|safe }}

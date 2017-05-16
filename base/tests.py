@@ -19,10 +19,5 @@ class HomepageTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.redirect_chain), 1)
         self.assertEqual(response.redirect_chain[0][1], 302)
-        self.assertEqual(response.redirect_chain[0][0], reverse('account:home'))
-
-
-class HelpPageTestCase(TestCase):
-    def test_homepage(self):
-        response = self.client.get(reverse('base:help'))
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.redirect_chain[0][0], reverse('account:home'))

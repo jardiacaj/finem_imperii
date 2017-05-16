@@ -1,0 +1,14 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+
+    <div class="col-lg-6 col-lg-offset-3">
+        <h1 class="page-header">Help sections</h1>
+        <ol class="lead">
+            <li>General information</li>
+            <li><a href="{% url 'help:fundamental' %}">Fundamentals</a></li>
+            <li><a href="{% url 'help:about' %}">About</a></li>
+        </ol>
+    </div>
+
+{% endblock %}

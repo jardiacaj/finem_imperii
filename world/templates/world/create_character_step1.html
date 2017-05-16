@@ -16,7 +16,6 @@
                 <li>
                     <h4>{{ world }}</h4>
                     <p>{{ world.description }}</p>
-                    <a href="{{ world.get_absolute_url }}" class="btn btn-default">View</a>
                     <a href="{% url 'world:create_character' world.id %}" class="btn btn-primary">Choose</a>
                 </li>
             {% empty %}

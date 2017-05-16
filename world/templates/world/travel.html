@@ -6,6 +6,12 @@
 
     <h1 class="page-header">Travel</h1>
 
+    {% if not request.hero.can_travel %}
+        <div class="alert alert-danger">
+            <p>You can't travel while taking part in a battle.</p>
+        </div>
+    {% endif %}
+
     {% if request.hero.travel_destination %}
         <p>You wil reach {{ request.hero.travel_destination }} in the next turn.</p>
     {% elif target_settlement %}

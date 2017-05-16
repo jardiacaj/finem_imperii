@@ -545,9 +545,16 @@ class Character(models.Model):
         days = distance / 100 * 2
         return math.ceil(days * 24)
 
-    def check_travelability(self, target_settlement):
+    def can_travel(self):
         if self.get_battle_participating_in() is not None:
-            return "You can't travel while participating in a battle"
+            return False
+        return True
+
+    def check_travelability(self, target_settlement):
+        can_travel_result = self.can_travel()
+        if can_travel_result is not None:
+            return "You can't currently travel " \
+                   "(are you taking part in battle?)"
         if target_settlement == self.location:
             return "You can't travel to {} as you are already there.".format(
                 target_settlement

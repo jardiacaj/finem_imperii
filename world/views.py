@@ -488,7 +488,7 @@ def unit_disband(request, unit_id):
     )
     unit.disband()
     messages.success(request, 'Your unit has been disbanded.', 'success')
-    return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
+    return redirect(reverse('world:character_home'))
 
 
 @inchar_required

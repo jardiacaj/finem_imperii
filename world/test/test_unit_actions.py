@@ -37,9 +37,10 @@ class TestUnitActions(TestCase):
             response,
             reverse('world:character_home')
         )
-        self.assertFalse(
-            WorldUnit.objects.filter(id=2).exists()
-        )
+        self.my_unit.refresh_from_db()
+        self.assertIsNone(self.my_unit.location)
+        self.assertIsNone(self.my_unit.world)
+        self.assertIsNone(self.my_unit.owner_character)
 
     def test_support_conquest(self):
         tile = Tile.objects.get(name="More mountains")

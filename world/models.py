@@ -747,8 +747,8 @@ class WorldUnit(models.Model):
     )
 
     owner_character = models.ForeignKey(Character, blank=True, null=True)
-    world = models.ForeignKey(World)
-    location = models.ForeignKey(Settlement)
+    world = models.ForeignKey(World, blank=True, null=True)
+    location = models.ForeignKey(Settlement, blank=True, null=True)
     origin = models.ForeignKey(Settlement, related_name='units_originating')
     name = models.CharField(max_length=100)
     recruitment_type = models.CharField(
@@ -867,7 +867,10 @@ class WorldUnit(models.Model):
     def disband(self):
         self.demobilize()
         self.soldier.update(unit=None)
-        self.delete()
+        self.owner_character = None
+        self.location = None
+        self.world = None
+        self.save()
 
 
 class InventoryItem(models.Model):

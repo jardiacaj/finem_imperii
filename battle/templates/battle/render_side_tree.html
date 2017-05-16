@@ -9,6 +9,7 @@
                 <ul>
                     {% for battle_unit in battle_character.battleunit_set.all %}
                         <li>
+                            <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
                             {{ battle_unit.starting_manpower }}
                             {{ battle_unit.type }}:
                             {{ battle_unit.world_unit.name }}

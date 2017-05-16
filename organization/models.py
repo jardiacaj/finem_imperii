@@ -114,7 +114,7 @@ class Organization(models.Model):
             pass
         if self.owner:
             return self.owner.get_violence_monopoly()
-        return False
+        return None
 
     def conquestable_tiles(self):
         if not self.violence_monopoly:

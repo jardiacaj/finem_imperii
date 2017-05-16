@@ -158,7 +158,8 @@ class RecruitmentView(View):
 
     def get(self, request, *args, **kwargs):
         context = {
-            'unit_types': WorldUnit.get_unit_types(nice=True)
+            'unit_types': WorldUnit.get_unit_types(nice=True),
+            'can_recruit': request.hero.can_conscript()
         }
         return render(request, self.template_name, context)
 
@@ -180,6 +181,12 @@ class RecruitmentView(View):
             else:
                 raise Http404()
 
+            if not request.hero.can_conscript():
+                return RecruitmentView.fail_post_with_error(
+                    request,
+                    "You can't conscript units here."
+                )
+
             # get soldier count
             target_soldier_count = \
                 int(request.POST.get('{}count'.format(prefix)))
@@ -198,7 +205,6 @@ class RecruitmentView(View):
                         target_soldier_count
                     )
                 )
-
 
             # calculate time
             conscription_time = request.hero.location.conscription_time(

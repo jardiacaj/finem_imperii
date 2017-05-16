@@ -53,6 +53,9 @@ def initialize_from_conflict(battle, conflict, tile):
                 battle_character = BattleCharacter.objects.get_or_create(
                     battle_organization=battle_organization,
                     character=unit.owner_character,
+                    present_in_battle=(
+                        unit.owner_character.location.tile == unit.location.tile
+                    )
                 )[0]
             else:
                 battle_character = None
@@ -315,6 +318,9 @@ def add_unit_to_battle_in_progress(
         battle_character = BattleCharacter.objects.get_or_create(
             battle_organization=battle_organization,
             character=world_unit.owner_character,
+            present_in_battle=(
+                world_unit.owner_character.location.tile == world_unit.location.tile
+            )
         )[0]
         battle_character_in_turn = BattleCharacterInTurn.objects.get_or_create(
             battle_character=battle_character,

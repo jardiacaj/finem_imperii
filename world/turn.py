@@ -371,6 +371,13 @@ class TurnProcessor:
     def restore_hours(self):
         for character in self.world.character_set.all():
             character.hours_in_turn_left = 15*24
+            if character.get_battle_participating_in() is not None:
+                character.add_notification(
+                    'battle',
+                    "Because you are taking part in a battle, you only "
+                    "have half as much time available."
+                )
+                character.hours_in_turn_left /= 2
             character.save()
 
     def trigger_battles(self):

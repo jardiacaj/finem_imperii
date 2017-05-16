@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 from django.db.models.aggregates import Avg
 from django.db.models.expressions import F
 
-from battle.models import BattleUnit, BattleSoldierInTurn
+from battle.models import BattleUnit, BattleSoldierInTurn, BattleCharacter
 from messaging import shortcuts
 from messaging.models import CharacterMessage, MessageRecipient
 import organization.models
@@ -526,15 +526,28 @@ class Character(models.Model):
     def activation_url(self):
         return reverse('world:activate_character', kwargs={'char_id': self.id})
 
+    def get_battle_participating_in(self):
+        try:
+            return BattleCharacter.objects.get(
+                character=self,
+                battle_organization__side__battle__current=True
+            ).battle_organization.side.battle
+        except BattleCharacter.DoesNotExist:
+            return None
+
     def travel_time(self, target_settlement):
         distance = self.location.distance_to(target_settlement)
         if (self.location.tile.type == Tile.MOUNTAIN
                 or target_settlement.tile.type == Tile.MOUNTAIN):
             distance *= 2
+        if self.location.tile.get_current_battles().exists():
+            distance *= 2
         days = distance / 100 * 2
         return math.ceil(days * 24)
 
     def check_travelability(self, target_settlement):
+        if self.get_battle_participating_in() is not None:
+            return "You can't travel while participating in a battle"
         if target_settlement == self.location:
             return "You can't travel to {} as you are already there.".format(
                 target_settlement
@@ -620,21 +633,33 @@ class Character(models.Model):
         return weight
 
     def can_take_grain_from_public_granary(self):
+        return self.can_use_capability_in_current_location(
+            organization.models.Capability.TAKE_GRAIN
+        )
+
+    def can_conscript(self):
+        return (
+            self.can_use_capability_in_current_location(
+                organization.models.Capability.CONSCRIPT
+            )
+            and
+            self.get_battle_participating_in() is None
+        )
+
+    def can_use_capability_in_current_location(self, capability_type):
         local_violence_monopoly = \
             self.location.tile.controlled_by.get_violence_monopoly()
 
+        organizations_local_vm = local_violence_monopoly.\
+            organizations_character_can_apply_capabilities_to_this_with(
+                self, capability_type)
+        organizations_controlled_by = self.location.tile.controlled_by\
+            .organizations_character_can_apply_capabilities_to_this_with(
+                self, capability_type)
         return (
-            local_violence_monopoly
-            .organizations_character_can_apply_capabilities_to_this_with(
-                self,
-                organization.models.Capability.TAKE_GRAIN
-            ) is not None
+            organizations_local_vm
             or
-            self.location.tile.controlled_by
-            .organizations_character_can_apply_capabilities_to_this_with(
-                self,
-                organization.models.Capability.TAKE_GRAIN
-            ) is not None
+            organizations_controlled_by
         )
 
     def takeable_grain_from_public_granary(self):

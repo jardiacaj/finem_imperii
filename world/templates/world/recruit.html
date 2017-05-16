@@ -6,6 +6,16 @@
 
     <h1 class="page-header">Recruitment</h1>
 
+    {% if not can_recruit %}
+        <div class="alert alert-danger">
+            <p>
+                You can't currently recruit an unit, either because you are not
+                allowed to recruit in your current location (are you in enemy
+                territory?) or because you are taking part in a battle.
+            </p>
+        </div>
+    {% endif %}
+
     <p>To form a new unit, you can choose different options.</p>
     <ol>
         <li>

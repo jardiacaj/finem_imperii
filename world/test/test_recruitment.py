@@ -89,7 +89,6 @@ class TestUnitActions(TestCase):
             WorldUnit.objects.filter(owner_character=self.character).exists())
         self.assertRedirects(response, reverse('world:recruit'))
 
-
     def test_fail_because_no_gender_selected(self):
         response = self.client.post(
             reverse('world:recruit'),
@@ -112,3 +111,7 @@ class TestUnitActions(TestCase):
         self.assertRedirects(response, reverse('world:recruit'))
         self.assertFalse(
             WorldUnit.objects.filter(owner_character=self.character).exists())
+
+    def test_can_recruit_method(self):
+        character = Character.objects.get(id=6)
+        self.assertFalse(character.can_conscript())

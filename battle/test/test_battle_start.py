@@ -267,6 +267,11 @@ class TestBattleStartWithAllies(TestCase):
         ).exists())
         self.assertEqual(BattleCharacter.objects.count(), 3)
 
+        self.assertEqual(
+            self.unit_of_kingdom.owner_character.get_battle_participating_in(),
+            self.battle
+        )
+
         self.assertTrue(BattleUnit.objects.exists())
         self.assertTrue(
             BattleUnit.objects.filter(world_unit=self.unit_of_warrior, starting_manpower=30).exists()
@@ -458,6 +463,11 @@ class TestBattleStartWithAllies(TestCase):
                                               organization=self.commonwealth).exists())
         self.assertEqual(BattleOrganization.objects.count(), 2)
 
+        self.assertEqual(
+            self.unit_of_commonwealth.owner_character.get_battle_participating_in(),
+            None
+        )
+
         self.assertTrue(
             BattleOrganization.objects.get(organization=self.kingdom).side.z !=
             BattleOrganization.objects.get(organization=self.horde).side.z
@@ -538,4 +548,10 @@ class TestBattleStartWithAllies(TestCase):
                                       starting_manpower=100).exists()
         )
         self.assertEqual(BattleUnit.objects.count(), 4)
+
+        self.assertEqual(
+            self.unit_of_commonwealth.owner_character.get_battle_participating_in(),
+            self.battle
+        )
+
         battle_tick(self.battle)

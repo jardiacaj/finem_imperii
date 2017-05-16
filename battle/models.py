@@ -157,6 +157,7 @@ class BattleOrganization(models.Model):
 class BattleCharacter(models.Model):
     battle_organization = models.ForeignKey(BattleOrganization)
     character = models.ForeignKey('world.Character')
+    present_in_battle = models.BooleanField()
 
 
 class BattleCharacterInTurn(models.Model):

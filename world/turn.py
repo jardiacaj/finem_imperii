@@ -123,7 +123,7 @@ class TurnProcessor:
                         '{} coins left.'.format(
                             unit.monthly_cost(),
                             unit,
-                            unit.owner_character.save()
+                            unit.owner_character.cash
                         )
                     )
 

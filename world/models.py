@@ -551,8 +551,7 @@ class Character(models.Model):
         return True
 
     def check_travelability(self, target_settlement):
-        can_travel_result = self.can_travel()
-        if can_travel_result is not None:
+        if not self.can_travel():
             return "You can't currently travel " \
                    "(are you taking part in battle?)"
         if target_settlement == self.location:

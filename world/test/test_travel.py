@@ -4,6 +4,7 @@ from django.test import TestCase
 from django.urls.base import reverse
 
 from world.models import World, Character
+from world.turn import TurnProcessor
 
 
 class TestTravel(TestCase):
@@ -49,4 +50,23 @@ class TestTravel(TestCase):
         self.assertEqual(character.location_id, 1008)
         self.assertEqual(character.hours_in_turn_left, 15*24 - 10)
 
-    #TODO test_travel_to_other_tile
+    def test_travel_to_other_tile(self):
+        response = self.client.post(
+            reverse('world:travel'),
+            data={'target_settlement_id': 1002},
+            follow=True
+        )
+        self.assertRedirects(response, reverse('world:travel'))
+
+        character = Character.objects.get(id=1)
+        self.assertEqual(character.location_id, 1001)
+        self.assertEqual(character.hours_in_turn_left, 15*24)
+        self.assertEqual(character.travel_destination_id, 1002)
+
+        turn_processor = TurnProcessor(character.world)
+        turn_processor.do_travels()
+
+        character.refresh_from_db()
+        self.assertEqual(character.location_id, 1002)
+        self.assertEqual(character.hours_in_turn_left, 15*24 - 52)
+        self.assertEqual(character.travel_destination_id, None)

@@ -6,9 +6,10 @@ from battle.battle_tick import battle_tick
 from battle.models import Battle, BattleCharacter, BattleUnit, BattleContubernium, BattleSoldier, BattleOrganization, \
     BattleContuberniumInTurn, BattleSoldierInTurn, BattleUnitInTurn, Order
 from organization.models import Organization, MilitaryStance
-from world.initialization import initialize_unit
+from world.initialization import initialize_unit, initialize_settlement
 from world.models import Tile, WorldUnit, NPC, Settlement, World
-from world.turn import trigger_battles_in_tile, TurnProcessor
+from world.turn import trigger_battles_in_tile, TurnProcessor, \
+    generate_barbarian_unit, battle_joins
 
 
 class MiscTests(TestCase):
@@ -18,6 +19,28 @@ class MiscTests(TestCase):
         tile = Tile.objects.get(id=108)
         trigger_battles_in_tile(tile)
         self.assertFalse(Battle.objects.exists())
+
+
+class BattleBarbarians(TestCase):
+    fixtures = ['simple_world']
+
+    def test_battle_with_barbarians(self):
+        world = World.objects.get(id=2)
+        turn_processor = TurnProcessor(world)
+        unit_of_kingrom_member = WorldUnit.objects.get(id=4)
+        initialize_unit(unit_of_kingrom_member)
+        kingdom_member = unit_of_kingrom_member.owner_character
+        settlement = kingdom_member.location
+        initialize_settlement(settlement)
+        generate_barbarian_unit(30, settlement)
+        turn_processor.trigger_battles()
+        self.assertTrue(settlement.tile.get_current_battles().exists())
+        battle = settlement.tile.get_current_battles()[0]
+        start_battle(battle)
+        battle_tick(battle)
+        generate_barbarian_unit(30, settlement)
+        battle_joins(battle)
+        battle_tick(battle)
 
 
 class TestBattleStart(TestCase):

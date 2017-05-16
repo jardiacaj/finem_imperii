@@ -42,6 +42,7 @@ class TurnProcessor:
         self.do_travels()
         self.restore_hours()
         self.do_unit_maintenance()
+        self.battle_starts()
         self.battle_joins()
         self.battle_turns()
         self.trigger_battles()
@@ -393,12 +394,16 @@ class TurnProcessor:
         ):
             battle_joins(battle)
 
+    def battle_starts(self):
+        for battle in Battle.objects.filter(
+            tile__world=self.world, current=True, started=False
+        ):
+            start_battle(battle)
+
     def battle_turns(self):
         for battle in Battle.objects.filter(
                 tile__world=self.world, current=True
         ):
-            if not battle.started:
-                start_battle(battle)
             battle_turn(battle)
 
 
@@ -423,18 +428,22 @@ def do_settlement_barbarians(settlement):
         if settlement.population < 20:
             return
         recruitment_size = random.randrange(10, settlement.population // 3)
-        soldiers = world.recruitment.sample_candidates(
-            world.recruitment.all_recruitable_soldiers_in_settlement(settlement),
-            recruitment_size
-        )
-        world.recruitment.recruit_unit(
-            "Barbarians of {}".format(settlement),
-            None,
-            settlement,
-            soldiers,
-            world.models.WorldUnit.CONSCRIPTION,
-            world.models.WorldUnit.INFANTRY
-        )
+        generate_barbarian_unit(recruitment_size, settlement)
+
+
+def generate_barbarian_unit(recruitment_size, settlement):
+    soldiers = world.recruitment.sample_candidates(
+        world.recruitment.all_recruitable_soldiers_in_settlement(settlement),
+        recruitment_size
+    )
+    world.recruitment.recruit_unit(
+        "Barbarians of {}".format(settlement),
+        None,
+        settlement,
+        soldiers,
+        world.models.WorldUnit.CONSCRIPTION,
+        world.models.WorldUnit.INFANTRY
+    )
 
 
 def trigger_battles_in_tile(tile):

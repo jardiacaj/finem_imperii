@@ -16,6 +16,12 @@
         </div>
     {% endif %}
 
+    <p>
+        You may recruit up to {{ request.hero.max_soldiers }} soldiers in
+        up to {{ request.hero.max_units }} units.
+    </p>
+
+    <!--
     <p>To form a new unit, you can choose different options.</p>
     <ol>
         <li>
@@ -40,8 +46,9 @@
             </ul>
         </li>
     </ol>
+    -->
 
-    <div class="col-xs-12 col-md-4 well">
+    <div class="well">
         <h4>Conscription</h4>
 
         <p>Conscripting soldiers from {{ request.hero.location }}.</p>
@@ -67,13 +74,15 @@
             <div class="form-group">
                 <label for="conscript_unit_type">Unit type</label>
                 <select class="form-control" id="conscript_unit_type" name="conscript_unit_type">
+                    {% comment %}
                     {% for type in unit_types %}
                         <option value="{{ type }}">{{ type|capfirst }}</option>
                     {% endfor %}
+                    {% endcomment %}
                 </select>
             </div>
 
-        <!--
+            <!--
             <div class="form-group">
                 <label for="conscript_pay">Payment</label>
                 <select class="form-control" id="conscript_pay" name="conscript_pay">
@@ -86,7 +95,7 @@
                     <option value="6">Double pay (6 coins per month)</option>
                 </select>
             </div>
-        -->
+            -->
 
             <h4>Conscripts profile</h4>
 
@@ -140,7 +149,7 @@
             </div>
         </form>
     </div>
-
+    <!--
     <div class="col-xs-12 col-md-4 well">
         <h4>Professional unit</h4>
         <form class="form-horizontal" role="form" method="post">
@@ -158,6 +167,7 @@
 
         </form>
     </div>
+    -->
 
 {% endblock %}
 

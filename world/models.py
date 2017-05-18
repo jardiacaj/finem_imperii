@@ -724,6 +724,16 @@ class Character(models.Model):
             inventory_object.quantity += quantity
             inventory_object.save()
 
+    def max_units(self):
+        if self.profile == Character.COMMANDER:
+            return 10
+        return 3
+
+    def max_soldiers(self):
+        if self.profile == Character.COMMANDER:
+            return 5000
+        return 500
+
 
 class WorldUnitStatusChangeException(Exception):
     pass
@@ -737,7 +747,7 @@ class WorldUnit(models.Model):
     CONSCRIPTION = 'conscription'
     PROFESSIONAL = 'professional'
     MERCENARY = 'mercenary'
-    RECTRUITMENT_CHOICES = (
+    RECRUITMENT_CHOICES = (
         (CONSCRIPTION, CONSCRIPTION),
         (PROFESSIONAL, PROFESSIONAL),
         (MERCENARY, MERCENARY),
@@ -802,7 +812,7 @@ class WorldUnit(models.Model):
     origin = models.ForeignKey(Settlement, related_name='units_originating')
     name = models.CharField(max_length=100)
     recruitment_type = models.CharField(
-        max_length=30, choices=RECTRUITMENT_CHOICES
+        max_length=30, choices=RECRUITMENT_CHOICES
     )
     type = models.CharField(max_length=30, choices=TYPE_CHOICES)
     status = models.CharField(max_length=30, choices=STATUS_CHOICES)
@@ -844,12 +854,27 @@ class WorldUnit(models.Model):
         )
 
     def change_status(self, new_status):
+        if (
+                self.owner_character.profile != Character.COMMANDER and
+                self.owner_character.location != self.location
+        ):
+            raise WorldUnitStatusChangeException(
+                "You can't change the unit's status while being "
+                "in a different location (only commanders can "
+                "do that)."
+            )
         if new_status not in WorldUnit.get_unit_states():
-            raise Exception("Invalid unit status {}".format(new_status))
+            raise WorldUnitStatusChangeException(
+                "Invalid unit status {}".format(new_status)
+            )
         if self.status == WorldUnit.CUSTOMER_SEARCH:
-            raise Exception("Mercenaries can't change_status()")
+            raise WorldUnitStatusChangeException(
+                "Mercenaries can't change_status()"
+            )
         if new_status == WorldUnit.CUSTOMER_SEARCH:
-            raise Exception("Can't switch to searching customer status")
+            raise WorldUnitStatusChangeException(
+                "Can't switch to searching customer status"
+            )
         if self.get_current_battle() is not None:
             raise WorldUnitStatusChangeException(
                 "Can't change status while in battle"
@@ -864,6 +889,7 @@ class WorldUnit(models.Model):
                     "Cannot demobilize {} the same turn it has been"
                     " mobilized".format(self)
                 )
+            self.demobilize()
         if (new_status != WorldUnit.NOT_MOBILIZED
                 and self.status == WorldUnit.NOT_MOBILIZED):
             if self.mobilization_status_since == self.world.current_turn:

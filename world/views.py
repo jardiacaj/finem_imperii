@@ -256,15 +256,36 @@ class RecruitmentView(View):
             unit_type = request.POST.get('{}unit_type'.format(prefix))
             if unit_type not in WorldUnit.get_unit_types(nice=True):
                 return RecruitmentView.fail_post_with_error(
-                    request, "Invalid unit type"
+                    request, "Invalid unit type."
                 )
 
             # check payment
             pay = int(request.POST.get('{}pay'.format(prefix)))
             if pay not in range(1, 7):
                 return RecruitmentView.fail_post_with_error(
-                    request, "Invalid payment"
+                    request, "Invalid payment."
                 )
+
+            if (
+                    request.hero.worldunit_set.count() + 1 >
+                    request.hero.max_units()
+            ):
+                return RecruitmentView.fail_post_with_error(
+                    request, "You can't recruit any more units."
+                )
+
+            already_recruited_soldier_count = sum(
+                unit.soldier.count()
+                for unit in request.hero.worldunit_set.all()
+            )
+            if (
+                    already_recruited_soldier_count + target_soldier_count >
+                    request.hero.max_soldiers()
+            ):
+                return RecruitmentView.fail_post_with_error(
+                    request, "You can't recruit that many soldiers."
+                )
+
 
             # get candidates
 

@@ -5,16 +5,10 @@
     <h1 class="page-header">Hi {{ user.username|capfirst }}</h1>
 
     <div class="col-md-6 well well-lg">
-        {% if not user.character.exists %}
-            <h2>The fundamentals</h2>
+        {% if not user.character_set.exists %}
+            <h2>The fundamentals (read me please)</h2>
 
             {% include 'help/fundamental_content.html' %}
-
-            <p>
-                This information is shown here because you are a new player.
-                You may find it anytime in the
-                <a href="{% url 'help:fundamental' %}">help section</a>.
-            </p>
 
             <hr>
 
@@ -24,30 +18,7 @@
             <h2>{{ message.title }}</h2>
             {{ message.html_content|safe }}
         {% empty %}
-            <p>
-                Because there is no MOTD configured, let me sing this sweet song.
-            </p>
-            <p>
-                Don't worry about a thing<br>
-                'Cause every little thing gonna be alright<br>
-                Singing' don't worry about a thing<br>
-                'Cause every little thing gonna be alright<br>
-            </p>
-            <p>
-                Rise up this mornin'<br>
-                Smiled with the risin' sun<br>
-                Three little birds<br>
-                Pitch by my doorstep<br>
-                Singin' sweet songs<br>
-                Of melodies pure and true<br>
-                Saying', (this is my message to you)<br>
-            </p>
-            <p>
-                Singing' don't worry 'bout a thing<br>
-                'Cause every little thing gonna be alright<br>
-                Singing' don't worry (don't worry) 'bout a thing<br>
-                <a href="https://www.youtube.com/watch?v=LanCLS_hIo4">'Cause every little thing gonna be alright</a>
-            </p>
+            <p>None configured.</p>
         {% endfor %}
     </div>
 

@@ -148,6 +148,23 @@ class CharacterCreationView(View):
             cash=0
         )
 
+        character.add_notification(
+            'welcome',
+            '<h4>Welcome, {char_name}!</h4>'
+            '<p>You are starting as a member of {state_link}, a realm in '
+            '<a href="{world_url}">{world_name}</a>.</p>'
+            '<p>A good way to start your journey is to write a message '
+            'to the other members of {state_link} asking for orders '
+            'or guidance on how you can be useful.</p>'
+            ''.format(
+                char_name=character.name,
+                state_link=state.get_html_link(),
+                world_url=world.get_absolute_url(),
+                world_name=world.name
+            ),
+            safe=True
+        )
+
         state.character_members.add(character)
 
         return redirect(character.activation_url)

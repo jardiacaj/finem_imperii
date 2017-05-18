@@ -64,7 +64,7 @@ Allocated: 3 days (vacation!)
  - Battle rework. (1 day) (finished)
 
 Allocated: 4 days
- 
+
 ## Week 6
 
  - Region view. (1/2 day) (finished)
@@ -77,9 +77,9 @@ Allocated: 5,5 days
 ## Week 7 
 
  - Battle movement (2 days) (finished)
- 
+
 Allocated: 2 days (vacation!)
- 
+
 ## Week 8
 
  - Battle movement (1,5 days) (finished)
@@ -134,11 +134,11 @@ Allocated: 5 days
  - Final delivery preparation
  - PAC3 (1/2 day)
  - PAC3 delivery
- 
+
 ## Week 13
 
  - Final delivery preparation
- 
+
 ## Week 14
 
  - Final delivery: document

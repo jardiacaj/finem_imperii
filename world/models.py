@@ -509,6 +509,15 @@ class NPC(models.Model):
 
 
 class Character(models.Model):
+    COMMANDER = 'commander'
+    TRADER = 'trader'
+    BUREAUCRAT = 'bureaucrat'
+    PROFILE_CHOICES = (
+        (COMMANDER, COMMANDER),
+        (TRADER, TRADER),
+        (BUREAUCRAT, BUREAUCRAT),
+    )
+
     name = models.CharField(max_length=100)
     world = models.ForeignKey(World)
     location = models.ForeignKey(Settlement)
@@ -521,6 +530,7 @@ class Character(models.Model):
     travel_destination = models.ForeignKey(
         Settlement, null=True, blank=True, related_name='travellers_heading'
     )
+    profile = models.CharField(max_length=20, choices=PROFILE_CHOICES)
 
     @property
     def activation_url(self):

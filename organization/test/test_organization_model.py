@@ -140,7 +140,7 @@ class TestOrganizationModel(TestCase):
 
     def test_get_relationship_to(self):
         organization1 = Organization.objects.get(name="Small Kingdom")
-        organization2 = Organization.objects.get(name="Small commonwealth")
+        organization2 = Organization.objects.get(name="Small Commonwealth")
         self.assertEqual(organization1.get_relationship_to(organization2).relationship, OrganizationRelationship.PEACE)
 
     def test_get_relationship_from(self):
@@ -150,11 +150,11 @@ class TestOrganizationModel(TestCase):
 
     def test_get_war_relationship_to(self):
         organization1 = Organization.objects.get(name="Horde")
-        organization2 = Organization.objects.get(name="Small commonwealth")
+        organization2 = Organization.objects.get(name="Small Commonwealth")
         self.assertEqual(organization1.get_relationship_to(organization2).relationship, OrganizationRelationship.WAR)
 
     def test_get_war_relationship_from(self):
-        organization1 = Organization.objects.get(name="Small commonwealth")
+        organization1 = Organization.objects.get(name="Small Commonwealth")
         organization2 = Organization.objects.get(name="Horde")
         self.assertEqual(organization1.get_relationship_from(organization2).relationship, OrganizationRelationship.WAR)
 
@@ -188,7 +188,7 @@ class TestOrganizationModel(TestCase):
     def test_get_default_stances(self):
         organization0 = Organization.objects.get(name="Small Democracy")
         organization1 = Organization.objects.get(name="Small Kingdom")
-        organization2 = Organization.objects.get(name="Small commonwealth")
+        organization2 = Organization.objects.get(name="Small Commonwealth")
 
         self.assertEqual(organization0.get_default_stance_to(organization1).get_stance(), MilitaryStance.DEFENSIVE)
         self.assertEqual(organization0.get_default_stance_to(organization2).get_stance(), MilitaryStance.DEFENSIVE)
@@ -206,7 +206,7 @@ class TestOrganizationModel(TestCase):
 
     def test_get_diplomatically_based_default_stances2(self):
         organization0 = Organization.objects.get(name="Horde")
-        organization1 = Organization.objects.get(name="Small commonwealth")
+        organization1 = Organization.objects.get(name="Small Commonwealth")
         self.assertEqual(organization0.get_default_stance_to(organization1).get_stance(), MilitaryStance.AGGRESSIVE)
         self.assertEqual(organization1.get_default_stance_to(organization0).get_stance(), MilitaryStance.AGGRESSIVE)
 

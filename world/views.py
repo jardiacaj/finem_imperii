@@ -135,6 +135,12 @@ class CharacterCreationView(View):
                 request, world_id, "Select a valid name/surname"
             )
 
+        profile = request.POST.get('profile')
+        if profile not in (choice[0] for choice in Character.PROFILE_CHOICES):
+            return self.fail_post_with_error(
+                request, world_id, "Select a valid profile"
+            )
+
         character = Character.objects.create(
             name=name + ' ' + surname,
             world=world,
@@ -145,7 +151,8 @@ class CharacterCreationView(View):
             ),
             oath_sworn_to=state if state.leader is None else state.leader,
             owner_user=request.user,
-            cash=0
+            cash=100,
+            profile=profile
         )
 
         character.add_notification(

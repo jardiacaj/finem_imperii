@@ -34,13 +34,62 @@ class TestCharacterCreation(TestCase):
         )
         self.assertEqual(response.status_code, 200)
 
-    def test_create_character_in_kingdom(self):
+    def test_create_commander_in_kingdom(self):
         response = self.client.post(
             reverse('world:create_character', kwargs={'world_id': 2}),
             data={
                 'state_id': Organization.objects.get(name="Small Kingdom").id,
                 'name': 'Rusbel',
-                'surname': 'Gossett'
+                'surname': 'Gossett',
+                'profile': 'commander'
+            },
+            follow=True
+        )
+
+        new_character = Character.objects.get(name="Rusbel Gossett")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.redirect_chain), 2)
+        self.assertEqual(response.redirect_chain[0][1], 302)
+        self.assertEqual(
+            response.redirect_chain[0][0],
+            reverse('world:activate_character', kwargs={'char_id': new_character.id})
+        )
+        self.assertEqual(response.redirect_chain[1][1], 302)
+        self.assertEqual(response.redirect_chain[1][0], reverse('world:character_home'))
+
+    def test_create_trader_in_commonwealth(self):
+        response = self.client.post(
+            reverse('world:create_character', kwargs={'world_id': 2}),
+            data={
+                'state_id': Organization.objects.get(name="Small Commonwealth").id,
+                'name': 'Rusbel',
+                'surname': 'Gossett',
+                'profile': 'trader'
+            },
+            follow=True
+        )
+
+        new_character = Character.objects.get(name="Rusbel Gossett")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.redirect_chain), 2)
+        self.assertEqual(response.redirect_chain[0][1], 302)
+        self.assertEqual(
+            response.redirect_chain[0][0],
+            reverse('world:activate_character', kwargs={'char_id': new_character.id})
+        )
+        self.assertEqual(response.redirect_chain[1][1], 302)
+        self.assertEqual(response.redirect_chain[1][0], reverse('world:character_home'))
+
+    def test_create_barbaric_bureaucrat(self):
+        response = self.client.post(
+            reverse('world:create_character', kwargs={'world_id': 2}),
+            data={
+                'state_id': Organization.objects.get(name="Barbarians of Parvus").id,
+                'name': 'Rusbel',
+                'surname': 'Gossett',
+                'profile': 'bureaucrat'
             },
             follow=True
         )

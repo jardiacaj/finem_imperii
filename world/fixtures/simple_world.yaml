@@ -391,7 +391,7 @@
   pk: 105
   fields:
     world_id: 2
-    name: "Small commonwealth"
+    name: "Small Commonwealth"
     color: "CE0004"
     description: "A small federated state"
     is_position: false
@@ -437,7 +437,7 @@
     world_id: 2
     name: "Commonwealth Lord"
     color: "A70004"
-    description: "Leader of the small commonwealth"
+    description: "Leader of the Small Commonwealth"
     is_position: true
     position_type: inherited
     owner_id: null

@@ -2,7 +2,12 @@
 
 {% block content %}
 
-    <h1 class="page-header">{{ character.get_html_name|safe }}</h1>
+    <h1 class="page-header">
+        {{ character.get_html_name|safe }}
+        <small>
+            {{ character.get_profile_display|capfirst }}
+        </small>
+    </h1>
 
     <div class="col-md-6">
 

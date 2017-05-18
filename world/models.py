@@ -645,7 +645,7 @@ class Character(models.Model):
     def carrying_weight(self):
         weight = 0
         for item in self.carrying_items():
-            weight += item.quantity
+            weight += item.quantity * item.get_weight()
         return weight
 
     def can_take_grain_from_public_granary(self):
@@ -684,11 +684,16 @@ class Character(models.Model):
 
         return min(
             self.remaining_carrying_capacity(),
-            self.hours_in_turn_left * 2,
+            self.hours_in_turn_left * self.inventory_bushels_per_hour(),
 
             self.location.get_default_granary().
             get_public_bushels_object().quantity
         )
+
+    def inventory_bushels_per_hour(self):
+        if self.profile == Character.TRADER:
+            return 4
+        return 2
 
     def inventory_object(self, type):
         try:
@@ -933,3 +938,8 @@ class InventoryItem(models.Model):
 
     def __str__(self):
         return "{} {}".format(self.quantity, self.get_type_display())
+
+    def get_weight(self):
+        if self.type == InventoryItem.CART:
+            return -100
+        return 1

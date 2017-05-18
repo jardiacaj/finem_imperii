@@ -55,6 +55,43 @@ class TestInventory(TestCase):
         character.refresh_from_db()
         self.assertEqual(character.hours_in_turn_left, 15*24 - 100/2)
 
+    def test_take_grain_with_carts(self):
+        character = Character.objects.get(id=1)
+        bushels_object = character.location.get_default_granary()\
+            .get_public_bushels_object()
+        bushels_object.quantity = 1000
+        bushels_object.save()
+
+        character.profile = Character.TRADER
+        character.save()
+
+        InventoryItem.objects.create(
+            type=InventoryItem.CART,
+            quantity=10,
+            owner_character=character
+        )
+
+        inv_cart = character.inventory_object(InventoryItem.CART)
+        self.assertEqual(inv_cart.quantity, 10)
+
+        response = self.client.post(
+            reverse('world:inventory'),
+            data={
+                'action': 'load',
+                'bushels': 1000
+            }
+        )
+        self.assertRedirects(response, reverse('world:inventory'))
+
+        inv_bush = character.inventory_object(InventoryItem.GRAIN)
+        self.assertEqual(inv_bush.quantity, 1000)
+
+        bushels_object.refresh_from_db()
+        self.assertEqual(bushels_object.quantity, 0)
+
+        character.refresh_from_db()
+        self.assertEqual(character.hours_in_turn_left, 15*24 - 1000/4)
+
     def test_unload_grain(self):
         character = Character.objects.get(id=1)
         character_bushels_object = InventoryItem.objects.create(

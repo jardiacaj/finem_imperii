@@ -2,7 +2,12 @@
 
 {% block content %}
 
-    <h1 class="page-header">Inventory</h1>
+    <h1 class="page-header">
+        Inventory
+        <small>
+            Remaining space: {{ request.hero.remaining_carrying_capacity }}
+        </small>
+    </h1>
 
     <p>
         {{ request.hero.cash }} silver coins.
@@ -50,7 +55,9 @@
                         <div class="col-lg-10 col-lg-offset-2">
                             <button type="submit" class="btn btn-primary">
                                 Unload grain
-                            </button> 2 bushels per hour
+                            </button>
+                            {{ request.hero.bushels_per_hour }}
+                            bushels per hour
                         </div>
                     </div>
 

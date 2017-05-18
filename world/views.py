@@ -155,6 +155,13 @@ class CharacterCreationView(View):
             profile=profile
         )
 
+        if character.profile == Character.TRADER:
+            InventoryItem.objects.create(
+                type=InventoryItem.CART,
+                quantity=5,
+                owner_character=character,
+            )
+
         character.add_notification(
             'welcome',
             '<h4>Welcome, {char_name}!</h4>'
@@ -589,7 +596,10 @@ class InventoryView(View):
     def post(self, request, *args, **kwargs):
         action = request.POST.get('action')
         bushels_to_transfer = int(request.POST.get('bushels'))
-        if request.hero.hours_in_turn_left * 2 < bushels_to_transfer:
+        hours_needed = math.ceil(
+            bushels_to_transfer / request.hero.inventory_bushels_per_hour()
+        )
+        if request.hero.hours_in_turn_left < hours_needed:
             return self.fail_post_with_error(
                 request, "You don't have enough time left this turn.")
         if bushels_to_transfer < 1:
@@ -623,6 +633,6 @@ class InventoryView(View):
             granary_bushels.save()
         else:
             raise Http404()
-        request.hero.hours_in_turn_left -= math.ceil(bushels_to_transfer / 2)
+        request.hero.hours_in_turn_left -= hours_needed
         request.hero.save()
         return redirect('world:inventory')

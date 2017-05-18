@@ -11,13 +11,19 @@
             {% csrf_token %}
 
             <div class="form-group">
-                <h2>Choose your State</h2>
+                <h2>Choose your realm</h2>
                 {% for state in world.get_violence_monopolies.all %}
                     <div class="col-md-6">
                         <div class="well">
-                            <label class="btn btn-primary">
+                            <label class="btn {% if state.barbaric %}btn-default{% else %}btn-primary{% endif %}">
                                 <input type="radio" name="state_id" value="{{ state.id }}"> {{ state.get_html_name|safe }}
                             </label>
+                            {% if state.barbaric %}
+                                <p><b>
+                                    This is a barbaric realm and recommended
+                                    for advanced players only!
+                                </b></p>
+                            {% endif %}
                             <p>{{ state.description }}</p>
                             <p>{{ state.get_membership_including_descendants|length }} members</p>
                             <p>{{ state.get_all_controlled_tiles|length }} regions</p>

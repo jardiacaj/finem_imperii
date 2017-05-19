@@ -31,7 +31,10 @@
                         <td style="vertical-align: middle">
                             {{ character.get_html_name|safe }}
                             {% if character.unread_messages.exists %}
-                                <span class="badge">{{ character.unread_messages.count }}</span>
+                                <span class="badge">
+                                    <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+                                    {{ character.unread_messages.count }}
+                                </span>
                             {% endif %}
                         </td>
                         <td style="vertical-align: middle">

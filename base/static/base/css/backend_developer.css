@@ -1,3 +1,7 @@
+.button_margin {
+    margin: 3px;
+}
+
 pre.wrapping {
     white-space: pre-wrap;
 }

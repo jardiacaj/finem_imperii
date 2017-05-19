@@ -785,25 +785,25 @@ class WorldUnit(models.Model):
     )
 
     LINE_CHOICES = (
-        (0, "Advanced line"),
-        (1, "Front line"),
-        (2, "Middle line"),
-        (3, "Rear line"),
-        (4, "Rearguard"),
+        (0, "advanced line"),
+        (1, "front line"),
+        (2, "middle line"),
+        (3, "rear line"),
+        (4, "rearguard"),
     )
 
     SIDE_CHOICES = (
-        (-5, "Flanking far left"),
-        (-4, "Flanking left"),
-        (-3, "Cover left flank"),
-        (-2, "Left side"),
-        (-1, "Left-center"),
-        (0, "Center"),
-        (1, "Right-center"),
-        (2, "Right side"),
-        (3, "Cover right flank"),
-        (4, "Flanking right"),
-        (5, "Flanking far right"),
+        (-5, "flanking far left"),
+        (-4, "flanking left"),
+        (-3, "cover left flank"),
+        (-2, "left side"),
+        (-1, "left-center"),
+        (0, "center"),
+        (1, "right-center"),
+        (2, "right side"),
+        (3, "cover right flank"),
+        (4, "flanking right"),
+        (5, "flanking far right"),
     )
 
     owner_character = models.ForeignKey(Character, blank=True, null=True)

@@ -183,7 +183,7 @@
             {% for capability in organization.capability_set.all %}
                 <li>
                     {% if can_use_capabilities %}
-                        <a href="{{ capability.get_absolute_url }}" class="btn btn-primary btn-sm">
+                        <a href="{{ capability.get_absolute_url }}" class="btn btn-primary btn-sm button_margin">
                             {{ capability.get_type_display|capfirst }}
                         </a>
                     {% else %}

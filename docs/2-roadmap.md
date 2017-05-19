@@ -120,10 +120,10 @@ Allocated: 5 days
  - Game start/tutorial (1/2 day) (finished)
  - Help system (1/2 day) (finished)
  - Character profiles + actions (1 day) (finished)
+ - Character start page (1/2 day) (finished)
  - MUST Economy balancing (1/2 day)
  - MUST Invitation system (1/2 day)
  - MUST Emortuus (2 days)
- - MUST Character start page (1/2 day)
  - MUST Closed alpha release (1 day)
  - VNTH Secession, rebellion and state founding. (2 days)
  - VNTH Character pause and deletion (1 day)
@@ -153,3 +153,7 @@ Allocated: 5 days
  - NTH Professional units and mercenaries
  - NTH Sieges. (1 day)
  - NTH Character/player prestige
+ - NTH Bureaucrats (1 day)
+ - NTH Spy (1 day)
+ - NTH Fighter & battle participation (2 days)
+ - NTH Archers (2 days)

@@ -12,6 +12,14 @@ from world.turn import organizations_with_battle_ready_units, \
     create_battle_from_conflict, TurnProcessor, do_settlement_barbarians
 
 
+class TestEmortuusTurn(TestCase):
+    fixtures = ['world1']
+
+    def test_pass_one_year_in_emortuus(self):
+        for i in range(12):
+            pass_turn(None, None, World.objects.all())
+
+
 class TestTurn(TestCase):
     fixtures = ['simple_world']
 

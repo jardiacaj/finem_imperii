@@ -1620,6 +1620,12 @@
     level: 2
     quantity: 2378
     settlement_id: 1
+- model: world.Building
+  fields:
+    type: granary
+    level: 0
+    quantity: 1
+    settlement_id: 1
 
 
 - model: world.Settlement
@@ -1683,7 +1689,7 @@
 - model: world.Building
   fields:
     type: granary
-    level: 2
+    level: 1
     quantity: 1
     settlement_id: 3
 
@@ -1742,9 +1748,9 @@
 - model: world.Building
   fields:
     type: granary
-    level: 2
+    level: 1
     quantity: 1
-    settlement_id: 4
+    settlement_id: 5
 
 
 
@@ -1777,7 +1783,7 @@
 - model: world.Building
   fields:
     type: granary
-    level: 2
+    level: 1
     quantity: 1
     settlement_id: 6
 
@@ -1804,7 +1810,7 @@
 - model: world.Building
   fields:
     type: granary
-    level: 2
+    level: 1
     quantity: 1
     settlement_id: 7
 

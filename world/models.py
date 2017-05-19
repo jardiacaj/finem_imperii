@@ -504,7 +504,7 @@ class NPC(models.Model):
         self.able = False
         self.save()
 
-        if unit.soldier.count() == 0:
+        if unit and unit.soldier.count() == 0:
             unit.disband()
 
 

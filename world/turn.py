@@ -39,6 +39,7 @@ class TurnProcessor:
 
     @transaction.atomic
     def do_turn(self):
+        # self.delete_dead_realms()
         self.do_travels()
         self.restore_hours()
         self.do_unit_maintenance()
@@ -138,6 +139,9 @@ class TurnProcessor:
                 state.save()
 
     def do_state_taxes(self, state: organization.models.Organization):
+        if not state.character_members.exists():
+            return
+
         settlement_input = []
         total_input = 0
         for tile in state.get_all_controlled_tiles():
@@ -425,7 +429,7 @@ def do_settlement_barbarians(settlement):
         )
         if barbarian_soldiers >= settlement.population / 3:
             return
-        if settlement.population < 20:
+        if settlement.population < 40:
             return
         recruitment_size = random.randrange(10, settlement.population // 3)
         generate_barbarian_unit(recruitment_size, settlement)

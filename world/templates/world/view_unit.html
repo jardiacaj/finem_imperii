@@ -175,9 +175,6 @@
             {% if unit.owner_character == request.hero %}
                 <h4>Actions</h4>
                 <p>
-                    <a class="btn btn-sm btn-primary" href="{% url 'world:unit_transfer' unit.id %}">Transfer</a>
-                </p>
-                <p>
                     <form class="form-inline" role="form" method="post" action="{% url 'world:unit_disband' unit.id %}">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">

@@ -24,7 +24,11 @@
     world_id: 1
     name: "Kingdom of Cardell"
     color: "8F00CC"
-    description: "It's a kingdom with a missing description"
+    description: >
+      The Kingdom emerged from the old Province of Luria. Through alliances and
+      diplomatic marriages, the Cardell family manage to bring under their
+      control the barbaric tribes of the old province and created a thriving
+      Kingdom.
     is_position: false
     position_type: inherited
     owner_id: null
@@ -40,7 +44,9 @@
     world_id: 1
     name: "King of Cardell"
     color: "B300FF"
-    description: "It's a king without description"
+    description: >
+      The King of Cardell is the patriarch of his Kingdom, leader of leaders,
+      guard and sovereign of Cardell and Luria.
     is_position: true
     owner_id: null
     leader_id: null
@@ -116,9 +122,14 @@
   pk: 3
   fields:
     world_id: 1
-    name: "Federated States of Central Emortuus"
+    name: "Federated Realms of Central Emortuus"
     color: "008691"
-    description: "It's a federation without description"
+    description: >
+      (This is an experimental organization)
+      Soon after the establishment of the First Realms of Emortuus, some
+      leaders decided it was better for the civilized nations to work
+      together to better fend off enemies and barbarians. Some Realms of
+      the central territories joined in this Federation.
     is_position: false
     owner_id: null
     leader_id: 4
@@ -134,9 +145,13 @@
   pk: 4
   fields:
     world_id: 1
-    name: "President of the Federated States of Central Emortuus"
+    name: "President of the Federated Realms of Central Emortuus"
     color: "008691"
-    description: "It's a president without description"
+    description: >
+      (This is an experimental organization)
+      The elected President of the Federation's role is to defend the
+      interests of the Federated Realms, coordinate their efforts and
+      represent the unity of the Federation.
     is_position: true
     position_type: elected
     owner_id: null
@@ -152,7 +167,11 @@
     world_id: 1
     name: "Knarkt commonwealth"
     color: "CE0004"
-    description: "It's a federated state without description"
+    description: >
+      The Commonwealth started as a successful tribe that controlled the
+      territories around Knarkt. After a couple of generations of relative
+      peace and prosperity, it rose as an influential emortuic Realm of
+      it's own right.
     is_position: false
     owner_id: null
     leader_id: 6
@@ -193,7 +212,10 @@
     world_id: 1
     name: "Knarkt Lord"
     color: "A70004"
-    description: "Lord of Knarkt"
+    description: >
+      The Lord of Knarkt is a life-long position elected by the members of the
+      Commonwealth. Ritualistic in the tradition of the old tribes and
+      respected by it's people.
     is_position: true
     position_type: inherited
     owner_id: null
@@ -260,7 +282,11 @@
     world_id: 1
     name: "Casmir"
     color: "928439"
-    description: "Federated State"
+    description: >
+      Unique for its horizontality and communal organization, Casmir is a
+      Realm formed by the free and democratic union of it's people. While often
+      marred in internal disputes, Casmirians always rise united when
+      external threats arise.
     is_position: false
     owner_id: null
     leader_id: 8
@@ -346,7 +372,9 @@
     world_id: 1
     name: "Casmir Thain"
     color: "928439"
-    description: "Thain of Casmir"
+    description: >
+      The Thain represents Casmir and is not so much a position of power
+      as a symbol of the Realm's unity, strength and dignity.
     is_position: true
     position_type: elected
     owner_id: null
@@ -364,7 +392,10 @@
     name: "Barbarians"
     barbaric: true
     color: "111111"
-    description: "Barbarians"
+    description: >
+      The anarchic barbaric tribes of Emortuus lack the infrastructure and
+      organization of the Realms, but their might should not be underrated,
+      especially in times when the population is unhappy with their leaders.
     is_position: false
     owner_and_leader_locked: false
     violence_monopoly: true
@@ -395,7 +426,7 @@
   pk: 1
   fields:
     world_id: 1
-    name: Cardell Peninsula
+    name: Lurian Peninsula
 - model: world.Region
   pk: 2
   fields:

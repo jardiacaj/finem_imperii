@@ -260,6 +260,7 @@ class RecruitmentView(View):
                 )
 
             # check payment
+            """
             pay = int(request.POST.get('{}pay'.format(prefix)))
             if pay not in range(1, 7):
                 return RecruitmentView.fail_post_with_error(
@@ -273,6 +274,7 @@ class RecruitmentView(View):
                 return RecruitmentView.fail_post_with_error(
                     request, "You can't recruit any more units."
                 )
+            """
 
             already_recruited_soldier_count = sum(
                 unit.soldier.count()

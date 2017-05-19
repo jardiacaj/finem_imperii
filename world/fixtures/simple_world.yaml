@@ -5,6 +5,7 @@
     email: alice@localhost
     # password is "test"
     password: 'pbkdf2_sha256$10000$vkRy7QauoLLj$ry+3xm3YX+YrSXbri8s3EcXDIrx5ceM+xQjtpLdw2oE='
+    is_staff: true
 
 
 - model: world.Character
@@ -16,6 +17,7 @@
     oath_sworn_to_id: 102
     owner_user_id: 1
     cash: 10000
+    profile: commander
 
 - model: world.Character
   pk: 2
@@ -26,6 +28,7 @@
     oath_sworn_to_id: 102
     owner_user_id: 1
     cash: 10000
+    profile: trader
 - model: battle.Order
   pk: 4
   fields:
@@ -54,6 +57,7 @@
     location_id: 1008
     owner_user_id: 1
     cash: 10000
+    profile: commander
 
 - model: world.Character
   pk: 4
@@ -63,6 +67,7 @@
     location_id: 1005
     owner_user_id: 1
     cash: 10000
+    profile: commander
 
 - model: world.Character
   pk: 8
@@ -72,6 +77,7 @@
     location_id: 1005
     owner_user_id: 1
     cash: 10000
+    profile: bureaucrat
 
 - model: world.Character
   pk: 5
@@ -81,6 +87,7 @@
     location_id: 1007
     owner_user_id: 1
     cash: 10000
+    profile: commander
 - model: battle.Order
   pk: 1
   fields:
@@ -128,6 +135,7 @@
     location_id: 1007
     owner_user_id: 1
     cash: 10000
+    profile: commander
 - model: battle.Order
   pk: 2
   fields:
@@ -156,6 +164,7 @@
     location_id: 1003
     owner_user_id: 1
     cash: 10000
+    profile: bureaucrat
 
 - model: world.Character
   pk: 9
@@ -165,6 +174,7 @@
     location_id: 1003
     owner_user_id: 1
     cash: 10000
+    profile: commander
 
 
 - model: world.World

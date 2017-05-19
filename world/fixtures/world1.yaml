@@ -1,3 +1,16 @@
+- model: messaging.ServerMOTD
+  fields:
+    title: Welcome to the closed alpha release
+    display_order: 0
+    draft: false
+    html_content: >
+      <p>This is a initial test release. If you report any issues you find
+      to the <a href="https://github.com/jardiacaj/finem_imperii/issues/new">
+      GitHub page</a> of the project, you will be helping improve this game.</p>
+      <p>You may play the game freely but I can't currently guarantee that a
+      database reset is needed at some point, which would cause loosing
+      everyone's progres in the game.</p>
+
 - model: world.World
   pk: 1
   fields:

@@ -113,6 +113,9 @@ Allocated: 5 days
  - Missing notifications (1/2 day) (finished)
  - Battle end (1/2 day) (finished)
  - Battle join (1/2 day) (finished)
+
+## Week 12
+
  - Unit payment (1/2 day) (finished)
  - Disband units with 0 soldiers (1/2 day) (finished)
  - Population regeneration (1/2 day) (finished)
@@ -121,16 +124,12 @@ Allocated: 5 days
  - Help system (1/2 day) (finished)
  - Character profiles + actions (1 day) (finished)
  - Character start page (1/2 day) (finished)
+ - Emortuus (1 day) (finished)
+ - MUST Step out (1/2 day)
+ - MUST Heir setting (1/2 day)
  - MUST Economy balancing (1/2 day)
  - MUST Invitation system (1/2 day)
- - MUST Emortuus (2 days)
  - MUST Closed alpha release (1 day)
- - VNTH Secession, rebellion and state founding. (2 days)
- - VNTH Character pause and deletion (1 day)
- - VNTH Imprisoning (1 day)
-
-## Week 12
-
  - Final delivery preparation
  - PAC3 (1/2 day)
  - PAC3 delivery
@@ -147,6 +146,9 @@ Allocated: 5 days
 
 ## Optional / kick out candidates
 
+ - VNTH Secession, rebellion and state founding. (2 days)
+ - VNTH Character pause and deletion (1 day)
+ - VNTH Imprisoning (1 day)
  - NTH Population evolution (1 day)
  - NTH Building production (1 day)
  - NTH Trade (1,5 days)

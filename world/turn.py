@@ -1,6 +1,8 @@
 import random
 
 import math
+
+import numpy.random
 from django.db import transaction
 from django.db.models.expressions import F
 
@@ -181,13 +183,18 @@ class TurnProcessor:
             type=Building.GRAIN_FIELD,
             owner=None
         ))
+        total_field_q = sum([field.quantity for field in fields])
+        field_weights = [field.quantity / total_field_q for field in fields]
         for jobseeker in npcs_looking_for_a_job:
-            jobseeker.workplace = random.choice(fields)
+            jobseeker.workplace = numpy.random.choice(
+                fields,
+                p=field_weights
+            )
             jobseeker.save()
 
         if not settlement.tile.controlled_by.get_violence_monopoly().barbaric:
             if settlement.guilds_setting == Settlement.GUILDS_PROHIBIT:
-                settlement.get_residents()
+                pass
             elif settlement.guilds_setting == Settlement.GUILDS_RESTRICT:
                 pass
             elif settlement.guilds_setting == Settlement.GUILDS_KEEP:

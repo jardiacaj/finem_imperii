@@ -1,6 +1,7 @@
 import logging
 import random
 
+import numpy.random
 from django.db import transaction
 
 from name_generator.name_generator import generate_name
@@ -54,29 +55,6 @@ def initialize_settlement(settlement):
 
     for i in range(settlement.population):
         npc = generate_npc(i, residences, settlement)
-
-        if npc.able and npc.age_months > NPC.VERY_YOUNG_AGE_LIMIT:
-            assigned_workers += 1
-
-            # we assign 90% of population to fields
-            if assigned_workers < (settlement.population // 10 * 9) or total_other_workplaces == 0:
-                # we do a weighted assignment
-                pos = random.randint(0, total_field_workplaces)
-                cumulative = 0
-                for field in fields:
-                    cumulative += field.max_workers()
-                    if pos < cumulative:
-                        break
-                npc.workplace = field
-            else:
-                pos = random.randint(0, total_other_workplaces)
-                cumulative = 0
-                for other_workplace in other_workplaces:
-                    cumulative += other_workplace.max_workers()
-                    if pos < cumulative:
-                        break
-                npc.workplace = other_workplace
-
         npc.save()
 
     if settlement.tile.controlled_by.barbaric:
@@ -93,12 +71,15 @@ def generate_npc(i, residences, settlement):
     else:
         age_months = random.randint(0, 60 * 12)
         able = (random.getrandbits(7) != 0)
+    residence_list = list(residences)
+    total_residence_q = sum([residence.quantity for residence in residence_list])
+    residence_wheights = [residence.quantity / total_residence_q for residence in residence_list]
     npc = NPC.objects.create(
         name=name,
         male=male,
         able=able,
         age_months=age_months,
-        residence=residences[i % residences.count()],
+        residence=numpy.random.choice(residence_list, p=residence_wheights),
         origin=settlement,
         location=settlement,
         workplace=None,

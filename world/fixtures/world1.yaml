@@ -2257,7 +2257,7 @@
 - model: world.Settlement
   pk: 24
   fields:
-    name: Verburgh
+    name: Byhill
     tile_id: 26
     population_default: 810
     x_pos: 50
@@ -2286,6 +2286,72 @@
     level: 2
     quantity: 1
     settlement_id: 24
+
+# East Luria
+- model: world.Settlement
+  pk: 25
+  fields:
+    name: Freehill
+    tile_id: 27
+    population_default: 677
+    x_pos: 62
+    z_pos: 25
+- model: world.Building
+  fields:
+    type: residence
+    level: 1
+    quantity: 101
+    settlement_id: 25
+- model: world.Building
+  fields:
+    type: grain field
+    level: 1
+    quantity: 1203
+    settlement_id: 25
+- model: world.Building
+  fields:
+    type: granary
+    level: 2
+    quantity: 1
+    settlement_id: 25
+- model: world.Building
+  fields:
+    type: guild
+    level: 2
+    quantity: 1
+    settlement_id: 25
+- model: world.Settlement
+  pk: 26
+  fields:
+    name: Verburgh
+    tile_id: 27
+    population_default: 977
+    x_pos: 60
+    z_pos: 76
+- model: world.Building
+  fields:
+    type: residence
+    level: 1
+    quantity: 101
+    settlement_id: 26
+- model: world.Building
+  fields:
+    type: grain field
+    level: 0
+    quantity: 3504
+    settlement_id: 26
+- model: world.Building
+  fields:
+    type: granary
+    level: 1
+    quantity: 1
+    settlement_id: 26
+- model: world.Building
+  fields:
+    type: guild
+    level: 2
+    quantity: 1
+    settlement_id: 26
 
 # Knarkt
 - model: world.Settlement

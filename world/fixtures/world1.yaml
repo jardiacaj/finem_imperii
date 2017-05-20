@@ -1627,6 +1627,12 @@
     level: 0
     quantity: 1
     settlement_id: 1
+- model: world.Building
+  fields:
+    type: guild
+    level: 0
+    quantity: 1
+    settlement_id: 1
 - model: world.Settlement
   pk: 2
   fields:
@@ -1659,6 +1665,12 @@
     level: 2
     quantity: 1
     settlement_id: 2
+- model: world.Building
+  fields:
+    type: guild
+    level: 2
+    quantity: 1
+    settlement_id: 2
 - model: world.Settlement
   pk: 3
   fields:
@@ -1687,6 +1699,12 @@
 - model: world.Building
   fields:
     type: granary
+    level: 1
+    quantity: 1
+    settlement_id: 3
+- model: world.Building
+  fields:
+    type: guild
     level: 1
     quantity: 1
     settlement_id: 3
@@ -1723,6 +1741,12 @@
     level: 2
     quantity: 1
     settlement_id: 4
+- model: world.Building
+  fields:
+    type: guild
+    level: 1
+    quantity: 1
+    settlement_id: 4
 - model: world.Settlement
   pk: 5
   fields:
@@ -1746,6 +1770,12 @@
 - model: world.Building
   fields:
     type: granary
+    level: 1
+    quantity: 1
+    settlement_id: 5
+- model: world.Building
+  fields:
+    type: guild
     level: 1
     quantity: 1
     settlement_id: 5
@@ -1782,6 +1812,12 @@
     level: 2
     quantity: 1
     settlement_id: 10
+- model: world.Building
+  fields:
+    type: guild
+    level: 1
+    quantity: 1
+    settlement_id: 10
 - model: world.Settlement
   pk: 11
   fields:
@@ -1808,6 +1844,12 @@
     level: 1
     quantity: 1
     settlement_id: 11
+- model: world.Building
+  fields:
+    type: guild
+    level: 0
+    quantity: 1
+    settlement_id: 11
 - model: world.Settlement
   pk: 12
   fields:
@@ -1831,6 +1873,12 @@
 - model: world.Building
   fields:
     type: granary
+    level: 1
+    quantity: 1
+    settlement_id: 12
+- model: world.Building
+  fields:
+    type: guild
     level: 1
     quantity: 1
     settlement_id: 12
@@ -1867,6 +1915,12 @@
     level: 1
     quantity: 1
     settlement_id: 6
+- model: world.Building
+  fields:
+    type: guild
+    level: 1
+    quantity: 1
+    settlement_id: 6
 - model: world.Settlement
   pk: 7
   fields:
@@ -1891,6 +1945,12 @@
   fields:
     type: granary
     level: 1
+    quantity: 1
+    settlement_id: 7
+- model: world.Building
+  fields:
+    type: guild
+    level: 2
     quantity: 1
     settlement_id: 7
 
@@ -1926,6 +1986,12 @@
     level: 2
     quantity: 1
     settlement_id: 8
+- model: world.Building
+  fields:
+    type: guild
+    level: 1
+    quantity: 1
+    settlement_id: 8
 - model: world.Settlement
   pk: 9
   fields:
@@ -1949,6 +2015,12 @@
 - model: world.Building
   fields:
     type: granary
+    level: 1
+    quantity: 1
+    settlement_id: 9
+- model: world.Building
+  fields:
+    type: guild
     level: 1
     quantity: 1
     settlement_id: 9

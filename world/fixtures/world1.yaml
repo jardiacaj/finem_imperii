@@ -1868,7 +1868,7 @@
   fields:
     type: grain field
     level: 2
-    quantity: 100
+    quantity: 1000
     settlement_id: 12
 - model: world.Building
   fields:
@@ -1882,6 +1882,109 @@
     level: 1
     quantity: 1
     settlement_id: 12
+
+# Muria
+- model: world.Settlement
+  pk: 13
+  fields:
+    name: Exard
+    tile_id: 18
+    population_default: 1325
+    x_pos: 43
+    z_pos: 34
+- model: world.Building
+  fields:
+    type: residence
+    level: 1
+    quantity: 151
+    settlement_id: 13
+- model: world.Building
+  fields:
+    type: prison
+    level: 0
+    settlement_id: 13
+- model: world.Building
+  fields:
+    type: grain field
+    level: 1
+    quantity: 16304
+    settlement_id: 13
+- model: world.Building
+  fields:
+    type: granary
+    level: 2
+    quantity: 1
+    settlement_id: 13
+- model: world.Building
+  fields:
+    type: guild
+    level: 2
+    quantity: 1
+    settlement_id: 13
+- model: world.Settlement
+  pk: 14
+  fields:
+    name: Baygrove
+    tile_id: 18
+    population_default: 584
+    x_pos: 88
+    z_pos: 46
+- model: world.Building
+  fields:
+    type: residence
+    level: 2
+    quantity: 80
+    settlement_id: 14
+- model: world.Building
+  fields:
+    type: grain field
+    level: 2
+    quantity: 7274
+    settlement_id: 14
+- model: world.Building
+  fields:
+    type: granary
+    level: 1
+    quantity: 1
+    settlement_id: 14
+- model: world.Building
+  fields:
+    type: guild
+    level: 0
+    quantity: 1
+    settlement_id: 14
+- model: world.Settlement
+  pk: 15
+  fields:
+    name: Haigate
+    tile_id: 18
+    population_default: 369
+    x_pos: 78
+    z_pos: 12
+- model: world.Building
+  fields:
+    type: residence
+    level: 1
+    quantity:  50
+    settlement_id: 15
+- model: world.Building
+  fields:
+    type: grain field
+    level: 1
+    quantity: 1000
+    settlement_id: 15
+- model: world.Building
+  fields:
+    type: granary
+    level: 1
+    quantity: 1
+    settlement_id: 15
+- model: world.Building
+  fields:
+    type: guild
+    level: 0
+    quantity: 1
+    settlement_id: 15
 
 # Knarkt
 - model: world.Settlement

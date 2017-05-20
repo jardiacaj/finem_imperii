@@ -664,7 +664,7 @@
     name: Dewbury
     world_id: 1
     region_id: 1
-    controlled_by: 1
+    controlled_by: 9
     x_pos: 2
     z_pos: -3
     y_pos: 0.1
@@ -1985,6 +1985,77 @@
     level: 0
     quantity: 1
     settlement_id: 15
+
+# Narris
+- model: world.Settlement
+  pk: 16
+  fields:
+    name: Cheadon
+    tile_id: 23
+    population_default: 5325
+    x_pos: 77
+    z_pos: 82
+- model: world.Building
+  fields:
+    type: residence
+    level: 1
+    quantity: 750
+    settlement_id: 16
+- model: world.Building
+  fields:
+    type: prison
+    level: 1
+    settlement_id: 16
+- model: world.Building
+  fields:
+    type: grain field
+    level: 1
+    quantity: 42085
+    settlement_id: 16
+- model: world.Building
+  fields:
+    type: granary
+    level: 1
+    quantity: 1
+    settlement_id: 16
+- model: world.Building
+  fields:
+    type: guild
+    level: 0
+    quantity: 1
+    settlement_id: 16
+- model: world.Settlement
+  pk: 17
+  fields:
+    name: Ersstone
+    tile_id: 23
+    population_default: 684
+    x_pos: 88
+    z_pos: 46
+- model: world.Building
+  fields:
+    type: residence
+    level: 2
+    quantity: 80
+    settlement_id: 17
+- model: world.Building
+  fields:
+    type: grain field
+    level: 0
+    quantity: 7014
+    settlement_id: 17
+- model: world.Building
+  fields:
+    type: granary
+    level: 1
+    quantity: 1
+    settlement_id: 17
+- model: world.Building
+  fields:
+    type: guild
+    level: 1
+    quantity: 1
+    settlement_id: 17
 
 # Knarkt
 - model: world.Settlement

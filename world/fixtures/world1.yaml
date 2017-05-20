@@ -1600,6 +1600,7 @@
     type: deepsea
 
 
+# Wattingham
 - model: world.Settlement
   pk: 1
   fields:
@@ -1626,8 +1627,6 @@
     level: 0
     quantity: 1
     settlement_id: 1
-
-
 - model: world.Settlement
   pk: 2
   fields:
@@ -1660,7 +1659,6 @@
     level: 2
     quantity: 1
     settlement_id: 2
-
 - model: world.Settlement
   pk: 3
   fields:
@@ -1693,6 +1691,7 @@
     quantity: 1
     settlement_id: 3
 
+# Dewbury
 - model: world.Settlement
   pk: 4
   fields:
@@ -1724,7 +1723,6 @@
     level: 2
     quantity: 1
     settlement_id: 4
-
 - model: world.Settlement
   pk: 5
   fields:
@@ -1752,9 +1750,92 @@
     quantity: 1
     settlement_id: 5
 
+# Wray
+- model: world.Settlement
+  pk: 10
+  fields:
+    name: Dryburgh
+    tile_id: 17
+    population_default: 13594
+    x_pos: 87
+    z_pos: 91
+- model: world.Building
+  fields:
+    type: residence
+    level: 1
+    quantity: 1010
+    settlement_id: 10
+- model: world.Building
+  fields:
+    type: prison
+    level: 1
+    settlement_id: 10
+- model: world.Building
+  fields:
+    type: grain field
+    level: 1
+    quantity: 33914
+    settlement_id: 10
+- model: world.Building
+  fields:
+    type: granary
+    level: 2
+    quantity: 1
+    settlement_id: 10
+- model: world.Settlement
+  pk: 11
+  fields:
+    name: Efird
+    tile_id: 17
+    population_default: 584
+    x_pos: 50
+    z_pos: 43
+- model: world.Building
+  fields:
+    type: residence
+    level: 2
+    quantity: 80
+    settlement_id: 11
+- model: world.Building
+  fields:
+    type: grain field
+    level: 2
+    quantity: 7274
+    settlement_id: 11
+- model: world.Building
+  fields:
+    type: granary
+    level: 1
+    quantity: 1
+    settlement_id: 11
+- model: world.Settlement
+  pk: 12
+  fields:
+    name: Fort
+    tile_id: 17
+    population_default: 210
+    x_pos: 78
+    z_pos: 12
+- model: world.Building
+  fields:
+    type: residence
+    level: 1
+    quantity:  40
+    settlement_id: 12
+- model: world.Building
+  fields:
+    type: grain field
+    level: 2
+    quantity: 100
+    settlement_id: 12
+- model: world.Building
+  fields:
+    type: granary
+    level: 1
+    quantity: 1
+    settlement_id: 12
 
-
-
+# Knarkt
 - model: world.Settlement
   pk: 6
   fields:
@@ -1786,7 +1867,6 @@
     level: 1
     quantity: 1
     settlement_id: 6
-
 - model: world.Settlement
   pk: 7
   fields:
@@ -1814,7 +1894,7 @@
     quantity: 1
     settlement_id: 7
 
-
+# Casmir
 - model: world.Settlement
   pk: 8
   fields:
@@ -1846,7 +1926,6 @@
     level: 2
     quantity: 1
     settlement_id: 8
-
 - model: world.Settlement
   pk: 9
   fields:

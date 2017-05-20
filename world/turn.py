@@ -2,7 +2,6 @@ import random
 
 import math
 
-import numpy.random
 from django.db import transaction
 from django.db.models.expressions import F
 
@@ -10,6 +9,7 @@ from battle.battle_init import initialize_from_conflict, start_battle, \
     add_unit_to_battle_in_progress
 from battle.battle_tick import battle_turn
 from battle.models import Battle, BattleOrganization
+from finem_imperii.random import WeightedChoice, weighted_choice
 from messaging.helpers import send_notification_to_characters
 from messaging.models import CharacterMessage
 import world.models
@@ -183,13 +183,13 @@ class TurnProcessor:
             type=Building.GRAIN_FIELD,
             owner=None
         ))
-        total_field_q = sum([field.quantity for field in fields])
-        field_weights = [field.quantity / total_field_q for field in fields]
+        field_choices = [
+            WeightedChoice(value=field, weight=field.quantity)
+            for field in fields
+        ]
+
         for jobseeker in npcs_looking_for_a_job:
-            jobseeker.workplace = numpy.random.choice(
-                fields,
-                p=field_weights
-            )
+            jobseeker.workplace = weighted_choice(field_choices)
             jobseeker.save()
 
         if not settlement.tile.controlled_by.get_violence_monopoly().barbaric:

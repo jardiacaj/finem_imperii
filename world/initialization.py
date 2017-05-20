@@ -1,9 +1,9 @@
 import logging
 import random
 
-import numpy.random
 from django.db import transaction
 
+from finem_imperii.random import WeightedChoice, weighted_choice
 from name_generator.name_generator import generate_name
 from organization.models import Organization
 from world.models import Building, NPC
@@ -68,15 +68,16 @@ def generate_npc(i, residences, settlement):
     else:
         age_months = random.randint(0, 60 * 12)
         able = (random.getrandbits(7) != 0)
-    residence_list = list(residences)
-    total_residence_q = sum([residence.quantity for residence in residence_list])
-    residence_wheights = [residence.quantity / total_residence_q for residence in residence_list]
+    residence_choices = [
+        WeightedChoice(value=residence, weight=residence.quantity)
+        for residence in residences
+    ]
     npc = NPC.objects.create(
         name=name,
         male=male,
         able=able,
         age_months=age_months,
-        residence=numpy.random.choice(residence_list, p=residence_wheights),
+        residence=weighted_choice(residence_choices),
         origin=settlement,
         location=settlement,
         workplace=None,

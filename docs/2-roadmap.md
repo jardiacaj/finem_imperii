@@ -125,11 +125,11 @@ Allocated: 5 days
  - Character profiles + actions (1 day) (finished)
  - Character start page (1/2 day) (finished)
  - Emortuus (1 day) (finished)
+ - MUST Invitation system (1/2 day)
+ - MUST Economy balancing (1/2 day)
+ - MUST Closed alpha release (1 day)
  - MUST Step out (1/2 day)
  - MUST Heir setting (1/2 day)
- - MUST Economy balancing (1/2 day)
- - MUST Invitation system (1/2 day)
- - MUST Closed alpha release (1 day)
  - Final delivery preparation
  - PAC3 (1/2 day)
  - PAC3 delivery

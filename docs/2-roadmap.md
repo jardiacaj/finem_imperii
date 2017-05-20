@@ -126,10 +126,10 @@ Allocated: 5 days
  - Character start page (1/2 day) (finished)
  - Emortuus (1 day) (finished)
  - MUST Guild management (1/2 day)
- - MUST Invitation system (1/2 day)
  - MUST Economy balancing (1/2 day)
  - MUST Closed alpha release (1 day)
  - MUST Step out (1/2 day)
+ - MUST Invitation system (1/2 day)
  - MUST Heir setting (1/2 day)
  - Final delivery preparation
  - PAC3 (1/2 day)

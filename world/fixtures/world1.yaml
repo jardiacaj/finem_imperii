@@ -2057,6 +2057,104 @@
     quantity: 1
     settlement_id: 17
 
+# Warcton
+- model: world.Settlement
+  pk: 18
+  fields:
+    name: Ledale
+    tile_id: 24
+    population_default: 259
+    x_pos: 23
+    z_pos: 85
+- model: world.Building
+  fields:
+    type: residence
+    level: 2
+    quantity: 28
+    settlement_id: 18
+- model: world.Building
+  fields:
+    type: grain field
+    level: 1
+    quantity: 2581
+    settlement_id: 18
+- model: world.Building
+  fields:
+    type: granary
+    level: 2
+    quantity: 1
+    settlement_id: 18
+- model: world.Building
+  fields:
+    type: guild
+    level: 1
+    quantity: 1
+    settlement_id: 18
+- model: world.Settlement
+  pk: 19
+  fields:
+    name: Daydale
+    tile_id: 24
+    population_default: 624
+    x_pos: 67
+    z_pos: 38
+- model: world.Building
+  fields:
+    type: residence
+    level: 1
+    quantity: 80
+    settlement_id: 19
+- model: world.Building
+  fields:
+    type: grain field
+    level: 1
+    quantity: 4068
+    settlement_id: 19
+- model: world.Building
+  fields:
+    type: granary
+    level: 1
+    quantity: 1
+    settlement_id: 19
+- model: world.Building
+  fields:
+    type: guild
+    level: 1
+    quantity: 1
+    settlement_id: 19
+- model: world.Settlement
+  pk: 20
+  fields:
+    name: Adfield
+    tile_id: 24
+    population_default: 305
+    x_pos: 47
+    z_pos: 83
+- model: world.Building
+  fields:
+    type: residence
+    level: 1
+    quantity: 39
+    settlement_id: 20
+- model: world.Building
+  fields:
+    type: grain field
+    level: 0
+    quantity: 7014
+    settlement_id: 20
+- model: world.Building
+  fields:
+    type: granary
+    level: 2
+    quantity: 1
+    settlement_id: 20
+- model: world.Building
+  fields:
+    type: guild
+    level: 2
+    quantity: 1
+    settlement_id: 20
+
 # Knarkt
 - model: world.Settlement
   pk: 6

@@ -57,9 +57,6 @@ def initialize_settlement(settlement):
         npc = generate_npc(i, residences, settlement)
         npc.save()
 
-    if settlement.tile.controlled_by.barbaric:
-        do_settlement_barbarians(settlement)
-
 
 def generate_npc(i, residences, settlement):
     male = random.getrandbits(1)

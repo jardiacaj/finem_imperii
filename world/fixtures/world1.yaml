@@ -2155,6 +2155,72 @@
     quantity: 1
     settlement_id: 20
 
+# West Luria
+- model: world.Settlement
+  pk: 21
+  fields:
+    name: Barla
+    tile_id: 25
+    population_default: 1357
+    x_pos: 20
+    z_pos: 13
+- model: world.Building
+  fields:
+    type: residence
+    level: 2
+    quantity: 163
+    settlement_id: 21
+- model: world.Building
+  fields:
+    type: grain field
+    level: 2
+    quantity: 9610
+    settlement_id: 21
+- model: world.Building
+  fields:
+    type: granary
+    level: 1
+    quantity: 1
+    settlement_id: 21
+- model: world.Building
+  fields:
+    type: guild
+    level: 1
+    quantity: 1
+    settlement_id: 21
+- model: world.Settlement
+  pk: 22
+  fields:
+    name: Deminster
+    tile_id: 25
+    population_default: 843
+    x_pos: 67
+    z_pos: 60
+- model: world.Building
+  fields:
+    type: residence
+    level: 1
+    quantity: 80
+    settlement_id: 22
+- model: world.Building
+  fields:
+    type: grain field
+    level: 1
+    quantity: 4068
+    settlement_id: 22
+- model: world.Building
+  fields:
+    type: granary
+    level: 1
+    quantity: 1
+    settlement_id: 22
+- model: world.Building
+  fields:
+    type: guild
+    level: 1
+    quantity: 1
+    settlement_id: 22
+
 # Knarkt
 - model: world.Settlement
   pk: 6

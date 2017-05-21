@@ -443,6 +443,9 @@ class NPCManager(models.Manager):
 class NPC(models.Model):
     class Meta:
         base_manager_name = 'stats_manager'
+        index_together = (
+            ('residence', 'hunger')
+        )
     stats_manager = NPCManager()
     objects = models.Manager()
 

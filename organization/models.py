@@ -73,6 +73,59 @@ class Organization(models.Model):
         related_name='second_heir_to')
     tax_countdown = models.SmallIntegerField(default=0)
 
+    def remove_member(self, member):
+        if member not in self.character_members.all():
+            raise Exception("{} is not a member of {}".format(member, self))
+        self.character_members.remove(
+            member
+        )
+
+        message_content = "{} left {}.".format(member, self)
+
+        if self.leader and member in \
+                self.leader.character_members.all():
+            self.leader.remove_member(member)
+
+        if member.get_violence_monopoly() is None:
+            member.world.get_barbaric_state().character_members.add(
+                member
+            )
+
+        if self.is_position:
+            if (
+                    self.heir_first and
+                    self.heir_first in self.get_heir_candidates()
+            ):
+                self.character_members.add(self.heir_first)
+                self.heir_first = self.heir_second = None
+                self.save()
+                message_content += " {} is the new {}.".format(
+                    self.get_position_occupier(), self
+                )
+            elif (
+                    self.heir_second and
+                    self.heir_second in self.get_heir_candidates()
+            ):
+                self.character_members.add(self.heir_second)
+                self.heir_first = self.heir_second = None
+                self.save()
+                message_content += " {} is the new {}.".format(
+                    self.get_position_occupier(), self
+                )
+            elif self.position_type == self.ELECTED:
+                self.convoke_elections()
+
+        if self.leader and self.leader.character_is_member(member):
+            self.leader.remove_member(member)
+
+        message = shortcuts.create_message(
+            message_content, self.world, 'leaving',
+            link=self.get_absolute_url()
+        )
+        shortcuts.add_organization_recipient(message, self)
+        for org in self.leaded_organizations.all():
+            shortcuts.add_organization_recipient(message, org)
+
     def get_descendants_list(self, including_self=False):
         descendants = list()
         if including_self:
@@ -219,7 +272,19 @@ class Organization(models.Model):
                 candidate=self.get_position_occupier(),
                 description="Auto-generated candidacy for incumbent character."
             )
-        return election
+
+        message = shortcuts.create_message(
+            "Elections have been convoked for the position {}. "
+            "They will take place in {} months.".format(
+                self, months_to_election
+            ),
+            self.world,
+            'elections',
+            link=election.get_absolute_url()
+        )
+        shortcuts.add_organization_recipient(message, self)
+        for org in self.leaded_organizations.all():
+            shortcuts.add_organization_recipient(message, org)
 
     def __str__(self):
         return self.name
@@ -537,21 +602,9 @@ class CapabilityProposal(models.Model):
                 character_to_ban = world.models.Character.objects.get(
                     id=proposal['character_id']
                 )
-                applying_to.character_members.remove(
-                    character_to_ban
-                )
-                if character_to_ban.get_violence_monopoly() is None:
-                    character_to_ban.world.get_barbaric_state().\
-                        character_members.add(
-                        character_to_ban
-                    )
+                applying_to.remove_member(character_to_ban)
             except world.models.Character.DoesNotExist:
                 pass
-
-            leader_organization = applying_to.leader
-            if leader_organization and character_to_ban in \
-                    leader_organization.character_members.all():
-                leader_organization.character_members.remove(character_to_ban)
 
             self.announce_execution(
                 "{} has been banned from {}".format(
@@ -565,15 +618,6 @@ class CapabilityProposal(models.Model):
                 months_to_election = proposal['months_to_election']
                 election = applying_to.convoke_elections(
                     months_to_election)
-
-                self.announce_execution(
-                    "Elections have been convoked in {}. "
-                    "They will take place in {} months.".format(
-                        applying_to, months_to_election
-                    ),
-                    'elections',
-                    link=election.get_absolute_url()
-                )
 
         elif self.capability.type == Capability.DIPLOMACY:
             try:

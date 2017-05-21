@@ -9,13 +9,15 @@ from organization.views.capability import banning_view, conquest_view, \
 from organization.views.decorator import capability_required_decorator
 from organization.views.generic_capability import ProposalView, CapabilityView
 from organization.views.regular import organization_view, election_list_view, \
-    election_view, document_view
+    election_view, document_view, leave_view
 
 urlpatterns = [
     url(r'^(?P<organization_id>[0-9]+)$',
         organization_view, name='view'),
     url(r'^(?P<organization_id>[0-9]+)/elections$',
         election_list_view, name='election_list'),
+    url(r'^(?P<organization_id>[0-9]+)/leave',
+        leave_view, name='leave'),
     url(r'^election/(?P<election_id>[0-9]+)$',
         election_view, name='election'),
     url(r'^document/(?P<document_id>[0-9]+)$',

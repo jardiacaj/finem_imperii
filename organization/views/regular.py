@@ -1,8 +1,11 @@
 from django.contrib import messages
+from django.http.response import Http404
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
+from django.views.decorators.http import require_POST
 
 from decorators import inchar_required
+from messaging import shortcuts
 from organization.models import Organization, OrganizationRelationship, \
     PolicyDocument, PositionElection
 
@@ -55,3 +58,17 @@ def election_view(request, election_id):
         'election': election,
     }
     return render(request, 'organization/view_election.html', context)
+
+
+@inchar_required
+@require_POST
+def leave_view(request, organization_id):
+    organization = get_object_or_404(Organization, id=organization_id)
+
+    if request.hero not in organization.character_members.all():
+        raise Http404("Hero is not a member")
+
+    organization.remove_member(request.hero)
+
+    messages.success(request, "You left {}".format(organization), "success")
+    return redirect(organization.get_absolute_url())

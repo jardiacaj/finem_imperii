@@ -160,7 +160,19 @@
     <div class="col-md-6">
         <h4>Actions</h4>
         {% if hero_is_member %}
-            LEAVE / STEP OUT
+            <form action="{% url 'organization:leave' organization.id %}" method="post">
+                <button
+                        type="submit"
+                        class="btn btn-danger"
+                        onclick="return confirm('Are you sure?')"
+                >
+                    {% if organization.is_position %}
+                        Step out
+                    {% else %}
+                        Leave
+                    {% endif %}
+                </button>
+            </form>
         {% else %}
             {% if not organization.is_position and organization.membership_type == 'character' %}
                 <!-- REQUEST TO JOIN -->

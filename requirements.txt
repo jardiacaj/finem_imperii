@@ -1,5 +1,4 @@
 Django==1.11
-requests==2.13.0
 django-bootstrap-form==3.2.1
 django-extensions==1.7.8
 PyYAML==3.12

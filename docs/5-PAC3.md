@@ -111,29 +111,32 @@ defeated or leaves the battleground.
 
 Conquest of regions is now possible. The owner of the conquest
 capability of a state is able to start and stop conquests, while
-any unit may contribute or fight
+any unit may contribute or oppose the conquest process.
 
 ## Barbarians
 
-Hostile, computer-controlled armies and regions should be a core part of
-the game, especially in early game, to provide a challenge for players
-and to make conquest of new territories more difficult.
-
-## Further character actions
-
-Currently, there is not much a player can spend their time on. Further
-character actions are planned.
+Barbarians units are automatically created from local population in
+settlements when there are no units to ensure public order in a
+settlement. This makes controlling a realm more challenging for the
+players and also adds difficulty to conquering barbarian regions.
 
 ## Economy
 
-There is not yet a system for characters to get and spend money and
-possibly other resources.
+A basic economic system has been implemented that revolves around two
+resources: grain and money. Able inhabitants of the controlled
+regions can work either on the fields, thus producing grain, or in
+a guild, producing money. Harvesting of fields happens during the
+summer months, so care has to be taken on managing the existing grain.
+Also, some regions may produce a surplus, while others may need imports.
+Characters can transport grain from one settlement to the other.
+
+Inhabitants working in guilds produce money, which is collected yearly
+in the form of taxes. This money can be then spent on military units.
 
 ## Help system
 
-To ease the introduction to the game, help pages should be created.
-A tutorial feature could prove useful.
-
-# Important missing features
+A lightweight help system has been introduced. It has only little
+content at the current stage. The main feature is a short introduction
+to the game which is also shown before players create a character.
 
 [1]: http://fi.joanardiaca.net

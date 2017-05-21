@@ -741,6 +741,26 @@ class CapabilityProposal(models.Model):
                     ):
                         applying_to.heir_second = second_heir
                         applying_to.save()
+
+                    message_content = "{} is now the heir of {}.".format(
+                        applying_to.heir_first, applying_to
+                    )
+                    if applying_to.heir_second:
+                        message_content += " {} is the second in the line of" \
+                                           "succession".format(
+                                                applying_to.heir_second
+                                            )
+                    message = shortcuts.create_message(
+                        message_content,
+                        applying_to.world,
+                        'heir',
+                        link=applying_to.get_absolute_url()
+                    )
+                    shortcuts.add_organization_recipient(
+                        message,
+                        applying_to.get_violence_monopoly()
+                    )
+
             except world.models.Character.DoesNotExist:
                 pass
 

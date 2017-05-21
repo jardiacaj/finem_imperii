@@ -30,6 +30,7 @@ class CharacterMessage(models.Model):
     GUILDS = 'guilds'
     UNIT = 'unit'
     WELCOME = 'welcome'
+    HEIR = 'heir'
     CATEGORY_CHOICES = (
         (TRAVEL, TRAVEL),
         (CONQUEST, CONQUEST),
@@ -46,6 +47,7 @@ class CharacterMessage(models.Model):
         (GUILDS, "conquest"),
         (UNIT, "unit"),
         (WELCOME, "welcome"),
+        (HEIR, "heir"),
     )
 
     content = models.TextField()

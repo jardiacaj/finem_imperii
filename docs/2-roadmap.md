@@ -127,7 +127,7 @@ Allocated: 5 days
  - Emortuus (1 day) (finished)
  - Guild management (1/2 day) (finished)
  - Heir setting (1/2 day) (finished)
- - MUST Step out (1/2 day)
+ - Step out (1/2 day) (finished)
  - MUST Economy balancing (1/2 day)
  - Final delivery preparation
  - PAC3 (1/2 day)

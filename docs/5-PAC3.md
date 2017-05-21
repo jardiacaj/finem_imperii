@@ -13,6 +13,10 @@ In this document I present first the aspects where few or no changes
 have happened since the PAC2. Later on I present the aspects where
 majors progress happened.
 
+PAC2 video: https://www.youtube.com/watch?v=5st9PQ-c4mY
+
+PAC3 video: https://www.youtube.com/watch?v=F-trGMinLgA
+
 # Review of aspects with minor or no changes
 
  - User interface design (done): the interface has only minor
@@ -85,6 +89,9 @@ has enough money.
 The remaining needed capabilities have been implemented:
 
 - Conquest
+- Manage taxes
+- Manage guilds
+- Take grain
 
 Some obsolete capabilities have been removed, like dissolving,
 seceding, managing memberships, etc.

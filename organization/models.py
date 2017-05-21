@@ -286,6 +286,11 @@ class Organization(models.Model):
                 result.append(capability)
         return result
 
+    def get_heir_candidates(self):
+        # TODO this works only for violence monopolies
+        return self.get_violence_monopoly().\
+            get_membership_including_descendants()
+
 
 class PositionElection(models.Model):
     position = models.ForeignKey(Organization)
@@ -490,11 +495,12 @@ class CapabilityProposal(models.Model):
 
     def execute(self):
         proposal = self.get_proposal_json_content()
+        applying_to = self.capability.applying_to
         if self.capability.type == Capability.POLICY_DOCUMENT:
             try:
                 if proposal['new']:
                     document = PolicyDocument(
-                        organization=self.capability.applying_to)
+                        organization=applying_to)
                 else:
                     document = PolicyDocument.objects.get(
                         id=proposal['document_id'])
@@ -531,7 +537,7 @@ class CapabilityProposal(models.Model):
                 character_to_ban = world.models.Character.objects.get(
                     id=proposal['character_id']
                 )
-                self.capability.applying_to.character_members.remove(
+                applying_to.character_members.remove(
                     character_to_ban
                 )
                 if character_to_ban.get_violence_monopoly() is None:
@@ -542,28 +548,28 @@ class CapabilityProposal(models.Model):
             except world.models.Character.DoesNotExist:
                 pass
 
-            leader_organization = self.capability.applying_to.leader
+            leader_organization = applying_to.leader
             if leader_organization and character_to_ban in \
                     leader_organization.character_members.all():
                 leader_organization.character_members.remove(character_to_ban)
 
             self.announce_execution(
                 "{} has been banned from {}".format(
-                    character_to_ban, self.capability.applying_to
+                    character_to_ban, applying_to
                 ),
                 'ban'
             )
 
         elif self.capability.type == Capability.CONVOKE_ELECTIONS:
-            if self.capability.applying_to.current_election is None:
+            if applying_to.current_election is None:
                 months_to_election = proposal['months_to_election']
-                election = self.capability.applying_to.convoke_elections(
+                election = applying_to.convoke_elections(
                     months_to_election)
 
                 self.announce_execution(
                     "Elections have been convoked in {}. "
                     "They will take place in {} months.".format(
-                        self.capability.applying_to, months_to_election
+                        applying_to, months_to_election
                     ),
                     'elections',
                     link=election.get_absolute_url()
@@ -574,7 +580,7 @@ class CapabilityProposal(models.Model):
                 target_organization = Organization.objects.get(
                     id=proposal['target_organization_id'])
                 target_relationship = proposal['target_relationship']
-                changing_relationship = self.capability.applying_to.\
+                changing_relationship = applying_to.\
                     get_relationship_to(target_organization)
                 reverse_relationship = changing_relationship.reverse_relation()
                 action_type = proposal['type']
@@ -606,10 +612,10 @@ class CapabilityProposal(models.Model):
                 if 'region_id' in proposal.keys():
                     region = world.models.Tile.objects.get(
                         id=proposal['region_id'])
-                    target_stance = self.capability.applying_to.\
+                    target_stance = applying_to.\
                         get_region_stance_to(target_organization, region)
                 else:
-                    target_stance = self.capability.applying_to.\
+                    target_stance = applying_to.\
                         get_default_stance_to(target_organization)
                 target_stance.stance_type = proposal.get('target_stance')
                 target_stance.save()
@@ -636,10 +642,10 @@ class CapabilityProposal(models.Model):
         elif self.capability.type == Capability.BATTLE_FORMATION:
             try:
                 formation = BattleFormation.objects.get(
-                    organization=self.capability.applying_to, battle=None)
+                    organization=applying_to, battle=None)
             except BattleFormation.DoesNotExist:
                 formation = BattleFormation(
-                    organization=self.capability.applying_to, battle=None)
+                    organization=applying_to, battle=None)
             formation.formation = proposal['formation']
             formation.spacing = proposal['spacing']
             formation.element_size = proposal['element_size']
@@ -647,7 +653,7 @@ class CapabilityProposal(models.Model):
 
             self.announce_execution(
                 "The battle formation of {} has been changed ({})".format(
-                    self.capability.applying_to,
+                    applying_to,
                     formation.formation
                 ),
                 'battle formation'
@@ -659,26 +665,26 @@ class CapabilityProposal(models.Model):
                 if proposal['stop']:
                     tile_event = world.models.TileEvent.objects.get(
                         tile=tile,
-                        organization=self.capability.applying_to,
+                        organization=applying_to,
                         end_turn__isnull=True
                     )
-                    tile_event.end_turn = self.capability.applying_to.\
+                    tile_event.end_turn = applying_to.\
                         world.current_turn
                     tile_event.save()
                 else:
                     if tile in \
-                            self.capability.applying_to.conquestable_tiles():
+                            applying_to.conquestable_tiles():
                         world.models.TileEvent.objects.create(
                             tile=tile,
                             type=world.models.TileEvent.CONQUEST,
-                            organization=self.capability.applying_to,
+                            organization=applying_to,
                             counter=0,
-                            start_turn=self.capability.applying_to.world.
+                            start_turn=applying_to.world.
                                 current_turn
                         )
                         tile.world.broadcast(
                             "{} has started conquering {}!".format(
-                                self.capability.applying_to,
+                                applying_to,
                                 tile
                             ),
                             'conquest',
@@ -695,7 +701,7 @@ class CapabilityProposal(models.Model):
                 )
                 if (
                         (settlement.tile in
-                         self.capability.applying_to.get_all_controlled_tiles())
+                         applying_to.get_all_controlled_tiles())
                         and
                         (proposal['option'] in
                          [choice[0] for choice in world.models.Settlement
@@ -712,6 +718,30 @@ class CapabilityProposal(models.Model):
                         settlement.tile.get_absolute_url()
                     )
             except world.models.Settlement.DoesNotExist:
+                pass
+
+        elif self.capability.type == Capability.HEIR:
+            try:
+                first_heir = world.models.Character.objects.get(
+                    id=proposal['first_heir'])
+                if (
+                        first_heir in applying_to.get_heir_candidates()
+                        and first_heir != applying_to.get_position_occupier()
+                ):
+                    applying_to.heir_first = first_heir
+                    applying_to.save()
+
+                    second_heir = None if proposal['second_heir'] == 0 else \
+                        world.models.Character.objects.get(
+                            id=proposal['second_heir']
+                        )
+                    if second_heir is None or (
+                            second_heir in applying_to.get_heir_candidates()
+                            and second_heir != applying_to.get_position_occupier()
+                    ):
+                        applying_to.heir_second = second_heir
+                        applying_to.save()
+            except world.models.Character.DoesNotExist:
                 pass
 
         else:

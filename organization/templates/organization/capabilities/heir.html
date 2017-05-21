@@ -1,0 +1,41 @@
+<p>
+    You have been granted to choose the heir to the position
+    {{ capability.applying_to }}.
+</p>
+
+<form class="" role="form" method="post" action="{% url 'organization:heir_capability' capability.id %}">
+    {% csrf_token %}
+    <p>
+        First heir:
+        <select name="first_heir">
+            {% if not capability.applying_to.heir_first %}
+                <option value="-1">None</option>
+            {% endif %}
+            {% for candidate in capability.applying_to.get_heir_candidates %}
+                <option value="{{ candidate.id }}">{{ candidate }}</option>
+            {% endfor %}
+        </select>
+    </p>
+
+    <p>
+        Second heir:
+        <select name="second_heir">
+            {% if not capability.applying_to.heir_second %}
+                <option value="-1">None</option>
+            {% endif %}
+            {% for candidate in capability.applying_to.get_heir_candidates %}
+                <option value="{{ candidate.id }}">{{ candidate }}</option>
+            {% endfor %}
+        </select>
+    </p>
+
+    <p>
+        <button
+                type="submit"
+                class="btn btn-primary"
+                onclick="return confirm('Are you sure?')"
+        >
+            Set
+        </button>
+    </p>
+</form>

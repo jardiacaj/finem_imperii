@@ -1,0 +1,13 @@
+<blockquote>
+    <p>
+        {{ proposal.proposing_character }} proposes make
+        {{ first_heir.get_html_link|safe }} the first in the line of succession
+        for {{ proposal.applying_to.get_html_link|safe }}.
+    </p>
+    {% if second_heir %}
+        <p>
+            The second in the line of succession shall be
+            {{ second_heir.get_html_link|safe }}.
+        </p>
+    {% endif %}
+</blockquote>

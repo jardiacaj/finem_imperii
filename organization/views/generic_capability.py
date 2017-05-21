@@ -146,6 +146,14 @@ class ProposalView(View):
                 id=proposal_content['settlement_id']
             )
 
+        elif proposal.capability.type == Capability.HEIR:
+            context['first_heir'] = Character.objects.get(
+                id=proposal_content['first_heir'])
+            context['second_heir'] = (
+                None if proposal_content['second_heir'] == 0 else
+                Character.objects.get(id=proposal_content['second_heir'])
+            )
+
         return render(request, 'organization/proposal.html', context)
 
     def post(self, request, proposal_id):

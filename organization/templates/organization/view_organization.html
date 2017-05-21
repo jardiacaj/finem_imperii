@@ -8,7 +8,13 @@
 
     <div class="row">
         <div class="col-md-6">
-            {{ organization.description }}
+            <p>{{ organization.description }}</p>
+            {% if organization.heir_first %}
+                <p>First heir: {{ organization.heir_first.get_html_link|safe }}</p>
+            {% endif %}
+            {% if organization.heir_second %}
+                <p>Second heir: {{ organization.heir_second.get_html_link|safe }}</p>
+            {% endif %}
         </div>
         <div class="col-md-6 lead">
             {% if organization.get_position_occupier %}
@@ -106,7 +112,7 @@
         {% endif %}
 
         {% if not organization.is_position %}
-            <h4>Members ({{ organization.membership_type }})</h4>
+            <h4>Members</h4>
             <ul>
                 {% if organization.membership_type == 'character' %}
                     {% for char_member in organization.character_members.all %}

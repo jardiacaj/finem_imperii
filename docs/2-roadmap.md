@@ -128,13 +128,13 @@ Allocated: 5 days
  - Guild management (1/2 day) (finished)
  - Heir setting (1/2 day) (finished)
  - Step out (1/2 day) (finished)
+ - Preliminary economy balancing (1/2 day) (finished)
  - Final delivery preparation
  - PAC3 (1/2 day)
  - PAC3 delivery
 
 ## Week 13
 
- - MUST Economy balancing (1/2 day)
  - MUST Closed alpha release (1 day)
  - MUST Invitation system (1/2 day)
  - Final delivery preparation

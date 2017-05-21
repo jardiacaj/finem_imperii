@@ -35,6 +35,6 @@ class TestTaxation(TestCase):
         self.assertEqual(state.tax_countdown, 12)
 
         char1 = Character.objects.get(id=4)
-        self.assertEqual(char1.cash, 10000 + 50)
+        self.assertEqual(char1.cash, 10000 + 100 * 6 / 2)
         char2 = Character.objects.get(id=8)
-        self.assertEqual(char2.cash, 10000 + 50)
+        self.assertEqual(char2.cash, 10000 + 100 * 6 / 2)

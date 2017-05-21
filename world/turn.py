@@ -10,6 +10,7 @@ from battle.battle_init import initialize_from_conflict, start_battle, \
 from battle.battle_tick import battle_turn
 from battle.models import Battle, BattleOrganization
 from finem_imperii.random import WeightedChoice, weighted_choice
+from messaging import shortcuts
 from messaging.helpers import send_notification_to_characters
 from messaging.models import CharacterMessage
 import world.models
@@ -151,8 +152,9 @@ class TurnProcessor:
                 t = 0
                 for guild in settlement.building_set.filter(
                         type=Building.GUILD):
-                    t += guild.field_production_counter
-                    total_input += guild.field_production_counter
+                    cash_produced = guild.field_production_counter * 6
+                    t += cash_produced
+                    total_input += cash_produced
                     guild.field_production_counter = 0
                     guild.save()
 
@@ -166,6 +168,24 @@ class TurnProcessor:
         for member in state.character_members.all():
             member.cash += member_share
             member.save()
+
+        message_content = "<p>Tax collection in {}.</p><ul>".format(state)
+        for settlement, cash in settlement_input:
+            message_content += "<li>{} produced {} coins.</li>".format(
+                settlement, cash
+            )
+        message_content += "</ul><p>Total: {} silver coins.</p>".format(
+            total_input)
+        message_content += "<p>Each member receives {} coins.</p>".format(
+            member_share)
+
+        message = shortcuts.create_message(
+            message_content,
+            self.world,
+            'taxes',
+            safe=True,
+        )
+        shortcuts.add_organization_recipient(message, state)
 
     def do_job_updates(self):
         for settlement in Settlement.objects.filter(

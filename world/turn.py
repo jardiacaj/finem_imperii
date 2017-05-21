@@ -192,15 +192,50 @@ class TurnProcessor:
             jobseeker.workplace = weighted_choice(field_choices)
             jobseeker.save()
 
+        guild_workers = settlement.get_residents().filter(
+            workplace__type=Building.GUILD
+        )
+        field_workers = settlement.get_residents().filter(
+            workplace__type=Building.GRAIN_FIELD
+        )
+
         if not settlement.tile.controlled_by.get_violence_monopoly().barbaric:
             if settlement.guilds_setting == Settlement.GUILDS_PROHIBIT:
-                pass
+                for guild_worker in guild_workers:
+                    guild_worker.workplace = weighted_choice(field_choices)
+                    guild_worker.save()
             elif settlement.guilds_setting == Settlement.GUILDS_RESTRICT:
-                pass
+                num_guild_workers_to_remove = max(
+                    10,
+                    int(guild_workers.count() * 0.03)
+                )
+                if num_guild_workers_to_remove > guild_workers.count():
+                    num_guild_workers_to_remove = guild_workers.count()
+                guild_workers_list = list(guild_workers)
+                for guild_worker in random.sample(
+                        guild_workers_list,
+                        num_guild_workers_to_remove
+                ):
+                    guild_worker.workplace = weighted_choice(field_choices)
+                    guild_worker.save()
             elif settlement.guilds_setting == Settlement.GUILDS_KEEP:
                 pass
             elif settlement.guilds_setting == Settlement.GUILDS_PROMOTE:
-                pass
+                num_guild_workers_to_add = max(
+                    10,
+                    int(guild_workers.count() * 0.03)
+                )
+                if num_guild_workers_to_add > field_workers.count():
+                    num_guild_workers_to_add = field_workers.count()
+                field_workers_list = list(field_workers)
+                for field_worker in random.sample(
+                        field_workers_list,
+                        num_guild_workers_to_add
+                ):
+                    field_worker.workplace = settlement.building_set.get(
+                        type=Building.GUILD
+                    )
+                    field_worker.save()
 
     def do_food_consumption(self):
         for settlement in Settlement.objects.filter(

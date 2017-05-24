@@ -29,7 +29,7 @@ Documentation License".
 | Nom de l'autor        | Joan Ardiaca Jové |
 | Nom del consultor     | Jordi Duch Gavaldà, Helio Tejedor Navarro |
 | Nom del PRA           | Joan Arnedo Moreno |
-| Data de lliurament    | 05/2017 |
+| Data de lliurament    | 06/2017 |
 | Titulació o programa  | Enginyeria informàtica |
 | Àrea del treball final | Videojocs |
 | Idioma del treball    | Anglès |

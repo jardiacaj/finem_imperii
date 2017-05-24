@@ -135,8 +135,10 @@ Allocated: 5 days
 
 ## Week 13
 
- - MUST Closed alpha release (1 day)
+ - MUST Emortuus realm join (1/2 day)
  - MUST Invitation system (1/2 day)
+ - MUST World startup plan (1/2 day)
+ - MUST Closed alpha release (1 day)
  - Final delivery preparation
 
 ## Week 14

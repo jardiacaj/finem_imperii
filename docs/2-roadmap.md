@@ -122,7 +122,7 @@ Allocated: 5 days
  - Battle restrictions on travel, time and recruitment (1 day) (finished)
  - Game start/tutorial (1/2 day) (finished)
  - Help system (1/2 day) (finished)
- - Character profiles + actions (1 day) (finished)
+ - Character profiles (1 day) (finished)
  - Character start page (1/2 day) (finished)
  - Emortuus (1 day) (finished)
  - Guild management (1/2 day) (finished)
@@ -130,13 +130,13 @@ Allocated: 5 days
  - Step out (1/2 day) (finished)
  - Preliminary economy balancing (1/2 day) (finished)
  - Final delivery preparation
- - PAC3 (1/2 day)
- - PAC3 delivery
+ - PAC3 (1/2 day) (finished)
+ - PAC3 delivery (finished)
 
 ## Week 13
 
+ - MUST Character actions (1 day)
  - MUST Emortuus realm join (1/2 day)
- - MUST Invitation system (1/2 day)
  - MUST World startup plan (1/2 day)
  - MUST Closed alpha release (1 day)
  - Final delivery preparation
@@ -149,6 +149,7 @@ Allocated: 5 days
 
 ## Optional / kick out candidates
 
+ - VNTH Invitation system (1/2 day)
  - VNTH Secession, rebellion and state founding. (2 days)
  - VNTH Character pause and deletion (1 day)
  - VNTH Imprisoning (1 day)

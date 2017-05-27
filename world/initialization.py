@@ -57,6 +57,10 @@ def initialize_settlement(settlement):
         npc = generate_npc(i, residences, settlement)
         npc.save()
 
+    settlement.building_set.filter(type=Building.GRAIN_FIELD).update(
+        field_production_counter=1500
+    )
+
 
 def generate_npc(i, residences, settlement):
     male = random.getrandbits(1)

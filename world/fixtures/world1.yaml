@@ -9,7 +9,7 @@
       GitHub page</a> of the project, you will be helping improve this game.</p>
       <p>You may play the game freely but I can't currently guarantee that a
       database reset is needed at some point, which would cause loosing
-      everyone's progres in the game.</p>
+      everyone's progress in the game.</p>
 
 - model: world.World
   pk: 1
@@ -17,6 +17,7 @@
     name: Emortuus
     description: The default world. A good place to start in.
     initialized: false
+    current_turn: 4
 
 - model: organization.Organization
   pk: 1

@@ -4,7 +4,7 @@
  <office:meta><dc:title>Treball Final (Plantilla)</dc:title><meta:initial-creator>EIMT</meta:initial-creator><meta:creation-date>2011-10-21T13:35:00</meta:creation-date><dc:date>2017-05-27T20:12:43.275367800</dc:date><meta:editing-cycles>80</meta:editing-cycles><meta:editing-duration>PT15H58M12S</meta:editing-duration><meta:generator>LibreOffice/5.3.3.2$Linux_X86_64 LibreOffice_project/30m0$Build-2</meta:generator><meta:document-statistic meta:table-count="4" meta:image-count="5" meta:object-count="0" meta:page-count="38" meta:paragraph-count="493" meta:word-count="6472" meta:character-count="40752" meta:non-whitespace-character-count="34792"/></office:meta>
  <office:settings>
   <config:config-item-set config:name="ooo:view-settings">
-   <config:config-item config:name="ViewAreaTop" config:type="long">62301</config:config-item>
+   <config:config-item config:name="ViewAreaTop" config:type="long">185596</config:config-item>
    <config:config-item config:name="ViewAreaLeft" config:type="long">0</config:config-item>
    <config:config-item config:name="ViewAreaWidth" config:type="long">75320</config:config-item>
    <config:config-item config:name="ViewAreaHeight" config:type="long">43393</config:config-item>
@@ -13,12 +13,12 @@
    <config:config-item-map-indexed config:name="Views">
     <config:config-item-map-entry>
      <config:config-item config:name="ViewId" config:type="string">view2</config:config-item>
-     <config:config-item config:name="ViewLeft" config:type="long">19659</config:config-item>
-     <config:config-item config:name="ViewTop" config:type="long">66156</config:config-item>
+     <config:config-item config:name="ViewLeft" config:type="long">26345</config:config-item>
+     <config:config-item config:name="ViewTop" config:type="long">51491</config:config-item>
      <config:config-item config:name="VisibleLeft" config:type="long">0</config:config-item>
-     <config:config-item config:name="VisibleTop" config:type="long">62301</config:config-item>
+     <config:config-item config:name="VisibleTop" config:type="long">185596</config:config-item>
      <config:config-item config:name="VisibleRight" config:type="long">75318</config:config-item>
-     <config:config-item config:name="VisibleBottom" config:type="long">105692</config:config-item>
+     <config:config-item config:name="VisibleBottom" config:type="long">228988</config:config-item>
      <config:config-item config:name="ZoomType" config:type="short">0</config:config-item>
      <config:config-item config:name="ViewLayoutColumns" config:type="short">2</config:config-item>
      <config:config-item config:name="ViewLayoutBookMode" config:type="boolean">true</config:config-item>
@@ -2891,7 +2891,7 @@
       <draw:text-box fo:min-height="0.0228in" fo:min-width="0.0161in">
        <text:p text:style-name="P2"/>
       </draw:text-box>
-     </draw:frame><text:page-number text:select-page="current">32</text:page-number></text:p>
+     </draw:frame><text:page-number text:select-page="current">3</text:page-number></text:p>
    </style:footer>
    <style:footer-first>
     <text:p text:style-name="P3"><draw:frame draw:style-name="fr3" draw:name="Frame10" text:anchor-type="paragraph" svg:x="4.1819in" svg:y="-0.0555in" draw:z-index="6">
@@ -19806,7 +19806,7 @@
    <text:p text:style-name="P54"/>
    <text:p text:style-name="P51"><text:span text:style-name="T15">És molt important incloure </text:span><text:span text:style-name="T12">totes</text:span><text:span text:style-name="T15"> les referències utilitzades i citar-les apropiadament, és a dir, incloent tota la informació necessària per identificar la referència. La informació mínima que cal incloure segons el tipus de referència és:</text:span></text:p>
    <text:p text:style-name="P54"/>
-   <text:list xml:id="list201245173824477" text:continue-numbering="true" text:style-name="WW8Num9">
+   <text:list xml:id="list203218701394118" text:continue-numbering="true" text:style-name="WW8Num9">
     <text:list-item>
      <text:p text:style-name="P192"><text:span text:style-name="T12">Llibre:</text:span><text:span text:style-name="T15"> Autors, Títol, Edició (si s’escau) Editorial, Ciutat, Any.</text:span></text:p>
     </text:list-item>

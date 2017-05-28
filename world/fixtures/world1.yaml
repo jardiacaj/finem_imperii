@@ -954,7 +954,7 @@
 - model: world.Tile
   pk: 42
   fields:
-    name: Mir Trunk
+    name: South Mir
     world_id: 1
     region_id: 1
     controlled_by: 9
@@ -2661,3 +2661,102 @@
     level: 1
     quantity: 1
     settlement_id: 9
+
+# North Mir
+- model: world.Settlement
+  pk: 32
+  fields:
+    name: Shahill
+    tile_id: 32
+    population_default: 711
+    x_pos: 25
+    z_pos: 20
+- model: world.Building
+  fields:
+    type: residence
+    level: 1
+    quantity: 70
+    settlement_id: 32
+- model: world.Building
+  fields:
+    type: grain field
+    level: 2
+    quantity: 10094
+    settlement_id: 32
+- model: world.Building
+  fields:
+    type: granary
+    level: 2
+    quantity: 1
+    settlement_id: 32
+- model: world.Building
+  fields:
+    type: guild
+    level: 1
+    quantity: 1
+    settlement_id: 32
+- model: world.Settlement
+  pk: 33
+  fields:
+    name: Deeproot
+    tile_id: 32
+    population_default: 2100
+    x_pos: 40
+    z_pos: 60
+- model: world.Building
+  fields:
+    type: residence
+    level: 1
+    quantity: 190
+    settlement_id: 33
+- model: world.Building
+  fields:
+    type: grain field
+    level: 1
+    quantity: 15302
+    settlement_id: 33
+- model: world.Building
+  fields:
+    type: granary
+    level: 1
+    quantity: 1
+    settlement_id: 33
+- model: world.Building
+  fields:
+    type: guild
+    level: 1
+    quantity: 1
+    settlement_id: 33
+- model: world.Settlement
+  pk: 34
+  fields:
+    name: Gra
+    tile_id: 32
+    population_default: 287
+    x_pos: 80
+    z_pos: 70
+- model: world.Building
+  fields:
+    type: residence
+    level: 1
+    quantity: 40
+    settlement_id: 34
+- model: world.Building
+  fields:
+    type: grain field
+    level: 1
+    quantity: 3878
+    settlement_id: 34
+- model: world.Building
+  fields:
+    type: granary
+    level: 0
+    quantity: 1
+    settlement_id: 34
+- model: world.Building
+  fields:
+    type: guild
+    level: 2
+    quantity: 1
+    settlement_id: 34
+

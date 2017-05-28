@@ -28,4 +28,6 @@ RUN cp devops/mod_wsgi.conf devops/finem_imperii_vhost.conf /etc/apache2/conf.d
 RUN cp devops/mod_wsgi.so /usr/lib/apache2/mod_wsgi.so
 RUN mkdir /run/apache2
 
+RUN echo "export DJANGO_SETTINGS_MODULE=prod.settings" >> /root/.bashrc
+
 CMD devops/alpine_entry.sh

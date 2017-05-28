@@ -166,11 +166,11 @@
   pk: 5
   fields:
     world_id: 1
-    name: "Knarkt commonwealth"
+    name: "Jade commonwealth"
     color: "CE0004"
     description: >
       The Commonwealth started as a successful tribe that controlled the
-      territories around Knarkt. After a couple of generations of relative
+      territories of Jade. After a couple of generations of relative
       peace and prosperity, it rose as an influential emortuic Realm of
       it's own right.
     is_position: false
@@ -211,10 +211,10 @@
   pk: 6
   fields:
     world_id: 1
-    name: "Knarkt Lord"
+    name: "Jade Lord"
     color: "A70004"
     description: >
-      The Lord of Knarkt is a life-long position elected by the members of the
+      The Lord of Jade is a life-long position elected by the members of the
       Commonwealth. Ritualistic in the tradition of the old tribes and
       respected by it's people.
     is_position: true
@@ -281,12 +281,12 @@
   pk: 7
   fields:
     world_id: 1
-    name: "Casmir"
+    name: "Mir"
     color: "928439"
     description: >
-      Unique for its horizontality and communal organization, Casmir is a
+      Unique for its horizontality and communal organization, Mir is a
       Realm formed by the free and democratic union of it's people. While often
-      marred in internal disputes, Casmirians always rise united when
+      marred in internal disputes, Mirians always rise united when
       external threats arise.
     is_position: false
     owner_id: null
@@ -371,10 +371,10 @@
   pk: 8
   fields:
     world_id: 1
-    name: "Casmir Thain"
+    name: "Mir Thain"
     color: "928439"
     description: >
-      The Thain represents Casmir and is not so much a position of power
+      The Thain represents Mir and is not so much a position of power
       as a symbol of the Realm's unity, strength and dignity.
     is_position: true
     position_type: elected
@@ -845,7 +845,7 @@
     name: North Mir
     world_id: 1
     region_id: 3
-    controlled_by: 9
+    controlled_by: 7
     x_pos: -2
     z_pos: -1
     y_pos: 0.15
@@ -856,7 +856,7 @@
     name: North Jade
     world_id: 1
     region_id: 2
-    controlled_by: 9
+    controlled_by: 5
     x_pos: -1
     z_pos: -1
     y_pos: 0.4
@@ -957,7 +957,7 @@
     name: South Mir
     world_id: 1
     region_id: 1
-    controlled_by: 9
+    controlled_by: 7
     x_pos: -2
     z_pos: 0
     y_pos: 0.2
@@ -965,10 +965,10 @@
 - model: world.Tile
   pk: 43
   fields:
-    name: Jade Mir Peaks
+    name: Jade-Mir Peaks
     world_id: 1
     region_id: 2
-    controlled_by: 9
+    controlled_by: 5
     x_pos: -1
     z_pos: 0
     y_pos: 0.5
@@ -1091,7 +1091,7 @@
     name: Knarkt
     world_id: 1
     region_id: 2
-    controlled_by: 5
+    controlled_by: 9
     x_pos: 0
     z_pos: 1
     y_pos: 0.55
@@ -1102,7 +1102,7 @@
     name: Casmir
     world_id: 1
     region_id: 6
-    controlled_by: 7
+    controlled_by: 9
     x_pos: 1
     z_pos: 1
     y_pos: 0.25
@@ -2520,12 +2520,12 @@
     quantity: 1
     settlement_id: 31
 
-# Knarkt
+# Jade-Mir Peaks
 - model: world.Settlement
   pk: 6
   fields:
     name: Shaax
-    tile_id: 54
+    tile_id: 43
     population_default: 2666
     x_pos: 29
     z_pos: 31
@@ -2562,7 +2562,7 @@
   pk: 7
   fields:
     name: Fynkah
-    tile_id: 54
+    tile_id: 43
     population_default: 812
     x_pos: 61
     z_pos: 50
@@ -2591,12 +2591,12 @@
     quantity: 1
     settlement_id: 7
 
-# Casmir
+# South Mir
 - model: world.Settlement
   pk: 8
   fields:
     name: Dipak
-    tile_id: 55
+    tile_id: 42
     population_default: 5300
     x_pos: 33
     z_pos: 8
@@ -2633,7 +2633,7 @@
   pk: 9
   fields:
     name: Kalyana
-    tile_id: 55
+    tile_id: 42
     population_default: 2100
     x_pos: 40
     z_pos: 53
@@ -2760,3 +2760,100 @@
     quantity: 1
     settlement_id: 34
 
+# North Jade
+- model: world.Settlement
+  pk: 35
+  fields:
+    name: Gogab
+    tile_id: 33
+    population_default: 3264
+    x_pos: 25
+    z_pos: 30
+- model: world.Building
+  fields:
+    type: residence
+    level: 2
+    quantity: 300
+    settlement_id: 35
+- model: world.Building
+  fields:
+    type: grain field
+    level: 2
+    quantity: 10909
+    settlement_id: 35
+- model: world.Building
+  fields:
+    type: granary
+    level: 2
+    quantity: 1
+    settlement_id: 35
+- model: world.Building
+  fields:
+    type: guild
+    level: 1
+    quantity: 1
+    settlement_id: 35
+- model: world.Settlement
+  pk: 36
+  fields:
+    name: Deeproot
+    tile_id: 33
+    population_default: 300
+    x_pos: 20
+    z_pos: 65
+- model: world.Building
+  fields:
+    type: residence
+    level: 2
+    quantity: 40
+    settlement_id: 36
+- model: world.Building
+  fields:
+    type: grain field
+    level: 2
+    quantity: 5000
+    settlement_id: 36
+- model: world.Building
+  fields:
+    type: granary
+    level: 2
+    quantity: 1
+    settlement_id: 36
+- model: world.Building
+  fields:
+    type: guild
+    level: 2
+    quantity: 1
+    settlement_id: 36
+- model: world.Settlement
+  pk: 37
+  fields:
+    name: Kash Falls
+    tile_id: 33
+    population_default: 640
+    x_pos: 75
+    z_pos: 80
+- model: world.Building
+  fields:
+    type: residence
+    level: 2
+    quantity: 80
+    settlement_id: 37
+- model: world.Building
+  fields:
+    type: grain field
+    level: 2
+    quantity: 6030
+    settlement_id: 37
+- model: world.Building
+  fields:
+    type: granary
+    level: 2
+    quantity: 1
+    settlement_id: 37
+- model: world.Building
+  fields:
+    type: guild
+    level: 2
+    quantity: 1
+    settlement_id: 37

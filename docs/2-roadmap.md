@@ -136,9 +136,9 @@ Allocated: 5 days
 ## Week 13
 
  - MUST Character actions (1 day)
- - MUST Emortuus realm join (1/2 day)
- - MUST World startup plan (1/2 day)
- - MUST Closed alpha release (1 day)
+ - MUST Emortuus realm join (1/2 day) (finished)
+ - MUST World startup plan (1/2 day) (finished)
+ - MUST Closed alpha release (1 day) (finished)
  - Final delivery preparation
 
 ## Week 14

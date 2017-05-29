@@ -52,7 +52,7 @@ class TurnProcessor:
         self.trigger_battles()
         self.do_elections()
         self.do_conquests()
-        self.do_barbarians()
+        self.do_barbarian_generation()
         # self.do_residence_assignment()
         self.do_job_updates()
         self.do_production()
@@ -60,6 +60,7 @@ class TurnProcessor:
         self.do_food_consumption()
         self.do_population_changes()
         # self.do_food_spoilage()
+        # self.do_public_order_update()
         self.do_taxes()
 
         self.world.current_turn += 1
@@ -351,12 +352,12 @@ class TurnProcessor:
             building.field_production_counter += workers.count()
             building.save()
 
-    def do_barbarians(self):
+    def do_barbarian_generation(self):
         world_settlements = world.models.Settlement.objects.filter(
             tile__world=self.world
         )
         for settlement in world_settlements:
-            do_settlement_barbarians(settlement)
+            do_settlement_barbarian_generation(settlement)
 
     def do_conquests(self):
         conquests_in_this_world = world.models.TileEvent.objects.filter(
@@ -473,7 +474,7 @@ class TurnProcessor:
             battle_turn(battle)
 
 
-def do_settlement_barbarians(settlement):
+def do_settlement_barbarian_generation(settlement):
     pure_barbarian_units = world.models.WorldUnit.objects.filter(
         location=settlement,
         owner_character__isnull=True

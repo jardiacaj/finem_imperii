@@ -9,7 +9,7 @@ from world.views import CharacterCreationView, activate_character, \
     unit_rename, unit_disband, character_view, tile_view, \
     tile_view_iframe, unit_battle_settings, unit_status_change, \
     unit_battle_orders, unit_conquest_action, character_view_iframe, \
-    InventoryView
+    InventoryView, public_order
 
 urlpatterns = [
     url(r'^create_character$', create_character, name='create_character'),
@@ -33,5 +33,6 @@ urlpatterns = [
     url(r'^unit/(?P<unit_id>[0-9]+)/disband', unit_disband, name='unit_disband'),
     url(r'^unit/(?P<unit_id>[0-9]+)/conquest', unit_conquest_action, name='unit_conquest_action'),
     url(r'^unit/(?P<unit_id>[0-9]+)/(?P<new_status>[ a-z]+)', unit_status_change, name='unit_status_change'),
+    url(r'^public_order', public_order, name='public_order'),
     url(r'^minimap$', minimap_view, name='minimap'),
 ]

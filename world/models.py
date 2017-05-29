@@ -742,6 +742,12 @@ class Character(models.Model):
             return 5000
         return 500
 
+    def can_work_public_order(self):
+        return (
+            self.profile == self.BUREAUCRAT and
+            self.get_battle_participating_in() is None
+        )
+
 
 class WorldUnitStatusChangeException(Exception):
     pass

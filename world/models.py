@@ -188,6 +188,9 @@ class Settlement(models.Model):
     guilds_setting = models.CharField(
         max_length=20, default=GUILDS_KEEP, choices=GUILDS_CHOICES)
 
+    def get_public_order_display(self):
+        return "{}%".format(self.public_order // 10)
+
     def size_name(self):
         for size in settlement_size_names:
             if size[0](self.population):
@@ -233,7 +236,7 @@ class Settlement(models.Model):
         try:
             return round(
                 (
-                    self.get_residents().filter(hunger__gt=0).count() /
+                    self.get_residents().filter(hunger__gt=1).count() /
                     self.get_residents().count()
                 ) * 100
             )

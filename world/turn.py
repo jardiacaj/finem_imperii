@@ -60,7 +60,7 @@ class TurnProcessor:
         self.do_food_consumption()
         self.do_population_changes()
         # self.do_food_spoilage()
-        # self.do_public_order_update()
+        self.do_public_order_update()
         self.do_taxes()
 
         self.world.current_turn += 1
@@ -71,12 +71,49 @@ class TurnProcessor:
             'turn'
         )
 
+    def do_public_order_update(self):
+        for tile in self.world.tile_set.all():
+            for settlement in tile.settlement_set.all():
+                self.do_settlement_population_changes(settlement)
+
+    def do_settlement_public_order_update(self, settlement: Settlement):
+        hunger_percent = settlement.get_hunger_percentage()
+        if hunger_percent > 50:
+            settlement.public_order -= (hunger_percent * 5)
+        else:
+            settlement.public_order += (50 - hunger_percent) * 2
+
+        non_barbarian_units = world.models.WorldUnit.objects.filter(
+            location=settlement,
+            owner_character__isnull=False
+        )
+
+        public_order_contributing_units = []
+        settlement_vm = settlement.tile.controlled_by.get_violence_monopoly()
+        for unit in non_barbarian_units:
+            char_vm = unit.owner_character.get_violence_monopoly()
+            if char_vm == settlement_vm:
+                public_order_contributing_units.append(
+                    public_order_contributing_units
+                )
+        contributing_soldiers = sum(
+            [unit.soldier.count() for unit in public_order_contributing_units]
+        )
+        solder_to_pop_ratio = contributing_soldiers / settlement.population
+
+        settlement.public_order += solder_to_pop_ratio * 250
+
+        settlement.public_order = min(
+            1000, max(settlement.public_order, 0)
+        )
+        settlement.save()
+
     def do_population_changes(self):
         for tile in self.world.tile_set.all():
             for settlement in tile.settlement_set.all():
                 self.do_settlement_population_changes(settlement)
 
-    def do_settlement_population_changes(self, settlement):
+    def do_settlement_population_changes(self, settlement: Settlement):
         settlement.update_population()
         amount_to_generate = 0
 

@@ -86,8 +86,12 @@
                 </h3></div>
                 <div class="panel-body">
 
-                    <p class="{% if settlement.get_hunger_percentage > 15 %}text-danger lead{% endif %}">
+                    <p class="{% if settlement.get_hunger_percentage > 15 %}text-danger{% endif %}">
                     Hunger: {{ settlement.get_hunger_percentage }}%
+                    </p>
+
+                    <p class="{% if settlement.public_order < 500 %}text-danger{% endif %}">
+                    Public order: {{ settlement.get_public_order_display }}
                     </p>
 
                     <h6>Buildings</h6>

@@ -512,22 +512,18 @@ class TurnProcessor:
 
 
 def do_settlement_barbarian_generation(settlement):
-    pure_barbarian_units = world.models.WorldUnit.objects.filter(
-        location=settlement,
-        owner_character__isnull=True
-    )
-    non_pure_barbarian_units = world.models.WorldUnit.objects.filter(
-        location=settlement,
-        owner_character__isnull=False
-    )
-    non_pure_barbarian_soldiers = sum(
-        [unit.soldier.count() for unit in non_pure_barbarian_units]
-    )
-    if non_pure_barbarian_soldiers < settlement.population / 10:
+    if settlement.public_order < 500:
+        public_order_ratio = settlement.public_order / 1000
+        public_disorder_ratio = 1 - public_order_ratio
+
+        pure_barbarian_units = world.models.WorldUnit.objects.filter(
+            location=settlement,
+            owner_character__isnull=True
+        )
         barbarian_soldiers = sum(
             [unit.soldier.count() for unit in pure_barbarian_units]
         )
-        if barbarian_soldiers >= settlement.population / 3:
+        if barbarian_soldiers >= settlement.population * public_disorder_ratio:
             return
         if settlement.population < 40:
             return

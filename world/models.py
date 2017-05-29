@@ -183,6 +183,8 @@ class Settlement(models.Model):
     population_default = models.IntegerField()
     x_pos = models.IntegerField()
     z_pos = models.IntegerField()
+    public_order = models.IntegerField(
+        default=1000, help_text="0-1000, shown as %")
     guilds_setting = models.CharField(
         max_length=20, default=GUILDS_KEEP, choices=GUILDS_CHOICES)
 

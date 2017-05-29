@@ -13,6 +13,7 @@ from django.views.generic.base import View
 from account.user_functions import can_create_character
 from battle.models import Order, Battle
 from decorators import inchar_required
+from messaging import shortcuts
 from messaging.models import MessageRelationship
 from name_generator.name_generator import get_names, get_surnames
 from organization.models import Organization, Capability
@@ -178,6 +179,14 @@ class CharacterCreationView(View):
             ),
             safe=True
         )
+
+        message = shortcuts.create_message(
+            "{} just joined {}. Let's give a warm welcome!",
+            world,
+            "newcomer",
+            link=character.get_absolute_url()
+        )
+        shortcuts.add_organization_recipient(message, state)
 
         state.character_members.add(character)
 

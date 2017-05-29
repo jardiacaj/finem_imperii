@@ -33,6 +33,7 @@ class CharacterMessage(models.Model):
     HEIR = 'heir'
     LEAVE = 'leaving'
     TAXES = 'taxes'
+    NEWCOMER = 'newcomer'
     CATEGORY_CHOICES = (
         (TRAVEL, TRAVEL),
         (CONQUEST, CONQUEST),
@@ -52,6 +53,7 @@ class CharacterMessage(models.Model):
         (HEIR, "heir"),
         (LEAVE, "leaving"),
         (TAXES, "taxes"),
+        (NEWCOMER, "newcomer"),
     )
 
     content = models.TextField()

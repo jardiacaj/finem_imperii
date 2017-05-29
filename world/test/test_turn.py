@@ -9,7 +9,7 @@ from world.models import Tile, WorldUnit, World, TileEvent, Settlement
 from world.turn import organizations_with_battle_ready_units, \
     battle_ready_units_in_tile, \
     opponents_in_organization_list, get_largest_conflict_in_list, \
-    create_battle_from_conflict, TurnProcessor, do_settlement_barbarians
+    create_battle_from_conflict, TurnProcessor, do_settlement_barbarian_generation
 
 
 class TestEmortuusTurn(TestCase):
@@ -174,7 +174,7 @@ class TestTurn(TestCase):
         for unit in settlement.worldunit_set.all():
             initialize_unit(unit)
 
-        do_settlement_barbarians(settlement)
+        do_settlement_barbarian_generation(settlement)
         self.assertFalse(
             settlement.worldunit_set.filter(owner_character__isnull=True).exists()
         )

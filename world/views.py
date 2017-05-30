@@ -171,6 +171,12 @@ class CharacterCreationView(View):
             '<p>A good way to start your journey is to write a message '
             'to the other members of {state_link} asking for orders '
             'or guidance on how you can be useful.</p>'
+            '<p>It is encouraged that you role play your character. Therefore,'
+            ' you should try to talk in the voice of your character, '
+            '{char_name}, instead of your own. You could start for example '
+            'by coming up with the story about the past of your character.'
+            'Other players will not be able to see who plays which character, '
+            'so don\'t be shy!</p>'
             ''.format(
                 char_name=character.name,
                 state_link=state.get_html_link(),

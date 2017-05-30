@@ -13,6 +13,10 @@
 
     <div class="row">
         <div class="col-lg-6">
+            <p>
+                {{ tile }}, {{ tile.region }}.
+            </p>
+
             {% for battle in tile.get_current_battles %}
                 <p class="alert alert-danger text-center">
                     <a href="{{ battle.get_absolute_url }}">

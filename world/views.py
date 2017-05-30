@@ -195,7 +195,9 @@ class CharacterCreationView(View):
         )
 
         message = shortcuts.create_message(
-            "{} just joined {}. Let's give a warm welcome!",
+            "{} just joined {}. Let's give a warm welcome!".format(
+                character, state
+            ),
             world,
             "newcomer",
             link=character.get_absolute_url()

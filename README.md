@@ -5,9 +5,22 @@
 
 # Finem Imperii
 
-Finem Imperii is a web-based role-strategy multiplayer game. Characters are part of a long-lived open persistent world placed in the late middle ages, where they will usually take the role of prominent members of society (e.g. commanders, traders, treasurers, rulers). Cooperation among players is a core part of the game, and is required for most scenarios.
+[![Join the chat at https://gitter.im/finemimperii/Lobby](https://badges.gitter.im/finemimperii/Lobby.svg)](https://gitter.im/finemimperii/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-Unlike other similar games, the players do not need to log-in frequently or at certain times. Also, the level of deepness and involvement can be variable, and there is no benefit from spending large amounts of time playing. There is no fixed objective in this game, but there are many open possibilities for the players.
+Public test release: http://fi.joanardiaca.net/
+
+Finem Imperii is a web-based role-strategy multiplayer game. Characters
+are part of a long-lived open persistent world placed in the late
+middle ages, where they will usually take the role of prominent members
+of society (e.g. commanders, traders, treasurers, rulers). Cooperation
+among players is a core part of the game, and is required for most
+scenarios.
+
+Unlike other similar games, the players do not need to log-in
+frequently or at certain times. Also, the level of deepness and
+involvement can be variable, and there is no benefit from spending
+large amounts of time playing. There is no fixed objective in this
+game, but there are many open possibilities for the players.
 
 You can find more information in the [documentation][1].
 
@@ -17,7 +30,9 @@ Basic
  - [Concept](https://github.com/jardiacaj/finem_imperii/blob/master/docs/1-concept.md)
  - [Roadmap](https://github.com/jardiacaj/finem_imperii/blob/master/docs/2-roadmap.md)
 
- Game design
+**The following links lead to outdated documents**
+
+Game design (outdated!)
  - [World](https://github.com/jardiacaj/finem_imperii/blob/master/docs/3-world.md)
  - [Characters](https://github.com/jardiacaj/finem_imperii/blob/master/docs/3-characters.md)
  - [Organizations](https://github.com/jardiacaj/finem_imperii/blob/master/docs/3-organizations.md)
@@ -26,7 +41,7 @@ Basic
  - [Units](https://github.com/jardiacaj/finem_imperii/blob/master/docs/3-units.md)
  - [Buildings](https://github.com/jardiacaj/finem_imperii/blob/master/docs/3-buildings.md)
 
- Technical
+ Technical (outdated!)
  - [Rendering](https://github.com/jardiacaj/finem_imperii/blob/master/docs/4-rendering.md)
  - [Server setup guide](https://github.com/jardiacaj/finem_imperii/blob/master/docs/4-server_setup.md)
 

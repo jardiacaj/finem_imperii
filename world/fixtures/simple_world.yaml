@@ -393,7 +393,7 @@
     world_id: 2
     name: "Small Commonwealth"
     color: "CE0004"
-    description: "A small federated state"
+    description: "A small federated Realm"
     is_position: false
     owner_id: null
     leader_id: 106

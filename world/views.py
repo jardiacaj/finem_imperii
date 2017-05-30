@@ -125,7 +125,7 @@ class CharacterCreationView(View):
             state = Organization.objects.get(id=state_id)
         except Organization.DoesNotExist:
             return self.fail_post_with_error(
-                request, world_id, "Select a valid state"
+                request, world_id, "Select a valid Realm"
             )
 
         name = request.POST.get('name')

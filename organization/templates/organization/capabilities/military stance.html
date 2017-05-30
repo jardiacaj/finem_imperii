@@ -1,6 +1,6 @@
 <p>
     You have been assigned the responsibility of deciding the military stance of
-    {{ capability.applying_to.get_html_link|safe }} against other states.
+    {{ capability.applying_to.get_html_link|safe }} against other realms.
 </p>
 
 <h4>Military stances</h4>
@@ -8,7 +8,7 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <td>State</td>
+            <td>Realm</td>
             <td>Stance</td>
             <td>Region specific stances</td>
             <td>Actions</td>
@@ -43,7 +43,7 @@
                 </td>
             </tr>
         {% empty %}
-            <tr><td>No other states</td></tr>
+            <tr><td>No other realms</td></tr>
         {% endfor %}
     </tbody>
 </table>

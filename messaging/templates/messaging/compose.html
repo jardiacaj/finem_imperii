@@ -44,10 +44,10 @@
 
                 <div class="form-group">
                     <input type="checkbox" name="recipient" id="recipient_settlement" value="settlement">
-                    <label for="recipient_settlement">Everyone at {{ request.hero.location }} (local settlement)</label>
+                    <label for="recipient_settlement">Everyone in {{ request.hero.location }} (local settlement)</label>
                     <br>
                     <input type="checkbox" name="recipient" id="recipient_region" value="region">
-                    <label for="recipient_region">Everyone at {{ request.hero.location.tile }} (local region)</label>
+                    <label for="recipient_region">Everyone in {{ request.hero.location.tile }} (local region)</label>
                 </div>
 
                 <legend>Recipients by politics</legend>
@@ -62,7 +62,7 @@
                     {% for organization in request.hero.organization_set.all %}
                         {% if not organization.is_position %}
                             <input type="checkbox" name="recipient" id="recipient_organization_{{ organization.id }}" value="organization_{{ organization.id }}">
-                            <label for="recipient_organization_{{ organization.id }}">Everyone in {{ organization.get_html_link|safe }}</label>
+                            <label for="recipient_organization_{{ organization.id }}">All members of {{ organization.get_html_link|safe }}</label>
                             <br>
 
                             {% if organization.leader %}

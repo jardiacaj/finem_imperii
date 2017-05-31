@@ -108,6 +108,11 @@
     applying_to: 1
 - model: organization.Capability
   fields:
+    organization_id: 1
+    type: 'take grain'
+    applying_to: 1
+- model: organization.Capability
+  fields:
     organization_id: 2
     type: 'manage guilds'
     applying_to: 1
@@ -164,7 +169,7 @@
   pk: 5
   fields:
     world_id: 1
-    name: "Jade commonwealth"
+    name: "Jade Commonwealth"
     color: "CE0004"
     description: >
       The Commonwealth started as a successful tribe that controlled the

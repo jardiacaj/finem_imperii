@@ -47,7 +47,7 @@ class CharacterMessage(models.Model):
         (MILITARY_STANCE, "military stance"),
         (BATTLE_FORMATION, "battle formation"),
         (CONQUEST, "conquest"),
-        (GUILDS, "conquest"),
+        (GUILDS, "guilds"),
         (UNIT, "unit"),
         (WELCOME, "welcome"),
         (HEIR, "heir"),

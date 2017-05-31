@@ -4,12 +4,13 @@
     display_order: 0
     draft: false
     html_content: >
-      <p>This is a initial public test release. If you report any issues you
+      <p>This is a temporary test release. If you report any issues you
       find to the <a href="https://github.com/jardiacaj/finem_imperii/issues/new">
       GitHub page</a> of the project, you will be helping improve this game.</p>
-      <p>You may play the game freely but it can't currently be guaranteed
-      that a database reset is needed at some point, which would cause loosing
-      everyone's progress in the game.</p>
+      <p>You may play the game freely but <b>your progress will be lost</b>
+      on the next reset, planned to happen on the 6th of June.</p>
+      <p>Mind that the game is currently in an unfinished (but playable)
+      state.</p>
 
 - model: world.World
   pk: 1

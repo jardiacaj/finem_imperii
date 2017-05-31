@@ -28,7 +28,7 @@ But there are many open possibilities. A player may choose to constructively tak
 forward in many different ways, or they may choose to strive to attain as much power as possible. They may also try
 to work for their own personal gain, explore the world freely or engage in trade.
 
-The different states in the fictional world are all opposed to the barbaric regions. Additionally, they may freely 
+The different realms in the fictional world are all opposed to the barbaric regions. Additionally, they may freely
 form their relationships with each other, for example by declaring war, making peace and forming alliances.
 
 Hierarchies and political organizations are a core part of the realms in the game. And, as in the real world, a good
@@ -60,7 +60,7 @@ happened in just a few decades: the Empire fell.
 >
 > It has now been over a hundred years of bloody civil wars, anarchy, shameless corruption and violence that has 
 profoundly decimated the population. Trust in leaders became trait to be exploited. The future looked grim. But now new 
-states and rulers are starting to rise again, bringing the people the hope of seeing order and peace restored.
+realms and rulers are starting to rise again, bringing the people the hope of seeing order and peace restored.
 >
 > Who will be able to bring hope and dignity to the world? Will you help bringing back the golden days of the Empire?
 

@@ -445,8 +445,6 @@ class Capability(models.Model):
     POLICY_DOCUMENT = 'policy'
     CONSCRIPT = 'conscript'
     DIPLOMACY = 'diplomacy'
-    MANAGE_SUBORGANIZATIONS = 'suborganizations'
-    MEMBERSHIPS = 'memberships'
     HEIR = 'heir'
     ELECT = 'elect'
     CANDIDACY = 'candidacy'
@@ -463,8 +461,6 @@ class Capability(models.Model):
         (POLICY_DOCUMENT, 'write policy and law'),
         (DIPLOMACY, 'conduct diplomacy'),
         (CONSCRIPT, 'conscript troops'),
-        (MANAGE_SUBORGANIZATIONS, 'manage subordinate organizations'),
-        (MEMBERSHIPS, 'manage memberships'),
         (HEIR, 'set heir'),
         (ELECT, 'elect'),
         (CANDIDACY, 'present candidacy'),

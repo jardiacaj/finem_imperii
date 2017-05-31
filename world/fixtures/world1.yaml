@@ -1,14 +1,14 @@
 - model: messaging.ServerMOTD
   fields:
-    title: Welcome to the closed alpha release
+    title: Welcome to the alpha release
     display_order: 0
     draft: false
     html_content: >
-      <p>This is a initial test release. If you report any issues you find
-      to the <a href="https://github.com/jardiacaj/finem_imperii/issues/new">
+      <p>This is a initial public test release. If you report any issues you
+      find to the <a href="https://github.com/jardiacaj/finem_imperii/issues/new">
       GitHub page</a> of the project, you will be helping improve this game.</p>
-      <p>You may play the game freely but I can't currently guarantee that a
-      database reset is needed at some point, which would cause loosing
+      <p>You may play the game freely but it can't currently be guaranteed
+      that a database reset is needed at some point, which would cause loosing
       everyone's progress in the game.</p>
 
 - model: world.World
@@ -67,7 +67,6 @@
     type: 'policy'
     applying_to: 1
 - model: organization.Capability
-  pk: 1
   fields:
     organization_id: 2
     type: 'conscript'
@@ -75,23 +74,17 @@
 - model: organization.Capability
   fields:
     organization_id: 1
-    stemming_from: 1
     type: 'conscript'
     applying_to: 1
 - model: organization.Capability
   fields:
     organization_id: 2
+    type: 'heir'
+    applying_to: 2
+- model: organization.Capability
+  fields:
+    organization_id: 2
     type: 'diplomacy'
-    applying_to: 1
-- model: organization.Capability
-  fields:
-    organization_id: 2
-    type: 'suborganizations'
-    applying_to: 1
-- model: organization.Capability
-  fields:
-    organization_id: 2
-    type: 'memberships'
     applying_to: 1
 - model: organization.Capability
   fields:
@@ -102,6 +95,11 @@
   fields:
     organization_id: 2
     type: 'battle formation'
+    applying_to: 1
+- model: organization.Capability
+  fields:
+    organization_id: 2
+    type: 'occupy region'
     applying_to: 1
 - model: organization.Capability
   fields:
@@ -184,11 +182,6 @@
 - model: organization.Capability
   fields:
     organization_id: 5
-    type: 'conscript'
-    applying_to: 5
-- model: organization.Capability
-  fields:
-    organization_id: 5
     type: 'ban'
     applying_to: 5
 - model: organization.Capability
@@ -199,13 +192,18 @@
 - model: organization.Capability
   fields:
     organization_id: 5
-    type: 'memberships'
+    type: 'conscript'
     applying_to: 5
 - model: organization.Capability
   fields:
     organization_id: 5
     type: 'heir'
     applying_to: 6
+- model: organization.Capability
+  fields:
+    organization_id: 5
+    type: 'take grain'
+    applying_to: 5
 
 - model: organization.Organization
   pk: 6
@@ -229,27 +227,7 @@
 - model: organization.Capability
   fields:
     organization_id: 6
-    type: 'ban'
-    applying_to: 5
-- model: organization.Capability
-  fields:
-    organization_id: 6
-    type: 'policy'
-    applying_to: 5
-- model: organization.Capability
-  fields:
-    organization_id: 6
     type: 'diplomacy'
-    applying_to: 5
-- model: organization.Capability
-  fields:
-    organization_id: 6
-    type: 'suborganizations'
-    applying_to: 5
-- model: organization.Capability
-  fields:
-    organization_id: 6
-    type: 'memberships'
     applying_to: 5
 - model: organization.Capability
   fields:
@@ -264,7 +242,7 @@
 - model: organization.Capability
   fields:
     organization_id: 6
-    type: 'take grain'
+    type: 'occupy region'
     applying_to: 5
 - model: organization.Capability
   fields:
@@ -315,16 +293,6 @@
   fields:
     organization_id: 7
     type: 'diplomacy'
-    applying_to: 7
-- model: organization.Capability
-  fields:
-    organization_id: 7
-    type: 'suborganizations'
-    applying_to: 7
-- model: organization.Capability
-  fields:
-    organization_id: 7
-    type: 'memberships'
     applying_to: 7
 - model: organization.Capability
   fields:

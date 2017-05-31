@@ -7,7 +7,7 @@ from finem_imperii.random import WeightedChoice, weighted_choice
 from name_generator.name_generator import generate_name
 from organization.models import Organization
 from world.models import Building, NPC
-from world.turn import do_settlement_barbarians
+from world.turn import do_settlement_barbarian_generation
 
 
 class AlreadyInitializedException(Exception):

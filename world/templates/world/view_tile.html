@@ -13,6 +13,10 @@
 
     <div class="row">
         <div class="col-lg-6">
+            <p>
+                {{ tile }}, {{ tile.region }}.
+            </p>
+
             {% for battle in tile.get_current_battles %}
                 <p class="alert alert-danger text-center">
                     <a href="{{ battle.get_absolute_url }}">
@@ -86,8 +90,12 @@
                 </h3></div>
                 <div class="panel-body">
 
-                    <p class="{% if settlement.get_hunger_percentage > 15 %}text-danger lead{% endif %}">
+                    <p class="{% if settlement.get_hunger_percentage > 15 %}text-danger{% endif %}">
                     Hunger: {{ settlement.get_hunger_percentage }}%
+                    </p>
+
+                    <p class="{% if settlement.public_order < 500 %}text-danger{% endif %}">
+                    Public order: {{ settlement.get_public_order_display }}
                     </p>
 
                     <h6>Buildings</h6>

@@ -52,7 +52,7 @@ class TurnProcessor:
         self.trigger_battles()
         self.do_elections()
         self.do_conquests()
-        self.do_barbarians()
+        self.do_barbarian_generation()
         # self.do_residence_assignment()
         self.do_job_updates()
         self.do_production()
@@ -60,6 +60,7 @@ class TurnProcessor:
         self.do_food_consumption()
         self.do_population_changes()
         # self.do_food_spoilage()
+        self.do_public_order_update()
         self.do_taxes()
 
         self.world.current_turn += 1
@@ -70,12 +71,49 @@ class TurnProcessor:
             'turn'
         )
 
+    def do_public_order_update(self):
+        for tile in self.world.tile_set.all():
+            for settlement in tile.settlement_set.all():
+                self.do_settlement_population_changes(settlement)
+
+    def do_settlement_public_order_update(self, settlement: Settlement):
+        hunger_percent = settlement.get_hunger_percentage()
+        if hunger_percent > 50:
+            settlement.public_order -= (hunger_percent * 5)
+        else:
+            settlement.public_order += (50 - hunger_percent) * 2
+
+        non_barbarian_units = world.models.WorldUnit.objects.filter(
+            location=settlement,
+            owner_character__isnull=False
+        )
+
+        public_order_contributing_units = []
+        settlement_vm = settlement.tile.controlled_by.get_violence_monopoly()
+        for unit in non_barbarian_units:
+            char_vm = unit.owner_character.get_violence_monopoly()
+            if char_vm == settlement_vm:
+                public_order_contributing_units.append(
+                    public_order_contributing_units
+                )
+        contributing_soldiers = sum(
+            [unit.soldier.count() for unit in public_order_contributing_units]
+        )
+        solder_to_pop_ratio = contributing_soldiers / settlement.population
+
+        settlement.public_order += solder_to_pop_ratio * 250
+
+        settlement.public_order = min(
+            1000, max(settlement.public_order, 0)
+        )
+        settlement.save()
+
     def do_population_changes(self):
         for tile in self.world.tile_set.all():
             for settlement in tile.settlement_set.all():
                 self.do_settlement_population_changes(settlement)
 
-    def do_settlement_population_changes(self, settlement):
+    def do_settlement_population_changes(self, settlement: Settlement):
         settlement.update_population()
         amount_to_generate = 0
 
@@ -351,12 +389,12 @@ class TurnProcessor:
             building.field_production_counter += workers.count()
             building.save()
 
-    def do_barbarians(self):
+    def do_barbarian_generation(self):
         world_settlements = world.models.Settlement.objects.filter(
             tile__world=self.world
         )
         for settlement in world_settlements:
-            do_settlement_barbarians(settlement)
+            do_settlement_barbarian_generation(settlement)
 
     def do_conquests(self):
         conquests_in_this_world = world.models.TileEvent.objects.filter(
@@ -473,23 +511,19 @@ class TurnProcessor:
             battle_turn(battle)
 
 
-def do_settlement_barbarians(settlement):
-    pure_barbarian_units = world.models.WorldUnit.objects.filter(
-        location=settlement,
-        owner_character__isnull=True
-    )
-    non_pure_barbarian_units = world.models.WorldUnit.objects.filter(
-        location=settlement,
-        owner_character__isnull=False
-    )
-    non_pure_barbarian_soldiers = sum(
-        [unit.soldier.count() for unit in non_pure_barbarian_units]
-    )
-    if non_pure_barbarian_soldiers < settlement.population / 10:
+def do_settlement_barbarian_generation(settlement):
+    if settlement.public_order < 500:
+        public_order_ratio = settlement.public_order / 1000
+        public_disorder_ratio = 1 - public_order_ratio
+
+        pure_barbarian_units = world.models.WorldUnit.objects.filter(
+            location=settlement,
+            owner_character__isnull=True
+        )
         barbarian_soldiers = sum(
             [unit.soldier.count() for unit in pure_barbarian_units]
         )
-        if barbarian_soldiers >= settlement.population / 3:
+        if barbarian_soldiers >= settlement.population * public_disorder_ratio:
             return
         if settlement.population < 40:
             return

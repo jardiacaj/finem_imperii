@@ -13,6 +13,7 @@ from django.views.generic.base import View
 from account.user_functions import can_create_character
 from battle.models import Order, Battle
 from decorators import inchar_required
+from messaging import shortcuts
 from messaging.models import MessageRelationship
 from name_generator.name_generator import get_names, get_surnames
 from organization.models import Organization, Capability
@@ -124,7 +125,7 @@ class CharacterCreationView(View):
             state = Organization.objects.get(id=state_id)
         except Organization.DoesNotExist:
             return self.fail_post_with_error(
-                request, world_id, "Select a valid state"
+                request, world_id, "Select a valid Realm"
             )
 
         name = request.POST.get('name')
@@ -165,11 +166,25 @@ class CharacterCreationView(View):
         character.add_notification(
             'welcome',
             '<h4>Welcome, {char_name}!</h4>'
-            '<p>You are starting as a member of {state_link}, a realm in '
-            '<a href="{world_url}">{world_name}</a>.</p>'
-            '<p>A good way to start your journey is to write a message '
+            '<p>'
+            'You are starting as a member of {state_link}, a realm in '
+            '<a href="{world_url}">{world_name}</a>.'
+            '</p>'
+            '<p>'
+            'A good way to start your journey is to write a message '
             'to the other members of {state_link} asking for orders '
-            'or guidance on how you can be useful.</p>'
+            'or guidance on how you can be useful.'
+            '</p>'
+            '<p>'
+            'It is encouraged that you role play your character. This '
+            'means that you should try to write in the voice of your '
+            'character, {char_name}, an inhabitant of {world_name}, instead '
+            'of your own, a person playing a computer game. You may want to '
+            'come up with a simple past history of your '
+            'character and presenting yourself to your realm. ' 
+            'If you need to say something that your character would not say, '
+            'you should prepend the letters OOC, meaning "out of character".'
+            '</p>'
             ''.format(
                 char_name=character.name,
                 state_link=state.get_html_link(),
@@ -178,6 +193,16 @@ class CharacterCreationView(View):
             ),
             safe=True
         )
+
+        message = shortcuts.create_message(
+            "{} just joined {}. Let's give a warm welcome!".format(
+                character, state
+            ),
+            world,
+            "newcomer",
+            link=character.get_absolute_url()
+        )
+        shortcuts.add_organization_recipient(message, state)
 
         state.character_members.add(character)
 
@@ -548,6 +573,40 @@ def unit_disband(request, unit_id):
     )
     unit.disband()
     messages.success(request, 'Your unit has been disbanded.', 'success')
+    return redirect(reverse('world:character_home'))
+
+
+@inchar_required
+@require_POST
+def public_order(request):
+    if not request.hero.can_work_public_order():
+        raise Http404("Can't do that")
+
+    hours = int(request.POST.get('hours'))
+
+    if hours < 1 or hours > request.hero.hours_in_turn_left:
+        messages.error(request, 'You can\'t work that many ours.', 'danger')
+
+    po_improvement = math.floor(
+        hours / request.hero.location.population * 500
+    )
+    new_po = min(request.hero.location.public_order + po_improvement, 1000)
+
+    message = 'You worked {} hours, improving the public order in ' \
+              '{} from {}% to {}%' \
+              ''.format(
+                    hours,
+                    request.hero.location,
+                    request.hero.location.public_order / 10,
+                    new_po / 10
+              )
+
+    request.hero.location.public_order = new_po
+    request.hero.location.save()
+    request.hero.hours_in_turn_left -= hours
+    request.hero.save()
+
+    messages.success(request, message, 'success')
     return redirect(reverse('world:character_home'))
 
 

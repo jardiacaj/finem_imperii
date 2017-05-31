@@ -183,8 +183,13 @@ class Settlement(models.Model):
     population_default = models.IntegerField()
     x_pos = models.IntegerField()
     z_pos = models.IntegerField()
+    public_order = models.IntegerField(
+        default=1000, help_text="0-1000, shown as %")
     guilds_setting = models.CharField(
         max_length=20, default=GUILDS_KEEP, choices=GUILDS_CHOICES)
+
+    def get_public_order_display(self):
+        return "{}%".format(self.public_order // 10)
 
     def size_name(self):
         for size in settlement_size_names:
@@ -231,7 +236,7 @@ class Settlement(models.Model):
         try:
             return round(
                 (
-                    self.get_residents().filter(hunger__gt=0).count() /
+                    self.get_residents().filter(hunger__gt=1).count() /
                     self.get_residents().count()
                 ) * 100
             )
@@ -736,6 +741,12 @@ class Character(models.Model):
         if self.profile == Character.COMMANDER:
             return 5000
         return 500
+
+    def can_work_public_order(self):
+        return (
+            self.profile == self.BUREAUCRAT and
+            self.get_battle_participating_in() is None
+        )
 
 
 class WorldUnitStatusChangeException(Exception):

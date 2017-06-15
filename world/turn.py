@@ -312,7 +312,10 @@ class TurnProcessor:
 
         hunger = mouths - bushels_to_consume
         if hunger > 0 and settlement.npc_set.exists():
-            for npc in random.sample(list(settlement.npc_set.all()), hunger):
+            for npc in random.sample(
+                    list(settlement.npc_set.all()),
+                    min(hunger, settlement.npc_set.count())
+            ):
                 npc.hunger += 1
                 npc.save()
 

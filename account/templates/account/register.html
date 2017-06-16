@@ -5,6 +5,15 @@
     <div class="col-xs-12 col-md-4 col-md-offset-4">
         <h1 class="page-header">Register</h1>
 
+        <div class="alert alert-danger text-center" role="alert">
+            <p>
+                Only one account per person is allowed.
+            </p>
+            <p>
+                Please respect this rule.
+            </p>
+        </div>
+
         <form method="post" action="{% url 'account:register' %}">
             {% csrf_token %}
             <div class="form-group">

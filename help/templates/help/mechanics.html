@@ -1,0 +1,456 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+
+    <div class="col-lg-6 col-lg-offset-3">
+        <h1 class="page-header">Game mechanics</h1>
+
+        <h2>Geography</h2>
+        <p>
+            The world is divided in tiles which contain settlements.
+        </p>
+        <p>
+            Emortuus, the main game world, consists of 10x10 tiles, of which 35 are land tiles. There are settlements only on 15 of the tiles at the time of this writing. There is a total of 37 settlements with initial population sizes ranging from the almost 13600 inhabitants of Dryburgh to the 210 of Fort.
+        </p>
+
+        <h2>Travel</h2>
+
+        <p>
+            Travelling without leaving the current region is allowed instantly as long as the character has enough time left. Travelling to a different region happens on turn end. It is only allowed to travel to contiguous regions (including diagonals). Travel is not allowed if the character is taking part in a battle.
+        </p>
+        <p>
+            If one of both settlements is in a mountain region, the time cost doubles. If there is a battle in progress in the origin tile, the cost doubles too. These are cumulative effects.
+        </p>
+        <p>
+            Travel at the turn’s end to a different region is possible even if the character does not have enough time left in the current turn. In that case, the remaining needed time will be subtracted from the time the character receives on the next turn.
+        </p>
+
+        <h2>Passage of time</h2>
+
+        <p>
+            Many world events happen at turn change (twice a day).
+        </p>
+        <ul>
+            <li>Travels between regions are executed.</li>
+            <li>Character’s time reserves are restored.</li>
+            <li>Military units receive payment.</li>
+            <li>Battles start, progress and end.</li>
+            <li>Democratic elections are convoked and resolved.</li>
+            <li>Region conquests are processed and resolved.</li>
+            <li>Barbaric units are generated.</li>
+            <li>Job updates are made for settlement inhabitants.</li>
+            <li>Production of fields and guilds is calculated and generated.</li>
+            <li>Settlement inhabitants consume food if available, if not their hunger rises and may eventually die off.</li>
+            <li>Inhabitants regrowth is processed.</li>
+            <li>Public order of settlements is calculated.</li>
+            <li>Taxes are collected once every 12 turns.</li>
+        </ul>
+
+        <h2>The concept of organizations</h2>
+
+        <p>
+            The object “Organization” in the code and database uses a very broad definition of the term. Positions (as in political positions) are also understood as a type of organization. Positions may only have a single member at a time. If an organization is not a position, it is able to contain several members.
+        </p>
+        <p>
+            Organizations may be barbaric, which gives them some special properties, like being automatically assigned banned characters. Only one barbaric violence monopoly may exist in a world.
+        </p>
+        <p>
+            Organizations that are not positions (so they can have multiple members) may have either a democratic or a distributed decision processes. In democratically organized organizations, every use of the organization’s capabilities will have to be voted. In distributed decision systems, all members may use the capabilities at their discretion with instant effects, no vote needed.
+        </p>
+        <p>
+            Positions may be democratically elected or inherited. These two systems may also be combined.
+        </p>
+        <p>
+            Organizations may also have relationships among them. An organization may have a leader. The leader of an organization is a symbolic position that can have varying amounts of power over the leaded organization.
+        </p>
+
+        <h2>Realms</h2>
+
+        <p>
+            Realms are organizations that own the monopoly of violence. They can be compared to states.
+        </p>
+        <p>
+            There are initially three existing realms, as introduced in the lore section of the game design chapter in this document.
+        </p>
+        <p>
+            The Kingdom of Cardell is a very centralized and authoritarian realm with most of its power being held by its king. The crown is an inherited position.
+        </p>
+        <p>
+            The Jade Commonwealth is less centralized, with some decisions being democratically taken. The Jade Lord still holds some power. It’s a life long position but the heir is decided by the members of the Commonwealth.
+        </p>
+        <p>
+            Mir is the most decentralized an democratic realm. All decisions are taken democratically by the members of Mir. The Mir Thain is a democratically-elected, symbolic-only position.
+        </p>
+        <p>
+            When a player creates a character, it may be freely chosen in what realm to start.
+        </p>
+        <p>
+            Characters that don’t form part of any realm are automatically assigned to the barbaric violence monopoly.
+        </p>
+
+        <h2>Organization capabilities</h2>
+
+        <p>
+            One of the most relevant aspects of organizations is that they may own organization capabilities. These capabilities allow the members of an organization or the occupier of a position to take certain actions.
+        </p>
+        <p>
+            There following list summarizes the existing capabilities.
+        </p>
+        <ul>
+            <li>Banning: allows to ban characters from an organization. This is most cases an extreme measure that will probably not be used frequently.</li>
+            <li>Writing policy and law: allows to create, edit and delete documents owned by the organization.</li>
+            <li>Conscript: allows to conscript troops in the territories controlled by the realm.</li>
+            <li>Diplomacy: allows to engage in diplomatic relations with other realms, including the declaration of war and the proposal of alliances.</li>
+            <li>Heir setting: allows to decide who will be the heir to a position.</li>
+            <li>Elect, present candidacy and convoke elections: these three capabilities are the base for democratic elections on positions.</li>
+            <li>Military stance: allows to change the military stance towards other realms.</li>
+            <li>Battle formation: allows to set the formation armies will be deployed in.</li>
+            <li>Conquest: allows to start and stop conquest of regions.</li>
+            <li>Take grain: allows to take grain from the public granaries.</li>
+            <li>Guilds: allows to control the position of the realm towards guilds, allowing control over the production of coins and food.</li>
+            <li>Manage taxation: allow management of settings for taxation and tax collection.</li>
+        </ul>
+        <p>
+            The capabilities an organization owns is the main origin of its power.
+        </p>
+        <p>
+            Positions and organizations with a distributed mode of decision-taking may use their capabilities directly without any kind of legitimation process.
+        </p>
+        <p>
+            Organizations with democratic decision-taking will need to vote before an action can be taken.
+        </p>
+        <p>
+            It is important to note that capabilities will often apply to the same organization that owns it, but this does not necessarily have to be the case. An organization may own a capability over a different organization, forming relationships of power.
+        </p>
+
+        <h2>Policy writing</h2>
+
+        <p>
+            Realms and other organization types may have a set of text documents published which are bound to the organization in question. Those are called “law and policy”, but which kind of content is written is up to the author(s).
+        </p>
+        <p>
+            Documents may be either public or private, in the latter case they are only visible to the members of the organization. They are linked in the organization’s information page.
+        </p>
+        <p>
+            Documents may be created, edited and deleted by the holders of the “write policy and law” capability.
+        </p>
+
+        <h2>Power relationships</h2>
+
+        <p>
+            There may exist power relationships between organizations, which of course translates to power relationships between characters.
+        </p>
+        <p>
+            These relationships may be either explicit or implicit.
+        </p>
+        <p>
+            Explicit power relationships take two different forms. The more obvious form is that of ownership relationships. For example, a King may create a subordinate organization, like a court, which he will be able to manage at his will.
+        </p>
+        <p>
+            The second type of explicit power relationship consists in organization A having capabilities that apply to organization B. For example, the King of Cardell owns many capabilities that apply to the Kingdom of Cardell, which he leads but does not own. One of those capabilities is “banning”. This gives the King substantial power over the Kingdom.
+        </p>
+        <p>
+            Leadership relationships are not necessarily power relationships. In the case of the King of Cardell, it is definitely a powerful leading role, but this does not have to be the case. For example, the Mir Thain is the elected leader of Mir, but the former does not have any power over Mir. In this case, leadership is a symbolic position.
+        </p>
+        <p>
+            While this symbolism may not express explicit power, there may be an implicit one. Implicit power relationships emerge from game play and can be more interesting and relevant than explicit ones.
+        </p>
+        <p>
+            Apart from cases like the Mir Thain, other examples can be envisioned where implicit power arises. One such example could be when a small, weak realm lies close to a larger, stronger, expansionist realm. While there may be no explicit power relationship, the larger realm can exert a lot of power over the smaller one, regardless of the existence of aggressive actions or threats.
+        </p>
+
+        <h2>Democracy</h2>
+
+        <p>
+            Democratic decision-taking has been presented in the previous “organization capabilities” section of this chapter. This is one of the mechanisms that allow democratic organizations to exist in the game.
+        </p>
+        <p>
+            The other fundamental mechanism to implement democratic organizations is that of elections.
+        </p>
+        <p>
+            In the game, some positions may be subject to elections. Elections can be either periodic at a set frequency (for example, the Mir Thain is elected every four in-game years) or only once the position is vacant for some reason. It is also possible to manually convoke elections, which is an organization capability.
+        </p>
+        <p>
+            There are three different capabilities that play a role in democratic elections:
+        </p>
+        <ul>
+            <li>“Convoke elections” allows to convoke elections at a set date.</li>
+            <li>“Present candidacy” allows to present a personal candidacy for a position. Only candidates that have presented themselves can be voted during elections.</li>
+            <li>“Elect” allows to cast a vote on the elections.</li>
+        </ul>
+        <p>
+            Please note that these capabilities do not necessarily have to be owned by the same organization.
+        </p>
+        <p>
+            Elections are processes that can take somewhere between 6 and 18 months to complete. The specific value can be chosen when convoking elections manually. If elections are convoked automatically, the default value of 6 months is used.
+        </p>
+        <p>
+            Once elections are in progress, any character that has access to the “present candidacy” capability may present themselves to the elections up to 3 months before the elections. The incumbent occupier of the position automatically presents themselves to the election (this avoids losing an election by default if not being able to play the game for a few days). Candidacies may also be retired at any time by the candidate.
+        </p>
+        <p>
+            Voters are encouraged to wait until the 3 last months of the elections to cast their vote to be able to see the full roster of candidates, but they may issue their vote at any time during the election period. The vote is secret.
+        </p>
+        <p>
+            Once the election period finishes, the election resolves. The candidate with most votes is declared the new occupier of the position in question.
+        </p>
+        <p>
+            Elections are automatically restarted if they result in a draw or no valid votes have been cast.
+        </p>
+
+        <h2>Inheritance</h2>
+
+        <p>
+            An alternative way of occupying positions is by inheritance.
+        </p>
+        <p>
+            There is no representation of biological relationships among characters, which makes inheritance based on those relationships not possible in the current state of the game.
+        </p>
+        <p>
+            In the game, the holders of the “set heir” capability may change who will inherit the position in question. A line of succession of two may be set up this way.
+        </p>
+        <p>
+            If the position becomes vacant, the first heir will occupy the position. If the first heir is not available for some reason, the second heir will occupy it.
+        </p>
+
+        <h2>Character profiles</h2>
+
+        <p>
+            Three different character profiles exist in the game. If can be chosen on character creation and cannot be changed afterwards.
+        </p>
+        <p>
+            Using the “commander” profile is the main way to play the game. They have a militaristic focus and can own more military units and soldiers than the other profiles.
+        </p>
+        <p>
+            Traders specialize in transportation of grain and start with transport carts that allow them to carry more goods around.
+        </p>
+        <p>
+            Finally, bureaucrats focus on keeping public order by using their special ability.
+        </p>
+        <p>
+            Character profiles introduce a basic form of specialization in the game, promoting cooperation and coordination.
+        </p>
+
+        <h2>Diplomacy</h2>
+
+        <p>
+            Probably the most fundamental form of relationship between realms is diplomacy. Those relationships are effected by using the “conduct diplomacy” capability.
+        </p>
+        <p>
+            There are five different possible relationships: war, peace, friendship, defensive alliance and alliance. The barbaric realm is locked at war with every other realm.
+        </p>
+        <p>
+            The owners of the “conduct diplomacy” capability change the relationships to other non-barbaric realms. Degrading a relationship, like when declaring war, is always an unilateral decision. Whenever one realm decides to degrade their relationship, this happens instantly.
+        </p>
+        <p>
+            Improving relationships requires consensus. One of the parties has to send a proposal, for example, declaring peace. The other party must then decide if it wants to accept or reject the proposal. Only if it is accepted, the relationship changes.
+        </p>
+        <p>
+            Changes in diplomatic relationships is notified to all characters in the world.
+        </p>
+
+        <h2>Military stance</h2>
+
+        <p>
+            Aside from diplomatic relationships, organizations also have military stances towards each other. There are three possible stances:
+        </p>
+        <ul>
+            <li>Realms that are at war with each other will have an aggressive stance towards each other.</li>
+            <li>Realms that are at peace will have a defensive stance toward each other.</li>
+            <li>Realms that declared friendship or are allies will have a conflict-avoiding stance.</li>
+        </ul>
+        <p>
+            But these are just the default settings. The owner of the “military orders” capability may override these stances. This is useful in different scenarios.
+        </p>
+        <p>
+            For example, two realms may be at war. Realm A attacks a position of realm B. If realm A has an overwhelmingly larger military power than realm B, the owner of the “military orders” capability (for example, a general) may decide to change the stance to “avoid battle” in that region. This will allow realm B to reinforce until it is ready for battle.
+        </p>
+        <p>
+            Changing military stances also allows to attack other realms without officially declaring war, allowing finer escalation and deescalation of conflicts.
+        </p>
+        <p>
+            A final example: armies of realms A, B and C may meet in a single settlement. All three realms are at war to each other. Battles in Finem Imperii are always two-sided (a three-way battle is currently not possible). Thus, realm A may decide to concentrate on attacking a single realm of its choice, by setting an aggressive stance towards one of the realms and choosing a defensive or avoiding stance towards the other.
+        </p>
+
+        <h2>Military units: recruitment, status, payment</h2>
+
+        <p>
+            Military units may be recruited in the territories in which the character can use the “conscript” capability.
+        </p>
+        <p>
+            A freshly recruited unit starts in the “following” status, which means that it is fully mobilized and ready for battle. It will also follow the character if he or she travels to another settlement. This allows to move military around the map.
+        </p>
+        <p>
+            The owner of the unit may switch the status to “standing”. In this setting, the unit will keeps its position on the map even if the character moves away and it will stay mobilized and ready for battle.
+        </p>
+        <p>
+            Finally, there is the “not mobilized” status. In this setting, the unit is not active, will not move from its position and will not take part in battles. Units in this stance also do not require payment, so demobilizing units is a practical way to save money.
+        </p>
+        <p>
+            Soldiers of non-mobilized units will keep working as civilians in their settlements. Once mobilized, they are removed from the workforce.
+        </p>
+        <p>
+            It is important to note that to change the status of a unit, the owner must be in the same location as the unit. This means, for example, that a non-mobilized unit cannot be changed to “standing”, thus demobilizing it, if the owner is not in the same location.
+        </p>
+        <p>
+            It is also important to note that mobilization changes can only be done once per turn. The reason is to avoid being able to mobilize an unit, do some action, and demobilize it again in the same turn, thus potentially avoiding a battle. If a unit has been mobilized, it will be susceptible to being attacked at least for one turn.
+        </p>
+        <p>
+            Unit payment happens automatically at the end of each turn. As mentioned, only mobilized units receive payment. If a character does not have enough money to pay an unit, it automatically demobilizes.
+        </p>
+
+        <h2>Battle creation</h2>
+
+        <p>
+            Battles are probably one of the most complex but also exciting and decisive aspects of the game. It is the main way to use military units and to defeat enemies.
+        </p>
+        <p>
+            Battles start when military units of at least two realms meet in a tile. At least one of the realm’s military stance has to be aggressive to at least one other. When multiple realms meet, always the largest conflict in terms of total soldier count generates a battle.
+        </p>
+        <p>
+            When two realms engage in battle, allies may join on of the two sides. As long as a realm has an aggressive stance to all realms on one side of the conflict, and a defensive or avoiding stance to all realms on the other side, it will join the latter side of the conflict.
+        </p>
+        <p>
+            Other than the existence of a military conflict, there are some further conditions that have to be met for a battle to be created:
+        </p>
+        <p>
+            Only one battle can be in progress per region.
+        </p>
+        <p>
+            If a battle has finished in the current turn, no new battle will happen in that region. This allows units to flee from a conflict zone before being caught up in a second battle just after the first ended.
+        </p>
+        <p>
+            A battle is created as soon as all conditions are met. Units and characters who are taking part in the battle will not be able to leave the region until the battle is over.
+        </p>
+        <p>
+            On the first turn after battle creation, no actual fighting will occur. This gives the chance to other units to join the battle from the beginning, as well as permitting one turn to decide a strategy and set unit orders accordingly.
+        </p>
+
+        <h2>Battle start</h2>
+
+        <p>
+            One turn after battle creation, the fighting actually starts. Units are placed onto a battlefield and all data structures are initialized.
+        </p>
+        <p>
+            During battles, units are divided into contubernia. The term contubernium stems from the ancient roman empire, whose army’s smallest organizational units were contubernia, being roughly equivalent to the modern squad. In Finem Imperii, contubernia are units of up to 8 soldiers.
+        </p>
+        <p>
+            The positioning of the units in the battlefield is decided by two factors.
+        </p>
+        <p>
+            The owner of the capability “battle formation” sets the general formation. Currently only line formations are possible, but the depth and spacing of the lines can be customized.
+        </p>
+        <p>
+            The other factor is each individual unit’s settings. Characters can change those settings for each of their units. It can be set how far in the front or back the unit will stand and to which side. The first setting is described the “line” and 5 possible options exist:
+        </p>
+        <ul>
+            <li>Advanced line</li>
+            <li>Front line</li>
+            <li>Middle line</li>
+            <li>Rear line</li>
+            <li>Rearguard</li>
+        </ul>
+        <p>
+            Furthermore, a total 11 settings describing the sideways positioning exist:
+        </p>
+        <ul>
+            <li>Center</li>
+            <li>Left-center / right-center</li>
+            <li>Left side / right side</li>
+            <li>Cover left flank / cover right flank</li>
+            <li>Flanking left / flanking right</li>
+            <li>Flanking far left / flanking far right</li>
+        </ul>
+        <p>
+        The flanking settings (last two items of the list) will put the units far to one side to form flanks. The other settings will put the units in a centred position. The setting influences each unit’s relative position in the line.
+        </p>
+
+        <h2>Battle orders</h2>
+
+        <p>
+            When a battle is in progress, each turn a set number of “ticks” will be processed. In each tick, every contubernium may move one tile and attack once.
+        </p>
+        <p>
+            Which movement is actually performed is decided by the unit’s owner. Four different orders can be assigned to units:
+        </p>
+        <ul>
+            <li>“Charge”: the unit moves towards the nearest enemy.</li>
+            <li>“Advance in formation”: the unit moves forward while staying in formation.</li>
+            <li>“Keep ground”: the unit stays where it is.</li>
+            <li>“Flee”: the unit moves away from the enemy.</li>
+        </ul>
+        <p>
+            Units always attack when there is an enemy adjacent. Damage is calculated for individual soldiers, which can get disabled, wounded or die.
+        </p>
+        <p>
+            If a contubernium moves far enough from the centre of the battlefield, it will escape the battle. If all contubernia of a unit leave the battle, the unit may move away from it’s current location in the world map.
+        </p>
+        <p>
+            The same battle as in the last illustration after some progress. Note how some units on the left are keeping ground. The rest have charged and met in the centre of the battlefield.
+        </p>
+        <p>
+            If a unit joins the battle while it is in progress, it will be positioned on the edge of the battlefield.
+        </p>
+
+        <h2>Battle end</h2>
+
+        <p>
+            A battle ends once one side of the conflict can fight no more. This can happen because of suffered losses, escaping the battlefield, or both.
+        </p>
+        <p>
+            The game does not declare a winner by itself. Characters are free to consider a battle as a success or a failure as they wish.
+        </p>
+
+        <h2>Conquest</h2>
+
+        <p>
+            Conquest is the form realms can expand their territories. Realms can conquer regions they don’t own by using the “occupy region” capability.
+        </p>
+        <p>
+            The “occupy region” capability allows to start an occupation process in any region with military presence but that is not owned by the realm. The occupation process starts a counter at zero.
+        </p>
+        <p>
+            Any military unit in the region may then support or counter the occupation. Characters may use up their turn time on those actions. Supporting the occupation raises the aforementioned counter, while countering it lowers the counter.
+        </p>
+        <p>
+            When a turn ends, several things can happen:
+        </p>
+        <ul>
+            <li>If no more units of the conquering realm are present in the region, the occupation process is interrupted.</li>
+            <li>Units present from the defending realm automatically lower the counter.</li>
+            <li>If the counter is larger than a value proportional to the region’s population, the region is conquered and is put under control of the conquering realm.</li>
+        </ul>
+        <p>
+            This process makes conquest harder the larger the local population is. It also gives an advantage to defending units. Making conquest a process instead of an instantaneous action is not only more realistic, but increases the strategic elements of conquest.
+        </p>
+
+        <h2>Economy, trade and taxation</h2>
+
+        <p>
+            The economy in Finem Imperii is driven by the actual population in each settlement. Inhabitants must meet certain conditions to do work: they must not be too young, they must not be disabled and they must not be a soldier of a mobilized unit.
+        </p>
+        <p>
+            Work may be done either on grain fields or on guilds. Grain fields produce grain. The fields must be worked year-round, but harvest happens only in the summer months. Thus, the grain must be managed correctly so population does not starve.
+        </p>
+        <p>
+            Alternatively, work may be done in guilds. Those will accumulate coins, which can be collected via taxes. Taxes are collected once a year and are distributed equally among all characters of the realm.
+        </p>
+        <p>
+            Realms can influence what type of work is done with the “manage guilds” capability. They may either promote guilds, keep them as they are, restrict them or prohibit them. This influences the growth or decline of people working in guilds, thus indirectly influencing how much grain and money is produced.
+        </p>
+
+        <h2>Demography and public order</h2>
+
+        <p>
+            If food becomes scarce, hunger will rise in the settlement. If hunger rises enough, public order will decline and at certain point people will even die from starvation.
+        </p>
+        <p>
+            Public order may be restored by placing mobilized military units in the settlement. Bureaucrats may also invest hours in improving public order. The larger a settlement is, the harder it is to effect public order.
+        </p>
+        <p>
+            If population has descended because of starvation but hunger has been controlled, population regenerates gradually in an exponential fashion until the designed population is reached.
+        </p>
+
+
+    </div>
+
+{% endblock %}

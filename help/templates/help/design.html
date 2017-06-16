@@ -1,0 +1,199 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+
+    <div class="col-lg-6 col-lg-offset-3">
+        <h1 class="page-header">Game design</h1>
+
+        <p>
+            Please note that in this page the game design is described, which
+            does not always correspond with the actual implementation! The
+            ideas expressed here describe how the game should be and that is
+            not necessarily always what it actually is.
+        </p>
+
+        <h2>Introduction</h2>
+
+        <p>
+            Finem Imperii is a web-based role-strategy multiplayer game. Characters are part of a long-lived open persistent world placed in the late middle ages, where they will usually take the role of prominent members of society (e. g. commanders, traders, treasurers, rulers). Cooperation among players is a core part of the game, and is required for most scenarios.
+        </p>
+        <p>
+            The in-game world is set in a fictional history after a long period of peace where a large empire controlled the whole known world. This empire entered a decadent state and finally fell.
+        </p>
+
+        <h2>Open world and game objectives</h2>
+
+        <p>
+            Finem Imperii is an open world game and, as such, the players may choose their own objectives in the game. The game implies the objective of building a successful empire, but this is not enforced in any way, and there is no way of “winning” the game.
+        </p>
+        <p>
+            Characters may choose among different possible goals and are encouraged to pave their own paths in game. They may try to gather as much power as possible trying and lead a realm to success. Or maybe they want to be a more passive order-following member of a realm. They may try to win democratic elections, or grab power by force.
+        </p>
+        <p>
+            There is also the possibility of not following a path in the military or political milieu and instead amass wealth by trade or explore the world freely without committing to any superior power.
+        </p>
+        <p>
+            Still, the main way of playing this game is by cooperating with other members of the same realm to reach a common goal. If this can be achieved or not, depends on how well the players can manage every situation as a group.
+        </p>
+
+        <h2>Player commitment</h2>
+
+        <p>
+            During design and implementation, it has been tried to not force the player to log-in frequently or at certain times. In many available strategy or role-playing multiplayer browser games, being able to play frequently or at certain times is required to be a successful player. This often leads to frustration for those players who can’t or don’t want to be accessing the game often, or even to wake up late at night to trigger some action.
+        </p>
+        <p>
+            This does not mean that more committed players won’t be more successful in Finem Imperii, but game mechanics have been designed to not be time critical. Rather, it is which decisions players make what makes more an effect, and it not so important that those decisions are made in a particular time of a particular day.
+        </p>
+        <p>
+            Also, the level of deepness and involvement can be variable, and there is generally no benefit from spending large amounts of time playing. This is accomplished, for example, by limiting how many actions characters may perform on each turn.
+        </p>
+        <p>
+            All of this does not mean that a motivated player has a higher chance of success. Committed players will be more likely to attain positions of responsibility and, once achieved, they are more likely to execute their powers properly by being more knowledgeable of game mechanics and social interactions and by (probably) having a deeper understanding of game situations.
+        </p>
+
+        <h2>Passage of time</h2>
+
+        <p>
+            Time in-game passes in a turn based fashion. These turns affect all players simultaneously. The standard setting is one turn every 12 hours.
+        </p>
+        <p>
+            One turn represents the pass of one month inside the game. Some actions that players can take have immediate effect, while others happen at the end of turn. This helps in not obliging players to connect at particular times of the day.
+        </p>
+        <p>
+            Characters will receive a limited amount of time they can spend in game actions (equivalent to the concept of action points in other games), which normally will be 15 days. The other 15 days of the month are considered to be spent on other activities, like sleep, rest, eating, etc. After a turn ends, their available time will reset.
+        </p>
+        <p>
+            The game will start at a certain date of a fictional era and a month will pass each turn. Thus, a week in the real world equates to 14 months in-game. A year in real world equates to just over 60 years.
+        </p>
+        <p>
+            The passage of time affects many aspects of the fictional world. For example, grain is harvested in the summer months. This means that care has to be taken to store and distribute the grain properly to ensure there is enough food the whole year.
+        </p>
+
+        <h2>Role playing</h2>
+
+        <p>
+            Finem Imperii is a true role-playing game in that it expects players to play the roles of their characters. Players should distinguish between themselves and their characters and play the latter much like improvising actors.
+        </p>
+        <p>
+            This gives the game a completely different level of deepness compared to many other RPGs. The story and setting in Finem Imperii is only partially given by the game itself. Its evolution is a process completely driven by the players. This is fundamentally different to most RPGs, where players may have some freedom in a predefined story and setting.
+        </p>
+        <p>
+            This also allows much deeper and richer interactions and makes the game experience much more immersive.
+        </p>
+        <blockquote>
+            <p>
+                Hey karl84, recruit an unit and take out the barbarians in the red tile
+            </p>
+        </blockquote>
+        <p>
+            Compare this previous non-role-played message to the following one.
+        </p>
+        <blockquote>
+            <p>
+                Sir Karl,<br>
+                the Kingdom requests you to take out the barbarians in Upcreek. The Crown wishes a triumph for Cardell,
+            </p>
+            <p>
+                King Dyland I of Cardell.
+            </p>
+        </blockquote>
+        <p>
+            While both versions contain the same message, the latter promotes a more enjoyable experience. But not only forms should be role-played. Players are encouraged to role-play all aspects of their characters.
+        </p>
+        <p>
+            It has of course to be allowed to talk out of character (OOC), because in some occasions the role has to be broken. For example, players may decide to break character if they want to ask for help in the game, or they want to notify their absence from the game for a period of time, etc.
+        </p>
+
+        <h2>Organizations and power relationships</h2>
+
+        <p>
+            Realms are the core organizational form in the game. Players are encouraged to play cooperatively in those realms.
+        </p>
+        <p>
+            Realms are defined in the game as organizations that own what in sociology is called the monopoly of the legitimate use of physical force, which is also a core concept of modern public law. The sociologist Max Weber was the first to formulate it trying to describe the most fundamental characteristic of states.
+        </p>
+        <p>
+            In Finem Imperii, this is the definition used for what constitutes a state. In-game they are mostly referred as “realms” because it fits better with the game ambiance. Other kinds of organizations may exist (like trader’s guilds, federations of states, mercenary groups, etc.), but only realms can own the monopoly on legitimate violence over a territory.
+        </p>
+        <p>
+            By using such a fundamental definition of statehood and being able to represent wildly different types of organizations in the same data structures, the game allows realms to differ substantially one from each other in the forms they function and how they are organized.
+        </p>
+        <p>
+            Some realms may concentrate all power on their leader and be run in an authoritarian style, while others may be democratic, not only in the way their leaders are chosen, but also in their decision-taking processes. There may even exist fully horizontal realms, where each member is organizationally equal to each other.
+        </p>
+        <p>
+            Legitimation is the key to holding power and the form a realm is organized, regardless of their initial power structure. If a leader or a state is not considered legitimate by enough followers, it will soon collapse.
+        </p>
+        <p>
+            Rulers that concentrate enough power will be encouraged by the game to delegate their power. Refusing to do so will make the realm more inefficient and other characters may feel left out or mistrusted. But delegating power is a decision that should not be taken lightly and may backfire in the form of rebellious but powerful subordinates.
+        </p>
+        <p>
+            Realms can interact diplomatically and declare each other war, make peace or form alliances.
+            Territories not controlled by any realm are considered barbaric. Realms form the “civilized world” opposed to the chaotic and unorganized barbarians. Territories of a realm in which the population is unhappy may see the rise of computer-controlled barbarian units. If the realm heavily neglects the population or can’t maintain it, regions may even turn away from the realm and become barbaric.
+        </p>
+        <p>
+            Barbarians are permanently opposed to the realms and pose a challenge to the members of the realms.
+            Players may also choose to play as barbarians. This is a more challenging way to play for several reasons, like the chaotic nature of barbarians, the lack of an organizational structure that fosters cooperation and the lack of an own territory.
+        </p>
+        <p>
+            Realms being a core part of the game, not only is cooperation encouraged, but characters will spend most of their time working in teams. There is no team searching process like in other games, and there is no entry barrier to realms for new characters.
+        </p>
+        <p>
+            Realms are also a way to promote specialization. Playing specialized characters and taking a particular role and responsibility in a realm makes new game dynamics emerge. Highly specialized characters will not only be more productive in their fields, they are also more dependant on their realm as a whole functioning properly.
+        </p>
+
+        <h2>Militaristic and war</h2>
+
+        <p>
+            Characters may form military units by different means, the main being conscription in the territories of their realm. These armies can be used to pacify barbarians, to keep public order and in military conflicts.
+            When opposing armies meet, a battle starts. The armies are placed onto a battlefield. How units are deployed and what their actions are is decided by both the owner of each unit and the Realm’s position responsible for high-level military decisions (which may be the Realm’s leader, a general, or any other position).
+        </p>
+        <p>
+            Once the armies meet, the battle will take one full turn to be prepared. This is to allow deciding a strategy just before the battle and also is more forgiving to players that cannot log in to the game that turn.
+        </p>
+        <p>
+            Battles will in most cases span over several turns. Each turn, a determined amount of progress of the battle will be run. This allows characters to change the orders assigned to their units during battle and also to bring in reinforcements or allies.
+        </p>
+        <p>
+            Battles end when one side cannot continue fighting, either because it has been completely disabled or it has fled the battlefield.
+        </p>
+
+        <h2>Territory and demographics</h2>
+
+        <p>
+            The game world is a continent, a landmass surrounded by ocean waters.
+        </p>
+        <p>
+            It is divided in quadratic tiles, representing world regions. These regions contain settlements, where population lives and buildings exist. Each inhabitant is represented by an own objects. Thus, the population members are simulated individually.
+        </p>
+        <p>
+            Realms can own tiles, they can’t own settlements individually. Each settlement and tile has it’s own characteristics, like terrain type and population count.
+        </p>
+        <p>
+            Characters are always located in settlements. They may travel freely and instantly among the settlements in the same tile as long as they have enough time to spend. But if they want to travel to a settlement in a different region, they will have to wait for the turn to end. The reason for this is to allow movement during the turn, being able to visit different places and interact with them during turn, while at the same time limiting movement to far locations, making long travels arduous proportional to the distance that has to be covered and giving the game world a feeling of vastness.
+        </p>
+
+        <h2>Economy</h2>
+
+        <p>
+            The population in the settlements may work either on the fields or in guilds, producing either grain or money respectively.
+        </p>
+        <p>
+            Grain is the basic resource for survival. It is harvested during the summer months, but work on the fields has to be done around the year. Grain has to be managed properly to keep population happy and well fed. A hungry population will become rebellious and can even die out of starvation. Grain can be transported between settlements by characters.
+        </p>
+        <p>
+            Realms can influence the growth of guilds. Those produce coins that are stored at the guilds themselves. Once a year, taxes will be collected, and those coins will become available to the realm members. Taxes are distributed equally among realm members.
+        </p>
+        <p>
+            The use of coins is mainly to recruit and maintain units. Therefore, they are key to running a successful realm.
+        </p>
+
+        <h2>Characters and users</h2>
+
+        <p>
+            It is not disclosed which user owns which characters. This shall avoid personalization of game play.
+        </p>
+
+    </div>
+
+{% endblock %}

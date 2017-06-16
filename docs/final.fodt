@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.text">
- <office:meta><dc:title>Treball Final (Plantilla)</dc:title><meta:initial-creator>EIMT</meta:initial-creator><meta:creation-date>2011-10-21T13:35:00</meta:creation-date><dc:date>2017-06-16T20:33:29.899291366</dc:date><meta:editing-cycles>114</meta:editing-cycles><meta:editing-duration>P1DT3H36M43S</meta:editing-duration><meta:generator>LibreOffice/5.3.3.2$Linux_X86_64 LibreOffice_project/30m0$Build-2</meta:generator><meta:document-statistic meta:table-count="4" meta:image-count="20" meta:object-count="0" meta:page-count="101" meta:paragraph-count="1022" meta:word-count="24705" meta:character-count="152125" meta:non-whitespace-character-count="128553"/></office:meta>
+ <office:meta><dc:title>Treball Final (Plantilla)</dc:title><meta:initial-creator>EIMT</meta:initial-creator><meta:creation-date>2011-10-21T13:35:00</meta:creation-date><dc:date>2017-06-16T22:02:49.102078284</dc:date><meta:editing-cycles>115</meta:editing-cycles><meta:editing-duration>P1DT3H44M31S</meta:editing-duration><meta:generator>LibreOffice/5.3.3.2$Linux_X86_64 LibreOffice_project/30m0$Build-2</meta:generator><meta:document-statistic meta:table-count="4" meta:image-count="20" meta:object-count="0" meta:page-count="101" meta:paragraph-count="1024" meta:word-count="24789" meta:character-count="152609" meta:non-whitespace-character-count="128955"/></office:meta>
  <office:settings>
   <config:config-item-set config:name="ooo:view-settings">
-   <config:config-item config:name="ViewAreaTop" config:type="long">900377</config:config-item>
+   <config:config-item config:name="ViewAreaTop" config:type="long">0</config:config-item>
    <config:config-item config:name="ViewAreaLeft" config:type="long">0</config:config-item>
    <config:config-item config:name="ViewAreaWidth" config:type="long">58161</config:config-item>
    <config:config-item config:name="ViewAreaHeight" config:type="long">32149</config:config-item>
@@ -13,12 +13,12 @@
    <config:config-item-map-indexed config:name="Views">
     <config:config-item-map-entry>
      <config:config-item config:name="ViewId" config:type="string">view2</config:config-item>
-     <config:config-item config:name="ViewLeft" config:type="long">20962</config:config-item>
-     <config:config-item config:name="ViewTop" config:type="long">919104</config:config-item>
+     <config:config-item config:name="ViewLeft" config:type="long">32080</config:config-item>
+     <config:config-item config:name="ViewTop" config:type="long">3002</config:config-item>
      <config:config-item config:name="VisibleLeft" config:type="long">0</config:config-item>
-     <config:config-item config:name="VisibleTop" config:type="long">900377</config:config-item>
+     <config:config-item config:name="VisibleTop" config:type="long">0</config:config-item>
      <config:config-item config:name="VisibleRight" config:type="long">58159</config:config-item>
-     <config:config-item config:name="VisibleBottom" config:type="long">932524</config:config-item>
+     <config:config-item config:name="VisibleBottom" config:type="long">32147</config:config-item>
      <config:config-item config:name="ZoomType" config:type="short">0</config:config-item>
      <config:config-item config:name="ViewLayoutColumns" config:type="short">2</config:config-item>
      <config:config-item config:name="ViewLayoutBookMode" config:type="boolean">true</config:config-item>
@@ -101,7 +101,7 @@
    <config:config-item config:name="DoNotCaptureDrawObjsOnPage" config:type="boolean">false</config:config-item>
    <config:config-item config:name="ClipAsCharacterAnchoredWriterFlyFrames" config:type="boolean">false</config:config-item>
    <config:config-item config:name="PrintRightPages" config:type="boolean">true</config:config-item>
-   <config:config-item config:name="Rsid" config:type="int">25984097</config:config-item>
+   <config:config-item config:name="Rsid" config:type="int">25987377</config:config-item>
    <config:config-item config:name="MathBaselineAlignment" config:type="boolean">true</config:config-item>
    <config:config-item config:name="InvertBorderSpacing" config:type="boolean">true</config:config-item>
    <config:config-item config:name="EmbedFonts" config:type="boolean">false</config:config-item>
@@ -2826,210 +2826,219 @@
   <style:style style:name="P475" style:family="paragraph" style:parent-style-name="Text_20_body">
    <style:text-properties officeooo:rsid="01015ec8" officeooo:paragraph-rsid="01015ec8"/>
   </style:style>
-  <style:style style:name="P476" style:family="paragraph" style:parent-style-name="Heading_20_1" style:list-style-name="">
+  <style:style style:name="P476" style:family="paragraph" style:parent-style-name="Text_20_body">
+   <style:text-properties officeooo:rsid="0153fd2d" officeooo:paragraph-rsid="0153fd2d"/>
+  </style:style>
+  <style:style style:name="P477" style:family="paragraph" style:parent-style-name="Text_20_body">
+   <style:text-properties officeooo:rsid="018c7c61" officeooo:paragraph-rsid="018c7c61"/>
+  </style:style>
+  <style:style style:name="P478" style:family="paragraph" style:parent-style-name="Text_20_body">
+   <style:text-properties officeooo:rsid="018c8931" officeooo:paragraph-rsid="018c8931"/>
+  </style:style>
+  <style:style style:name="P479" style:family="paragraph" style:parent-style-name="Heading_20_1" style:list-style-name="">
    <style:paragraph-properties fo:text-align="justify" style:justify-single-word="false" fo:orphans="2" fo:widows="2"/>
    <style:text-properties fo:language="en" fo:country="GB" officeooo:rsid="0020d621" officeooo:paragraph-rsid="0020d621" style:language-complex="ar" style:country-complex="SA"/>
   </style:style>
-  <style:style style:name="P477" style:family="paragraph" style:parent-style-name="Heading_20_1" style:master-page-name="Convert_20_4">
+  <style:style style:name="P480" style:family="paragraph" style:parent-style-name="Heading_20_1" style:master-page-name="Convert_20_4">
    <style:paragraph-properties style:page-number="1"/>
    <style:text-properties fo:language="en" fo:country="GB" officeooo:rsid="00e28448" officeooo:paragraph-rsid="00e28448" style:font-size-complex="10pt" style:language-complex="ar" style:country-complex="SA"/>
   </style:style>
-  <style:style style:name="P478" style:family="paragraph" style:parent-style-name="Heading_20_1">
+  <style:style style:name="P481" style:family="paragraph" style:parent-style-name="Heading_20_1">
    <style:paragraph-properties fo:break-before="page"/>
   </style:style>
-  <style:style style:name="P479" style:family="paragraph" style:parent-style-name="Heading_20_1">
+  <style:style style:name="P482" style:family="paragraph" style:parent-style-name="Heading_20_1">
    <style:paragraph-properties fo:break-before="page"/>
    <style:text-properties fo:language="en" fo:country="GB" style:language-complex="ar" style:country-complex="SA"/>
   </style:style>
-  <style:style style:name="P480" style:family="paragraph" style:parent-style-name="Heading_20_1">
+  <style:style style:name="P483" style:family="paragraph" style:parent-style-name="Heading_20_1">
    <style:paragraph-properties fo:break-before="page"/>
    <style:text-properties fo:language="en" fo:country="GB" officeooo:rsid="00201766" officeooo:paragraph-rsid="00201766" style:language-complex="ar" style:country-complex="SA"/>
   </style:style>
-  <style:style style:name="P481" style:family="paragraph" style:parent-style-name="Heading_20_1">
+  <style:style style:name="P484" style:family="paragraph" style:parent-style-name="Heading_20_1">
    <style:paragraph-properties fo:break-before="page"/>
    <style:text-properties fo:language="en" fo:country="GB" officeooo:rsid="00b78174" officeooo:paragraph-rsid="00b78174" style:language-complex="ar" style:country-complex="SA"/>
   </style:style>
-  <style:style style:name="P482" style:family="paragraph" style:parent-style-name="Heading_20_1" style:list-style-name="">
+  <style:style style:name="P485" style:family="paragraph" style:parent-style-name="Heading_20_1" style:list-style-name="">
    <style:paragraph-properties fo:text-align="justify" style:justify-single-word="false" fo:orphans="2" fo:widows="2" fo:break-before="page"/>
    <style:text-properties fo:language="en" fo:country="GB" officeooo:rsid="01133f80" officeooo:paragraph-rsid="012f304e" style:language-complex="ar" style:country-complex="SA"/>
   </style:style>
-  <style:style style:name="P483" style:family="paragraph" style:parent-style-name="Heading_20_1">
+  <style:style style:name="P486" style:family="paragraph" style:parent-style-name="Heading_20_1">
    <style:paragraph-properties fo:break-before="page"/>
    <style:text-properties fo:language="en" fo:country="GB" officeooo:rsid="0020d621" officeooo:paragraph-rsid="0020d621" style:language-complex="ar" style:country-complex="SA"/>
   </style:style>
-  <style:style style:name="P484" style:family="paragraph" style:parent-style-name="Heading_20_1">
+  <style:style style:name="P487" style:family="paragraph" style:parent-style-name="Heading_20_1">
    <style:paragraph-properties fo:break-before="page"/>
    <style:text-properties fo:language="en" fo:country="GB" style:font-size-complex="10pt" style:language-complex="ar" style:country-complex="SA"/>
   </style:style>
-  <style:style style:name="P485" style:family="paragraph" style:parent-style-name="Heading_20_1">
+  <style:style style:name="P488" style:family="paragraph" style:parent-style-name="Heading_20_1">
    <style:paragraph-properties fo:break-before="page"/>
    <style:text-properties fo:language="en" fo:country="GB" officeooo:rsid="00201766" officeooo:paragraph-rsid="00415857" style:font-size-complex="10pt" style:language-complex="ar" style:country-complex="SA"/>
   </style:style>
-  <style:style style:name="P486" style:family="paragraph" style:parent-style-name="Heading_20_1">
+  <style:style style:name="P489" style:family="paragraph" style:parent-style-name="Heading_20_1">
    <style:paragraph-properties fo:break-before="page"/>
    <style:text-properties officeooo:rsid="00cc6947" officeooo:paragraph-rsid="00cc6947"/>
   </style:style>
-  <style:style style:name="P487" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P490" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="00e2b39b" officeooo:paragraph-rsid="00e2b39b"/>
   </style:style>
-  <style:style style:name="P488" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P491" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties fo:language="en" fo:country="GB" officeooo:rsid="003bb724" officeooo:paragraph-rsid="003bb724" style:language-complex="ar" style:country-complex="SA"/>
   </style:style>
-  <style:style style:name="P489" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P492" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties fo:language="en" fo:country="GB" officeooo:rsid="001f666f" style:language-complex="ar" style:country-complex="SA"/>
   </style:style>
-  <style:style style:name="P490" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P493" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties fo:language="en" fo:country="GB" officeooo:paragraph-rsid="00415857" style:language-complex="ar" style:country-complex="SA"/>
   </style:style>
-  <style:style style:name="P491" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P494" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="003e1d1b" officeooo:paragraph-rsid="003e1d1b"/>
   </style:style>
-  <style:style style:name="P492" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P495" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="00526efe" officeooo:paragraph-rsid="00526efe"/>
   </style:style>
-  <style:style style:name="P493" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P496" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="004e871a" officeooo:paragraph-rsid="004e871a"/>
   </style:style>
-  <style:style style:name="P494" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P497" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="00b19376" officeooo:paragraph-rsid="00b19376"/>
   </style:style>
-  <style:style style:name="P495" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P498" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="00b19376" officeooo:paragraph-rsid="004e871a"/>
   </style:style>
-  <style:style style:name="P496" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P499" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="00be5bf8" officeooo:paragraph-rsid="00be5bf8"/>
   </style:style>
-  <style:style style:name="P497" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P500" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="00b49172" officeooo:paragraph-rsid="00b49172"/>
   </style:style>
-  <style:style style:name="P498" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P501" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="00ccb7e9" officeooo:paragraph-rsid="00ccb7e9"/>
   </style:style>
-  <style:style style:name="P499" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P502" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="00cde901" officeooo:paragraph-rsid="00cde901"/>
   </style:style>
-  <style:style style:name="P500" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P503" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="005028c8" officeooo:paragraph-rsid="005028c8"/>
   </style:style>
-  <style:style style:name="P501" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P504" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="008b4c8f" officeooo:paragraph-rsid="008b4c8f"/>
   </style:style>
-  <style:style style:name="P502" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P505" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="00906a46" officeooo:paragraph-rsid="00906a46"/>
   </style:style>
-  <style:style style:name="P503" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P506" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="006d9a91" officeooo:paragraph-rsid="006d9a91"/>
   </style:style>
-  <style:style style:name="P504" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P507" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="006345e2" officeooo:paragraph-rsid="006345e2"/>
   </style:style>
-  <style:style style:name="P505" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P508" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:paragraph-rsid="006345e2"/>
   </style:style>
-  <style:style style:name="P506" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P509" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="0049fe38" officeooo:paragraph-rsid="005465a3"/>
   </style:style>
-  <style:style style:name="P507" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P510" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="0049fe38" officeooo:paragraph-rsid="0049fe38"/>
   </style:style>
-  <style:style style:name="P508" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P511" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:paragraph-rsid="00667615"/>
   </style:style>
-  <style:style style:name="P509" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P512" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:paragraph-rsid="005465a3"/>
   </style:style>
-  <style:style style:name="P510" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P513" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="00834771" officeooo:paragraph-rsid="00e28448"/>
   </style:style>
-  <style:style style:name="P511" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P514" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="00f64f4b" officeooo:paragraph-rsid="00f64f4b"/>
   </style:style>
-  <style:style style:name="P512" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P515" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="00415857" officeooo:paragraph-rsid="005465a3"/>
   </style:style>
-  <style:style style:name="P513" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P516" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="00415857" officeooo:paragraph-rsid="012a2301"/>
   </style:style>
-  <style:style style:name="P514" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P517" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="00f02faf" officeooo:paragraph-rsid="00f02faf"/>
   </style:style>
-  <style:style style:name="P515" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P518" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="00f02faf" officeooo:paragraph-rsid="016f57a0"/>
   </style:style>
-  <style:style style:name="P516" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P519" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="00f02faf" officeooo:paragraph-rsid="0170ef90"/>
   </style:style>
-  <style:style style:name="P517" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P520" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:paragraph-rsid="00f02faf"/>
   </style:style>
-  <style:style style:name="P518" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P521" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="01133f80" officeooo:paragraph-rsid="01133f80"/>
   </style:style>
-  <style:style style:name="P519" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P522" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="01133f80" officeooo:paragraph-rsid="005465a3"/>
   </style:style>
-  <style:style style:name="P520" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P523" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="01133f80" officeooo:paragraph-rsid="014c227f"/>
   </style:style>
-  <style:style style:name="P521" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P524" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:paragraph-rsid="016f57a0"/>
   </style:style>
-  <style:style style:name="P522" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P525" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="0170ef90" officeooo:paragraph-rsid="0170ef90"/>
   </style:style>
-  <style:style style:name="P523" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P526" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="00ef3f09" officeooo:paragraph-rsid="0179bab2"/>
   </style:style>
-  <style:style style:name="P524" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P527" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="017a7793" officeooo:paragraph-rsid="017a7793"/>
   </style:style>
-  <style:style style:name="P525" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P528" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:paragraph-rsid="0132a67e"/>
   </style:style>
-  <style:style style:name="P526" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P529" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="0135c6df" officeooo:paragraph-rsid="0135c6df"/>
   </style:style>
-  <style:style style:name="P527" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P530" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="0144f06a"/>
   </style:style>
-  <style:style style:name="P528" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P531" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="0144f06a" officeooo:paragraph-rsid="0144f06a"/>
   </style:style>
-  <style:style style:name="P529" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P532" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:paragraph-rsid="0149270d"/>
   </style:style>
-  <style:style style:name="P530" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P533" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="0149270d" officeooo:paragraph-rsid="0149270d"/>
   </style:style>
-  <style:style style:name="P531" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P534" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="0173db1c" officeooo:paragraph-rsid="017a7793"/>
   </style:style>
-  <style:style style:name="P532" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P535" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="006fe4bb" officeooo:paragraph-rsid="014c227f"/>
   </style:style>
-  <style:style style:name="P533" style:family="paragraph" style:parent-style-name="Heading_20_2">
+  <style:style style:name="P536" style:family="paragraph" style:parent-style-name="Heading_20_2">
    <style:text-properties officeooo:rsid="01843052" officeooo:paragraph-rsid="01843052"/>
   </style:style>
-  <style:style style:name="P534" style:family="paragraph" style:parent-style-name="Contents_20_1">
+  <style:style style:name="P537" style:family="paragraph" style:parent-style-name="Contents_20_1">
    <style:paragraph-properties>
     <style:tab-stops>
      <style:tab-stop style:position="5.9055in" style:type="right" style:leader-style="dotted" style:leader-text="."/>
     </style:tab-stops>
    </style:paragraph-properties>
   </style:style>
-  <style:style style:name="P535" style:family="paragraph" style:parent-style-name="Code">
+  <style:style style:name="P538" style:family="paragraph" style:parent-style-name="Code">
    <style:text-properties officeooo:rsid="01843052" officeooo:paragraph-rsid="01843052"/>
   </style:style>
-  <style:style style:name="P536" style:family="paragraph" style:parent-style-name="Footnote">
+  <style:style style:name="P539" style:family="paragraph" style:parent-style-name="Footnote">
    <style:text-properties officeooo:rsid="0182a32a" officeooo:paragraph-rsid="0182a32a"/>
   </style:style>
-  <style:style style:name="P537" style:family="paragraph" style:parent-style-name="Footnote">
+  <style:style style:name="P540" style:family="paragraph" style:parent-style-name="Footnote">
    <style:text-properties officeooo:rsid="01843052" officeooo:paragraph-rsid="01843052"/>
   </style:style>
-  <style:style style:name="P538" style:family="paragraph" style:parent-style-name="Footnote">
+  <style:style style:name="P541" style:family="paragraph" style:parent-style-name="Footnote">
    <style:text-properties officeooo:rsid="018c278e" officeooo:paragraph-rsid="018c278e"/>
   </style:style>
-  <style:style style:name="P539" style:family="paragraph" style:parent-style-name="Illustration">
+  <style:style style:name="P542" style:family="paragraph" style:parent-style-name="Illustration">
    <style:text-properties officeooo:rsid="0180ef97" officeooo:paragraph-rsid="0180ef97"/>
   </style:style>
   <style:style style:name="T1" style:family="text">
@@ -3550,6 +3559,12 @@
   </style:style>
   <style:style style:name="T173" style:family="text">
    <style:text-properties officeooo:rsid="018c278e"/>
+  </style:style>
+  <style:style style:name="T174" style:family="text">
+   <style:text-properties officeooo:rsid="018c7c61"/>
+  </style:style>
+  <style:style style:name="T175" style:family="text">
+   <style:text-properties officeooo:rsid="018c8931"/>
   </style:style>
   <style:style style:name="fr1" style:family="graphic" style:parent-style-name="Frame">
    <style:graphic-properties style:wrap="dynamic" style:number-wrapped-paragraphs="1" style:vertical-pos="from-top" style:vertical-rel="paragraph" style:horizontal-pos="center" style:horizontal-rel="page-content" fo:background-color="#ffffff" style:background-transparency="100%" draw:fill="solid" draw:fill-color="#ffffff" draw:opacity="0%" style:writing-mode="lr-tb" draw:wrap-influence-on-position="once-successive"/>
@@ -4911,7 +4926,7 @@
       <draw:text-box fo:min-height="0.0228in" fo:min-width="0.0161in">
        <text:p text:style-name="P2"/>
       </draw:text-box>
-     </draw:frame><text:page-number text:select-page="current">65</text:page-number></text:p>
+     </draw:frame><text:page-number text:select-page="current">3</text:page-number></text:p>
    </style:footer>
    <style:footer-first>
     <text:p text:style-name="P3"><draw:frame draw:style-name="fr3" draw:name="Frame10" text:anchor-type="paragraph" svg:x="4.1819in" svg:y="-0.0555in" draw:z-index="27">
@@ -13603,22 +13618,22 @@
      </text:table-of-content-entry-template>
     </text:table-of-content-source>
     <text:index-body>
-     <text:p text:style-name="P534"><text:a xlink:type="simple" xlink:href="#__RefHeading___Toc3617_2229350756" text:style-name="Index_20_Link" text:visited-style-name="Index_20_Link">Preface<text:tab/>1</text:a></text:p>
-     <text:p text:style-name="P534"><text:a xlink:type="simple" xlink:href="#__RefHeading___Toc318813117" text:style-name="Index_20_Link" text:visited-style-name="Index_20_Link">Introduction<text:tab/>2</text:a></text:p>
-     <text:p text:style-name="P534"><text:a xlink:type="simple" xlink:href="#__RefHeading___Toc88_3900411723" text:style-name="Index_20_Link" text:visited-style-name="Index_20_Link">Game design<text:tab/>11</text:a></text:p>
-     <text:p text:style-name="P534"><text:a xlink:type="simple" xlink:href="#__RefHeading___Toc2014_1835880767" text:style-name="Index_20_Link" text:visited-style-name="Index_20_Link">Technology and resources<text:tab/>20</text:a></text:p>
-     <text:p text:style-name="P534"><text:a xlink:type="simple" xlink:href="#__RefHeading___Toc2032_1835880767" text:style-name="Index_20_Link" text:visited-style-name="Index_20_Link">Mechanics and implementation<text:tab/>34</text:a></text:p>
-     <text:p text:style-name="P534"><text:a xlink:type="simple" xlink:href="#__RefHeading___Toc3432_4192610855" text:style-name="Index_20_Link" text:visited-style-name="Index_20_Link">Implementation vs. original concept<text:tab/>58</text:a></text:p>
-     <text:p text:style-name="P534"><text:a xlink:type="simple" xlink:href="#__RefHeading___Toc96_3900411723" text:style-name="Index_20_Link" text:visited-style-name="Index_20_Link">Outlook<text:tab/>63</text:a></text:p>
-     <text:p text:style-name="P534"><text:a xlink:type="simple" xlink:href="#__RefHeading___Toc318813125" text:style-name="Index_20_Link" text:visited-style-name="Index_20_Link">Conclusions<text:tab/>66</text:a></text:p>
-     <text:p text:style-name="P534"><text:a xlink:type="simple" xlink:href="#__RefHeading___Toc318813127" text:style-name="Index_20_Link" text:visited-style-name="Index_20_Link">Bibliography<text:tab/>67</text:a></text:p>
-     <text:p text:style-name="P534"><text:a xlink:type="simple" xlink:href="#__RefHeading___Toc1222_2913962129" text:style-name="Index_20_Link" text:visited-style-name="Index_20_Link">Annex A: Server setup instructions<text:tab/>69</text:a></text:p>
-     <text:p text:style-name="P534"><text:a xlink:type="simple" xlink:href="#__RefHeading___Toc318813128" text:style-name="Index_20_Link" text:visited-style-name="Index_20_Link">Annex B: GNU Free Documentation License<text:tab/>71</text:a></text:p>
-     <text:p text:style-name="P534"><text:a xlink:type="simple" xlink:href="#__RefHeading___Toc100_3900411723" text:style-name="Index_20_Link" text:visited-style-name="Index_20_Link">Annex C: GNU Affero General Public License<text:tab/>82</text:a></text:p>
+     <text:p text:style-name="P537"><text:a xlink:type="simple" xlink:href="#__RefHeading___Toc3617_2229350756" text:style-name="Index_20_Link" text:visited-style-name="Index_20_Link">Preface<text:tab/>1</text:a></text:p>
+     <text:p text:style-name="P537"><text:a xlink:type="simple" xlink:href="#__RefHeading___Toc318813117" text:style-name="Index_20_Link" text:visited-style-name="Index_20_Link">Introduction<text:tab/>2</text:a></text:p>
+     <text:p text:style-name="P537"><text:a xlink:type="simple" xlink:href="#__RefHeading___Toc88_3900411723" text:style-name="Index_20_Link" text:visited-style-name="Index_20_Link">Game design<text:tab/>11</text:a></text:p>
+     <text:p text:style-name="P537"><text:a xlink:type="simple" xlink:href="#__RefHeading___Toc2014_1835880767" text:style-name="Index_20_Link" text:visited-style-name="Index_20_Link">Technology and resources<text:tab/>20</text:a></text:p>
+     <text:p text:style-name="P537"><text:a xlink:type="simple" xlink:href="#__RefHeading___Toc2032_1835880767" text:style-name="Index_20_Link" text:visited-style-name="Index_20_Link">Mechanics and implementation<text:tab/>34</text:a></text:p>
+     <text:p text:style-name="P537"><text:a xlink:type="simple" xlink:href="#__RefHeading___Toc3432_4192610855" text:style-name="Index_20_Link" text:visited-style-name="Index_20_Link">Implementation vs. original concept<text:tab/>58</text:a></text:p>
+     <text:p text:style-name="P537"><text:a xlink:type="simple" xlink:href="#__RefHeading___Toc96_3900411723" text:style-name="Index_20_Link" text:visited-style-name="Index_20_Link">Outlook<text:tab/>63</text:a></text:p>
+     <text:p text:style-name="P537"><text:a xlink:type="simple" xlink:href="#__RefHeading___Toc318813125" text:style-name="Index_20_Link" text:visited-style-name="Index_20_Link">Conclusions<text:tab/>66</text:a></text:p>
+     <text:p text:style-name="P537"><text:a xlink:type="simple" xlink:href="#__RefHeading___Toc318813127" text:style-name="Index_20_Link" text:visited-style-name="Index_20_Link">Bibliography<text:tab/>67</text:a></text:p>
+     <text:p text:style-name="P537"><text:a xlink:type="simple" xlink:href="#__RefHeading___Toc1222_2913962129" text:style-name="Index_20_Link" text:visited-style-name="Index_20_Link">Annex A: Server setup instructions<text:tab/>69</text:a></text:p>
+     <text:p text:style-name="P537"><text:a xlink:type="simple" xlink:href="#__RefHeading___Toc318813128" text:style-name="Index_20_Link" text:visited-style-name="Index_20_Link">Annex B: GNU Free Documentation License<text:tab/>71</text:a></text:p>
+     <text:p text:style-name="P537"><text:a xlink:type="simple" xlink:href="#__RefHeading___Toc100_3900411723" text:style-name="Index_20_Link" text:visited-style-name="Index_20_Link">Annex C: GNU Affero General Public License<text:tab/>82</text:a></text:p>
     </text:index-body>
    </text:table-of-content>
    <text:p text:style-name="P428"/>
-   <text:h text:style-name="P477" text:outline-level="1"><text:bookmark-start text:name="__RefHeading___Toc3617_2229350756"/>Preface<text:bookmark-end text:name="__RefHeading___Toc3617_2229350756"/></text:h>
+   <text:h text:style-name="P480" text:outline-level="1"><text:bookmark-start text:name="__RefHeading___Toc3617_2229350756"/>Preface<text:bookmark-end text:name="__RefHeading___Toc3617_2229350756"/></text:h>
    <text:h text:style-name="P368" text:outline-level="2"><text:bookmark-start text:name="__RefHeading___Toc3619_2229350756"/>The game<text:bookmark-end text:name="__RefHeading___Toc3619_2229350756"/></text:h>
    <text:p text:style-name="P202">This project has been developed as the final project for my university degree <text:span text:style-name="T154">at the Universitat Oberta de Catalunya</text:span>.</text:p>
    <text:p text:style-name="P202"><text:span text:style-name="T153">A public release of the game will be available shortly after delivering this document at the following location</text:span>:</text:p>
@@ -14015,7 +14030,7 @@
    <text:p text:style-name="P84">In the PAC2 a partially working product was to be achieved. It had to show the general form of the game, but it had not have to be finished or properly working.</text:p>
    <text:p text:style-name="P84">The PAC3 included a working version of the game, with all core aspects of the game implemented. It had not to be a full game, but it had to be consistent, self-explaining and playable to at least some extent.</text:p>
    <text:p text:style-name="P472">The final revision of the planning, including all intermediate versions, can be found in the source code repository<text:note text:id="ftn34" text:note-class="footnote"><text:note-citation>9</text:note-citation><text:note-body>
-      <text:p text:style-name="P538"><text:a xlink:type="simple" xlink:href="https://github.com/jardiacaj/finem_imperii/blob/master/docs/2-roadmap.md" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">https://github.com/jardiacaj/finem_imperii/blob/master/docs/2-roadmap.md</text:a></text:p></text:note-body></text:note>.</text:p>
+      <text:p text:style-name="P541"><text:a xlink:type="simple" xlink:href="https://github.com/jardiacaj/finem_imperii/blob/master/docs/2-roadmap.md" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">https://github.com/jardiacaj/finem_imperii/blob/master/docs/2-roadmap.md</text:a></text:p></text:note-body></text:note>.</text:p>
    <text:h text:style-name="P329" text:outline-level="2"><text:bookmark-start text:name="__RefHeading___Toc318813122"/>Summary of <text:span text:style-name="T51">the </text:span>obtained product<text:bookmark-end text:name="__RefHeading___Toc318813122"/></text:h>
    <text:p text:style-name="P118">The obtained product of this project is a working and playable video game. It is not a full implementation of the original idea or even of the original design, but it is self-contained and consistent. It is apt to be publicly released.</text:p>
    <text:p text:style-name="P118">On some aspects it may transmit an unfinished or unpolished state. It can be compared to early access games.</text:p>
@@ -14085,7 +14100,7 @@
    <text:h text:style-name="P366" text:outline-level="2"><text:bookmark-start text:name="__RefHeading___Toc3228_2229350756"/>Territory and <text:span text:style-name="T102">demographics</text:span><text:bookmark-end text:name="__RefHeading___Toc3228_2229350756"/></text:h>
    <text:p text:style-name="P183">The game world is a continent, a landmass surrounded by ocean waters.</text:p>
    <text:p text:style-name="P184">It is divided in quadratic tiles, representing world regions. These regions contain settlements, where population lives and buildings exist. Each inhabitant is represented by an own objects. Thus, the population members are simulated individually.</text:p>
-   <text:p text:style-name="P539"><draw:frame draw:style-name="fr10" draw:name="Image20" text:anchor-type="paragraph" svg:width="2.5008in" svg:height="2.4165in" draw:z-index="26"><draw:image>
+   <text:p text:style-name="P542"><draw:frame draw:style-name="fr10" draw:name="Image20" text:anchor-type="paragraph" svg:width="2.5008in" svg:height="2.4165in" draw:z-index="26"><draw:image>
       <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAYIAAAF1CAIAAABqD3p/AAA9s0lEQVR4nO3dB2CU5f0H8Jvv
        7ZHkshOyE8IKYW8UARFQREWrrVq3pbVqq/23ard2W2eHo1q1FhQHKogiiOy9RwYBsuftffeO
        +/8ub4gUFVEDb8b302t873nHPVze++b3vO97dyqZ7eeyAS64Xpdn0g2bL3U/pCeXy3SMKiPJ
@@ -14411,10 +14426,10 @@
    <text:p text:style-name="P188">The three realms are organized in very different ways, offering some initial variation and showing the capabilities of the game.<text:bookmark-end text:name="__DdeLink__4456_2133701829"/></text:p>
    <text:h text:style-name="P38" text:outline-level="1"><text:bookmark-start text:name="__RefHeading___Toc2014_1835880767"/>Technology <text:span text:style-name="T87">and resources</text:span><text:bookmark-end text:name="__RefHeading___Toc2014_1835880767"/></text:h>
    <text:p text:style-name="P125">In this chapter it is described how the development of the project has taken place, including the applied methodologies and technologies.</text:p>
-   <text:h text:style-name="P533" text:outline-level="2">Python and PIP</text:h>
+   <text:h text:style-name="P536" text:outline-level="2">Python and PIP</text:h>
    <text:p text:style-name="P463">Python 3 has been chosen to develop this project. The software has been tested with versions 3.4 to 3.6.</text:p>
    <text:p text:style-name="P463">PIP is used to install dependencies. Once PIP for Python 3 is installed, only one command is needed to install the required dependencies:</text:p>
-   <text:p text:style-name="P535">sudo pip3 install -r requirements.txt</text:p>
+   <text:p text:style-name="P538">sudo pip3 install -r requirements.txt</text:p>
    <text:p text:style-name="P463">For more details on how to set up a test environment, refer to annex A of this document.</text:p>
    <text:h text:style-name="Heading_20_2" text:outline-level="2"><text:bookmark-start text:name="__RefHeading___Toc2018_1835880767"/>Django framework<text:bookmark-end text:name="__RefHeading___Toc2018_1835880767"/></text:h>
    <text:p text:style-name="P147">Django, a Python web framework, has been used in this project. The justification for this decision has been made in the introductory chapter of this document.</text:p>
@@ -14487,7 +14502,7 @@
     </text:list-item>
    </text:list>
    <text:p text:style-name="P153"><text:soft-page-break/>Code inspection for PEP8<text:note text:id="ftn0" text:note-class="footnote"><text:note-citation>12</text:note-citation><text:note-body>
-      <text:p text:style-name="P536">Python Enhancement Proposal 8 -- Style Guide for Python Code: <text:a xlink:type="simple" xlink:href="https://www.python.org/dev/peps/pep-0008/" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">https://www.python.org/dev/peps/pep-0008/</text:a> <text:span text:style-name="T173">[7]</text:span></text:p></text:note-body></text:note> conformance has been set to be a warning <text:span text:style-name="T163">for this project</text:span> (up from the default setting, which is only a notice) to ensure good code style conformance.</text:p>
+      <text:p text:style-name="P539">Python Enhancement Proposal 8 -- Style Guide for Python Code: <text:a xlink:type="simple" xlink:href="https://www.python.org/dev/peps/pep-0008/" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">https://www.python.org/dev/peps/pep-0008/</text:a> <text:span text:style-name="T173">[7]</text:span></text:p></text:note-body></text:note> conformance has been set to be a warning <text:span text:style-name="T163">for this project</text:span> (up from the default setting, which is only a notice) to ensure good code style conformance.</text:p>
    <text:p text:style-name="P153">To work better with Markdown files, which is the format used for documentation files, the free to use plug-in Markdown Navigator has been used.</text:p>
    <text:h text:style-name="P350" text:outline-level="2"><text:bookmark-start text:name="__RefHeading___Toc2020_1835880767"/>Database and <text:span text:style-name="T69">world</text:span> initialization<text:bookmark-end text:name="__RefHeading___Toc2020_1835880767"/></text:h>
    <text:p text:style-name="P154">During development, the embedded database solution SQLite has been used, which is the default setting in Django. SQLite is very <text:span text:style-name="T163">convenient</text:span> to set up and use because it does not follow the usual client-server model. Instead, a local file is created that contains the database and is accessed <text:span text:style-name="T163">using</text:span> the SQLite libraries.</text:p>
@@ -16720,7 +16735,7 @@
     </draw:frame>An example of a Chart.js chart from the unit information page.</text:p>
    <text:h text:style-name="P348" text:outline-level="2"><text:bookmark-start text:name="__RefHeading___Toc2026_1835880767"/><text:span text:style-name="T49">3D r</text:span>endering<text:bookmark-end text:name="__RefHeading___Toc2026_1835880767"/></text:h>
    <text:p text:style-name="P464">Both the world map and the battlefields are rendered in 3D in the client browser using the three.js JavaScript library<text:note text:id="ftn33" text:note-class="footnote"><text:note-citation>23</text:note-citation><text:note-body>
-      <text:p text:style-name="P537">Three.js: <text:a xlink:type="simple" xlink:href="https://threejs.org/" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">https://threejs.org</text:a></text:p></text:note-body></text:note>. This is the only area of the game where extensive use of JavaScript <text:span text:style-name="T165">is made</text:span>.</text:p>
+      <text:p text:style-name="P540">Three.js: <text:a xlink:type="simple" xlink:href="https://threejs.org/" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">https://threejs.org</text:a></text:p></text:note-body></text:note>. This is the only area of the game where extensive use of JavaScript <text:span text:style-name="T165">is made</text:span>.</text:p>
    <text:p text:style-name="P163">Three.js allows to use graphics acceleration for 3D rendering via <text:span text:style-name="T76">WebGL. This allows to represent dynamic scenes in the browser without any additional browser plugins and with good performance.</text:span></text:p>
    <text:p text:style-name="P164">Rendering the world and the battlefield in 3D adds more dynamism to the game and allows to interact and visualize better the in-game world. Other forms of world and battlefield visualization and interaction would not have had an equally good ratio between benefit and complexity.</text:p>
    <text:p text:style-name="P164">Only a very basic use of the possible 3D capabilities is made, using only basic geometries, plain colours without any texturing and a very basic use of lighting.</text:p>
@@ -35556,21 +35571,22 @@
    <text:p text:style-name="P278">If food becomes scarce, hunger will rise in the settlement. If hunger rises enough, public order will decline and at certain point people will even die from starvation.</text:p>
    <text:p text:style-name="P278">Public order may be restored by placing mobilized military units in the settlement. <text:span text:style-name="T153">Bureaucrats may also invest hours in improving public order. The larger a settlement is, the harder it is to effect public order.</text:span></text:p>
    <text:p text:style-name="P279">If population has descended because of starvation but hunger has been controlled, population regenerates gradually in an exponential fashion until the designed population is reached.<text:bookmark-end text:name="__DdeLink__4518_2133701829"/></text:p>
-   <text:h text:style-name="P482" text:outline-level="1"><text:bookmark-start text:name="__RefHeading___Toc3432_4192610855"/>Implementation vs. original concept<text:bookmark-end text:name="__RefHeading___Toc3432_4192610855"/></text:h>
-   <text:p text:style-name="P227">While the delivered product is playable in its current form, m<text:span text:style-name="T118">y original idea for this game included some concepts and mechanisms that have not been implemented </text:span>during the semester<text:span text:style-name="T118">. </text:span>Most of these features were not even planned for this first implementation. Others were originally planned but during the development process were simplified or removed entirely.</text:p>
+   <text:h text:style-name="P485" text:outline-level="1"><text:bookmark-start text:name="__RefHeading___Toc3432_4192610855"/>Implementation vs. original concept<text:bookmark-end text:name="__RefHeading___Toc3432_4192610855"/></text:h>
+   <text:p text:style-name="P227">While the delivered product is playable in its current form, m<text:span text:style-name="T118">y original idea for this game included some concepts and mechanisms that have not been implemented </text:span>during the semester<text:span text:style-name="T118">. </text:span>Most of these features were not even planned for this first implementation. Others were originally planned but were simplified or removed entirely <text:span text:style-name="T175">when revising the original planning</text:span>.</text:p>
    <text:p text:style-name="P227">This chapter should convey a better idea of in what direction Finem Imperii may go in the future and how it may be improved.</text:p>
    <text:h text:style-name="P389" text:outline-level="2">Character actions</text:h>
    <text:p text:style-name="P279">There is in the current implementation few ways to spend time and money in the game. There is no way to train units, improve them, interact with settlement’s populations, etc.</text:p>
    <text:p text:style-name="P279">This gives the game an unfinished feel and gives less space to players to make decisions on how to invest their resources.</text:p>
+   <text:p text:style-name="P478">This would most likely be the first aspect to improve after the semester’s end.</text:p>
    <text:h text:style-name="Heading_20_2" text:outline-level="2">Sub<text:span text:style-name="T118">ordinate </text:span>organizations and power delegation</text:h>
    <text:p text:style-name="P222">One of the parts of the game includes aspects of trust, treason, hierarchies and delegation.</text:p>
    <text:p text:style-name="P222">Unfortunately, in the current state of the game, a character in a powerful position cannot cannot create subordinate positions or organizations. This is an important missing feature that would add dynamism and deepness to the game.</text:p>
    <text:p text:style-name="P222">Those subordinate organizations would be managed by their owner, such that the latter <text:span text:style-name="T119">may decide who is a member, and when to create and dissolve those organizations.</text:span></text:p>
    <text:p text:style-name="P223">Furthermore, allowing to delegate owned powers to subordinate organizations would allow for a more interesting management of realms.</text:p>
-   <text:h text:style-name="P380" text:outline-level="2">Rebellion <text:span text:style-name="T120">and realm</text:span> founding</text:h>
+   <text:h text:style-name="P380" text:outline-level="2"><text:soft-page-break/>Rebellion <text:span text:style-name="T120">and realm</text:span> founding</text:h>
    <text:p text:style-name="P223">In the same direction as the last one, allowing to rebel as a member of a realm and to found new states is an important aspect of then original concept that has not been implemented.</text:p>
-   <text:p text:style-name="P223"><text:soft-page-break/>This would allows unhappy realm members to overthrow their leaders, making the latter more prone to take into account their subordinates’ whishes and opinions.</text:p>
-   <text:p text:style-name="P224">Being able to found new realms, either as a secession of an existing realm or as a pioneering project would allow a deeper <text:span text:style-name="T170">game play.</text:span></text:p>
+   <text:p text:style-name="P223">This would allow unhappy realm members to overthrow their leaders, making the latter more prone to take into account their subordinates’ whishes and <text:span text:style-name="T175">satisfaction levels</text:span>.</text:p>
+   <text:p text:style-name="P224">Being able to found new realms, either as a secession of an existing realm or as a pioneering project would allow a deeper <text:span text:style-name="T170">game play and more complex political interactions.</text:span></text:p>
    <text:h text:style-name="Heading_20_2" text:outline-level="2"><text:span text:style-name="T120">Realm t</text:span>erritory loss</text:h>
    <text:p text:style-name="P224">In the current state of the game, <text:span text:style-name="T121">mismanagement of territory may lead to both hunger and population loss, and the rising of barbarian military units. While the mismanaged region may be non-productive, the </text:span><text:span text:style-name="T31">de jure</text:span><text:span text:style-name="T121"> ownership of the region is never actually lost (except if a different realm conquers it).</text:span></text:p>
    <text:p text:style-name="P225">This means that regions are never returned to barbaric control and realms can only grow if uncontested by other realms. This may lead to aberrant <text:span text:style-name="T122">game play</text:span>.</text:p>
@@ -35578,9 +35594,9 @@
    <text:p text:style-name="P227">The original idea includes a deeper economic system based on resource production. The idea is to have different buildings that either extract natural resources (sawmills could produce timber, mines could produce metal ore, etc.) or manufacture resources to different forms (blacksmiths could produce tools and weapons, carpenters could produce furniture, etc.).</text:p>
    <text:p text:style-name="P227">This would completely change the form how resources are produced and consumed in the game and could introduce more complex trade relationships and realm management possibilities.</text:p>
    <text:p text:style-name="P227">Some goods would be vital for the militaristic aspects of realms (like weapons) while others may improve the happiness <text:span text:style-name="T123">of the population </text:span>and thus <text:span text:style-name="T123">public order, too.</text:span></text:p>
-   <text:h text:style-name="Heading_20_2" text:outline-level="2">Unit micromanagement</text:h>
+   <text:h text:style-name="Heading_20_2" text:outline-level="2"><text:soft-page-break/>Unit micromanagement</text:h>
    <text:p text:style-name="P226">While in the current implementation each soldier is represented individually in the database, this is barely if at all noticeable.</text:p>
-   <text:p text:style-name="P228">The original idea includes the capability to identify each individual soldier and manage them independently. This would allow to see each soldier’s <text:soft-page-break/>skill level, health status, history, <text:span text:style-name="T124">etc. Also actions would be applicable to individual soldiers: removing them from the unit, training them, etc.</text:span></text:p>
+   <text:p text:style-name="P228">The original idea includes the capability to identify each individual soldier and manage them independently. This would allow to see each soldier’s skill level, health status, history, <text:span text:style-name="T124">etc. Also actions would be applicable to individual soldiers: removing them from the unit, training them, etc.</text:span></text:p>
    <text:h text:style-name="Heading_20_2" text:outline-level="2"><text:span text:style-name="T123">New unit types and</text:span> <text:span text:style-name="T112">sieges</text:span></text:h>
    <text:p text:style-name="P229">In the current state of the the game, only infantry units exist. The addition of new types, like cavalry, pikemen, archers, etc., each with their own special abilities, strengths and weaknesses, would add more importance to the strategic elements of battles, which is currently limited.</text:p>
    <text:p text:style-name="P230">The addition of sieges and siege battles would increase strategic elements even more. Settlement could have defensive elements like walls which attackers could either siege or assault. This could make the addition of siege military units useful. The construction and maintenance of defensive structures would make realm management more complex.</text:p>
@@ -35589,21 +35605,21 @@
    <text:p text:style-name="P231">There is currently no implemented way to delete or pause characters. <text:span text:style-name="T125">This causes inactive characters to linger indefinitely in the game worlds.</text:span></text:p>
    <text:p text:style-name="P232">Pausing characters would be an useful feature for players who need to stop playing for a period of time but could return in the future. Also, pausing of characters would be automatic for accounts that have been inactive for a prolonged amount of time.</text:p>
    <text:p text:style-name="P232">Deleting characters should be usefu<text:span text:style-name="T126">l if a player wants to leave the game. It would also be useful in the situation where a player has reached the character limit and wants to create a new character by deleting an existing one.</text:span></text:p>
-   <text:h text:style-name="Heading_20_2" text:outline-level="2">Perma<text:span text:style-name="T128">nent character </text:span>death</text:h>
+   <text:h text:style-name="Heading_20_2" text:outline-level="2"><text:soft-page-break/>Perma<text:span text:style-name="T128">nent character </text:span>death</text:h>
    <text:p text:style-name="P235">Originally I envisioned this game containing permadeath, which would be unavoidable in the long term by the aging of characters. Other causes of permadeath could be the assassination by another character or by dying in battle.</text:p>
-   <text:p text:style-name="P235"><text:soft-page-break/>The death of characters would give more importance to legacy and planning what could happen after a character’s death. This is a complex feature to design properly, as many players will find permadeath excessively frustrating and may prompt them to stop playing altogether.</text:p>
+   <text:p text:style-name="P235">The death of characters would give more importance to legacy and planning what could happen after a character’s death. This is a complex feature to design properly, as many players will find permadeath excessively frustrating and may prompt them to stop playing altogether.</text:p>
    <text:h text:style-name="P383" text:outline-level="2">Simulation of population</text:h>
    <text:p text:style-name="P236">In the current implementation each single inhabitant of each world settlement is individually represented in the database. Their relevance is currently limited: they can be recruited in military units, have residences and workplaces. They also consume food individually and have individual hunger levels.</text:p>
    <text:p text:style-name="P236">This concept could be brought further. Population changes like births, aging and deaths could be based on individual simulation. <text:span text:style-name="T129">Migration movements to better living conditions could be implemented. Policies oriented towards specific population segments would allow a finer management of population, for example, with the introduction of elderly care or birth houses.</text:span></text:p>
    <text:h text:style-name="P382" text:outline-level="2">Dynasties</text:h>
-   <text:p text:style-name="P237">In the original idea, characters should be created inside dynasties or families. <text:span text:style-name="T130">This would allow biological relationships among characters, e. g., one character could be the child of another. This could include diplomatic marriages. Dynasties could also offset the negative aspects of permadeath by being able to play the heir of a dead character, which could start with the possessions of the dead character.</text:span></text:p>
+   <text:p text:style-name="P237">In the original idea, characters should be created inside dynasties or families. <text:span text:style-name="T130">This would allow biological relationships among characters, e. g., one character could be the child of another. This could include diplomatic marriages. Dynasties could also offset the negative aspects of permadeath by being able to play the heir of a dead character, which could start where the dead character left off.</text:span></text:p>
    <text:h text:style-name="Heading_20_2" text:outline-level="2">Fog of war <text:span text:style-name="T130">and intelligence collection</text:span></text:h>
    <text:p text:style-name="P238">Currently in the game every character can see almost all information available about the game world. Each character can see what is going on on every other region, regardless of the distance to it, and can see the military force of other realms, the progress and outcomes of battles, etc.</text:p>
-   <text:p text:style-name="P240">Because of this, there is currently no reason to do intelligence collection. Restricting available information based on criteria like locality would give an advantage to realms that coordinate their efforts better and would allow to engage in scouting, infiltration and espionage work.</text:p>
-   <text:h text:style-name="P384" text:outline-level="2"><text:soft-page-break/><text:span text:style-name="T153">Additional</text:span> <text:span text:style-name="T131">character profiles</text:span></text:h>
+   <text:p text:style-name="P240"><text:soft-page-break/>Because of this, there is currently no reason to do intelligence collection. Restricting available information based on criteria like locality would give an advantage to realms that coordinate their efforts better and would allow to engage in scouting, infiltration and espionage work.</text:p>
+   <text:h text:style-name="P384" text:outline-level="2"><text:span text:style-name="T153">Additional</text:span> <text:span text:style-name="T131">character profiles</text:span></text:h>
    <text:p text:style-name="P279">Originally I envisioned two further character profiles: the hero and the spy.</text:p>
-   <text:p text:style-name="P279">Heroes specialize in fighting and may participate in battles as a soldier. They confer significant bonuses during battle, but they always risk death in the battlefield.</text:p>
-   <text:p text:style-name="P279">Spies specialize in subterfuge and espionage. They may intercept communications, gather privileged information, engage in sabotage or even assassinations.</text:p>
+   <text:p text:style-name="P279">Heroes <text:span text:style-name="T175">would </text:span>specialize in fighting and participate in battles as a soldier. They <text:span text:style-name="T175">would </text:span>confer significant bonuses during battle, but they always risk death in the battlefield.</text:p>
+   <text:p text:style-name="P279">Spies <text:span text:style-name="T175">would </text:span>specialize in subterfuge and espionage. They <text:span text:style-name="T175">would be able to</text:span> intercept communications, gather privileged information, engage in sabotage or even assassinations.</text:p>
    <text:h text:style-name="P35" text:outline-level="1"><text:bookmark-start text:name="__RefHeading___Toc96_3900411723"/>Outlook<text:bookmark-end text:name="__RefHeading___Toc96_3900411723"/></text:h>
    <text:p text:style-name="P233">In this chapter I want to present how Finem Imperii as a project may go on in the future, looking at different options and their possible outcomes.</text:p>
    <text:h text:style-name="P385" text:outline-level="2">Public release <text:span text:style-name="T132">and continuity</text:span></text:h>
@@ -35614,27 +35630,28 @@
    <text:h text:style-name="P388" text:outline-level="2">Improvement of existing features</text:h>
    <text:p text:style-name="Text_20_body">After a short pause from further development work, I would also like to continue improving the game <text:span text:style-name="T153">the first effort should focus on improving the existing game elements that are not fully polished. To take just some examples, the visualization of battles should be improved to show the actions of each unit. Also, the in-game help system could use some enhancements.</text:span></text:p>
    <text:h text:style-name="P378" text:outline-level="2"><text:bookmark-start text:name="__RefHeading___Toc2946_2337624728"/>Visual design improvement<text:bookmark-end text:name="__RefHeading___Toc2946_2337624728"/></text:h>
-   <text:p text:style-name="P241">One aspect that should be improved to make the game more appealing to new players is the visual aspect. There is currently no imagery at all and the design is <text:span text:style-name="T133">simple. Visual aspects were not a factor evaluated in the semester and are quite time-consuming to implement, therefore (as mentioned in the design chapter of this document) design was kept simple and functional.</text:span></text:p>
+   <text:p text:style-name="P241">One aspect that should be improved to make the game more appealing to new players is the visual aspect. There is currently no imagery at all and the design is <text:span text:style-name="T133">simple. Visual aspects were not an evaluation factor and are quite time-consuming to implement, therefore (as mentioned in the design chapter of this document) design was kept simple and functional.</text:span></text:p>
    <text:h text:style-name="P352" text:outline-level="2"><text:bookmark-start text:name="__RefHeading___Toc2036_1835880767"/><text:soft-page-break/>Improving code quality<text:bookmark-end text:name="__RefHeading___Toc2036_1835880767"/></text:h>
-   <text:p text:style-name="P242">Developing a game like Finem Imperii can be a lot of work. One of the ways to speed up progress is to attract developers that are interested in contributing to the project, it being free software.</text:p>
-   <text:p text:style-name="P242">To attract developers, one of the decisive points is to have clean, easy to understand and consistent source code with elevated code coverage by high quality tests.</text:p>
-   <text:p text:style-name="P242">The current code quality is not bad, but it could certainly be improved. For example: the “world” Django application of this project encompasses many different elements of the game, making it difficult to navigate and understand for new developers. This could be refactored to multiple, smaller, simpler apps.</text:p>
-   <text:p text:style-name="P242">Also, the static code analysis tool used (code climate) points out many present issues in the source code that could be improved.</text:p>
+   <text:p text:style-name="P242">Developing a game like Finem Imperii can be a lot of work. One of the ways to speed up progress is to attract developers that are interested in contributing to the project, <text:span text:style-name="T174">as it is </text:span>free software.</text:p>
+   <text:p text:style-name="P242">To attract developers, one of the <text:span text:style-name="T174">key factors </text:span>is to have clean, easy to understand and consistent <text:span text:style-name="T174">code base </text:span>with elevated code coverage by high quality tests.</text:p>
+   <text:p text:style-name="P242">The current code quality is not <text:span text:style-name="T174">low</text:span>, but it certainly <text:span text:style-name="T174">has room for improvement</text:span>. For example: the “world” Django application <text:span text:style-name="T174">in</text:span> this project encompasses <text:span text:style-name="T174">too </text:span>many different elements of the game, making it difficult to navigate and understand for new developers. This could be refactored to multiple, smaller, simpler apps.</text:p>
+   <text:p text:style-name="P242">Also, the static code analysis tool used (<text:span text:style-name="T174">C</text:span>ode <text:span text:style-name="T174">C</text:span>limate) points out many present issues in the source code that could be improved.</text:p>
    <text:p text:style-name="P242">The currently existing tests are also not categorized and may take some minutes to run on less powerful devices. This can make development more tedious and thus less appealing to new developers.</text:p>
    <text:h text:style-name="P389" text:outline-level="2">Feature developments</text:h>
    <text:p text:style-name="P279">Once the most important issues have been tackled, focus can be brought on feature development. Many proposals have been presented in the last chapter of this document, “implementation vs. original concept”.</text:p>
    <text:h text:style-name="P341" text:outline-level="2"><text:bookmark-start text:name="__RefHeading___Toc1447_3060012842"/>Monetization<text:bookmark-end text:name="__RefHeading___Toc1447_3060012842"/></text:h>
-   <text:p text:style-name="P241">While not <text:span text:style-name="T134">part of my plans, Finem Imperii could most certainly be monetized. This is more interesting if the case arises where the game gets popular and the amount of work it requires increases. Monetizing the game would allow me and possibly also others to dedicate a larger amount of time on developing the game and keeping it operative.</text:span></text:p>
+   <text:p text:style-name="P241">While not <text:span text:style-name="T134">part of my initial plans, Finem Imperii could most certainly be monetized in the future. This is more interesting if the case arises where the game gets popular and the amount of work it requires increases. Monetizing the game would allow me and possibly also others to dedicate a larger amount of time on developing the game and keeping it operative.</text:span></text:p>
    <text:p text:style-name="P242">There are several ways this could be achieved.</text:p>
-   <text:p text:style-name="P242">One of the more obvious and common ways would be to add advertising. <text:span text:style-name="T135">A popular option for this is Google AdSense. Calculating the expected revenue is not trivial. In the case of this game, longer sessions than average could be expected (several minutes long), which could increase </text:span><text:soft-page-break/><text:span text:style-name="T135">monetization potential. A large amount of visits would be required to generate an amount of money which can be relied on, probably several thousands unique visitors per day or more.</text:span></text:p>
-   <text:p text:style-name="P243">Another option would be a freemium <text:span text:style-name="T136">or </text:span>premium model <text:span text:style-name="T137">including microtransactions</text:span>. <text:span text:style-name="T136">Players could make payments via a payment provider (for example PayPal). Paid players could, for example, play in an exclusive world for premium users. Other options would be to increase the character limit, mark premium players in some way (for example making their characters’ names stand out), selling symbolic rare items with little to no impact on game play, etc. One aspect to keep in mind is that players would expect a quality, finished game to pay for.</text:span></text:p>
+   <text:p text:style-name="P242">One of the more obvious and common ways would be to add advertising. <text:span text:style-name="T135">A popular option for this is Google AdSense. Calculating the expected revenue is not trivial. In the case of this game, longer sessions than </text:span><text:soft-page-break/><text:span text:style-name="T135">average could be expected (several minutes long), which could increase monetization potential. A large amount of visits would be required to generate an amount of money which can be relied upon, probably several thousands unique visitors per day or more.</text:span></text:p>
+   <text:p text:style-name="P243">Another option would be a freemium <text:span text:style-name="T136">or </text:span>premium model <text:span text:style-name="T137">including microtransactions</text:span>. <text:span text:style-name="T136">Players could make payments via a payment provider (for example PayPal). Paid players could, for example, play in an exclusive world for premium users. Other options would be to increase the character limit, mark premium players in some way (for example making their characters’ names stand out), selling symbolic rare items with little or no impact on game play, etc. One aspect to keep in mind is that players would expect a quality, finished game to pay for.</text:span></text:p>
    <text:p text:style-name="P244">A pay-to-win scheme is not an option. These lead to aberrant game play.</text:p>
    <text:p text:style-name="P244">Another options would be to accept donations. <text:span text:style-name="T137">What I have seen from other projects, while it may offer some income, this is rarely a viable option. A freemium option is usually much more viable.</text:span></text:p>
    <text:h text:style-name="P31" text:outline-level="1"><text:bookmark-start text:name="__RefHeading___Toc318813125"/>Conclusions<text:bookmark-end text:name="__RefHeading___Toc318813125"/></text:h>
-   <text:p text:style-name="P247">In this document we have seen the development of a video game from the absolute first steps until its publishing. The design and conceptualization has been presented, followed by a description of the technical decisions and development workflow, generating and implementation of game mechanics that, when put together properly, provided a game. <text:span text:style-name="T139">Finally, we have seen which elements the implementation misses that were included in the original conceptualization and how those may change the game experience; and how the game may go on in the future.</text:span></text:p>
-   <text:p text:style-name="P249">The delivered product is certainly not perfect, but I think it showcases well what can be achieved in around 4 months of work by a single developer. The <text:span text:style-name="T140">lean methodology allowed to approach a rather complex game concept in a limited time, but this complexity also meant that not everything has been implemented as originally envisioned. This can give the game an unfinished look and experience, even if its playable.</text:span></text:p>
+   <text:p text:style-name="P247">In this document we have seen the development of a video game from the absolute first steps until <text:span text:style-name="T174">just before its public release</text:span>. The design and conceptualization has been presented, followed by a description of the technical decisions and development workflow, generating an implementation of game mechanics that, when put together, provided a <text:span text:style-name="T174">playable </text:span>game. <text:span text:style-name="T139">Finally, we have seen which elements the implementation misses that were included in the original conceptualization and how those may change the game experience; and how this project may go on in the future.</text:span></text:p>
+   <text:p text:style-name="P249">The delivered product <text:span text:style-name="T174">has certainly room for improvement</text:span>, but I think it showcases well what can be achieved in around 4 months of work by a single developer. The <text:span text:style-name="T140">lean methodology allowed to approach a rather complex game concept in a limited time, but this complexity also meant that not everything has been implemented as originally designed. This can make the game look at some points a somewhat unfinished look and feel. Despite this, it is a playable game that meets the initially set objectives.</text:span></text:p>
    <text:p text:style-name="P250">Not every feature that I would like to see in the game has been implemented, but that does not mean that they won’t be added to the game in the future. It was clear from the conceptualization stage that not everything could be implemented as imagined.</text:p>
-   <text:p text:style-name="P251"><text:span text:style-name="T141">Still, I hope that Finem Imperii can be appreciated as a fresh and original game by those who can look beyond the product’s shortcomings. I will consider it a success if the game can bring at least some enjoyment so some people and that they can feel entertain and immersed in a fictional world for a few minutes a day.</text:span></text:p>
+   <text:p text:style-name="P477">In any case, the validity of the design, methodology and technology decisions has been shown to be appropriate. With enough time and resources, not much would have to change to give the game a more professional and enjoyable feel.</text:p>
+   <text:p text:style-name="P251"><text:span text:style-name="T141">I hope that Finem Imperii can be appreciated as a fresh and original game by those who can look beyond its shortcomings. I will consider it a success if the game can bring at least some enjoyment so some people and that they can feel entertain and immersed in a fictional world for a few minutes a day.</text:span></text:p>
    <text:h text:style-name="P33" text:outline-level="1"><text:bookmark-start text:name="__RefHeading___Toc318813127"/>Bibliogr<text:span text:style-name="T34">aphy</text:span><text:bookmark-end text:name="__RefHeading___Toc318813127"/></text:h>
    <text:p text:style-name="P468">The availability of all web-based resources has been <text:span text:style-name="T173">last</text:span> checked on the 16<text:span text:style-name="T171">th</text:span> of June 2017.</text:p>
    <text:p text:style-name="P468">URLs used in this document that do not lead to a reference <text:span text:style-name="T173">in a bibliographical</text:span> are not included in this list.</text:p>
@@ -35755,7 +35772,7 @@
    <text:p text:style-name="P109"><text:span text:style-name="T3">Run </text:span><text:span text:style-name="Source_20_Text"><text:span text:style-name="T3">python3 manage.py runserver</text:span></text:span><text:span text:style-name="T3"> to start the development server.</text:span></text:p>
    <text:p text:style-name="P109"><text:span text:style-name="T3">You should now be able to access your Django development server at </text:span><text:span text:style-name="Source_20_Text"><text:span text:style-name="T3">http://localhost:8000/</text:span></text:span><text:span text:style-name="T3">. You may log in with the test user &quot;alice&quot; with the password &quot;test&quot;.</text:span></text:p>
    <text:p text:style-name="P80">For more information on the Django development server, refer to its documentation.</text:p>
-   <text:h text:style-name="P476" text:outline-level="1"/>
+   <text:h text:style-name="P479" text:outline-level="1"/>
    <text:h text:style-name="P37" text:outline-level="1"><text:bookmark-start text:name="__RefHeading___Toc318813128"/>Annex B: GNU Free Documentation License<text:bookmark-end text:name="__RefHeading___Toc318813128"/></text:h>
    <text:p text:style-name="P240">Version 1.3, 3 November 2008</text:p>
    <text:p text:style-name="P239">Copyright © 2000, 2001, 2002, 2007, 2008 Free Software Foundation, Inc. &lt;<text:a xlink:type="simple" xlink:href="http://fsf.org/" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">http://fsf.org/</text:a>&gt;</text:p>

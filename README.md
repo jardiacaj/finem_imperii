@@ -25,23 +25,8 @@ You can find more information in the [documentation][1].
 
 ## Documentation index
 
-Basic
  - [Concept](https://github.com/jardiacaj/finem_imperii/blob/master/docs/1-concept.md)
  - [Roadmap](https://github.com/jardiacaj/finem_imperii/blob/master/docs/2-roadmap.md)
-
-**The following links lead to outdated documents**
-
-Game design (outdated!)
- - [World](https://github.com/jardiacaj/finem_imperii/blob/master/docs/3-world.md)
- - [Characters](https://github.com/jardiacaj/finem_imperii/blob/master/docs/3-characters.md)
- - [Organizations](https://github.com/jardiacaj/finem_imperii/blob/master/docs/3-organizations.md)
- - [Elections](https://github.com/jardiacaj/finem_imperii/blob/master/docs/3-elections.md)
- - [Travel](https://github.com/jardiacaj/finem_imperii/blob/master/docs/3-travel.md)
- - [Units](https://github.com/jardiacaj/finem_imperii/blob/master/docs/3-units.md)
- - [Buildings](https://github.com/jardiacaj/finem_imperii/blob/master/docs/3-buildings.md)
-
- Technical (outdated!)
- - [Rendering](https://github.com/jardiacaj/finem_imperii/blob/master/docs/4-rendering.md)
  - [Server setup guide](https://github.com/jardiacaj/finem_imperii/blob/master/docs/4-server_setup.md)
 
 

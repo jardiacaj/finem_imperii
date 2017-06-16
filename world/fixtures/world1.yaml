@@ -358,7 +358,7 @@
     violence_monopoly: false
     decision_taking: distributed
     membership_type: character
-    election_period_months: 25
+    election_period_months: 48
 
 - model: organization.Organization
   pk: 9

@@ -20,6 +20,7 @@ Week 14 | 05-29 to 06-04 | 06-04 is final delivery date
 ## Snapshots
 
 [View the status at PAC2 stage (2017-04-26)](https://github.com/jardiacaj/finem_imperii/blob/master/docs/5-PAC2.md)
+
 [View the status at PAC3 stage (2017-05-22)](https://github.com/jardiacaj/finem_imperii/blob/master/docs/5-PAC3.md)
 
 ## Week 1

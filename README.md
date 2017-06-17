@@ -29,5 +29,10 @@ You can find more information in the [documentation][1].
  - [Roadmap](https://github.com/jardiacaj/finem_imperii/blob/master/docs/2-roadmap.md)
  - [Server setup guide](https://github.com/jardiacaj/finem_imperii/blob/master/docs/4-server_setup.md)
 
+## Presentations (in Catalan)
+
+ - [PAC2](https://www.youtube.com/watch?v=5st9PQ-c4mY)
+ - [PAC3](https://www.youtube.com/watch?v=F-trGMinLgA)
+ - [Final](https://www.youtube.com/watch?v=U3K7ZS2y5sg&list=PLFGHa89PbqVcDhu-ckluKqQ2UPWbCXYYd)
 
 [1]: https://github.com/jardiacaj/finem_imperii/tree/master/docs

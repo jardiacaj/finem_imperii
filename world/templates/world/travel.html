@@ -14,6 +14,18 @@
 
     {% if request.hero.travel_destination %}
         <p>You wil reach {{ request.hero.travel_destination }} in the next turn.</p>
+
+        <form class="form-horizontal" role="form" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="target_settlement_id" value="0">
+
+            <div class="form-group text-center">
+                <p>
+                    <button type="submit" class="btn btn-danger">Cancel travel</button>
+                </p>
+            </div>
+        </form>
+
     {% elif target_settlement %}
         <p>
             The distance from your current location, {{ request.hero.location }}, to {{ target_settlement }} is

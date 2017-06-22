@@ -399,9 +399,17 @@ class TravelView(View):
 
     @transaction.atomic
     def post(self, request, *args, **kwargs):
+        settlement_id = int(request.POST.get('target_settlement_id'))
+
+        if settlement_id == 0 and request.hero.travel_destination:
+            messages.success(request, "OK.", extra_tags="success")
+            request.hero.travel_destination = None
+            request.hero.save()
+            return redirect('world:travel')
+
         target_settlement = get_object_or_404(
             Settlement,
-            id=request.POST.get('target_settlement_id'),
+            id=settlement_id,
             tile__world_id=request.hero.world_id
         )
         check_result = request.hero.check_travelability(target_settlement)

@@ -70,3 +70,28 @@ class TestTravel(TestCase):
         self.assertEqual(character.location_id, 1002)
         self.assertEqual(character.hours_in_turn_left, 15*24 - 52)
         self.assertEqual(character.travel_destination_id, None)
+
+    def test_travel_to_other_tile_and_cancel(self):
+        response = self.client.post(
+            reverse('world:travel'),
+            data={'target_settlement_id': 1002},
+            follow=True
+        )
+        self.assertRedirects(response, reverse('world:travel'))
+
+        character = Character.objects.get(id=1)
+        self.assertEqual(character.location_id, 1001)
+        self.assertEqual(character.hours_in_turn_left, 15*24)
+        self.assertEqual(character.travel_destination_id, 1002)
+
+        response = self.client.post(
+            reverse('world:travel'),
+            data={'target_settlement_id': 0},
+            follow=True
+        )
+        self.assertRedirects(response, reverse('world:travel'))
+
+        character = Character.objects.get(id=1)
+        self.assertEqual(character.location_id, 1001)
+        self.assertEqual(character.hours_in_turn_left, 15*24)
+        self.assertEqual(character.travel_destination_id, None)

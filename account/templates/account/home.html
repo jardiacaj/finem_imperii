@@ -36,9 +36,11 @@
                                     {{ character.unread_messages.count }}
                                 </span>
                             {% endif %}
+                            <br>
+                            {{ character.get_profile_display|capfirst }}
                         </td>
                         <td style="vertical-align: middle">
-                            {{ character.location }}
+                            {{ character.location }}, {{ character.location.tile }}
                         </td>
                         <td style="vertical-align: middle" class="text-right">
                             <a href="{{ character.activation_url }}" class="btn btn-primary">Enter</a>

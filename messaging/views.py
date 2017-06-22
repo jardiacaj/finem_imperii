@@ -16,7 +16,8 @@ def recipient_required_decorator(func):
     @inchar_required
     def inner(*args, **kwargs):
         recipient_id = kwargs.get('recipient_id')
-        args[0].recipient = get_object_or_404(MessageRecipient, id=recipient_id, character=args[0].hero)
+        args[0].recipient = get_object_or_404(
+            MessageRecipient, id=recipient_id, character=args[0].hero)
         return func(*args, **kwargs)
     return inner
 
@@ -31,10 +32,11 @@ def home(request):
 
 
 class ComposeView(View):
-
-    def get(self, request, character_id=None, prefilled_text='', reply_to=None):
+    def get(self,
+            request, character_id=None, prefilled_text='', reply_to=None):
         if character_id:
-            target_character = get_object_or_404(Character, id=character_id, world=request.hero.world)
+            target_character = get_object_or_404(
+                Character, id=character_id, world=request.hero.world)
         else:
             target_character = None
 
@@ -53,20 +55,33 @@ class ComposeView(View):
     def post(self, request):
         message_body = request.POST.get('message_body')
         reply_to = (
-            get_object_or_404(MessageRecipient, id=request.POST.get('reply_to'), character=request.hero)
+            get_object_or_404(
+                MessageRecipient,
+                id=request.POST.get('reply_to'),
+                character=request.hero
+            )
             if request.POST.get('reply_to') else None
         )
 
         if not message_body:
             messages.error(request, "Please write some message.", "danger")
-            return redirect(request.META.get('HTTP_REFERER', reverse('messaging:compose')))
+            return redirect(
+                request.META.get('HTTP_REFERER', reverse('messaging:compose')))
 
         if len(message_body) > 10000:
-            return self.fail_post_gracefully(request, reply_to, message_body, error_message="This message is too long.")
+            return self.fail_post_gracefully(
+                request,
+                reply_to,
+                message_body,
+                error_message="This message is too long."
+            )
 
         if not reply_to and not request.POST.getlist('recipient'):
             return self.fail_post_gracefully(
-                request, reply_to, message_body, error_message="You must choose at least one recipient."
+                request,
+                reply_to,
+                message_body,
+                error_message="You must choose at least one recipient."
             )
 
         message = create_message(
@@ -91,7 +106,8 @@ class ComposeView(View):
         messages.success(request, "Message sent.", "success")
         return redirect('messaging:sent')
 
-    def fail_post_gracefully(self, request, reply_to, prefilled_body, error_message):
+    def fail_post_gracefully(
+            self, request, reply_to, prefilled_body, error_message):
         messages.error(request, error_message, "danger")
         return self.get(request, None, prefilled_body, reply_to)
 
@@ -108,7 +124,8 @@ class ComposeView(View):
                     character_count += 1
                     add_character_recipient(message, character)
             elif split[0] == 'region':
-                for character in Character.objects.filter(location__tile=request.hero.location.tile):
+                for character in Character.objects.filter(
+                        location__tile=request.hero.location.tile):
                     character_count += 1
                     add_character_recipient(message, character)
             elif split[0] == 'organization':
@@ -121,52 +138,64 @@ class ComposeView(View):
                 add_character_recipient(message, character)
             else:
                 message.delete()
-                raise ComposeView.RecipientBuildingException("Invalid recipient.")
+                raise ComposeView.RecipientBuildingException(
+                    "Invalid recipient.")
 
         if organization_count > 4 or character_count > 40:
             message.delete()
-            raise ComposeView.RecipientBuildingException("Too many recipients.")
+            raise ComposeView.RecipientBuildingException(
+                "Too many recipients.")
 
 
 @inchar_required
 def add_contact(request, character_id):
-    target_character = get_object_or_404(Character, id=character_id, world=request.hero.world)
-    created = MessageRelationship.objects.get_or_create(from_character=request.hero, to_character=target_character)[1]
+    target_character = get_object_or_404(
+        Character, id=character_id, world=request.hero.world)
+    created = MessageRelationship.objects.get_or_create(
+        from_character=request.hero, to_character=target_character)[1]
     if created:
         messages.success(request, "Character added to contacts", "success")
-    return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
+    return redirect(
+        request.META.get('HTTP_REFERER', reverse('world:character_home')))
 
 
 @inchar_required
 def remove_contact(request, character_id):
-    target_character = get_object_or_404(Character, id=character_id, world=request.hero.world)
+    target_character = get_object_or_404(
+        Character, id=character_id, world=request.hero.world)
     try:
-        target_relationship = MessageRelationship.objects.get(from_character=request.hero, to_character=target_character)
+        target_relationship = MessageRelationship.objects.get(
+            from_character=request.hero, to_character=target_character)
         target_relationship.delete()
         messages.success(request, "Character removed contacts", "success")
     except MessageRelationship.DoesNotExist:
         pass
-    return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
+    return redirect(
+        request.META.get('HTTP_REFERER', reverse('world:character_home')))
 
 
 @inchar_required
 def mark_all_read(request):
-    MessageRecipient.objects.filter(character=request.hero, read=False).update(read=True)
-    return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
+    MessageRecipient.objects.filter(
+        character=request.hero, read=False).update(read=True)
+    return redirect(
+        request.META.get('HTTP_REFERER', reverse('world:character_home')))
 
 
 @recipient_required_decorator
 def mark_read(request, recipient_id):
     request.recipient.read = not request.recipient.read
     request.recipient.save()
-    return redirect(request.META.get('HTTP_REFERER', reverse('messaging:home')))
+    return redirect(
+        request.META.get('HTTP_REFERER', reverse('messaging:home')))
 
 
 @recipient_required_decorator
 def mark_favourite(request, recipient_id):
     request.recipient.favourite = not request.recipient.favourite
     request.recipient.save()
-    return redirect(request.META.get('HTTP_REFERER', reverse('messaging:home')))
+    return redirect(
+        request.META.get('HTTP_REFERER', reverse('messaging:home')))
 
 
 @inchar_required
@@ -182,7 +211,9 @@ def messages_list(request):
 def favourites_list(request):
     context = {
         'tab': 'favourites',
-        'recipient_list': request.hero.messagerecipient_set.filter(favourite=True)
+        'recipient_list': request.hero.messagerecipient_set.filter(
+            favourite=True
+        )
     }
     return render(request, 'messaging/message_list.html', context)
 
@@ -199,4 +230,5 @@ def sent_list(request):
 @recipient_required_decorator
 def reply(request, recipient_id, prefilled_text=''):
     view = ComposeView()
-    return view.get(request, reply_to=request.recipient, prefilled_text=prefilled_text)
+    return view.get(
+        request, reply_to=request.recipient, prefilled_text=prefilled_text)

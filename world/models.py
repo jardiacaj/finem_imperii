@@ -188,6 +188,9 @@ class Settlement(models.Model):
     guilds_setting = models.CharField(
         max_length=20, default=GUILDS_KEEP, choices=GUILDS_CHOICES)
 
+    def make_public_order_in_range(self):
+        self.public_order = min(1000, max(self.public_order, 0))
+
     def get_public_order_display(self):
         return "{}%".format(self.public_order // 10)
 

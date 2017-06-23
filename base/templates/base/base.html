@@ -1,9 +1,26 @@
 {% extends 'base/base_naked.html' %}
 
+{% load cookielaw_tags %}
+{% load staticfiles %}
+
 {% block body %}
+
+    <!-- Gitter -->
+    <script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async
+            defer></script>
+    <script>
+        ((window.gitter = {}).chat = {}).options = {
+            room: 'finemimperii/Lobby'
+        };
+    </script>
+
+    <!-- cookie law -->
+    <script src="{% static 'cookielaw/js/cookielaw.js' %}"></script>
+
     {% include "base/navbar.html" %}
 
     <div class="container-fluid">
+        {% cookielaw_banner %}
 
         {% if request.hero %}
             <div class="col-xs-12 col-md-3 well">

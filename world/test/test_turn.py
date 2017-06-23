@@ -4,7 +4,7 @@ from django.urls.base import reverse
 from battle.models import Battle
 from organization.models import Organization
 from world.admin import pass_turn
-from world.initialization import initialize_unit
+from world.initialization import initialize_unit, initialize_settlement
 from world.models import Tile, WorldUnit, World, TileEvent, Settlement
 from world.turn import organizations_with_battle_ready_units, \
     battle_ready_units_in_tile, \
@@ -170,11 +170,21 @@ class TestTurn(TestCase):
 
     def test_barbarian_non_creation_in_occupied_settlement(self):
         settlement = Settlement.objects.get(name="Small Fynkah")
+        initialize_settlement(settlement)
 
         for unit in settlement.worldunit_set.all():
             initialize_unit(unit)
 
         do_settlement_barbarian_generation(settlement)
         self.assertFalse(
+            settlement.worldunit_set.filter(owner_character__isnull=True).exists()
+        )
+
+    def test_barbarian_creation_in_barbaric_settlement(self):
+        settlement = Settlement.objects.get(name="Small Shaax")
+        initialize_settlement(settlement)
+
+        do_settlement_barbarian_generation(settlement)
+        self.assertTrue(
             settlement.worldunit_set.filter(owner_character__isnull=True).exists()
         )

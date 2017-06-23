@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'bootstrapform',
+    'cookielaw',
     'base',
     'account',
     'world',

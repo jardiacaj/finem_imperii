@@ -520,24 +520,35 @@ class TurnProcessor:
             battle_turn(battle)
 
 
-def do_settlement_barbarian_generation(settlement):
-    if settlement.public_order < 500:
-        public_order_ratio = settlement.public_order / 1000
-        public_disorder_ratio = 1 - public_order_ratio
+def do_settlement_barbarian_generation(settlement: Settlement):
+    if settlement.population < 40:
+        return
 
-        pure_barbarian_units = world.models.WorldUnit.objects.filter(
-            location=settlement,
-            owner_character__isnull=True
-        )
-        barbarian_soldiers = sum(
-            [unit.soldier.count() for unit in pure_barbarian_units]
-        )
-        if barbarian_soldiers >= settlement.population * public_disorder_ratio:
-            return
-        if settlement.population < 40:
-            return
-        recruitment_size = random.randrange(10, settlement.population // 3)
-        generate_barbarian_unit(recruitment_size, settlement)
+    pure_barbarian_units = world.models.WorldUnit.objects.filter(
+        location=settlement,
+        owner_character__isnull=True
+    )
+    barbarian_soldiers = sum(
+        [unit.soldier.count() for unit in pure_barbarian_units]
+    )
+
+    if settlement.tile.controlled_by.get_violence_monopoly().barbaric:
+        if barbarian_soldiers < settlement.population * 0.2:
+            recruitment_size = random.randrange(
+                int(settlement.population * 0.05),
+                int(settlement.population * 0.15)
+            )
+            generate_barbarian_unit(recruitment_size, settlement)
+
+    else:
+        if settlement.public_order < 500:
+            public_order_ratio = settlement.public_order / 1000
+            public_disorder_ratio = 1 - public_order_ratio
+
+            if barbarian_soldiers >= settlement.population * public_disorder_ratio:
+                return
+            recruitment_size = random.randrange(10, settlement.population // 3)
+            generate_barbarian_unit(recruitment_size, settlement)
 
 
 def generate_barbarian_unit(recruitment_size, settlement):

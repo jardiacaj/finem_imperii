@@ -73,6 +73,9 @@ class Organization(models.Model):
         related_name='second_heir_to')
     tax_countdown = models.SmallIntegerField(default=0)
 
+    def has_tax_collection(self):
+        return self.violence_monopoly and not self.barbaric
+
     def remove_member(self, member):
         if member not in self.character_members.all():
             raise Exception("{} is not a member of {}".format(member, self))

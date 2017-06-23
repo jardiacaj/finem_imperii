@@ -47,6 +47,10 @@
                         {% if not forloop.last %},{% endif %}
                     {% endfor %}
             {% endif %}
+            {% if organization.has_tax_collection %}
+                <br>Next tax collection in {{ organization.tax_countdown }}
+                months.
+            {% endif %}
         </div>
     </div>
 
@@ -98,6 +102,9 @@
                     </a>
                 {% endif %}
             {% endfor %}
+            {% if organization.election_period_months %}
+                Electons for this position are called every {{ organization.election_period_months }} months.
+            {% endif %}
         {% endif %}
 
         {% if organization.policydocument_set.all %}

@@ -175,7 +175,7 @@ class TurnProcessor:
 
     def do_taxes(self):
         for state in self.world.get_violence_monopolies():
-            if state.barbaric:
+            if not state.has_tax_collection:
                 continue
 
             state.tax_countdown -= 1
@@ -532,8 +532,19 @@ def do_settlement_barbarian_generation(settlement: Settlement):
         [unit.soldier.count() for unit in pure_barbarian_units]
     )
 
+    non_barbarian_units = world.models.WorldUnit.objects.filter(
+        location=settlement,
+        owner_character__isnull=False
+    )
+    non_barbarian_soldiers = sum(
+        [unit.soldier.count() for unit in non_barbarian_units]
+    )
+
     if settlement.tile.controlled_by.get_violence_monopoly().barbaric:
-        if barbarian_soldiers < settlement.population * 0.2:
+        if (
+                barbarian_soldiers < settlement.population * 0.2
+                and non_barbarian_soldiers < settlement.population * 0.2
+        ):
             recruitment_size = random.randrange(
                 int(settlement.population * 0.05),
                 int(settlement.population * 0.15)

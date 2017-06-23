@@ -1,7 +1,15 @@
 from django.contrib import admin
-from django.apps import apps
 
-app = apps.get_app_config('messaging')
+from messaging.models import ServerMOTD, CharacterMessage, MessageRecipient, \
+    MessageRecipientGroup, MessageRelationship
 
-for model_name, model in app.models.items():
-    admin.site.register(model)
+
+@admin.register(ServerMOTD)
+class MOTDAdmin(admin.ModelAdmin):
+    list_display = ('title', 'display_order', 'draft')
+    list_filter = ('draft', )
+
+admin.site.register(CharacterMessage)
+admin.site.register(MessageRecipient)
+admin.site.register(MessageRecipientGroup)
+admin.site.register(MessageRelationship)

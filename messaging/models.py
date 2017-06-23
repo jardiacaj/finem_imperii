@@ -11,6 +11,9 @@ class ServerMOTD(models.Model):
     display_order = models.SmallIntegerField()
     draft = models.BooleanField(default=True)
 
+    def __str__(self):
+        return self.title
+
 
 class CharacterMessage(models.Model):
     class Meta:

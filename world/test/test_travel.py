@@ -50,6 +50,24 @@ class TestTravel(TestCase):
         self.assertEqual(character.location_id, 1008)
         self.assertEqual(character.hours_in_turn_left, 15*24 - 10)
 
+    def test_travel_in_tile_with_unit(self):
+        self.client.get(
+            reverse('world:activate_character', kwargs={'char_id': 2}),
+            follow=True
+        )
+
+        response = self.client.post(
+            reverse('world:travel'),
+            data={'target_settlement_id': 1008},
+            follow=True
+        )
+        self.assertRedirects(response, reverse('world:travel'))
+
+        character = Character.objects.get(id=2)
+        self.assertEqual(character.location_id, 1008)
+        self.assertEqual(character.hours_in_turn_left, 15*24 - 10)
+        self.assertEqual(character.worldunit_set.all()[0].location_id, 1008)
+
     def test_travel_to_other_tile(self):
         response = self.client.post(
             reverse('world:travel'),

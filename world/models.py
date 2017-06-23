@@ -605,6 +605,13 @@ class Character(models.Model):
         return None
 
     def perform_travel(self, destination):
+        for unit in self.worldunit_set.filter(
+            status=WorldUnit.FOLLOWING,
+            location=self.location
+        ):
+            unit.location = destination
+            unit.save()
+
         travel_time = self.travel_time(destination)
         self.location = destination
         self.hours_in_turn_left -= travel_time

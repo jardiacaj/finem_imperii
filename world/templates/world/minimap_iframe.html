@@ -8,6 +8,7 @@
         $(function () {
             var map = new MapRenderer({{ world_data|safe }});
             map.focus_to_region({{ request.hero.location.tile_id }});
+            map.enable_region_tags();
             map.highlight_settlement({{ request.hero.location_id }});
             {% if request.hero.travel_destination %}
                 map.add_travel_line({{ request.hero.location_id }}, {{ request.hero.travel_destination_id }});

@@ -6,8 +6,8 @@ from battle.battle_tick import battle_tick
 from battle.models import Battle, BattleUnit, Order, BattleOrganization, \
     BattleCharacter, BattleSoldier, BattleSoldierInTurn
 from world.initialization import initialize_unit
-from world.models import Tile, WorldUnit, Settlement, World
-from world.turn import do_settlement_barbarian_generation, trigger_battles_in_tile
+from world.models import Tile, WorldUnit, World
+from world.turn import trigger_battles_in_tile
 
 
 class TestBarbarianBattle(TestCase):

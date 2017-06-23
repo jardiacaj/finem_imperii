@@ -370,7 +370,10 @@ def activate_character(request, char_id):
 
 @inchar_required
 def character_home(request):
-    return render(request, 'world/character_home.html')
+    context = {
+        'recipient_list': request.hero.messagerecipient_set.filter(read=False)
+    }
+    return render(request, 'world/character_home.html', context=context)
 
 
 class TravelView(View):

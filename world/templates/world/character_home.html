@@ -1,6 +1,7 @@
 {% extends "base/base.html" %}
 
 {% load bootstrap %}
+{% load extra_filters %}
 
 {% block content %}
 
@@ -67,6 +68,10 @@
                 </fieldset>
             </form>
         {% endif %}
+
+        {% for recipient in recipient_list %}
+            {% include 'messaging/message_include.html' %}
+        {% endfor %}
     </div>
 
     <div class="col-md-4">

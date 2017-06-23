@@ -339,6 +339,11 @@ class Building(models.Model):
         help_text="NULL means 'owned by local population'"
     )
 
+    def worker_percent(self):
+        return int(
+            self.worker.count() / self.max_ideal_workers() * 100
+        )
+
     def max_workers(self):
         if self.type == self.GUILD:
             return self.quantity * 20000
@@ -383,6 +388,15 @@ class Building(models.Model):
     def population_consumable_bushels(self):
         bushel_object = self.get_public_bushels_object()
         return bushel_object.quantity
+
+    def grain_reserve_in_months(self):
+        try:
+            return math.floor(
+                self.population_consumable_bushels() /
+                self.settlement.population
+            )
+        except ZeroDivisionError:
+            return 0
 
     def __str__(self):
         return self.LEVEL_DESCRIPTORS[self.type][self.level][

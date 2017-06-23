@@ -23,6 +23,7 @@ from world.recruitment import build_population_query_from_request, \
     BadPopulation, sample_candidates, recruit_unit
 from world.renderer import render_world_for_view
 from world.templatetags.extra_filters import nice_hours
+from world.turn import field_output_months
 
 
 @inchar_required
@@ -53,6 +54,7 @@ def tile_view(request, tile_id):
     tile = get_object_or_404(Tile, id=tile_id, world=request.hero.world)
     context = {
         'tile': tile,
+        'harvest': (tile.world.current_turn % 12) in field_output_months,
         'characters': Character.objects.filter(location__tile=tile),
         'units': WorldUnit.objects.filter(location__tile=tile),
         'conquests': TileEvent.objects.filter(

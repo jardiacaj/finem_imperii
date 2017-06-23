@@ -105,12 +105,13 @@
                             <li>
                                 {{ building|capfirst }}
                                 {% if building.type == 'granary' %}
-                                    - {{ building.get_public_bushels_object.quantity }} bushels
-                                {% elif building.type == 'residence' %}
-                                    - {{ building.resident.count }} residents
+                                    - {{ building.grain_reserve_in_months }} months reserve, {{ building.get_public_bushels_object.quantity }} bushels
                                 {% elif building.type == 'grain field' %}
-                                    - {{ building.worker.count }} workers
+                                    {% if harvest %}<b>(harvesting)</b>{% endif %}
+                                    - {{ building.worker.count }}
+                                    ({{ building.worker_percent }}%) workers
                                 {% elif building.type == 'guild' %}
+                                    ({{ settlement.get_guilds_setting_display }})
                                     - {{ building.worker.count }} workers
                                 {% endif %}
                             </li>

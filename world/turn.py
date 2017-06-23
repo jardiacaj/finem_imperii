@@ -175,7 +175,7 @@ class TurnProcessor:
 
     def do_taxes(self):
         for state in self.world.get_violence_monopolies():
-            if state.barbaric:
+            if not state.has_tax_collection:
                 continue
 
             state.tax_countdown -= 1

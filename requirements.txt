@@ -5,3 +5,5 @@ PyYAML==3.12
 coverage>=4.0,<4.4
 mysqlclient==1.3.10
 # psycopg2==2.7.1
+django-classy-tags
+django-cookie-law

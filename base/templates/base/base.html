@@ -1,9 +1,12 @@
 {% extends 'base/base_naked.html' %}
 
+{% load cookielaw_tags %}
+
 {% block body %}
     {% include "base/navbar.html" %}
 
     <div class="container-fluid">
+        {% cookielaw_banner %}
 
         {% if request.hero %}
             <div class="col-xs-12 col-md-3 well">

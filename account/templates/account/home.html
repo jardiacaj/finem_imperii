@@ -15,7 +15,7 @@
             <h2>News</h2>
         {% endif %}
         {% for message in server_messages %}
-            <h2>{{ message.title }}</h2>
+            <h3>{{ message.title }}</h3>
             {{ message.html_content|safe }}
         {% empty %}
             <p>None configured.</p>

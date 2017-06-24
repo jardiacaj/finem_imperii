@@ -109,7 +109,7 @@
                         </ul>
                     </li>
                 {% endif %}
-                <li><a href="{% url 'help:home' %}">Help</a></li>
+                <li><a href="{% url 'help:home' %}">Game Manual</a></li>
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'account:logout' %}">Logout ({{ user }})</a></li>
                 {%  else %}

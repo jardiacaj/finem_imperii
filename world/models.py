@@ -9,6 +9,7 @@ from django.db import models, transaction
 from django.contrib.auth.models import User
 from django.db.models.aggregates import Avg
 from django.db.models.expressions import F
+from django.utils import timezone
 
 from battle.models import BattleUnit, BattleSoldierInTurn, BattleCharacter
 from messaging import shortcuts
@@ -556,7 +557,7 @@ class Character(models.Model):
         Settlement, null=True, blank=True, related_name='travellers_heading'
     )
     profile = models.CharField(max_length=20, choices=PROFILE_CHOICES)
-    last_activation_time = models.DateTimeField(auto_now_add=True)
+    last_activation_time = models.DateTimeField(default=timezone.now)
     paused = models.BooleanField(default=False)
 
     @property

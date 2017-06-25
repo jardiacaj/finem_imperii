@@ -30,8 +30,7 @@ def initialize_world(world):
 
 
 def initialize_organization(organization):
-    if organization.position_type == Organization.ELECTED and organization.get_position_occupier() is None:
-        organization.convoke_elections()
+    pass
 
 
 def initialize_tile(tile):

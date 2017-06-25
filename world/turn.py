@@ -17,6 +17,8 @@ import world.models
 import organization.models
 import world.recruitment
 import world.initialization
+from organization.models import PositionElectionVote, PositionElection, \
+    Organization
 from world.models import Building, Settlement, NPC, WorldUnit
 from world.templatetags.extra_filters import nice_turn
 
@@ -445,7 +447,8 @@ class TurnProcessor:
                 send_notification_to_characters(
                     self.world.character_set,
                     CharacterMessage.CONQUEST,
-                    "{tile}, which was previously controlled by {previous}, has been conquered by {conqueror}!".format(
+                    "{tile}, which was previously controlled by {previous}, "
+                    "has been conquered by {conqueror}!".format(
                         tile=conquest.tile.get_html_link(),
                         previous=previous_owner.get_html_link(),
                         conqueror=conquest.organization.get_html_link()
@@ -454,18 +457,36 @@ class TurnProcessor:
                 )
 
     def do_elections(self):
-        for organization in self.world.organization_set.all():
-            if organization.current_election and organization.current_election.turn == self.world.current_turn:
-                organization.current_election.resolve()
+        for election in PositionElection.objects.filter(
+            position__world=self.world,
+            turn=self.world.current_turn
+        ):
+            election.resolve()
 
-        for organization in self.world.organization_set.all():
-            if organization.election_period_months and not organization.current_election and not organization.last_election:
-                organization.convoke_elections(12)
-            elif organization.election_period_months and not organization.current_election and organization.last_election:
-                turns_since_last_election = self.world.current_turn - organization.last_election.turn
-                turns_to_next_election = organization.election_period_months - turns_since_last_election
-                if turns_to_next_election < 12:
-                    organization.convoke_elections(12)
+        for organization in self.world.organization_set.filter(
+            position_type=Organization.ELECTED
+        ):
+            if not organization.current_election:
+                if not organization.last_election:
+                    turns_to_next_election = 6
+                else:
+                    turns_since_last_election = self.world.current_turn - organization.last_election.turn
+                    turns_to_next_election = organization.election_period_months - turns_since_last_election
+                organization.convoke_elections(turns_to_next_election)
+            elif organization.current_election.turn - organization.world.current_turn == 3:
+                message = shortcuts.create_message(
+                    "<p>Election for {} will be in 3 months.</p>"
+                    "<p>Now. no new candidates can "
+                    "present themselves to this election.</p>"
+                    "<p>Make sure to cast your vote before the "
+                    "election!</p>".format(
+                        organization.get_html_link(),
+                    ),
+                    self.world,
+                    "elections",
+                    safe=True,
+                    link=organization.current_election.get_absolute_url()
+                )
 
     def do_travels(self):
         for character in self.world.character_set.all():

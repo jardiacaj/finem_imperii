@@ -30,13 +30,21 @@ def add_character_recipient(message: CharacterMessage, character, group=None):
             message=message, character=character, group=group)
 
 
-def add_organization_recipient(message: CharacterMessage, organization):
+def add_organization_recipient(
+        message: CharacterMessage,
+        organization,
+        add_lead_organizations=False
+):
     group = MessageRecipientGroup.objects.get_or_create(
         message=message,
         organization=organization
     )[0]
     for character in organization.character_members.all():
         add_character_recipient(message, character, group)
+
+    if add_lead_organizations:
+        for lead_organization in organization.leaded_organizations.all():
+            add_organization_recipient(message, lead_organization)
 
 
 def add_recipients_for_reply(

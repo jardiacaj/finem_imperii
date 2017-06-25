@@ -125,9 +125,11 @@ class Organization(models.Model):
             message_content, self.world, 'leaving',
             link=self.get_absolute_url()
         )
-        shortcuts.add_organization_recipient(message, self)
-        for org in self.leaded_organizations.all():
-            shortcuts.add_organization_recipient(message, org)
+        shortcuts.add_organization_recipient(
+            message,
+            self,
+            add_lead_organizations=True
+        )
 
     def get_descendants_list(self, including_self=False):
         descendants = list()
@@ -285,9 +287,11 @@ class Organization(models.Model):
             'elections',
             link=election.get_absolute_url()
         )
-        shortcuts.add_organization_recipient(message, self)
-        for org in self.leaded_organizations.all():
-            shortcuts.add_organization_recipient(message, org)
+        shortcuts.add_organization_recipient(
+            message,
+            self,
+            add_lead_organizations=True
+        )
 
     def __str__(self):
         return self.name
@@ -389,6 +393,12 @@ class PositionElection(models.Model):
                 winners.append(candidacy)
 
         if len(winners) != 1:
+            message_content = (
+                "The elections for {} resulted in no winner. "
+                "New elections will be convoked.".format(
+                    self.position.get_html_link()
+                )
+            )
             self.position.convoke_elections()
         else:
             winning_candidacy = winners[0]
@@ -397,6 +407,26 @@ class PositionElection(models.Model):
             self.position.character_members.remove(
                 self.position.get_position_occupier())
             self.position.character_members.add(winning_candidate)
+            message_content = (
+                "The elections for {} have been won by {}."
+                "".format(
+                    self.position.get_html_link(),
+                    winning_candidate.get_html_link()
+                )
+            )
+
+        message = shortcuts.create_message(
+            message_content,
+            self.position.world,
+            'elections',
+            safe=True,
+            link=self.get_absolute_url()
+        )
+        shortcuts.add_organization_recipient(
+            message,
+            self.position,
+            add_lead_organizations=True
+        )
 
         self.position.last_election = self
         self.position.current_election = None

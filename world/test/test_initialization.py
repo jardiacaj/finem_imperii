@@ -19,12 +19,6 @@ class TestInitialization(TestCase):
         world.initialization.initialize_settlement(settlement)
         self.assertEqual(settlement.npc_set.count(), settlement.population)
 
-    def test_initialize_organization_elected(self):
-        organization = Organization.objects.get(name="Democracy leader")
-        organization.character_members.clear()
-        world.initialization.initialize_organization(organization)
-        self.assertTrue(PositionElection.objects.filter(position=organization, closed=False).exists())
-
     def test_initialize_organization_inherited(self):
         organization = Organization.objects.get(name="Small King")
         organization.character_members.clear()

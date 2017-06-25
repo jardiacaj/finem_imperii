@@ -7,6 +7,7 @@ from django.views.decorators.http import require_POST
 from django.views.generic.base import View
 
 from battle.models import BattleFormation
+from messaging import shortcuts
 from organization.models import Organization, PolicyDocument, Capability, \
     PositionCandidacy, PositionElectionVote, OrganizationRelationship, \
     MilitaryStance
@@ -145,11 +146,13 @@ def election_convoke_view(request, capability_id):
 @require_POST
 @capability_required_decorator
 def candidacy_view(request, capability_id):
-    capability = get_object_or_404(Capability, id=capability_id, type=Capability.CANDIDACY)
+    capability = get_object_or_404(
+        Capability, id=capability_id, type=Capability.CANDIDACY)
 
     election = capability.applying_to.current_election
     if not election:
-        messages.error(request, "There is currently no election in progress!", "danger")
+        messages.error(
+            request, "There is currently no election in progress!", "danger")
         return redirect(capability.get_absolute_url())
 
     description = request.POST.get('description')
@@ -159,10 +162,26 @@ def candidacy_view(request, capability_id):
         election=election,
         candidate=request.hero
     )
+    message = shortcuts.create_message(
+        "<p>{} has presented a candidacy to the election for {}.</p>".format(
+            request.hero.get_html_link(),
+            capability.applying_to.get_html_link()
+        ),
+        capability.applying_to.world,
+        "elections",
+        safe=True,
+        link=election.get_absolute_url()
+    )
+    shortcuts.add_organization_recipient(
+        message,
+        capability.applying_to,
+        add_lead_organizations=True
+    )
 
     if retire:
         candidacy.retired = True
-        messages.success(request, "Your candidacy has been retired.", "success")
+        messages.success(
+            request, "Your candidacy has been retired.", "success")
     else:
         candidacy.description = description
         if new:

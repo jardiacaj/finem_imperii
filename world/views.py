@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.http.response import Http404
 from django.shortcuts import render, get_object_or_404, redirect
+from django.utils import timezone
 from django.views.decorators.http import require_POST
 from django.views.generic.base import View
 
@@ -363,8 +364,11 @@ class RecruitmentView(View):
 
 @login_required
 def activate_character(request, char_id):
-    character = get_object_or_404(Character, pk=char_id, owner_user=request.user)
+    character = get_object_or_404(
+        Character, pk=char_id, owner_user=request.user)
     request.session['character_id'] = character.id
+    character.last_activation = timezone.now()
+    character.save()
     return redirect('world:character_home')
 
 

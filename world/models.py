@@ -556,6 +556,8 @@ class Character(models.Model):
         Settlement, null=True, blank=True, related_name='travellers_heading'
     )
     profile = models.CharField(max_length=20, choices=PROFILE_CHOICES)
+    last_activation_time = models.DateTimeField(auto_now_add=True)
+    paused = models.BooleanField(default=False)
 
     @property
     def activation_url(self):

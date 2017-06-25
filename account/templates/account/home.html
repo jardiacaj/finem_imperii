@@ -23,7 +23,7 @@
     </div>
 
     <div class="col-md-6">
-        <h2>Your characters</h2>
+        <h2>Your characters ({{ user.character_set.count }}/4)</h2>
         <table class="table table-hover">
             <tbody>
                 {% for character in user.character_set.all %}

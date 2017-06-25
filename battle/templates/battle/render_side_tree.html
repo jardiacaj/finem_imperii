@@ -3,19 +3,19 @@
         <li class="lead">{{ battle_organization.organization.get_html_link|safe }}</li>
 
         <ul>
-            {% for battle_character in battle_organization.battlecharacter_set.all %}
-                <li>{{ battle_character.character.get_html_link|safe }}</li>
+            {% for battle_unit in battle_organization.battleunit_set.all %}
 
-                <ul>
-                    {% for battle_unit in battle_character.battleunit_set.all %}
-                        <li>
-                            <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
-                            {{ battle_unit.starting_manpower }}
-                            {{ battle_unit.type }}:
-                            {{ battle_unit.world_unit.name }}
-                        </li>
-                    {% endfor %}
-                </ul>
+                <li>
+                    <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
+                    {{ battle_unit.starting_manpower }}
+                    {{ battle_unit.type }}:
+                    {{ battle_unit.world_unit.name }}
+                    {% if battle_unit.owner %}
+                        <ul><li>
+                            {{ battle_unit.owner.character.get_html_link|safe }}
+                        </li></ul>
+                    {% endif %}
+                </li>
 
             {% empty %}
                 <li>No one</li>

@@ -40,7 +40,7 @@ function BattleRenderer(battle_data) {
     zis.get_contubernium_default_material = function (contubernium) {
         var unit = zis.units[contubernium.unit_id];
         var character = zis.characters[unit.character_id];
-        var organization = zis.organizations[character.organization_id];
+        var organization = zis.organizations[unit.organization_id];
         return organization.material;
     };
 
@@ -157,7 +157,7 @@ function BattleRenderer(battle_data) {
             } else {
                 var unit = zis.units[zis.picked_contubernium.unit_id];
                 var character = zis.characters[unit.character_id];
-                var organization = zis.organizations[character.organization_id];
+                var organization = zis.organizations[unit.organization_id];
                 zis.hover_callback(zis.picked_contubernium, unit, character, organization);
             }
         }

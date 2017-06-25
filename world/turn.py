@@ -184,7 +184,7 @@ class TurnProcessor:
             state.save()
             if state.tax_countdown <= 0:
                 self.do_state_taxes(state)
-                state.tax_countdown = 12
+                state.tax_countdown = 6
                 state.save()
 
     def do_state_taxes(self, state: organization.models.Organization):

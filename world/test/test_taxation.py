@@ -32,7 +32,7 @@ class TestTaxation(TestCase):
         turn_processor.do_taxes()
 
         state = settlement.tile.controlled_by.get_violence_monopoly()
-        self.assertEqual(state.tax_countdown, 12)
+        self.assertEqual(state.tax_countdown, 6)
 
         char1 = Character.objects.get(id=4)
         self.assertEqual(char1.cash, 10000 + 100 * 6 / 2)

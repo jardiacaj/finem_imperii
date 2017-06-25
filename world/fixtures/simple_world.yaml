@@ -6,6 +6,7 @@
     # password is "test"
     password: 'pbkdf2_sha256$10000$vkRy7QauoLLj$ry+3xm3YX+YrSXbri8s3EcXDIrx5ceM+xQjtpLdw2oE='
     is_staff: true
+    is_superuser: true
 
 
 - model: world.Character

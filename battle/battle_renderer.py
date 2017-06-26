@@ -1,4 +1,5 @@
 from battle.models import Battle
+from finem_imperii.app_settings import BATTlE_TICKS_PER_TURN
 
 
 def render_battle_for_view(battle: Battle):
@@ -49,6 +50,7 @@ def render_battle_for_view(battle: Battle):
                         }
 
     result = {
+        'battle_ticks_per_turn': BATTlE_TICKS_PER_TURN,
         'organizations': organizations,
         'characters': characters,
         'units': units,

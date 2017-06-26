@@ -174,7 +174,7 @@ function BattleRenderer(battle_data) {
 
     /* VARS */
 
-    zis.showing_turn = zis.turn_count - 1;
+    zis.showing_turn = Math.max(zis.turn_count - 1 - battle_data.battle_ticks_per_turn, 0);
     zis.picked_contubernium = undefined;
     zis.clicked_contubernium = undefined;
 

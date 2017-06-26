@@ -6,6 +6,7 @@ from django.db import transaction
 
 from battle.models import Battle, BattleCharacterInTurn, BattleUnitInTurn, BattleContuberniumInTurn, \
     BattleSoldierInTurn, Coordinates, Order, BattleUnit
+from finem_imperii.app_settings import BATTlE_TICKS_PER_TURN
 from world.models import WorldUnit
 
 
@@ -431,7 +432,7 @@ def battle_tick(battle: Battle):
 
 
 def battle_turn(battle: Battle):
-    for i in range(15):
+    for i in range(BATTlE_TICKS_PER_TURN):
         battle.refresh_from_db()
         if battle.current:
             battle_tick(battle)

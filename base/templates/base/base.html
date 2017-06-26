@@ -15,7 +15,7 @@
     </script>
 
     <!-- cookie law -->
-    <script src="{% static 'cookielaw/js/cookielaw.js' %}"></script>
+    <script src="{% static 'cookielaw/js/cookielaw.js' %}?{{ git_rev }}"></script>
 
     {% include "base/navbar.html" %}
 

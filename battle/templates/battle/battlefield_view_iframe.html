@@ -4,10 +4,10 @@
 
 {% block body %}
 
-    <script src="{% static 'world/3rd/three.min.js' %}"></script>
-    <script src="{% static 'world/3rd/OrbitControls.js' %}"></script>
-    <script src="{% static 'world/base_renderer.js' %}"></script>
-    <script src="{% static 'world/battle_renderer.js' %}"></script>
+    <script src="{% static 'world/3rd/three.min.js' %}?{{ git_rev }}"></script>
+    <script src="{% static 'world/3rd/OrbitControls.js' %}?{{ git_rev }}"></script>
+    <script src="{% static 'world/base_renderer.js' %}?{{ git_rev }}"></script>
+    <script src="{% static 'world/battle_renderer.js' %}?{{ git_rev }}"></script>
 
     <script>
         function info_callback(contubernium, unit, character, organization) {

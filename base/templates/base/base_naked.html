@@ -25,16 +25,16 @@
         <![endif]-->
 
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-        <script src="{% static 'base/3rd/js/jquery.min.js' %}"></script>
+        <script src="{% static 'base/3rd/js/jquery.min.js' %}?{{ git_rev }}"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
 
         <!-- Latest compiled and minified JavaScript -->
-        <script src="{% static 'base/3rd/js/bootstrap.min.js' %}"
+        <script src="{% static 'base/3rd/js/bootstrap.min.js' %}?{{ git_rev }}"
                 integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
                 crossorigin="anonymous"></script>
 
         <!-- Chart.js -->
-        <script src="{% static 'base/3rd/js/Chart.bundle.min.js' %}"
+        <script src="{% static 'base/3rd/js/Chart.bundle.min.js' %}?{{ git_rev }}"
                 crossorigin="anonymous"></script>
 
         <script>

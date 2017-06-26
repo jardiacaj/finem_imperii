@@ -24,9 +24,22 @@
         })
     </script>
 
-    <div class="battlefield_turn_controls">
-        <button onclick="map.prev_turn()" class="btn btn-default">PREV</button>
-        <button onclick="map.fwd_turn()" class="btn btn-default">NEXT</button>
+    <div class="battlefield_turn_controls text-center">
+        <button onclick="map.turn_back()" class="btn btn-default">
+            <span class="glyphicon glyphicon-fast-backward" aria-hidden="true"></span>
+        </button>
+        <button onclick="map.step_back()" class="btn btn-default">
+            <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+        </button>
+
+        <span id="current_turn_display"></span>/<span id="total_turn_display"></span>
+
+        <button onclick="map.step_fwd()" class="btn btn-default">
+            <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+        </button>
+        <button onclick="map.turn_fwd()" class="btn btn-default">
+            <span class="glyphicon glyphicon-fast-forward" aria-hidden="true"></span>
+        </button>
     </div>
 
     <div class="battlefield_unit_info text-right">

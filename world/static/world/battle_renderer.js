@@ -7,13 +7,29 @@ function BattleRenderer(battle_data) {
     zis.click_callback = undefined;
     zis.hover_callback = undefined;
 
-    zis.prev_turn = function () {
+    zis.step_back = function () {
         if (zis.showing_turn > 0) zis.showing_turn--;
         zis.animated_update();
     };
 
-    zis.fwd_turn = function () {
+    zis.step_fwd = function () {
         if (zis.showing_turn < zis.turn_count - 1) zis.showing_turn++;
+        zis.animated_update();
+    };
+
+    zis.turn_back = function () {
+        zis.showing_turn = Math.max(
+            zis.showing_turn - zis.battle_ticks_per_turn,
+            0
+        );
+        zis.animated_update();
+    };
+
+    zis.turn_fwd = function () {
+        zis.showing_turn = Math.min(
+            zis.showing_turn + zis.battle_ticks_per_turn,
+            zis.turn_count - 1
+        );
         zis.animated_update();
     };
 
@@ -64,6 +80,11 @@ function BattleRenderer(battle_data) {
         zis.renderer.scene.add(mesh);
     };
 
+    zis.update_turn_counter = function () {
+        $('#current_turn_display').text(zis.showing_turn);
+        $('#total_turn_display').text(zis.turn_count - 1);
+    };
+
     zis.render_turn = function (turn_num) {
         for (var contubernium_id in zis.contubernia)  {
             if (Object.prototype.hasOwnProperty.call(zis.contubernia, contubernium_id)) {
@@ -75,11 +96,10 @@ function BattleRenderer(battle_data) {
                 }
             }
         }
+        zis.update_turn_counter();
     };
 
     zis.animated_update = function () {
-        console.log("Showing turn " + zis.showing_turn);
-
         for (var contubernium_id in zis.contubernia) {
             if (Object.prototype.hasOwnProperty.call(zis.contubernia, contubernium_id)) {
                 var contubernium = zis.contubernia[contubernium_id];
@@ -95,6 +115,7 @@ function BattleRenderer(battle_data) {
             }
         }
         zis.renderer.render();
+        zis.update_turn_counter();
     };
 
     zis.generate_organization_materials = function () {
@@ -170,11 +191,11 @@ function BattleRenderer(battle_data) {
     zis.characters = battle_data.characters;
     zis.units = battle_data.units;
     zis.contubernia = battle_data.contubernia;
+    zis.battle_ticks_per_turn = battle_data.battle_ticks_per_turn;
     zis.turn_count = battle_data.turn_count;
 
     /* VARS */
-
-    zis.showing_turn = Math.max(zis.turn_count - 1 - battle_data.battle_ticks_per_turn, 0);
+    zis.showing_turn = Math.max(zis.turn_count - 1 - zis.battle_ticks_per_turn, 0);
     zis.picked_contubernium = undefined;
     zis.clicked_contubernium = undefined;
 

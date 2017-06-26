@@ -30,7 +30,9 @@ pre.wrapping {
 .battlefield_turn_controls {
     position: absolute;
     top: 10px;
-    left: 10px
+    left: 10px;
+    width: 100%;
+    color: #000;
 }
 
 .battlefield_unit_info {

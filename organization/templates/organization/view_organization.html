@@ -64,8 +64,8 @@
                     <li>
                         {{ tile.get_html_link|safe }}
                         {% if tile.controlled_by != organization %}
-                            (controlled by <a href="{{ tile.controlled_by.get_absolute_url }}">
-                            {{ tile.controlled_by }}</a>
+                            (controlled by
+                            {{ tile.controlled_by.get_html_link|safe }})
                         {% endif %}
                     </li>
                 {% empty %}

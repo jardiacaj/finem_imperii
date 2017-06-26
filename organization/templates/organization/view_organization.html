@@ -123,7 +123,10 @@
             <ul>
                 {% if organization.membership_type == 'character' %}
                     {% for char_member in organization.character_members.all %}
-                        <li>{{ char_member.get_html_link|safe }}</li>
+                        <li>
+                            {{ char_member.get_html_link|safe }}
+                            ({{ char_member.get_profile_display }})
+                        </li>
                     {% empty %}
                         <li>None</li>
                     {% endfor %}

@@ -1,5 +1,5 @@
 #!/bin/ash
 
-git rev-parse HEAD | cut -c -7 > base/templates/base/build.html
-echo -n " " >> base/templates/base/build.html
-git tag -l --points-at HEAD >> base/templates/base/build.html
+GIT_REV=$(git rev-parse HEAD | cut -c -7)
+echo "build = '$GIT_REV'" > finem_imperii/bulid.py
+echo "$GIT_REV" > base/templates/base/build.html

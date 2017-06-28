@@ -19,7 +19,7 @@ import world.recruitment
 import world.initialization
 from organization.models import PositionElectionVote, PositionElection, \
     Organization
-from world.models import Building, Settlement, NPC, WorldUnit
+from world.models import Building, Settlement, NPC, WorldUnit, World
 from world.templatetags.extra_filters import nice_turn
 
 
@@ -39,12 +39,13 @@ field_production_reset_month = 8
 
 
 class TurnProcessor:
-    def __init__(self, world):
+    def __init__(self, world: World):
         self.world = world
 
     @transaction.atomic
     def do_turn(self):
         # self.delete_dead_realms()
+        self.character_pausing()
         self.do_travels()
         self.restore_hours()
         self.do_unit_maintenance()
@@ -72,6 +73,10 @@ class TurnProcessor:
             "It is now {}.".format(nice_turn(self.world.current_turn)),
             'turn'
         )
+
+    def character_pausing(self):
+        for character in self.world.character_set.all():
+            character.maybe_pause()
 
     def do_public_order_update(self):
         for tile in self.world.tile_set.all():

@@ -564,6 +564,45 @@ class Character(models.Model):
     def activation_url(self):
         return reverse('world:activate_character', kwargs={'char_id': self.id})
 
+    def inactivity_time(self):
+        return timezone.now() - self.last_activation_time
+
+    def hours_since_last_activation(self):
+        return self.inactivity_time().total_seconds() / 60 / 60
+
+    def maybe_pause(self):
+        if not self.can_pause():
+            return
+
+        if self.hours_since_last_activation() > self.inactivity_hours_allowed():
+            self.pause()
+
+    def inactivity_hours_allowed(self):
+        time_since_user_registered = timezone.now() - self.owner_user.date_joined
+        hours_since_user_registered = time_since_user_registered.total_seconds() / 60 / 60
+        return 24 * 2 if hours_since_user_registered < 24 * 5 else 24 * 6
+
+    @transaction.atomic()
+    def pause(self):
+        for organization in self.organization_set.exclude(violence_monopoly=True):
+            organization.remove_member(self)
+
+        self.last_activation_time = timezone.now()
+        self.paused = True
+        self.save()
+
+    def can_pause(self):
+        return not self.paused
+
+    def can_unpause(self):
+        return self.paused and self.hours_since_last_activation() > 48
+
+    def unpause(self):
+        if not self.can_unpause():
+            return
+        self.paused = False
+        self.save()
+
     def get_battle_participating_in(self):
         try:
             return BattleCharacter.objects.get(
@@ -576,7 +615,7 @@ class Character(models.Model):
     def travel_time(self, target_settlement):
         distance = self.location.distance_to(target_settlement)
         if (self.location.tile.type == Tile.MOUNTAIN
-                or target_settlement.tile.type == Tile.MOUNTAIN):
+            or target_settlement.tile.type == Tile.MOUNTAIN):
             distance *= 2
         if self.location.tile.get_current_battles().exists():
             distance *= 2
@@ -599,18 +638,18 @@ class Character(models.Model):
         if target_settlement.tile.distance_to(self.location.tile) > 1.5:
             return "You can only travel to contiguous regions."
         if (self.travel_destination is not None
-                and self.travel_destination != target_settlement):
+            and self.travel_destination != target_settlement):
             return "You cant travel to {} because you are already travelling" \
                    " to {}.".format(
-                        target_settlement,
-                        self.travel_destination
-                   )
+                target_settlement,
+                self.travel_destination
+            )
         return None
 
     def perform_travel(self, destination):
         for unit in self.worldunit_set.filter(
-            status=WorldUnit.FOLLOWING,
-            location=self.location
+                status=WorldUnit.FOLLOWING,
+                location=self.location
         ):
             unit.location = destination
             unit.save()
@@ -701,12 +740,12 @@ class Character(models.Model):
         local_violence_monopoly = \
             self.location.tile.controlled_by.get_violence_monopoly()
 
-        organizations_local_vm = local_violence_monopoly.\
+        organizations_local_vm = local_violence_monopoly. \
             organizations_character_can_apply_capabilities_to_this_with(
-                self, capability_type)
-        organizations_controlled_by = self.location.tile.controlled_by\
+            self, capability_type)
+        organizations_controlled_by = self.location.tile.controlled_by \
             .organizations_character_can_apply_capabilities_to_this_with(
-                self, capability_type)
+            self, capability_type)
         return (
             organizations_local_vm
             or

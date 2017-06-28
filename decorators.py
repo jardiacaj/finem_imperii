@@ -20,6 +20,7 @@ def inchar_required(func):
             Character,
             pk=args[0].session.get('character_id', 0),
             owner_user=args[0].user,
+            paused=False
         )
         args[0].hero = hero
 

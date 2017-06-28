@@ -9,12 +9,13 @@ from world.views import CharacterCreationView, activate_character, \
     unit_rename, unit_disband, character_view, tile_view, \
     tile_view_iframe, unit_battle_settings, unit_status_change, \
     unit_battle_orders, unit_conquest_action, character_view_iframe, \
-    InventoryView, public_order
+    InventoryView, public_order, pause_character
 
 urlpatterns = [
     url(r'^create_character$', create_character, name='create_character'),
     url(r'^create_character/(?P<world_id>[0-9]+)$', login_required(CharacterCreationView.as_view()), name='create_character'),
     url(r'^activate_character/(?P<char_id>[0-9]+)$', activate_character, name='activate_character'),
+    url(r'^pause_character$', pause_character, name='pause_character'),
     url(r'^character_home$', character_home, name='character_home'),
     url(r'^travel/(?P<settlement_id>[0-9]+)?$', inchar_required(TravelView.as_view()), name='travel'),
     url(r'^travel_iframe/(?P<settlement_id>[0-9]+)?$', travel_view_iframe, name='travel_iframe'),

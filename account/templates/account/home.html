@@ -43,7 +43,27 @@
                             {{ character.location }}, {{ character.location.tile }}
                         </td>
                         <td style="vertical-align: middle" class="text-right">
-                            <a href="{{ character.activation_url }}" class="btn btn-primary">Enter</a>
+                            <form action="{% url 'world:pause_character' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="character_id" value="{{ character.id }}">
+
+                                <button
+                                        type="submit"
+                                        class="btn btn-default"
+                                        onclick="return confirm('Are you sure?')"
+
+                                >
+                                    <span class="glyphicon glyphicon-pause" aria-hidden="true"></span>
+                                    Pause
+                                </button>
+                                <a
+                                        href="{{ character.activation_url }}"
+                                        class="btn btn-primary"
+                                >
+                                    <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
+                                    Enter
+                                </a>
+                            </form>
                         </td>
                     </tr>
                 {% empty %}

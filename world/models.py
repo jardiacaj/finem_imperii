@@ -582,6 +582,14 @@ class Character(models.Model):
         hours_since_user_registered = time_since_user_registered.total_seconds() / 60 / 60
         return 24 * 2 if hours_since_user_registered < 24 * 5 else 24 * 6
 
+    def hours_until_autopause(self):
+        inactivity_hours_allowed = self.inactivity_hours_allowed()
+        hours_since_last_activation = self.hours_since_last_activation()
+        return max(
+            inactivity_hours_allowed - hours_since_last_activation,
+            0
+        )
+
     @transaction.atomic()
     def pause(self):
         for organization in self.organization_set.exclude(violence_monopoly=True):

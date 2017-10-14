@@ -41,29 +41,59 @@
                         </td>
                         <td style="vertical-align: middle">
                             {{ character.location }}, {{ character.location.tile }}
+
+                            {% if character.paused and not character.can_unpause %}
+                                <br>
+                                Can not unpause yet.
+                            {% endif %}
+
+                            {% if not character.paused and character.hours_until_autopause < 48 %}
+                                <br>
+                                Autopause in
+                                {{ character.hours_until_autopause|floatformat:"0" }} hours.
+                            {% endif %}
+
                         </td>
                         <td style="vertical-align: middle" class="text-right">
-                            <form action="{% url 'world:pause_character' %}" method="post">
-                                {% csrf_token %}
-                                <input type="hidden" name="character_id" value="{{ character.id }}">
+                            {% if character.can_unpause %}
+                                <form action="{% url 'world:unpause_character' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="character_id" value="{{ character.id }}">
 
-                                <button
-                                        type="submit"
-                                        class="btn btn-default"
-                                        onclick="return confirm('Are you sure?')"
+                                    <button
+                                            type="submit"
+                                            class="btn btn-default"
+                                            onclick="return confirm('Are you sure?')"
 
-                                >
-                                    <span class="glyphicon glyphicon-pause" aria-hidden="true"></span>
-                                    Pause
-                                </button>
-                                <a
-                                        href="{{ character.activation_url }}"
-                                        class="btn btn-primary"
-                                >
-                                    <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
-                                    Enter
-                                </a>
-                            </form>
+                                    >
+                                        <span class="glyphicon glyphicon-pause" aria-hidden="true"></span>
+                                        Unpause
+                                    </button>
+                                </form>
+                            {% endif %}
+                            {% if character.can_pause %}
+                                <form action="{% url 'world:pause_character' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="character_id" value="{{ character.id }}">
+
+                                    <button
+                                            type="submit"
+                                            class="btn btn-default"
+                                            onclick="return confirm('Are you sure?')"
+
+                                    >
+                                        <span class="glyphicon glyphicon-pause" aria-hidden="true"></span>
+                                        Pause
+                                    </button>
+                                    <a
+                                            href="{{ character.activation_url }}"
+                                            class="btn btn-primary"
+                                    >
+                                        <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
+                                        Enter
+                                    </a>
+                                </form>
+                            {% endif %}
                         </td>
                     </tr>
                 {% empty %}

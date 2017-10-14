@@ -367,7 +367,7 @@ def activate_character(request, char_id):
     character = get_object_or_404(
         Character, pk=char_id, owner_user=request.user)
     request.session['character_id'] = character.id
-    character.last_activation = timezone.now()
+    character.last_activation_time = timezone.now()
     character.save()
     return redirect('world:character_home')
 

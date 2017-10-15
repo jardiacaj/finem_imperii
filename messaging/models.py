@@ -37,6 +37,7 @@ class CharacterMessage(models.Model):
     LEAVE = 'leaving'
     TAXES = 'taxes'
     NEWCOMER = 'newcomer'
+    PAUSE = 'pause'
     CATEGORY_CHOICES = (
         (TRAVEL, TRAVEL),
         (CONQUEST, CONQUEST),
@@ -57,6 +58,7 @@ class CharacterMessage(models.Model):
         (LEAVE, "leaving"),
         (TAXES, "taxes"),
         (NEWCOMER, "newcomer"),
+        (PAUSE, "pause"),
     )
 
     content = models.TextField()

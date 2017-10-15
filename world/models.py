@@ -604,6 +604,19 @@ class Character(models.Model):
             organization = self.organization_set.exclude(
                 id=self.world.get_barbaric_state().id)[0]
             organization.remove_member(self)
+
+            message = shortcuts.create_message(
+                "The character {} has been paused.",
+                self.world,
+                'pause',
+                link=self.get_absolute_url()
+            )
+            shortcuts.add_organization_recipient(
+                message,
+                organization,
+                add_lead_organizations=True
+            )
+
             self.refresh_from_db()
 
         self.last_activation_time = timezone.now()
@@ -621,6 +634,18 @@ class Character(models.Model):
         self.oath_sworn_to.character_members.add(self)
         self.world.get_barbaric_state().character_members.remove(self)
         self.save()
+
+        message = shortcuts.create_message(
+            "The character {} has been unpaused.",
+            self.world,
+            'pause',
+            link=self.get_absolute_url()
+        )
+        shortcuts.add_organization_recipient(
+            message,
+            self.get_violence_monopoly(),
+            add_lead_organizations=True
+        )
 
     def get_battle_participating_in(self):
         try:

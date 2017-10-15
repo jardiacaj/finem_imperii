@@ -614,7 +614,7 @@ class Character(models.Model):
         return not self.paused
 
     def can_unpause(self):
-        return self.paused and self.hours_since_last_activation() > 48
+        return self.paused and self.hours_since_last_activation() > 24*5
 
     def unpause(self):
         self.paused = False

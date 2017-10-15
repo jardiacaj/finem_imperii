@@ -177,6 +177,16 @@
     cash: 10000
     profile: commander
 
+- model: world.Character
+  pk: 10
+  fields:
+    name: Paused character
+    world_id: 2
+    paused: true
+    location_id: 1004
+    owner_user_id: 1
+    cash: 10000
+    profile: commander
 
 - model: world.World
   pk: 2

@@ -3,7 +3,7 @@
 {% block content %}
 
     <h1 class="page-header">
-        {{ character.get_html_name|safe }}
+        {{ character.get_html_name|safe }}{% if character.paused %} (paused){% endif %}
         <small>
             {{ character.get_profile_display|capfirst }}
         </small>

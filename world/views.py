@@ -56,7 +56,7 @@ def tile_view(request, tile_id):
     context = {
         'tile': tile,
         'harvest': (tile.world.current_turn % 12) in field_output_months,
-        'characters': Character.objects.filter(location__tile=tile),
+        'characters': Character.objects.filter(location__tile=tile, paused=False),
         'units': WorldUnit.objects.filter(location__tile=tile),
         'conquests': TileEvent.objects.filter(
             tile=tile, type=TileEvent.CONQUEST, end_turn__isnull=True)

@@ -120,12 +120,14 @@ class ComposeView(View):
             split = raw_recipient.split('_')
 
             if split[0] == 'settlement':
-                for character in request.hero.location.character_set.all():
+                for character in request.hero.location.character_set.filter(
+                        paused=False):
                     character_count += 1
                     add_character_recipient(message, character)
             elif split[0] == 'region':
                 for character in Character.objects.filter(
-                        location__tile=request.hero.location.tile):
+                        location__tile=request.hero.location.tile,
+                        paused=False):
                     character_count += 1
                     add_character_recipient(message, character)
             elif split[0] == 'organization':

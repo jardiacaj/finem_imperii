@@ -183,18 +183,10 @@ def unit_movement(battle: Battle):
 def check_if_order_done(battle_unit_in_turn: BattleUnitInTurn):
     order = battle_unit_in_turn.battle_unit.get_order()
     if order:
-        if order.what == Order.STAND:
-            pass
         if order.what == Order.MOVE:
             if euclidean_distance(battle_unit_in_turn.coordinates(), order.target_location_coordinates()) == 0:
                 order.done = True
                 order.save()
-        if order.what == Order.FLEE:
-            pass
-        if order.what == Order.CHARGE:
-            pass
-        if order.what == Order.ADVANCE_IN_FORMATION:
-            pass
 
 
 def closest_in_set(coords, contubernium_set):
@@ -220,7 +212,10 @@ def get_target_distance_function(battle_contubernium_in_turn: BattleContubernium
 
     if order:
 
-        if order.what == Order.STAND:
+        if order.what == Order.STAND or (
+            order.what == Order.RANGED_AND_STAND and
+            battle_contubernium_in_turn.battle_unit_in_turn.ammo_remaining == 0
+        ):
             return None
 
         if order.what == Order.MOVE:
@@ -234,7 +229,10 @@ def get_target_distance_function(battle_contubernium_in_turn: BattleContubernium
                 return euclidean_distance(coords, target)
             return result
 
-        if order.what == Order.FLEE:
+        if order.what == Order.FLEE or (
+            order.what == Order.RANGED_AND_FLEE and
+            battle_contubernium_in_turn.battle_unit_in_turn.ammo_remaining == 0
+        ):
             original_enemy_distance = closest_in_set(battle_contubernium_in_turn.coordinates(), enemy_contubernia)[1]
 
             def result(coords: Coordinates):
@@ -242,7 +240,10 @@ def get_target_distance_function(battle_contubernium_in_turn: BattleContubernium
                 return (original_enemy_distance + 10) - distance if distance is not None else 0
             return result
 
-        if order.what == Order.CHARGE:
+        if order.what == Order.CHARGE or (
+            order.what == Order.RANGED_AND_CHARGE and
+            battle_contubernium_in_turn.battle_unit_in_turn.ammo_remaining == 0
+        ):
             def result(coords: Coordinates):
                 closest, distance = closest_in_set(coords, enemy_contubernia)
                 return distance if distance is not None and distance >= 2 else 0
@@ -260,8 +261,35 @@ def get_target_distance_function(battle_contubernium_in_turn: BattleContubernium
                 return euclidean_distance(coords, target)
             return result
 
-        if order.what == Order.RANGED_ATTACK:
-            pass
+        if order.what in (
+            Order.RANGED_AND_CHARGE,
+            Order.RANGED_AND_FLEE,
+            Order.RANGED_AND_STAND
+        ) and battle_contubernium_in_turn.battle_unit_in_turn.ammo_remaining > 0:
+            def result(coords: Coordinates):
+                closest, distance = closest_in_set(coords, enemy_contubernia)
+                shot_range = battle_contubernium_in_turn.battle_unit_in_turn.battle_unit.world_unit.shot_range()
+                if distance > shot_range:
+                    return distance - shot_range
+                if distance < shot_range - 1:
+                    return shot_range - distance
+                return 0
+            return result
+
+        if order.what == Order.STAND_AND_DISTANCE:
+            def result(coords: Coordinates):
+                closest, enemy_distance = closest_in_set(coords, enemy_contubernia)
+                shot_range = battle_contubernium_in_turn.battle_unit_in_turn.battle_unit.world_unit.shot_range()
+                if shot_range == 0:
+                    min_enemy_distance = 7
+                else:
+                    min_enemy_distance = shot_range - 1
+
+                if enemy_distance > min_enemy_distance:
+                    return 0
+                else:
+                    return min_enemy_distance - enemy_distance
+            return result
 
 
 def optimistic_move_desire_formulation(battle_contubernium_in_turn: BattleContuberniumInTurn, target_distance_function):

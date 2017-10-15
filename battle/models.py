@@ -311,6 +311,7 @@ class Order(models.Model):
     RANGED_AND_CHARGE = 'ranged and charge'
     RANGED_AND_FLEE = 'ranged and flee'
     RANGED_AND_STAND = 'ranged and stand'
+    STAND_AND_DISTANCE = 'stand and keep distance'
     WHAT_CHOICES = (
        (STAND, STAND),
        (MOVE, MOVE),
@@ -320,6 +321,7 @@ class Order(models.Model):
        (RANGED_AND_CHARGE, "ranged attack, then charge"),
        (RANGED_AND_FLEE, "ranged attack, then flee"),
        (RANGED_AND_STAND, "ranged attack, then stand"),
+       (STAND_AND_DISTANCE, STAND_AND_DISTANCE),
     )
     ORDER_PRIORITY = {
         STAND: 4,

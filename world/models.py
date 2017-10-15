@@ -965,6 +965,11 @@ class WorldUnit(models.Model):
             return 24
         return 0
 
+    def shot_range(self):
+        if self.type == self.ARCHERS:
+            return 5
+        return 0
+
     def monthly_cost(self):
         return unit_cost(self.soldier.count())
 

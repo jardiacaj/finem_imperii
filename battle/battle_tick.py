@@ -195,15 +195,14 @@ def check_if_order_done(battle_unit_in_turn: BattleUnitInTurn):
             pass
         if order.what == Order.ADVANCE_IN_FORMATION:
             pass
-        if order.what == Order.RANGED_ATTACK:
-            pass
 
 
 def closest_in_set(coords, contubernium_set):
     closest = None
     distance = None
     for contubernium in contubernium_set:
-        tentative_distance = euclidean_distance(coords, contubernium.coordinates())
+        tentative_distance = euclidean_distance(
+            coords, contubernium.coordinates())
         if closest is None or tentative_distance < distance:
             closest = contubernium
             distance = tentative_distance

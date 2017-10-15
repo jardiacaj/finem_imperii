@@ -270,7 +270,7 @@ def generate_in_turn_objects(battle):
         barbarian_unit.save()
 
 
-def generate_in_turn_objects_for_unit(turn, unit):
+def generate_in_turn_objects_for_unit(turn: BattleTurn, unit: BattleUnit):
     if unit.world_unit.owner_character:
         owner_in_turn = BattleCharacterInTurn.objects.get(
             battle_character=unit.owner,
@@ -285,6 +285,7 @@ def generate_in_turn_objects_for_unit(turn, unit):
         x_pos=unit.starting_x_pos,
         z_pos=unit.starting_z_pos,
         order=unit.get_order(),
+        ammo_remaining=unit.world_unit.starting_ammo()
     )
     for contubernium in unit.battlecontubernium_set.all():
         bcontubit = BattleContuberniumInTurn.objects.create(

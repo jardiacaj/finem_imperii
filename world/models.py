@@ -957,6 +957,14 @@ class WorldUnit(models.Model):
     def get_unit_states(nice=False):
         return (state[1 if nice else 0] for state in WorldUnit.STATUS_CHOICES)
 
+    def is_ranged(self):
+        return self.type in (self.ARCHERS, self.CATAPULT)
+
+    def starting_ammo(self):
+        if self.type == self.ARCHERS:
+            return 24
+        return 0
+
     def monthly_cost(self):
         return unit_cost(self.soldier.count())
 

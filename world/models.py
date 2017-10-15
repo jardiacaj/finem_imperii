@@ -592,8 +592,19 @@ class Character(models.Model):
 
     @transaction.atomic()
     def pause(self):
-        for organization in self.organization_set.exclude(violence_monopoly=True):
+        self.oath_sworn_to = self.get_violence_monopoly()
+        self.save()
+
+        for unit in self.worldunit_set.all():
+            unit.disband()
+
+        while self.organization_set.exclude(
+                id=self.world.get_barbaric_state().id
+        ).exists():
+            organization = self.organization_set.exclude(
+                id=self.world.get_barbaric_state().id)[0]
             organization.remove_member(self)
+            self.refresh_from_db()
 
         self.last_activation_time = timezone.now()
         self.paused = True
@@ -610,6 +621,8 @@ class Character(models.Model):
             return
         self.paused = False
         self.save()
+
+        self.oath_sworn_to.character_members.add(self)
 
     def get_battle_participating_in(self):
         try:

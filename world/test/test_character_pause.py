@@ -1,9 +1,13 @@
+from datetime import timedelta
+
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
+from django.utils import timezone
 
 from world.models import Character, WorldUnit
+from world.turn import TurnProcessor
 
 
 class TestCharacterPause(TestCase):
@@ -63,17 +67,75 @@ class TestCharacterPause(TestCase):
         self.assertIsNone(unit.world)
         self.assertFalse(unit.soldier.exists())
 
-    def test_location_of_pausing_character(self):
-        pass
-
     def test_unpause_character(self):
-        pass
+        character = Character.objects.get(id=1)
+
+        response = self.client.post(
+            reverse('world:pause_character'),
+            data={'character_id': character.id},
+            follow=True
+        )
+        character.refresh_from_db()
+
+        self.assertRedirects(
+            response,
+            reverse('account:home')
+        )
+
+        self.assertTrue(character.paused)
+        character.last_activation_time = timezone.now() - timedelta(days=30)
+        character.save()
+
+        response = self.client.post(
+            reverse('world:unpause_character'),
+            data={'character_id': character.id},
+            follow=True
+        )
+        character.refresh_from_db()
+
+        self.assertRedirects(
+            response,
+            reverse('account:home')
+        )
+
+        self.assertFalse(character.paused)
+        self.assertEqual(character.get_violence_monopoly().name,
+                         "Small Kingdom")
 
     def test_cant_unpause(self):
-        pass
+        character = Character.objects.get(id=1)
+        self.assertTrue(character.can_pause())
+        self.assertFalse(character.can_unpause())
+
+        response = self.client.post(
+            reverse('world:pause_character'),
+            data={'character_id': character.id},
+            follow=True
+        )
+        character.refresh_from_db()
+        self.assertFalse(character.can_pause())
+        self.assertFalse(character.can_unpause())
+
+        character.last_activation_time = timezone.now() - timedelta(days=30)
+        character.save()
+
+        self.assertFalse(character.can_pause())
+        self.assertTrue(character.can_unpause())
 
     def test_autopause(self):
-        pass
+        character = Character.objects.get(id=1)
+        character.last_activation_time = timezone.now() - timedelta(days=30)
+        character.save()
+        turn_processor = TurnProcessor(character.world)
+        turn_processor.character_pausing()
+        character.refresh_from_db()
+        self.assertTrue(character.paused)
 
     def test_do_not_autopause(self):
-        pass
+        character = Character.objects.get(id=1)
+        character.last_activation_time = timezone.now()
+        character.save()
+        turn_processor = TurnProcessor(character.world)
+        turn_processor.character_pausing()
+        character.refresh_from_db()
+        self.assertFalse(character.paused)

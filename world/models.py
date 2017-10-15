@@ -570,7 +570,7 @@ class Character(models.Model):
     def hours_since_last_activation(self):
         return self.inactivity_time().total_seconds() / 60 / 60
 
-    def maybe_pause(self):
+    def maybe_pause_for_inactivity(self):
         if not self.can_pause():
             return
 
@@ -617,12 +617,10 @@ class Character(models.Model):
         return self.paused and self.hours_since_last_activation() > 48
 
     def unpause(self):
-        if not self.can_unpause():
-            return
         self.paused = False
-        self.save()
-
         self.oath_sworn_to.character_members.add(self)
+        self.world.get_barbaric_state().character_members.remove(self)
+        self.save()
 
     def get_battle_participating_in(self):
         try:
@@ -699,8 +697,7 @@ class Character(models.Model):
     def get_violence_monopoly(self):
         try:
             return self.organization_set.get(violence_monopoly=True)
-        except (organization.models.Organization.DoesNotExist,
-                organization.models.Organization.MultipleObjectsReturned):
+        except organization.models.Organization.DoesNotExist:
             return None
 
     def unread_messages(self):

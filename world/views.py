@@ -396,6 +396,30 @@ def pause_character(request):
     return redirect('account:home')
 
 
+@login_required
+@require_POST
+def unpause_character(request):
+    character = get_object_or_404(
+        Character,
+        pk=request.POST.get('character_id'),
+        owner_user=request.user
+    )
+    if character.can_unpause():
+        character.unpause()
+        messages.success(
+            request,
+            "{} has been unpaused.".format(character),
+            "success"
+        )
+    else:
+        messages.error(
+            request,
+            "{} can't be unpaused.".format(character),
+            "danger"
+        )
+    return redirect('account:home')
+
+
 @inchar_required
 def character_home(request):
     context = {

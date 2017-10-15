@@ -75,8 +75,8 @@ class TurnProcessor:
         )
 
     def character_pausing(self):
-        for character in self.world.character_set.all():
-            character.maybe_pause()
+        for character in self.world.character_set.filter(paused=False):
+            character.maybe_pause_for_inactivity()
 
     def do_public_order_update(self):
         for tile in self.world.tile_set.all():

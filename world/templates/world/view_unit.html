@@ -158,9 +158,11 @@
                                     <select class="form-control" name="battle_orders" id="battle_orders">
                                         <option value="charge" {% if unit.default_battle_orders.what == "charge" %}selected{% endif %}>Charge</option>
                                         <option value="formation" {% if unit.default_battle_orders.what == "formation" %}selected{% endif %}>Advance in formation</option>
-                                        <!-- <option value="ranged" {% if unit.default_battle_orders.what == "ranged" %}selected{% endif %}>Ranged attack</option> -->
                                         <option value="stand" {% if unit.default_battle_orders.what == "stand" %}selected{% endif %}>Keep ground</option>
                                         <option value="flee" {% if unit.default_battle_orders.what == "flee" %}selected{% endif %}>Flee</option>
+                                        <option value="ranged and charge" {% if unit.default_battle_orders.what == "ranged and charge" %}selected{% endif %}>Ranged attack, then charge</option>
+                                        <option value="ranged and flee" {% if unit.default_battle_orders.what == "ranged and flee" %}selected{% endif %}>Ranged attack, then flee</option>
+                                        <option value="ranged and stand" {% if unit.default_battle_orders.what == "ranged and stand" %}selected{% endif %}>Ranged attack, then stand</option>
                                     </select>
                                     <button type="submit" class="btn btn-primary btn-sm">Save</button>
                                 </form>

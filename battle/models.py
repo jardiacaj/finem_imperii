@@ -307,14 +307,18 @@ class Order(models.Model):
     FLEE = 'flee'
     CHARGE = 'charge'
     ADVANCE_IN_FORMATION = 'formation'
-    RANGED_ATTACK = 'ranged'
+    RANGED_AND_CHARGE = 'ranged and charge'
+    RANGED_AND_FLEE = 'ranged and flee'
+    RANGED_AND_STAND = 'ranged and stand'
     WHAT_CHOICES = (
        (STAND, STAND),
        (MOVE, MOVE),
        (FLEE, FLEE),
        (CHARGE, CHARGE),
        (ADVANCE_IN_FORMATION, ADVANCE_IN_FORMATION),
-       (RANGED_ATTACK, RANGED_ATTACK),
+       (RANGED_AND_CHARGE, "ranged attack, then charge"),
+       (RANGED_AND_FLEE, "ranged attack, then flee"),
+       (RANGED_AND_STAND, "ranged attack, then stand"),
     )
     ORDER_PRIORITY = {
         STAND: 4,
@@ -322,7 +326,9 @@ class Order(models.Model):
         FLEE: 3,
         CHARGE: 0,
         ADVANCE_IN_FORMATION: 2,
-        RANGED_ATTACK: 1,
+        RANGED_AND_CHARGE: 1,
+        RANGED_AND_FLEE: 1,
+        RANGED_AND_STAND: 1,
     }
 
     what = models.CharField(max_length=15, choices=WHAT_CHOICES)

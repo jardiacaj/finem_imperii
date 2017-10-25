@@ -1,4 +1,4 @@
-from battle.models import Battle
+from battle.models import Battle, BattleSoldierInTurn
 from finem_imperii.app_settings import BATTlE_TICKS_PER_TURN
 
 
@@ -47,7 +47,18 @@ def render_battle_for_view(battle: Battle):
                         contubernia[contubernium.id]['in_turn'][contubernium_in_turn.battle_turn.num] = {
                             'x_pos': contubernium_in_turn.x_pos,
                             'z_pos': contubernium_in_turn.z_pos,
+                            'ammo_remaining': contubernium_in_turn.ammo_remaining,
+                            'soldiers': []
                         }
+
+                        for soldier in contubernium_in_turn.battlesoldierinturn_set.all():
+                            contubernia[contubernium.id]['in_turn'][
+                                contubernium_in_turn.battle_turn.num][
+                                'soldiers'].append(
+                                {
+                                    'wound_status': soldier.wound_status
+                                }
+                            )
 
     result = {
         'battle_ticks_per_turn': BATTlE_TICKS_PER_TURN,

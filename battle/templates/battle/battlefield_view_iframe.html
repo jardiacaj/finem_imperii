@@ -10,8 +10,8 @@
     <script src="{% static 'world/battle_renderer.js' %}?{{ git_rev }}"></script>
 
     <script>
-        function info_callback(contubernium, unit, character, organization) {
-            $('#unit_name').text(contubernium === undefined ? '' : unit.name);
+        function info_callback(contubernium, contubernium_in_turn, unit, character, organization) {
+            $('#unit_name').text(contubernium === undefined ? '' : unit.name + ' ' + contubernium_in_turn.soldiers.length);
             $('#char_name').text(character === undefined ? '' : character.name);
             $('#org_name').text(organization === undefined ? '' : organization.name);
         }

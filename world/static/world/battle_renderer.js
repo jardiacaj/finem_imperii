@@ -179,7 +179,13 @@ function BattleRenderer(battle_data) {
                 var unit = zis.units[zis.picked_contubernium.unit_id];
                 var character = zis.characters[unit.character_id];
                 var organization = zis.organizations[unit.organization_id];
-                zis.hover_callback(zis.picked_contubernium, unit, character, organization);
+                zis.hover_callback(
+                    zis.picked_contubernium,
+                    zis.picked_contubernium.in_turn[zis.showing_turn],
+                    unit,
+                    character,
+                    organization
+                );
             }
         }
 

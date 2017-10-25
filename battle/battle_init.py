@@ -284,8 +284,7 @@ def generate_in_turn_objects_for_unit(turn: BattleTurn, unit: BattleUnit):
         battle_turn=turn,
         x_pos=unit.starting_x_pos,
         z_pos=unit.starting_z_pos,
-        order=unit.get_order(),
-        ammo_remaining=unit.world_unit.starting_ammo()
+        order=unit.get_order()
     )
     for contubernium in unit.battlecontubernium_set.all():
         bcontubit = BattleContuberniumInTurn.objects.create(
@@ -293,7 +292,8 @@ def generate_in_turn_objects_for_unit(turn: BattleTurn, unit: BattleUnit):
             battle_unit_in_turn=buit,
             battle_turn=turn,
             x_pos=contubernium.starting_x_pos,
-            z_pos=contubernium.starting_z_pos
+            z_pos=contubernium.starting_z_pos,
+            ammo_remaining=unit.world_unit.starting_ammo()
         )
         for soldier in contubernium.battlesoldier_set.all():
             BattleSoldierInTurn.objects.create(

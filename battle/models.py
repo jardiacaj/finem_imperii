@@ -210,7 +210,6 @@ class BattleUnitInTurn(models.Model):
     x_pos = models.IntegerField()
     z_pos = models.IntegerField()
     order = models.ForeignKey('Order', null=True)
-    ammo_remaining = models.PositiveIntegerField()
 
     def coordinates(self):
         return Coordinates(self.x_pos, self.z_pos)
@@ -251,6 +250,7 @@ class BattleContuberniumInTurn(models.Model):
     desires_pos = models.BooleanField(default=False)
     desired_x_pos = models.IntegerField(blank=True, null=True)
     desired_z_pos = models.IntegerField(blank=True, null=True)
+    ammo_remaining = models.PositiveIntegerField()
 
     def coordinates(self):
         return Coordinates(self.x_pos, self.z_pos)

@@ -214,7 +214,7 @@ def get_target_distance_function(battle_contubernium_in_turn: BattleContubernium
 
         if order.what == Order.STAND or (
             order.what == Order.RANGED_AND_STAND and
-            battle_contubernium_in_turn.battle_unit_in_turn.ammo_remaining == 0
+            battle_contubernium_in_turn.ammo_remaining == 0
         ):
             return None
 
@@ -231,7 +231,7 @@ def get_target_distance_function(battle_contubernium_in_turn: BattleContubernium
 
         if order.what == Order.FLEE or (
             order.what == Order.RANGED_AND_FLEE and
-            battle_contubernium_in_turn.battle_unit_in_turn.ammo_remaining == 0
+            battle_contubernium_in_turn.ammo_remaining == 0
         ):
             original_enemy_distance = closest_in_set(battle_contubernium_in_turn.coordinates(), enemy_contubernia)[1]
 
@@ -242,7 +242,7 @@ def get_target_distance_function(battle_contubernium_in_turn: BattleContubernium
 
         if order.what == Order.CHARGE or (
             order.what == Order.RANGED_AND_CHARGE and
-            battle_contubernium_in_turn.battle_unit_in_turn.ammo_remaining == 0
+            battle_contubernium_in_turn.ammo_remaining == 0
         ):
             def result(coords: Coordinates):
                 closest, distance = closest_in_set(coords, enemy_contubernia)
@@ -265,7 +265,7 @@ def get_target_distance_function(battle_contubernium_in_turn: BattleContubernium
             Order.RANGED_AND_CHARGE,
             Order.RANGED_AND_FLEE,
             Order.RANGED_AND_STAND
-        ) and battle_contubernium_in_turn.battle_unit_in_turn.ammo_remaining > 0:
+        ) and battle_contubernium_in_turn.ammo_remaining > 0:
             def result(coords: Coordinates):
                 closest, distance = closest_in_set(coords, enemy_contubernia)
                 shot_range = battle_contubernium_in_turn.battle_unit_in_turn.battle_unit.world_unit.shot_range()
@@ -404,6 +404,7 @@ def unit_attack(battle: Battle):
     ))
     random.shuffle(contubernia)
     for contubernium in contubernia:
+        world_unit = contubernium.battle_unit_in_turn.battle_unit.world_unit
         enemy_contubernia = BattleContuberniumInTurn.objects.filter(
             battle_turn=contubernium.battle_turn
         ).exclude(
@@ -412,16 +413,48 @@ def unit_attack(battle: Battle):
         )
         target_contubernium, distance = \
             closest_in_set(contubernium.coordinates(), enemy_contubernia)
-        if target_contubernium is not None and distance < 2:
-            for soldier in contubernium.battlesoldierinturn_set.all():
-                target_soldier = random.choice(
-                    target_contubernium.battlesoldierinturn_set.all()[:]
-                )
-                while (random.random() <
+
+        if target_contubernium is None:
+            continue
+
+        if distance < 2:
+            unit_attack_melee(contubernium, target_contubernium)
+        elif (
+                world_unit.is_ranged() and
+                distance <= world_unit.shot_range() and
+                contubernium.ammo_remaining > 0
+        ):
+            unit_attack_ranged(contubernium, target_contubernium)
+
+
+def unit_attack_ranged(contubernium: BattleContuberniumInTurn,
+                       target_contubernium: BattleContuberniumInTurn):
+    for soldier in contubernium.battlesoldierinturn_set.all():
+        target_soldier = random.choice(
+            target_contubernium.battlesoldierinturn_set.all()[:]
+        )
+        while (random.random() <
+                       0.3 * soldier.attack_chance_multiplier()):
+            if target_soldier.wound_status < BattleSoldierInTurn.DEAD:
+                target_soldier.take_hit()
+        target_soldier.save()
+    contubernium.ammo_remaining -= 1
+    if contubernium.ammo_remaining < 0:
+        contubernium.ammo_remaining = 0
+    contubernium.save()
+
+
+def unit_attack_melee(contubernium: BattleContuberniumInTurn,
+                      target_contubernium: BattleContuberniumInTurn):
+    for soldier in contubernium.battlesoldierinturn_set.all():
+        target_soldier = random.choice(
+            target_contubernium.battlesoldierinturn_set.all()[:]
+        )
+        while (random.random() <
                        0.5 * soldier.attack_chance_multiplier()):
-                    if target_soldier.wound_status < BattleSoldierInTurn.DEAD:
-                        target_soldier.take_hit()
-                target_soldier.save()
+            if target_soldier.wound_status < BattleSoldierInTurn.DEAD:
+                target_soldier.take_hit()
+        target_soldier.save()
 
 
 def check_end(battle: Battle):

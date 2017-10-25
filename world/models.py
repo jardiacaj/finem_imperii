@@ -148,7 +148,8 @@ class TileEvent(models.Model):
 
     tile = models.ForeignKey(Tile)
     type = models.CharField(max_length=20, choices=TYPE_CHOICES, db_index=True)
-    organization = models.ForeignKey(organization.models.Organization, blank=True, null=True)
+    organization = models.ForeignKey(
+        organization.models.Organization, blank=True, null=True)
     counter = models.IntegerField(blank=True, null=True)
     start_turn = models.IntegerField()
     end_turn = models.IntegerField(blank=True, null=True)
@@ -513,11 +514,14 @@ class NPC(models.Model):
         self.save()
         if self.wound_status == BattleSoldierInTurn.DEAD:
             self.die()
-        elif self.wound_status == BattleSoldierInTurn.MEDIUM_WOUND:
+        self.ability_roll()
+
+    def ability_roll(self):
+        if self.wound_status == BattleSoldierInTurn.MEDIUM_WOUND:
             if random.getrandbits(3) == 0:
                 self.able = False
                 self.save()
-        elif self.wound_status == BattleSoldierInTurn.HEAVY_WOUND:
+        if self.wound_status == BattleSoldierInTurn.HEAVY_WOUND:
             if random.getrandbits(1) == 0:
                 self.able = False
                 self.save()
@@ -578,8 +582,10 @@ class Character(models.Model):
             self.pause()
 
     def inactivity_hours_allowed(self):
-        time_since_user_registered = timezone.now() - self.owner_user.date_joined
-        hours_since_user_registered = time_since_user_registered.total_seconds() / 60 / 60
+        time_since_user_registered = (
+            timezone.now() - self.owner_user.date_joined)
+        hours_since_user_registered = (
+            time_since_user_registered.total_seconds() / 60 / 60)
         return 24 * 2 if hours_since_user_registered < 24 * 5 else 24 * 6
 
     def hours_until_autopause(self):
@@ -1019,6 +1025,11 @@ class WorldUnit(models.Model):
             raise WorldUnitStatusChangeException(
                 "The unit is already {}".format(self.get_status_display())
             )
+        if (new_status == WorldUnit.FOLLOWING
+                and self.owner_character.location != self.location):
+            raise WorldUnitStatusChangeException(
+                "A unit can only follow you if you are in the same location."
+            )
         if new_status == WorldUnit.NOT_MOBILIZED:
             if self.mobilization_status_since == self.world.current_turn:
                 raise WorldUnitStatusChangeException(
@@ -1034,11 +1045,6 @@ class WorldUnit(models.Model):
                     " demobilized".format(self)
                 )
             self.mobilize()
-        if (new_status == WorldUnit.FOLLOWING
-                and self.owner_character.location != self.location):
-            raise WorldUnitStatusChangeException(
-                "A unit can only follow you if you are in the same location."
-            )
         self.status = new_status
         self.save()
 

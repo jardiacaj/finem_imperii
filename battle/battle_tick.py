@@ -86,6 +86,8 @@ def create_next_turn(battle: Battle):
                         bcontubit.desires_pos = False
                         bcontubit.battle_turn = new_turn
                         bcontubit.battle_unit_in_turn = buit
+                        bcontubit.attack_type_this_turn = None
+                        bcontubit.contubernium_attacked_this_turn = None
                         bcontubit.save()
                     except BattleContuberniumInTurn.DoesNotExist:
                         pass
@@ -419,12 +421,22 @@ def unit_attack(battle: Battle):
 
         if distance < 2:
             unit_attack_melee(contubernium, target_contubernium)
+            contubernium.attack_type_this_turn = \
+                BattleContuberniumInTurn.MELEE_ATTACK
+            contubernium.contubernium_attacked_this_turn = \
+                target_contubernium
+            contubernium.save()
         elif (
                 world_unit.is_ranged() and
                 distance <= world_unit.shot_range() and
                 contubernium.ammo_remaining > 0
         ):
             unit_attack_ranged(contubernium, target_contubernium)
+            contubernium.attack_type_this_turn = \
+                BattleContuberniumInTurn.RANGED_ATTACK
+            contubernium.contubernium_attacked_this_turn = \
+                target_contubernium
+            contubernium.save()
 
 
 def unit_attack_ranged(contubernium: BattleContuberniumInTurn,

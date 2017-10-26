@@ -237,6 +237,13 @@ class BattleContubernium(models.Model):
 
 
 class BattleContuberniumInTurn(models.Model):
+    MELEE_ATTACK = "melee"
+    RANGED_ATTACK = "ranged"
+    ATTACK_TYPE_CHOICES = (
+        (MELEE_ATTACK, "melee attack"),
+        (RANGED_ATTACK, "ranged attack"),
+    )
+
     class Meta:
         unique_together = [
             ["battle_turn", "x_pos", "z_pos"],
@@ -251,6 +258,11 @@ class BattleContuberniumInTurn(models.Model):
     desired_x_pos = models.IntegerField(blank=True, null=True)
     desired_z_pos = models.IntegerField(blank=True, null=True)
     ammo_remaining = models.PositiveIntegerField()
+    attack_type_this_turn = models.CharField(
+        max_length=15, blank=True, null=True, choices=ATTACK_TYPE_CHOICES)
+    contubernium_attacked_this_turn = models.ForeignKey(
+        "BattleContuberniumInTurn",
+        blank=True, null=True)
 
     def coordinates(self):
         return Coordinates(self.x_pos, self.z_pos)

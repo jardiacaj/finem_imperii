@@ -48,6 +48,11 @@ def render_battle_for_view(battle: Battle):
                             'x_pos': contubernium_in_turn.x_pos,
                             'z_pos': contubernium_in_turn.z_pos,
                             'ammo_remaining': contubernium_in_turn.ammo_remaining,
+                            'attack_type': contubernium_in_turn.attack_type_this_turn,
+                            'attack_target':
+                                contubernium_in_turn.contubernium_attacked_this_turn.battle_contubernium_id
+                                if contubernium_in_turn.contubernium_attacked_this_turn
+                                else None,
                             'soldiers': []
                         }
 

@@ -172,11 +172,11 @@ function MapRenderer(world_data) {
     zis.region_geometry = new THREE.CubeGeometry(1, 1, 1);
     zis.region_edges_geometry = new THREE.EdgesGeometry( zis.region_geometry );
     zis.region_materials = {
-        "plains": new THREE.MeshLambertMaterial({color: 0x7D802A, shading: THREE.SmoothShading}),
-        "forest": new THREE.MeshLambertMaterial({color: 0x0A5906, shading: THREE.SmoothShading}),
-        "shore": new THREE.MeshLambertMaterial({color: 0x0D3E6C, shading: THREE.SmoothShading}),
-        "deepsea": new THREE.MeshLambertMaterial({color: 0x000E59, shading: THREE.SmoothShading}),
-        "mountain": new THREE.MeshLambertMaterial({color: 0x5C564A, shading: THREE.SmoothShading})
+        "plains": new THREE.MeshLambertMaterial({color: 0x7D802A}),
+        "forest": new THREE.MeshLambertMaterial({color: 0x0A5906}),
+        "shore": new THREE.MeshLambertMaterial({color: 0x0D3E6C}),
+        "deepsea": new THREE.MeshLambertMaterial({color: 0x000E59}),
+        "mountain": new THREE.MeshLambertMaterial({color: 0x5C564A})
     };
     zis.settlement_material_highlighted = new THREE.MeshBasicMaterial( {color: 0xFFFFFF} );
 

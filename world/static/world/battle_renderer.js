@@ -123,8 +123,7 @@ function BattleRenderer(battle_data) {
             if (Object.prototype.hasOwnProperty.call(zis.organizations, organization_id)) {
                 var organization = zis.organizations[organization_id];
                 organization.material = new THREE.MeshLambertMaterial({
-                    color: parseInt(organization.color, 16),
-                    shading: THREE.SmoothShading
+                    color: parseInt(organization.color, 16)
                 });
             }
         }
@@ -208,7 +207,7 @@ function BattleRenderer(battle_data) {
     /* MATERIALS AND GEOMETRIES */
 
     zis.contubernium_material_highlighted = new THREE.MeshBasicMaterial( {color: 0xFFFFFF} );
-    zis.ground_material = new THREE.MeshLambertMaterial({color: 0x1A5B07, shading: THREE.SmoothShading});
+    zis.ground_material = new THREE.MeshLambertMaterial({color: 0x1A5B07});
     zis.ground_geometry = new THREE.CubeGeometry(300, 2, 300);
     zis.contubernium_geometry = new THREE.CubeGeometry(0.9, 0.9, 0.9);
     zis.generate_organization_materials();

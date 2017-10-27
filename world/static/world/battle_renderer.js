@@ -73,6 +73,9 @@ function BattleRenderer(battle_data) {
         }
         mesh.position.y = 0.5;
 
+        mesh.scale.x = Math.sqrt(contubernium_in_turn.soldiers.length) / Math.sqrt(8);
+        mesh.scale.z = Math.sqrt(contubernium_in_turn.soldiers.length) / Math.sqrt(8);
+
         mesh.contubernium = contubernium;
         mesh.pick_type = "contubernium";
         contubernium.mesh = mesh;
@@ -110,6 +113,8 @@ function BattleRenderer(battle_data) {
                 } else {
                     contubernium.mesh.position.x = contubernium_in_turn === undefined ? 1000 : contubernium_in_turn.x_pos;
                     contubernium.mesh.position.z = contubernium_in_turn === undefined ? 1000 : contubernium_in_turn.z_pos;
+                    contubernium.mesh.scale.x = contubernium_in_turn === undefined ? 0 : Math.sqrt(contubernium_in_turn.soldiers.length) / Math.sqrt(8);
+                    contubernium.mesh.scale.z = contubernium_in_turn === undefined ? 0 : Math.sqrt(contubernium_in_turn.soldiers.length) / Math.sqrt(8);
                 }
 
             }

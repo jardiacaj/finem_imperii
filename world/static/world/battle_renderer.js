@@ -69,7 +69,7 @@ function BattleRenderer(battle_data) {
         var material = zis.get_contubernium_default_material(contubernium);
         var mesh = new THREE.Mesh( zis.contubernium_geometry, material );
 
-        if (contubernium_in_turn == undefined) {
+        if (contubernium_in_turn === undefined) {
             mesh.position.x = 1000;
             mesh.position.z = 1000;
         } else {
@@ -86,6 +86,28 @@ function BattleRenderer(battle_data) {
         contubernium.mesh = mesh;
 
         zis.renderer.scene.add(mesh);
+    };
+
+    zis.create_attack_display = function (contubernium) {
+        if (contubernium.attack_line !== undefined) {
+            zis.remove_attack_display(contubernium);
+        }
+
+        var contubernium_in_turn = contubernium.in_turn[zis.showing_turn];
+        var target = zis.contubernia[contubernium_in_turn.attack_target];
+        var target_in_turn = target.in_turn[zis.showing_turn];
+        var geometry = new THREE.Geometry();
+        geometry.vertices.push(new THREE.Vector3(contubernium_in_turn.x_pos, 1, contubernium_in_turn.z_pos));
+        geometry.vertices.push(new THREE.Vector3(target_in_turn.x_pos, 1, target_in_turn.z_pos));
+        var line = new THREE.Line(geometry, zis.attack_line_material);
+        contubernium.attack_line = line;
+        zis.renderer.scene.add(line);
+    };
+
+    zis.remove_attack_display = function (contubernium) {
+        if(contubernium.attack_line === undefined) return;
+        zis.renderer.scene.remove(contubernium.attack_line);
+        contubernium.attack_line = undefined;
     };
 
     zis.update_turn_counter = function () {
@@ -106,6 +128,12 @@ function BattleRenderer(battle_data) {
                     contubernium.mesh.position.z = contubernium_in_turn === undefined ? 1000 : contubernium_in_turn.z_pos;
                     contubernium.mesh.scale.x = contubernium_scale_factor(contubernium_in_turn);
                     contubernium.mesh.scale.z = contubernium_scale_factor(contubernium_in_turn);
+                }
+
+                if (contubernium_in_turn && contubernium_in_turn.attack_target) {
+                    zis.create_attack_display(contubernium);
+                } else {
+                    zis.remove_attack_display(contubernium);
                 }
 
             }
@@ -191,6 +219,7 @@ function BattleRenderer(battle_data) {
     /* MATERIALS AND GEOMETRIES */
 
     zis.contubernium_material_highlighted = new THREE.MeshBasicMaterial( {color: 0xFFFFFF} );
+    zis.attack_line_material = new THREE.LineBasicMaterial( {color: 0xFFFFFF} );
     zis.ground_material = new THREE.MeshLambertMaterial({color: 0x1A5B07});
     zis.ground_geometry = new THREE.CubeGeometry(300, 2, 300);
     zis.contubernium_geometry = new THREE.CubeGeometry(0.9, 0.9, 0.9);

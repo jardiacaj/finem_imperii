@@ -60,6 +60,11 @@ function BattleRenderer(battle_data) {
         return organization.material;
     };
 
+    function contubernium_scale_factor(contubernium_in_turn) {
+        if (contubernium_in_turn === undefined) {return 0;}
+        return Math.sqrt(contubernium_in_turn.soldiers.length) / Math.sqrt(8);
+    }
+
     zis.add_contubernium = function (contubernium, contubernium_in_turn) {
         var material = zis.get_contubernium_default_material(contubernium);
         var mesh = new THREE.Mesh( zis.contubernium_geometry, material );
@@ -73,8 +78,8 @@ function BattleRenderer(battle_data) {
         }
         mesh.position.y = 0.5;
 
-        mesh.scale.x = Math.sqrt(contubernium_in_turn.soldiers.length) / Math.sqrt(8);
-        mesh.scale.z = Math.sqrt(contubernium_in_turn.soldiers.length) / Math.sqrt(8);
+        mesh.scale.x = contubernium_scale_factor(contubernium_in_turn);
+        mesh.scale.z = contubernium_scale_factor(contubernium_in_turn);
 
         mesh.contubernium = contubernium;
         mesh.pick_type = "contubernium";
@@ -113,8 +118,8 @@ function BattleRenderer(battle_data) {
                 } else {
                     contubernium.mesh.position.x = contubernium_in_turn === undefined ? 1000 : contubernium_in_turn.x_pos;
                     contubernium.mesh.position.z = contubernium_in_turn === undefined ? 1000 : contubernium_in_turn.z_pos;
-                    contubernium.mesh.scale.x = contubernium_in_turn === undefined ? 0 : Math.sqrt(contubernium_in_turn.soldiers.length) / Math.sqrt(8);
-                    contubernium.mesh.scale.z = contubernium_in_turn === undefined ? 0 : Math.sqrt(contubernium_in_turn.soldiers.length) / Math.sqrt(8);
+                    contubernium.mesh.scale.x = contubernium_scale_factor(contubernium_in_turn);
+                    contubernium.mesh.scale.z = contubernium_scale_factor(contubernium_in_turn);
                 }
 
             }
@@ -158,7 +163,7 @@ function BattleRenderer(battle_data) {
         }
     };
 
-    zis.notify_contubernium_pick = function (contubernium_three_object) {
+    zis.notify_contubernium_pick = function (contubernium_three_object, mousemove_event) {
         var previously_picked = zis.picked_contubernium;
 
         if (contubernium_three_object === undefined) {
@@ -177,7 +182,7 @@ function BattleRenderer(battle_data) {
             if (zis.picked_contubernium === undefined) {
                 zis.hover_callback(undefined);
             } else {
-                zis.hover_callback(zis.picked_contubernium);
+                zis.hover_callback(zis.picked_contubernium, mousemove_event);
             }
         }
 

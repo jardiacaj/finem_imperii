@@ -41,6 +41,7 @@ pre.wrapping {
     right: 10px;
     color: black;
     font-size: 120%;
+    text-align: center;
 }
 
 .travel_map_iframe {

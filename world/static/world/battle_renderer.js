@@ -93,20 +93,6 @@ function BattleRenderer(battle_data) {
         $('#total_turn_display').text(zis.turn_count - 1);
     };
 
-    zis.render_turn = function (turn_num) {
-        for (var contubernium_id in zis.contubernia)  {
-            if (Object.prototype.hasOwnProperty.call(zis.contubernia, contubernium_id)) {
-                var contubernium = zis.contubernia[contubernium_id];
-                var contubernium_in_turn = contubernium.in_turn[turn_num];
-
-                if (contubernium.mesh === undefined) {
-                    zis.add_contubernium(contubernium, contubernium_in_turn)
-                }
-            }
-        }
-        zis.update_turn_counter();
-    };
-
     zis.animated_update = function () {
         for (var contubernium_id in zis.contubernia) {
             if (Object.prototype.hasOwnProperty.call(zis.contubernia, contubernium_id)) {
@@ -215,7 +201,7 @@ function BattleRenderer(battle_data) {
     zis.renderer = new BaseRenderer(40, 60, 0);
     zis.renderer.picking_types['contubernium'] = zis.notify_contubernium_pick;
     zis.render_ground();
-    zis.render_turn(zis.showing_turn);
+    zis.animated_update();
 
     zis.renderer.render();
     $(zis.renderer.canvas_container).on('click', zis.mouse_click_listener_notifier);

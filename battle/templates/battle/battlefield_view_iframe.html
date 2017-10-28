@@ -10,7 +10,12 @@
     <script src="{% static 'world/battle_renderer.js' %}?{{ git_rev }}"></script>
 
     <script>
-        function show_info(contubernium, contubernium_in_turn, unit, character, organization) {
+        function show_info(contubernium) {
+            var contubernium_in_turn = contubernium.in_turn[map.showing_turn];
+            var unit = map.units[contubernium.unit_id];
+            var character = map.characters[unit.character_id];
+            var organization = map.organizations[unit.organization_id];
+
             $('#unit_name').text(unit.name);
             $('#char_name').text(character.name);
 
@@ -46,11 +51,15 @@
             hover_hint_el.show();
         }
 
-        function info_callback(contubernium, contubernium_in_turn, unit, character, organization) {
+        function info_callback(contubernium) {
             if (contubernium === undefined) {
-                clear_info()
+                if (map.clicked_contubernium === undefined) {
+                    clear_info()
+                } else {
+                    show_info(map.clicked_contubernium)
+                }
             } else {
-                show_info(contubernium, contubernium_in_turn, unit, character, organization)
+                show_info(contubernium)
             }
         }
 

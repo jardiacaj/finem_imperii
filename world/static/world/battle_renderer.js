@@ -151,12 +151,9 @@ function BattleRenderer(battle_data) {
 
         if (zis.click_callback) {
             if (zis.clicked_contubernium === undefined) {
-                zis.click_callback(undefined, undefined, undefined, undefined);
+                zis.click_callback(undefined);
             } else {
-                var unit = zis.units[zis.clicked_contubernium.unit_id];
-                var character = zis.characters[unit.character_id];
-                var organization = zis.organizations[character.organization_id];
-                zis.click_callback(zis.clicked_contubernium, unit, character, organization);
+                zis.click_callback(zis.clicked_contubernium);
             }
         }
     };
@@ -178,18 +175,9 @@ function BattleRenderer(battle_data) {
 
         if (zis.hover_callback) {
             if (zis.picked_contubernium === undefined) {
-                zis.hover_callback(undefined, undefined, undefined, undefined);
+                zis.hover_callback(undefined);
             } else {
-                var unit = zis.units[zis.picked_contubernium.unit_id];
-                var character = zis.characters[unit.character_id];
-                var organization = zis.organizations[unit.organization_id];
-                zis.hover_callback(
-                    zis.picked_contubernium,
-                    zis.picked_contubernium.in_turn[zis.showing_turn],
-                    unit,
-                    character,
-                    organization
-                );
+                zis.hover_callback(zis.picked_contubernium);
             }
         }
 

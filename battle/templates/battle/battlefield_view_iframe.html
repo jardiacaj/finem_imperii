@@ -10,18 +10,48 @@
     <script src="{% static 'world/battle_renderer.js' %}?{{ git_rev }}"></script>
 
     <script>
+        function show_info(contubernium, contubernium_in_turn, unit, character, organization) {
+            $('#unit_name').text(unit.name);
+            $('#char_name').text(character.name);
+
+            var action_string = '';
+            if (contubernium_in_turn.attack_target === null) {
+                action_string = 'Not attacking';
+            } else {
+                action_string = contubernium_in_turn.attack_type +
+                    ' attack on ' +
+                    map.units[map.contubernia[contubernium_in_turn.attack_target].unit_id].name;
+            }
+            $('#action').text(action_string);
+
+            var soldier_string = '';
+            for (soldier_index in contubernium_in_turn.soldiers) {
+                soldier = contubernium_in_turn.soldiers[soldier_index];
+                soldier_string += '●◕◑◔'.substring(soldier['wound_status'], 1);
+            }
+            $('#soldiers').text(soldier_string);
+            $('#org_name').text(organization.name);
+
+
+            var unit_info_el = $('#unit_info');
+            unit_info_el.show();
+            var hover_hint_el = $('#hover_hint');
+            hover_hint_el.hide();
+        }
+
+        function clear_info() {
+            var unit_info_el = $('#unit_info');
+            unit_info_el.hide();
+            var hover_hint_el = $('#hover_hint');
+            hover_hint_el.show();
+        }
+
         function info_callback(contubernium, contubernium_in_turn, unit, character, organization) {
-            $('#unit_name').text(contubernium === undefined ? '' :
-                unit.name + ' ' + contubernium_in_turn.soldiers.length +
-                ' ' + contubernium_in_turn.attack_type +
-                ' ' + (
-                    contubernium_in_turn.attack_target !== null ?
-                    map.units[map.contubernia[contubernium_in_turn.attack_target].unit_id].name :
-                    ''
-                )
-                );
-            $('#char_name').text(character === undefined ? '' : character.name);
-            $('#org_name').text(organization === undefined ? '' : organization.name);
+            if (contubernium === undefined) {
+                clear_info()
+            } else {
+                show_info(contubernium, contubernium_in_turn, unit, character, organization)
+            }
         }
 
         var map;
@@ -51,9 +81,17 @@
     </div>
 
     <div class="battlefield_unit_info text-right">
-        <div id="org_name"></div>
-        <div id="char_name"></div>
-        <div id="unit_name"></div>
+        <div id="hover_hint">
+            Hover over a unit to see more information
+        </div>
+        <div id="unit_info">
+            <div class="lead" id="unit_name"></div>
+            <div>
+                <span id="char_name"></span>, <span id="org_name"></span>
+            </div>
+            <div id="soldiers"></div>
+            <div id="action"></div>
+        </div>
     </div>
 
 {% endblock %}

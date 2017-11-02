@@ -429,7 +429,8 @@ def unit_attack(battle: Battle):
         elif (
                 world_unit.is_ranged() and
                 distance <= world_unit.shot_range() and
-                contubernium.ammo_remaining > 0
+                contubernium.ammo_remaining > 0 and
+                not contubernium.moved_this_turn
         ):
             unit_attack_ranged(contubernium, target_contubernium)
             contubernium.attack_type_this_turn = \

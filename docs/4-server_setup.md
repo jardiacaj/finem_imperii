@@ -27,6 +27,7 @@ OSes should be similar.
 - Ensure you have Python 3 and pip installed. Finem imperii has been
 tested with versions 3.4 to 3.6. The required packages are commonly
 named `python3` and `python3-pip`.
+- Make sure, you have mysql installed on your system
 - Go to the directory where you downloaded the Finem Imperii code.
 - Run `sudo pip3 install -r requirements.txt` to install the required
 python dependencies.

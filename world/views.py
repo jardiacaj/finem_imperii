@@ -773,3 +773,50 @@ class InventoryView(View):
         request.hero.hours_in_turn_left -= hours_needed
         request.hero.save()
         return redirect('world:inventory')
+
+
+@login_required
+@require_POST
+def transfer_cash(request):
+    transfer_cash_amount = int(request.POST.get('transfer_cash_amount'))
+
+    from_character = get_object_or_404(
+        Character,
+        pk=request.POST.get('from_character_id'),
+        owner_user=request.user
+    )
+    to_character = get_object_or_404(
+        Character,
+        pk=request.POST.get('to_character_id'),
+        owner_user=request.user
+    )
+
+    if from_character.location != to_character.location:
+        messages.error(
+            request,
+            "You need to be in the same location to transfer money.",
+            "danger"
+        )
+        return redirect('account:home')
+
+    if transfer_cash_amount > from_character.cash:
+        messages.error(
+            request,
+            "You have not enough cash.",
+            "danger"
+        )
+        return redirect('account:home')
+
+    from_character.cash = from_character.cash - transfer_cash_amount
+    to_character.cash = to_character.cash + transfer_cash_amount
+
+    from_character.save()
+    to_character.save()
+
+    messages.success(
+        request,
+        "The transactions was successful",
+        "success"
+    )
+
+    return redirect('account:home')

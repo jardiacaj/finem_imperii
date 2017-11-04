@@ -41,11 +41,6 @@ class TestCashTransfer(TestCase):
         from_character.refresh_from_db()
         to_character.refresh_from_db()
 
-        self.assertRedirects(
-            response,
-            reverse('account:home')
-        )
-
         self.assertEqual(from_character_cash_before_transfer - 100, from_character.cash)
         self.assertEqual(to_character_cash_before_transfer + 100, to_character.cash)
 
@@ -71,11 +66,6 @@ class TestCashTransfer(TestCase):
         from_character.refresh_from_db()
         to_character.refresh_from_db()
 
-        self.assertRedirects(
-            response,
-            reverse('account:home')
-        )
-
         self.assertEqual(from_character_cash_before_transfer, from_character.cash)
         self.assertEqual(to_character_cash_before_transfer, to_character.cash)
 
@@ -100,11 +90,6 @@ class TestCashTransfer(TestCase):
 
         from_character.refresh_from_db()
         to_character.refresh_from_db()
-
-        self.assertRedirects(
-            response,
-            reverse('account:home')
-        )
 
         self.assertEqual(from_character_cash_before_transfer, from_character.cash)
         self.assertEqual(to_character_cash_before_transfer, to_character.cash)

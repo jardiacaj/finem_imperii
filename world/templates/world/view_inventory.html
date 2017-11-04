@@ -11,6 +11,48 @@
 
     <p>
         {{ request.hero.cash }} silver coins.
+
+        {% if request.hero.location.character_set.all|length > 1 %}
+            <form action="{% url 'world:transfer_cash' %}" class="form-horizontal col-lg-12" method="post">
+                {% csrf_token %}
+
+                <input type="hidden" name="from_character_id" value="{{ request.hero.id }}">
+
+                <div class="form-group col-lg-2">
+                    <label for="coins_to_transfer">
+                        Transfer coins
+                    </label>
+
+                    <input class="form-control"
+                           id="coins_to_transfer"
+                           type="number"
+                           name="transfer_cash_amount"
+                           min="1"
+                           max="{{ request.hero.cash }}"
+                           value="100"
+                    >
+                </div>
+                  <div class="col-lg-4">
+                    <label for="transfer_to_character">
+                        to nearby character
+                    </label>
+                    <div class="input-group" id="transfer_to_character">
+                        <select name="to_character_id" class="form-control">
+                            {% for near_character in request.hero.location.character_set.all %}
+                                {% if request.hero.id != near_character.id %}
+                                <option value="{{ near_character.id }}">
+                                    {{ near_character.name }}
+                                </option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                      <span class="input-group-btn">
+                        <button class="btn btn-primary" type="submit">Transfer</button>
+                      </span>
+                    </div>
+                  </div>
+            </form>
+        {% endif %}
     </p>
 
     {% for item in request.hero.inventoryitem_set.all %}

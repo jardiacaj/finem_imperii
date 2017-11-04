@@ -797,7 +797,7 @@ def transfer_cash(request):
             "You need to be in the same location to transfer money.",
             "danger"
         )
-        return redirect('account:home')
+        return redirect('world:inventory')
 
     if transfer_cash_amount > from_character.cash:
         messages.error(
@@ -805,7 +805,7 @@ def transfer_cash(request):
             "You have not enough cash.",
             "danger"
         )
-        return redirect('account:home')
+        return redirect('world:inventory')
 
     from_character.cash = from_character.cash - transfer_cash_amount
     to_character.cash = to_character.cash + transfer_cash_amount
@@ -815,8 +815,8 @@ def transfer_cash(request):
 
     messages.success(
         request,
-        "The transactions was successful",
+        "The transactions was successful.",
         "success"
     )
 
-    return redirect('account:home')
+    return redirect('world:inventory')

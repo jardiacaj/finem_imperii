@@ -10,42 +10,118 @@
     <script src="{% static 'world/battle_renderer.js' %}?{{ git_rev }}"></script>
 
     <script>
-        function info_callback(contubernium, contubernium_in_turn, unit, character, organization) {
-            $('#unit_name').text(contubernium === undefined ? '' : unit.name + ' ' + contubernium_in_turn.soldiers.length);
-            $('#char_name').text(character === undefined ? '' : character.name);
-            $('#org_name').text(organization === undefined ? '' : organization.name);
+        function show_info(contubernium) {
+            if (contubernium === undefined) return clear_info();
+            var contubernium_in_turn = contubernium.in_turn[map.showing_turn];
+            if (contubernium_in_turn === undefined) return clear_info();
+            var unit = map.units[contubernium.unit_id];
+            var character = map.characters[unit.character_id];
+            var organization = map.organizations[unit.organization_id];
+
+            $('#unit_name').text(unit.name);
+            $('#char_name').text(character.name);
+
+            var action_string = '';
+            if (contubernium_in_turn.attack_target === null) {
+                action_string = 'Not attacking';
+            } else {
+                action_string = contubernium_in_turn.attack_type +
+                    ' attack on ' +
+                    map.units[map.contubernia[contubernium_in_turn.attack_target].unit_id].name;
+            }
+            $('#action').text(action_string);
+
+            var soldier_string = '';
+            for (soldier_index in contubernium_in_turn.soldiers) {
+                var soldier = contubernium_in_turn.soldiers[soldier_index];
+                var wound_status = soldier['wound_status'];
+                if (wound_status > 3) continue;
+                soldier_string += '●◕◑◔'.substr(wound_status, 1);
+            }
+            $('#soldiers').text(soldier_string);
+            $('#org_name').text(organization.name);
+
+
+            var unit_info_el = $('#unit_info');
+            unit_info_el.show();
+            var hover_hint_el = $('#hover_hint');
+            hover_hint_el.hide();
+        }
+
+        function clear_info() {
+            var unit_info_el = $('#unit_info');
+            unit_info_el.hide();
+            var hover_hint_el = $('#hover_hint');
+            hover_hint_el.show();
+        }
+
+        function info_callback(contubernium, mousemove_event) {
+            var unit_info_el = $('#unit_info');
+
+            if (contubernium === undefined) {
+                if (map.clicked_contubernium === undefined) {
+                    clear_info()
+                } else {
+                    unit_info_el.css('position', 'absolute');
+                    unit_info_el.css('top', '10px');
+                    unit_info_el.css('bottom', '');
+                    unit_info_el.css('left', '');
+                    unit_info_el.css('right', '10px');
+                    show_info(map.clicked_contubernium);
+                }
+            } else {
+                if (mousemove_event !== undefined) {
+                    var x = mousemove_event.clientX,
+                        y = mousemove_event.clientY;
+                    unit_info_el.css('position', 'fixed');
+                    unit_info_el.css('top', (y + 20) + 'px');
+                    unit_info_el.css('bottom', '');
+                    unit_info_el.css('left', (x + 20) + 'px');
+                    unit_info_el.css('right', '');
+                }
+                show_info(contubernium);
+            }
         }
 
         var map;
         $(function () {
-            map = new BattleRenderer({{ battle_data|safe }});
+            var battle_data = {{ battle_data|safe }};
+            map = new BattleRenderer(battle_data);
             map.renderer.add_orbit_controls();
             map.hover_callback = info_callback;
         })
     </script>
 
     <div class="battlefield_turn_controls text-center">
-        <button onclick="map.turn_back()" class="btn btn-default">
+        <button onclick="map.turn_back(); show_info(map.clicked_contubernium);" class="btn btn-default">
             <span class="glyphicon glyphicon-fast-backward" aria-hidden="true"></span>
         </button>
-        <button onclick="map.step_back()" class="btn btn-default">
+        <button onclick="map.step_back(); show_info(map.clicked_contubernium);" class="btn btn-default">
             <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
         </button>
 
         <span id="current_turn_display"></span>/<span id="total_turn_display"></span>
 
-        <button onclick="map.step_fwd()" class="btn btn-default">
+        <button onclick="map.step_fwd(); show_info(map.clicked_contubernium);" class="btn btn-default">
             <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
         </button>
-        <button onclick="map.turn_fwd()" class="btn btn-default">
+        <button onclick="map.turn_fwd(); show_info(map.clicked_contubernium);" class="btn btn-default">
             <span class="glyphicon glyphicon-fast-forward" aria-hidden="true"></span>
         </button>
     </div>
 
     <div class="battlefield_unit_info text-right">
-        <div id="org_name"></div>
-        <div id="char_name"></div>
-        <div id="unit_name"></div>
+        <div id="hover_hint">
+            Hover over a unit to see more information
+        </div>
+        <div id="unit_info">
+            <div class="lead" id="unit_name"></div>
+            <div>
+                <span id="char_name"></span>, <span id="org_name"></span>
+            </div>
+            <div id="soldiers"></div>
+            <div id="action"></div>
+        </div>
     </div>
 
 {% endblock %}

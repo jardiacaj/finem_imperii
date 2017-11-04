@@ -2,10 +2,12 @@
 
 set -e
 
-pip3 install coveralls
-pip3 install codeclimate-test-reporter
-apk add --no-cache git
 cd /var/www/finem_imperii
+wget http://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
+chmod +x test-reporter-latest-linux-amd64
+./test-reporter-latest-linux-amd64 before-build
+pip3 install coveralls
+apk add --no-cache git
 coverage run --branch --source . ./manage.py test
 
 if [ -z "$COVERALLS_REPO_TOKEN" ]; then
@@ -14,8 +16,9 @@ else
     coveralls
 fi
 
-if [ -z "$CODECLIMATE_REPO_TOKEN" ]; then
+if [ -z "$CC_TEST_REPORTER_ID" ]; then
     echo "Not running codeclimate reporter (token missing)"
 else
-    codeclimate-test-reporter
+    coverage xml
+    ./test-reporter-latest-linux-amd64 after-build --coverage-input-type coverage.py
 fi

@@ -3,7 +3,7 @@ MAINTAINER "Joan Ardiaca Jové"
 
 # Base packages
 RUN apk add --update --no-cache apache2 python3 bash git mariadb-dev gcc \
-  python3-dev coreutils expect gettext mariadb-dev libffi-dev
+  python3-dev coreutils expect gettext mariadb-dev libffi-dev openssl
 RUN apk add --virtual build-dependence pkgconfig g++ tzdata
 
 RUN ln -s /usr/bin/python3.5 /usr/bin/python

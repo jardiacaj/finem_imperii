@@ -46,7 +46,7 @@ function BaseRenderer(initial_camera_x, initial_camera_y, initial_camera_z) {
         // (-1 to +1) for both components
         zis.mouse_vector.x = (event.clientX / window.innerWidth ) * 2 - 1;
         zis.mouse_vector.y = - (event.clientY / window.innerHeight) * 2 + 1;
-        zis.pick();
+        zis.pick(event);
     };
 
     zis.window_resize_listener = function (event) {
@@ -66,7 +66,7 @@ function BaseRenderer(initial_camera_x, initial_camera_y, initial_camera_z) {
         pos.y = -( pos.y * heightHalf ) + heightHalf;
     };
 
-    zis.pick = function () {
+    zis.pick = function (mouse_move_event) {
         zis.raycaster.setFromCamera( zis.mouse_vector, zis.camera );
 
         // calculate objects intersecting the picking ray
@@ -83,7 +83,7 @@ function BaseRenderer(initial_camera_x, initial_camera_y, initial_camera_z) {
                 if (intersected_types.indexOf(picked_type) === -1) {
                     intersected_types.push(picked_type);
                     if (zis.last_picking_results[picked_type] !== picked_object) {
-                        zis.picking_types[picked_type](picked_object);
+                        zis.picking_types[picked_type](picked_object, mouse_move_event);
                         zis.last_picking_results[picked_type] = picked_object;
                     }
                 }

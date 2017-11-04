@@ -5,7 +5,7 @@ import world.initialization
 from world.models import WorldUnit, Character, NPC
 
 
-class TestUnitActions(TestCase):
+class TestRecruitment(TestCase):
     fixtures = ['simple_world']
 
     def setUp(self):

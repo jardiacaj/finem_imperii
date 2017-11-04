@@ -6,7 +6,7 @@ from world.models import Building, NPC, Settlement, InventoryItem
 from world.turn import TurnProcessor
 
 
-class TestFieldProduction(TestCase):
+class TestFoodConsumption(TestCase):
     fixtures = ['simple_world']
 
     def test_food_consumption(self):

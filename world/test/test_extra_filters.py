@@ -3,7 +3,7 @@ from django.test import TestCase
 from world.templatetags import extra_filters
 
 
-class TestInitialization(TestCase):
+class TestExtraFilters(TestCase):
     def test_subtract1(self):
         self.assertEqual(extra_filters.subtract(1, 2), -1)
 

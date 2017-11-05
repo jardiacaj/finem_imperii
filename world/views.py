@@ -756,23 +756,17 @@ class InventoryView(View):
         return redirect('world:inventory')
 
 
-@login_required
+@inchar_required
 @require_POST
 def transfer_cash(request):
     transfer_cash_amount = int(request.POST.get('transfer_cash_amount'))
 
-    from_character = get_object_or_404(
-        Character,
-        pk=request.POST.get('from_character_id'),
-        owner_user=request.user
-    )
     to_character = get_object_or_404(
         Character,
-        pk=request.POST.get('to_character_id'),
-        owner_user=request.user
+        pk=request.POST.get('to_character_id')
     )
 
-    if from_character.location != to_character.location:
+    if request.hero.location != to_character.location:
         messages.error(
             request,
             "You need to be in the same location to transfer money.",
@@ -780,7 +774,7 @@ def transfer_cash(request):
         )
         return redirect('world:inventory')
 
-    if transfer_cash_amount > from_character.cash:
+    if transfer_cash_amount > request.hero.cash:
         messages.error(
             request,
             "You have not enough cash.",
@@ -788,15 +782,23 @@ def transfer_cash(request):
         )
         return redirect('world:inventory')
 
-    from_character.cash = from_character.cash - transfer_cash_amount
+    if transfer_cash_amount < 1:
+        messages.error(
+            request,
+            "That is not a valid cash amount.",
+            "danger"
+        )
+        return redirect('world:inventory')
+
+    request.hero.cash = request.hero.cash - transfer_cash_amount
     to_character.cash = to_character.cash + transfer_cash_amount
 
-    from_character.save()
+    request.hero.save()
     to_character.save()
 
     messages.success(
         request,
-        "The transactions was successful.",
+        "The transaction was successful.",
         "success"
     )
 

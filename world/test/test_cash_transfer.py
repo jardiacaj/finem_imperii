@@ -19,77 +19,111 @@ class TestCashTransfer(TestCase):
         user.save()
         self.assertEqual(User.objects.get(id=1), user)
 
+        self.client.get(
+            reverse('world:activate_character', kwargs={'char_id': 1}),
+            follow=True
+        )
+        self.from_character = Character.objects.get(id=1)
+
     def test_can_transfer_cash_to_character_in_same_settlement(self):
-        from_character = Character.objects.get(id=1)
         to_character = Character.objects.get(id=2)
 
-        self.assertEqual(from_character.location.id, to_character.location.id)
+        self.assertEqual(self.from_character.location.id, to_character.location.id)
 
-        from_character_cash_before_transfer = from_character.cash
+        from_character_cash_before_transfer = self.from_character.cash
         to_character_cash_before_transfer = to_character.cash
 
         response = self.client.post(
             reverse('world:transfer_cash'),
             data={
-                'from_character_id': from_character.id,
                 'to_character_id': to_character.id,
                 'transfer_cash_amount': 100,
             },
             follow=True
         )
 
-        from_character.refresh_from_db()
+        self.assertRedirects(response, reverse('world:inventory'))
+
+        self.from_character.refresh_from_db()
         to_character.refresh_from_db()
 
-        self.assertEqual(from_character_cash_before_transfer - 100, from_character.cash)
+        self.assertEqual(from_character_cash_before_transfer - 100, self.from_character.cash)
         self.assertEqual(to_character_cash_before_transfer + 100, to_character.cash)
 
     def test_cannot_transfer_cash_to_character_in_different_settlement(self):
-        from_character = Character.objects.get(id=1)
+        self.from_character = Character.objects.get(id=1)
         to_character = Character.objects.get(id=3)
 
-        self.assertNotEqual(from_character.location.id, to_character.location.id)
+        self.assertNotEqual(self.from_character.location.id, to_character.location.id)
 
-        from_character_cash_before_transfer = from_character.cash
+        from_character_cash_before_transfer = self.from_character.cash
         to_character_cash_before_transfer = to_character.cash
 
         response = self.client.post(
             reverse('world:transfer_cash'),
             data={
-                'from_character_id': from_character.id,
                 'to_character_id': to_character.id,
                 'transfer_cash_amount': 100,
             },
             follow=True
         )
 
-        from_character.refresh_from_db()
+        self.assertRedirects(response, reverse('world:inventory'))
+
+        self.from_character.refresh_from_db()
         to_character.refresh_from_db()
 
-        self.assertEqual(from_character_cash_before_transfer, from_character.cash)
+        self.assertEqual(from_character_cash_before_transfer, self.from_character.cash)
         self.assertEqual(to_character_cash_before_transfer, to_character.cash)
 
     def test_cannot_transfer_more_cash_than_available(self):
-        from_character = Character.objects.get(id=1)
+        self.from_character = Character.objects.get(id=1)
         to_character = Character.objects.get(id=2)
 
-        self.assertEqual(from_character.location.id, to_character.location.id)
+        self.assertEqual(self.from_character.location.id, to_character.location.id)
 
-        from_character_cash_before_transfer = from_character.cash
+        from_character_cash_before_transfer = self.from_character.cash
         to_character_cash_before_transfer = to_character.cash
 
         response = self.client.post(
             reverse('world:transfer_cash'),
             data={
-                'from_character_id': from_character.id,
                 'to_character_id': to_character.id,
                 'transfer_cash_amount': 1000000000000,
             },
             follow=True
         )
 
-        from_character.refresh_from_db()
+        self.assertRedirects(response, reverse('world:inventory'))
+
+        self.from_character.refresh_from_db()
         to_character.refresh_from_db()
 
-        self.assertEqual(from_character_cash_before_transfer, from_character.cash)
+        self.assertEqual(from_character_cash_before_transfer, self.from_character.cash)
+        self.assertEqual(to_character_cash_before_transfer, to_character.cash)
+
+    def test_cannot_transfer_negative_cash(self):
+        self.from_character = Character.objects.get(id=1)
+        to_character = Character.objects.get(id=2)
+
+        self.assertEqual(self.from_character.location.id, to_character.location.id)
+
+        from_character_cash_before_transfer = self.from_character.cash
+        to_character_cash_before_transfer = to_character.cash
+
+        response = self.client.post(
+            reverse('world:transfer_cash'),
+            data={
+                'to_character_id': to_character.id,
+                'transfer_cash_amount': -100,
+            },
+            follow=True
+        )
+
+        self.assertRedirects(response, reverse('world:inventory'))
+
+        self.from_character.refresh_from_db()
+        to_character.refresh_from_db()
+
+        self.assertEqual(from_character_cash_before_transfer, self.from_character.cash)
         self.assertEqual(to_character_cash_before_transfer, to_character.cash)

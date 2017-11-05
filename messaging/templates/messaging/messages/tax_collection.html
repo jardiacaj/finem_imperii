@@ -1,0 +1,24 @@
+<h2>
+    Tax collection in {{ organization.get_html_link|safe }}
+</h2>
+
+<p>
+    Tax production per region
+</p>
+
+<table class="table table-striped table-hover table-condensed">
+    {% for settlement, cash in settlement_input %}
+        <tr>
+            <td>{{ settlement }}, {{ settlement.tile.get_html_link|safe }}</td>
+            <td class="text-right">{{ cash }} coins</td>
+        </tr>
+    {% endfor %}
+    <tr>
+        <td><b>Total</b></td>
+        <td class="text-center"><b>{{ total_input }} coins</b></td>
+    </tr>
+</table>
+
+<p>
+    Each member receives {{ member_share }} coins.
+</p>

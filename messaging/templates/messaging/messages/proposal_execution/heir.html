@@ -1,0 +1,16 @@
+{% load extra_filters %}
+
+<p>
+    {{ proposal.capability.applying_to.heir_first.get_html_link|safe }}
+    is now the heir to
+    {{ proposal.capability.applying_to.get_html_link|safe }}
+</p>
+
+{% if proposal.capability.applying_to.heir_second %}
+    <p>
+        {{ proposal.capability.applying_to.heir_second.get_html_link|safe }}
+        is second in the line of succession.
+    </p>
+{% endif %}
+
+{% include 'vote_result.html' %}

@@ -1,15 +1,21 @@
+from django.template.loader import render_to_string
+
 from messaging.models import CharacterMessage, MessageRecipient, \
     MessageRecipientGroup
 
 
 def create_message(
-        content, world, category, sender=None, safe=False, link=None
+        template, world, category, template_context=None, sender=None,
+        link=None
 ):
+    content = render_to_string(
+        '{}'.format(template),
+        template_context
+    )
     return CharacterMessage.objects.create(
         content=content,
         creation_turn=world.current_turn,
         sender=sender,
-        safe=safe,
         category=category,
         link=link
     )

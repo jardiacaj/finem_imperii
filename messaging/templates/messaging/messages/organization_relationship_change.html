@@ -1,0 +1,38 @@
+{% if relationship.relationship == 'war' %}
+    <p>
+        {{ relationship.from_organization.get_html_link|safe }}
+        declared war on
+        {{ relationship.to_organization.get_html_link|safe }}!
+    </p>
+{% elif previous_relationship == 'war' and relationship.relationship == 'peace' %}
+    <p>
+        {{ relationship.from_organization.get_html_link|safe }}
+        and
+        {{ relationship.to_organization.get_html_link|safe }}
+        have made peace.
+    </p>
+{% elif previous_relationship == 'war' and relationship.relationship != 'war' %}
+    <p>
+        The war between
+        {{ relationship.from_organization.get_html_link|safe }}
+        and
+        {{ relationship.to_organization.get_html_link|safe }}
+        has ended.
+    </p>
+    <p>
+        Their relationship is now:
+        {{ relationship.relationship }}.
+    </p>
+{% else %}
+    <p>
+        {{ relationship.from_organization.get_html_link|safe }}
+        and
+        {{ relationship.to_organization.get_html_link|safe }}
+        now have the following relationship:
+        {{ relationship.relationship }}.
+    </p>
+    <p>
+        Their previous relationship was:
+        {{ previous_relationship }}.
+    </p>
+{% endif %}

@@ -1,0 +1,8 @@
+{% load extra_filters %}
+
+<p>
+    The regulation of guilds in {{ settlement.get_html_link|safe }}
+    is now the following:
+    <b>{{ settlement.get_guilds_setting_display }}</b>
+</p>
+{% include 'vote_result.html' %}

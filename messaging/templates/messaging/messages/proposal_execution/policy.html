@@ -1,0 +1,10 @@
+<p>
+    {% if new %}
+        The document {{ document.get_html_link|safe }} has been created.
+    {% elif deleted %}
+        The document {{ document.get_html_link|safe }} has been deleted.
+    {% else %}
+        The document {{ document.title }} has been edited.
+    {% endif %}
+</p>
+{% include 'vote_result.html' %}

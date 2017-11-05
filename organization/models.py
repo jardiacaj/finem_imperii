@@ -83,8 +83,6 @@ class Organization(models.Model):
             member
         )
 
-        message_content = "{} left {}.".format(member, self)
-
         if self.leader and member in \
                 self.leader.character_members.all():
             self.leader.remove_member(member)
@@ -102,9 +100,6 @@ class Organization(models.Model):
                 self.character_members.add(self.heir_first)
                 self.heir_first = self.heir_second = None
                 self.save()
-                message_content += " {} is the new {}.".format(
-                    self.get_position_occupier(), self
-                )
             elif (
                     self.heir_second and
                     self.heir_second in self.get_heir_candidates()
@@ -112,9 +107,6 @@ class Organization(models.Model):
                 self.character_members.add(self.heir_second)
                 self.heir_first = self.heir_second = None
                 self.save()
-                message_content += " {} is the new {}.".format(
-                    self.get_position_occupier(), self
-                )
             elif self.position_type == self.ELECTED:
                 self.convoke_elections()
 
@@ -122,7 +114,13 @@ class Organization(models.Model):
             self.leader.remove_member(member)
 
         message = shortcuts.create_message(
-            message_content, self.world, 'leaving',
+            'messaging/messages/member_left_organization.html',
+            self.world,
+            'leaving',
+            {
+                'organization': self,
+                'member': member
+            },
             link=self.get_absolute_url()
         )
         shortcuts.add_organization_recipient(
@@ -275,16 +273,14 @@ class Organization(models.Model):
             PositionCandidacy.objects.create(
                 election=election,
                 candidate=self.get_position_occupier(),
-                description="Auto-generated candidacy for incumbent character."
+                description="Automatic candidacy for incumbent character."
             )
 
         message = shortcuts.create_message(
-            "Elections have been convoked for the position {}. "
-            "They will take place in {} months.".format(
-                self, months_to_election
-            ),
+            'messaging/messages/elections_convoked.html',
             self.world,
             'elections',
+            {'organization': self},
             link=election.get_absolute_url()
         )
         shortcuts.add_organization_recipient(
@@ -292,6 +288,7 @@ class Organization(models.Model):
             self,
             add_lead_organizations=True
         )
+        return self.current_election
 
     def __str__(self):
         return self.name
@@ -393,12 +390,6 @@ class PositionElection(models.Model):
                 winners.append(candidacy)
 
         if len(winners) != 1:
-            message_content = (
-                "The elections for {} resulted in no winner. "
-                "New elections will be convoked.".format(
-                    self.position.get_html_link()
-                )
-            )
             self.position.convoke_elections()
         else:
             winning_candidacy = winners[0]
@@ -407,19 +398,16 @@ class PositionElection(models.Model):
             self.position.character_members.remove(
                 self.position.get_position_occupier())
             self.position.character_members.add(winning_candidate)
-            message_content = (
-                "The elections for {} have been won by {}."
-                "".format(
-                    self.position.get_html_link(),
-                    winning_candidate.get_html_link()
-                )
-            )
 
         message = shortcuts.create_message(
-            message_content,
+            'messaging/messages/elections_resolved.html',
             self.position.world,
             'elections',
-            safe=True,
+            {
+                'election': self,
+                'winner_count': len(winners),
+                'winner': None if len(winners) != 1 else winning_candidate
+            },
             link=self.get_absolute_url()
         )
         shortcuts.add_organization_recipient(
@@ -557,11 +545,18 @@ class CapabilityProposal(models.Model):
     closed = models.BooleanField(default=False)
     democratic = models.BooleanField()
 
-    def announce_proposal(self):
+    def announce_proposal(self, extra_context=None):
+        context = {'proposal': self}
+        if extra_context is not None:
+            context = {**context, **extra_context}
+
         message = shortcuts.create_message(
-            "New {}".format(self),
-            self.capability.organization.world,
+            template='messaging/messages/proposal.html'.format(
+                self.capability.type
+            ),
+            world=self.capability.organization.world,
             category="proposal",
+            template_context=context,
             link=self.get_absolute_url(),
         )
         shortcuts.add_organization_recipient(
@@ -569,15 +564,18 @@ class CapabilityProposal(models.Model):
         shortcuts.add_organization_recipient(
             message, self.capability.organization)
 
-    def announce_execution(self, text, category, link=None):
+    def announce_execution(self, category, extra_context=None, link=None):
+        context = {'proposal': self}
+        if extra_context is not None:
+            context = {**context, **extra_context}
+
         message = shortcuts.create_message(
-            (
-                "{}'s proposal passed: {}"
-                if self.democratic
-                else "Action by {}: {}"
-            ).format(self.proposing_character, text),
-            self.capability.organization.world,
+            template='messaging/messages/proposal_execution/{}.html'.format(
+                self.capability.type
+            ),
+            world=self.capability.organization.world,
             category=category,
+            template_context=context,
             link=(self.get_absolute_url() if link is None and self.democratic
                   else link),
         )
@@ -601,8 +599,11 @@ class CapabilityProposal(models.Model):
 
                 if proposal['delete']:
                     self.announce_execution(
-                        "The document {} has been deleted".format(document),
-                        "policy"
+                        "policy",
+                        extra_context={
+                            'deleted': True,
+                            'document': document
+                        }
                     )
                     document.delete()
                 else:
@@ -614,12 +615,11 @@ class CapabilityProposal(models.Model):
                     document.save()
 
                     self.announce_execution(
-                        (
-                            "A new document titled {} has been created"
-                            if proposal['new'] else
-                            "The document {} has been edited"
-                        ).format(document),
                         "policy",
+                        extra_context={
+                            'new': proposal['new'],
+                            'document': document
+                        },
                         link=document.get_absolute_url()
                     )
 
@@ -632,21 +632,22 @@ class CapabilityProposal(models.Model):
                     id=proposal['character_id']
                 )
                 applying_to.remove_member(character_to_ban)
+                self.announce_execution(
+                    'ban',
+                    {'banned_character': character_to_ban}
+                )
             except world.models.Character.DoesNotExist:
                 pass
-
-            self.announce_execution(
-                "{} has been banned from {}".format(
-                    character_to_ban, applying_to
-                ),
-                'ban'
-            )
 
         elif self.capability.type == Capability.CONVOKE_ELECTIONS:
             if applying_to.current_election is None:
                 months_to_election = proposal['months_to_election']
                 election = applying_to.convoke_elections(
                     months_to_election)
+                self.announce_execution(
+                    'elections',
+                    {'election': election}
+                )
 
         elif self.capability.type == Capability.DIPLOMACY:
             try:
@@ -657,6 +658,23 @@ class CapabilityProposal(models.Model):
                     get_relationship_to(target_organization)
                 reverse_relationship = changing_relationship.reverse_relation()
                 action_type = proposal['type']
+
+                if self.democratic:
+                    self.announce_execution(
+                        'diplomacy',
+                        {
+                            'action_type': action_type,
+                            'target_organization': target_organization,
+                            'target_relationship': target_relationship,
+                            'changing_relationship': changing_relationship,
+                            'reverse_relationship': reverse_relationship,
+                            'has_to_be_agreed':
+                                changing_relationship.
+                                target_has_to_be_agreed_upon(
+                                    target_relationship)
+                        }
+                    )
+
                 if action_type == 'propose':
                     changing_relationship.desire(target_relationship)
                 elif action_type == 'accept':
@@ -694,19 +712,10 @@ class CapabilityProposal(models.Model):
                 target_stance.save()
 
                 self.announce_execution(
-                    (
-                        "The general military stance of {from_} towards {to} "
-                        "is now {stance}"
-                        if target_stance.region is None else
-                        "The military stance of {from_} towards {to} "
-                        "in {region} is now {stance}"
-                    ).format(
-                        from_=target_stance.from_organization,
-                        to=target_stance.to_organization,
-                        stance=target_stance.get_stance_type_display(),
-                        region=target_stance.region,
-                    ),
-                    'military stance'
+                    'military stance',
+                    extra_context={
+                        'stance': target_stance
+                    }
                 )
 
             except (world.models.Tile.DoesNotExist, Organization.DoesNotExist):
@@ -725,11 +734,8 @@ class CapabilityProposal(models.Model):
             formation.save()
 
             self.announce_execution(
-                "The battle formation of {} has been changed ({})".format(
-                    applying_to,
-                    formation.formation
-                ),
-                'battle formation'
+                'battle formation',
+                {'formation': formation}
             )
 
         elif self.capability.type == Capability.CONQUEST:
@@ -744,10 +750,17 @@ class CapabilityProposal(models.Model):
                     tile_event.end_turn = applying_to.\
                         world.current_turn
                     tile_event.save()
+                    self.announce_execution(
+                        'conquest',
+                        {
+                            'tile_event': tile_event,
+                            'action': 'stop'
+                        }
+                    )
                 else:
                     if tile in \
                             applying_to.conquestable_tiles():
-                        world.models.TileEvent.objects.create(
+                        tile_event = world.models.TileEvent.objects.create(
                             tile=tile,
                             type=world.models.TileEvent.CONQUEST,
                             organization=applying_to,
@@ -755,14 +768,21 @@ class CapabilityProposal(models.Model):
                             start_turn=applying_to.world.
                                 current_turn
                         )
-                        tile.world.broadcast(
-                            "{} has started conquering {}!".format(
-                                applying_to,
-                                tile
-                            ),
+                        self.announce_execution(
                             'conquest',
+                            {
+                                'tile_event': tile_event,
+                                'action': 'start'
+                            }
+                        )
+
+                        tile.world.broadcast(
+                            'messaging/messages/conquest_start.html',
+                            'conquest',
+                            {'tile_event': tile_event},
                             tile.get_absolute_url()
                         )
+
             except (world.models.Tile.DoesNotExist,
                     world.models.TileEvent.DoesNotExist):
                 pass
@@ -783,12 +803,8 @@ class CapabilityProposal(models.Model):
                     settlement.guilds_setting = proposal['option']
                     settlement.save()
                     self.announce_execution(
-                        "{} in {}".format(
-                            settlement.get_guilds_setting_display(),
-                            settlement
-                        ),
                         'guilds',
-                        settlement.tile.get_absolute_url()
+                        {'settlement': settlement}
                     )
             except world.models.Settlement.DoesNotExist:
                 pass
@@ -815,20 +831,7 @@ class CapabilityProposal(models.Model):
                         applying_to.heir_second = second_heir
                         applying_to.save()
 
-                    message_content = "{} is now the heir of {}.".format(
-                        applying_to.heir_first, applying_to
-                    )
-                    if applying_to.heir_second:
-                        message_content += " {} is the second in the line of" \
-                                           "succession".format(
-                                                applying_to.heir_second
-                                            )
-                    message = shortcuts.create_message(
-                        message_content,
-                        applying_to.world,
-                        'heir',
-                        link=applying_to.get_absolute_url()
-                    )
+                    message = self.announce_execution('heir')
                     shortcuts.add_organization_recipient(
                         message,
                         applying_to.get_violence_monopoly()
@@ -838,7 +841,10 @@ class CapabilityProposal(models.Model):
                 pass
 
         else:
-            raise Exception("Executing unknown capability action_type '{}'".format(self.capability.type))
+            raise Exception(
+                "Executing unknown capability action_type '{}'"
+                .format(self.capability.type)
+            )
 
         self.executed = True
         self.closed = True
@@ -930,6 +936,12 @@ class PolicyDocument(models.Model):
     def get_absolute_url(self):
         return reverse('organization:document', kwargs={'document_id': self.id})
 
+    def get_html_link(self):
+        return '<a href="{}">{}</a>'.format(
+            self.get_absolute_url(),
+            self.title,
+        )
+
 
 class OrganizationRelationship(models.Model):
     class Meta:
@@ -1012,21 +1024,20 @@ class OrganizationRelationship(models.Model):
     def is_proposal(self):
         return self.desired_relationship and self.desired_relationship != self.relationship
 
+    def target_has_to_be_agreed_upon(self, target_relationship):
+        return self.RELATIONSHIP_LEVEL[target_relationship] > self.RELATIONSHIP_LEVEL[self.relationship]
+
     @transaction.atomic
     def desire(self, target_relationship):
-        if target_relationship == self.WAR:
-            self.to_organization.world.broadcast(
-                "{} declared war on {}!", "diplomacy"
-            )
-
-        if self.RELATIONSHIP_LEVEL[target_relationship] < self.RELATIONSHIP_LEVEL[self.relationship]:
-            self.set_relationship(target_relationship)
-        else:
+        if self.target_has_to_be_agreed_upon(target_relationship):
             self.desired_relationship = target_relationship
             self.save()
+        else:
+            self.set_relationship(target_relationship)
 
     @transaction.atomic
-    def set_relationship(self, target_relationship):
+    def set_relationship(self, target_relationship: str):
+        previous_relationship = self.relationship
         self.relationship = target_relationship
         self.desired_relationship = None
         self.save()
@@ -1035,16 +1046,14 @@ class OrganizationRelationship(models.Model):
         reverse_relation.desired_relationship = None
         reverse_relation.save()
 
-        if target_relationship != self.WAR:
-            self.to_organization.world.broadcast(
-                "{} and {} now have the following diplomatic relationship: {}"
-                "".format(
-                    self.from_organization,
-                    self.to_organization,
-                    self.relationship
-                ),
-                "diplomacy"
-            )
+        self.to_organization.world.broadcast(
+            'messaging/messages/organization_relationship_change.html',
+            'diplomacy',
+            {
+                'relationship': self,
+                'previous_relationship': previous_relationship
+            }
+        )
 
     def default_military_stance(self):
         if self.relationship in (OrganizationRelationship.PEACE,):

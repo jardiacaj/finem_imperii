@@ -162,21 +162,6 @@ def candidacy_view(request, capability_id):
         election=election,
         candidate=request.hero
     )
-    message = shortcuts.create_message(
-        "<p>{} has presented a candidacy to the election for {}.</p>".format(
-            request.hero.get_html_link(),
-            capability.applying_to.get_html_link()
-        ),
-        capability.applying_to.world,
-        "elections",
-        safe=True,
-        link=election.get_absolute_url()
-    )
-    shortcuts.add_organization_recipient(
-        message,
-        capability.applying_to,
-        add_lead_organizations=True
-    )
 
     if retire:
         candidacy.retired = True
@@ -191,6 +176,23 @@ def candidacy_view(request, capability_id):
             messages.success(
                 request, "Your candidacy has been updated.", "success")
     candidacy.save()
+
+    message = shortcuts.create_message(
+        'messaging/messages/elections_candidacy.html',
+        capability.applying_to.world,
+        'elections',
+        {
+            'candidacy': candidacy,
+            'retire': retire,
+            'new': new
+        },
+        link=election.get_absolute_url()
+    )
+    shortcuts.add_organization_recipient(
+        message,
+        capability.applying_to,
+        add_lead_organizations=True
+    )
 
     return redirect(capability.get_absolute_url())
 

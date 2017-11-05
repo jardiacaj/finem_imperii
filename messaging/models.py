@@ -68,7 +68,6 @@ class CharacterMessage(models.Model):
         'world.Character', related_name='messages_sent', blank=True, null=True)
     category = models.CharField(
         max_length=20, choices=CATEGORY_CHOICES, blank=True, null=True)
-    safe = models.BooleanField(default=False)
     link = models.TextField(blank=True, null=True)
 
     def get_nice_recipient_list(self):

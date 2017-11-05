@@ -108,7 +108,7 @@ class TestElections(TestCase):
         candidacy = PositionCandidacy.objects.get(id=1)
         self.assertEqual(candidacy.election, self.president.current_election)
         self.assertEqual(candidacy.candidate_id, self.democracy_leader_id)
-        self.assertEqual(candidacy.description, 'Auto-generated candidacy for incumbent character.')
+        self.assertEqual(candidacy.description, 'Automatic candidacy for incumbent character.')
         self.assertEqual(candidacy.retired, False)
 
         response = self.client.get(

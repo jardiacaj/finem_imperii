@@ -34,15 +34,19 @@ class World(models.Model):
         default=False, help_text="True during turn processing"
     )
 
-    def broadcast(self, content, category, link=None):
-        new_turn_message = shortcuts.create_message(
-            content,
-            self,
-            category,
-            link=link
+    def broadcast(self, template, category, context=None, link=None):
+        if context is None:
+            context = {}
+
+        message = shortcuts.create_message(
+            template=template,
+            world=self,
+            category=category,
+            template_context=context,
+            link=link,
         )
         for character in self.character_set.all():
-            shortcuts.add_character_recipient(new_turn_message, character)
+            shortcuts.add_character_recipient(message, character)
 
     def get_violence_monopolies(self):
         return self.organization_set.filter(violence_monopoly=True)
@@ -58,6 +62,12 @@ class World(models.Model):
 
     def get_current_date(self):
         return turn_to_date(self.current_turn)
+
+    def get_html_link(self):
+        return '<a href="{}">{}</a>'.format(
+            self.get_absolute_url(),
+            self.name
+        )
 
     def get_absolute_url(self):
         return reverse('world:world', kwargs={'world_id': self.id})
@@ -612,9 +622,10 @@ class Character(models.Model):
             organization.remove_member(self)
 
             message = shortcuts.create_message(
-                "The character {} has been paused.",
+                'messaging/messages/character_paused.html',
                 self.world,
                 'pause',
+                {'character': self},
                 link=self.get_absolute_url()
             )
             shortcuts.add_organization_recipient(
@@ -642,9 +653,10 @@ class Character(models.Model):
         self.save()
 
         message = shortcuts.create_message(
-            "The character {} has been unpaused.",
+            'messaging/messages/character_unpaused.html',
             self.world,
             'pause',
+            {'character': self},
             link=self.get_absolute_url()
         )
         shortcuts.add_organization_recipient(
@@ -708,22 +720,19 @@ class Character(models.Model):
         self.location = destination
         self.hours_in_turn_left -= travel_time
         self.save()
-        return "After {} of travel you have reached {}.".format(
-            nice_hours(travel_time), destination
-        )
+        return travel_time, destination
 
     @transaction.atomic
-    def add_notification(self, category, content, safe=False):
-        message = CharacterMessage.objects.create(
-            content=content,
+    def add_notification(self, template, category, template_context=None):
+        if template_context is None:
+            template_context = {}
+        message = shortcuts.create_message(
+            template=template,
+            world=self.world,
             category=category,
-            creation_turn=self.world.current_turn,
-            safe=safe
+            template_context=template_context
         )
-        MessageRecipient.objects.create(
-            message=message,
-            character=self
-        )
+        shortcuts.add_character_recipient(message, self)
 
     def get_violence_monopoly(self):
         try:

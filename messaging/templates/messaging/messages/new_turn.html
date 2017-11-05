@@ -1,0 +1,6 @@
+{% load extra_filters %}
+
+<p class="text-center">
+    It is now {{ world.current_turn|nice_turn }} in
+    {{ world.get_html_link|safe }}
+</p>

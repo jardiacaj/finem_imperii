@@ -1,0 +1,5 @@
+<p>
+    {{ character_to_ban.get_html_link|safe }} has been banned from
+    {{ proposal.capability.applying_to.get_html_link|safe }}.
+</p>
+{% include 'vote_result.html' %}

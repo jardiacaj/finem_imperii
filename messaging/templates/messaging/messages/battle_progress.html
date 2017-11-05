@@ -1,0 +1,7 @@
+<p>
+    {% if battle.current %}
+        The battle in {{ battle.tile.get_html_link|safe }} continues!
+    {% else %}
+        The battle in {{ battle.tile.get_html_link|safe }} has ended.
+    {% endif %}
+</p>

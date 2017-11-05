@@ -1,0 +1,15 @@
+<p>
+    {% if stance.region %}
+        {{ stance.from_organization.get_html_link|safe }}'s
+        military stance towards
+        {{ stance.to_organization.get_html_link|safe }} in
+        {{ stance.region.get_html_link|safe }} is now
+        {{ stance.get_stance_type_display }}.
+    {% else %}
+        {{ stance.from_organization.get_html_link|safe }}'s
+        default military stance towards
+        {{ stance.to_organization.get_html_link|safe }} is now
+        {{ stance.get_stance_type_display }}.
+    {% endif %}
+</p>
+{% include 'vote_result.html' %}

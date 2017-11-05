@@ -38,6 +38,7 @@ class CharacterMessage(models.Model):
     TAXES = 'taxes'
     NEWCOMER = 'newcomer'
     PAUSE = 'pause'
+    CASH = 'cash transfer'
     CATEGORY_CHOICES = (
         (TRAVEL, TRAVEL),
         (CONQUEST, CONQUEST),
@@ -59,6 +60,7 @@ class CharacterMessage(models.Model):
         (TAXES, "taxes"),
         (NEWCOMER, "newcomer"),
         (PAUSE, "pause"),
+        (CASH, "cash transfer"),
     )
 
     content = models.TextField()

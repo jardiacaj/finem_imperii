@@ -802,4 +802,14 @@ def transfer_cash(request):
         "success"
     )
 
+    shortcuts.create_message(
+        'messaging/messages/cash_received.html',
+        request.hero.world,
+        "cash transfer",
+        {
+            'sender': request.hero,
+            'amount': transfer_cash_amount
+        }
+    )
+
     return redirect('world:inventory')

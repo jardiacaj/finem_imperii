@@ -167,45 +167,26 @@ class CharacterCreationView(View):
             )
 
         character.add_notification(
+            'messaging/messages/welcome.html',
             'welcome',
-            '<h4>Welcome, {char_name}!</h4>'
-            '<p>'
-            'You are starting as a member of {state_link}, a realm in '
-            '<a href="{world_url}">{world_name}</a>.'
-            '</p>'
-            '<p>'
-            'A good way to start your journey is to write a message '
-            'to the other members of {state_link} asking for orders '
-            'or guidance on how you can be useful.'
-            '</p>'
-            '<p>'
-            'It is encouraged that you role play your character. This '
-            'means that you should try to write in the voice of your '
-            'character, {char_name}, an inhabitant of {world_name}, instead '
-            'of your own, a person playing a computer game. You may want to '
-            'come up with a simple past history of your '
-            'character and presenting yourself to your realm. ' 
-            'If you need to say something that your character would not say, '
-            'you should prepend the letters OOC, meaning "out of character".'
-            '</p>'
-            ''.format(
-                char_name=character.name,
-                state_link=state.get_html_link(),
-                world_url=world.get_absolute_url(),
-                world_name=world.name
-            ),
-            safe=True
+            {
+                'state': state,
+                'character': character
+            }
         )
 
-        message = shortcuts.create_message(
-            "{} just joined {}. Let's give a warm welcome!".format(
-                character, state
-            ),
-            world,
-            "newcomer",
-            link=character.get_absolute_url()
-        )
-        shortcuts.add_organization_recipient(message, state)
+        if not state.barbaric:
+            message = shortcuts.create_message(
+                'messaging/messages/new_character.html',
+                world,
+                "newcomer",
+                {
+                    'character': character,
+                    'organization': state
+                },
+                link=character.get_absolute_url()
+            )
+            shortcuts.add_organization_recipient(message, state)
 
         state.character_members.add(character)
 

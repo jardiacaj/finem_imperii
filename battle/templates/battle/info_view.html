@@ -12,19 +12,6 @@
 
     <p></p>
 
-    <div class="row">
-        <div class="col-sm-5">
-            {% include 'battle/render_side_tree.html' with side=battle.get_side_a %}
-        </div>
-
-        <div class="col-sm-2 text-center">
-            <h1>VS</h1>
-            {{ battle.tile.get_html_link|safe }}
-        </div>
-
-        <div class="col-sm-5">
-            {% include 'battle/render_side_tree.html' with side=battle.get_side_b %}
-        </div>
-    </div>
+    {% include 'battle/versus_view_include.html' with battle=battle only %}
 
 {% endblock %}

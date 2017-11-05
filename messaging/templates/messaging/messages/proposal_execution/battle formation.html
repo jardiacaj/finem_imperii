@@ -1,0 +1,12 @@
+{% load extra_filters %}
+
+<p>
+    The battle formation of
+    {{ proposal.capability.applying_to.get_html_link|safe }}
+    is now {{ formation.formation }}.
+    <br>
+    Spacing: {{ formation.spacing }}
+    <br>
+    Element size: {{ formation.element_size }}
+</p>
+{% include 'vote_result.html' %}

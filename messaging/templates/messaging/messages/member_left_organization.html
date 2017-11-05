@@ -1,0 +1,25 @@
+{% if organization.is_position %}
+    <p>
+        {{ member.get_html_link|safe }} is not
+        {{ organization.get_html_link|safe }} anymore.
+    </p>
+    {% if organization.get_position_occupier %}
+        <p>
+            {{ organization.get_position_occupier.get_html_link|safe }}
+            is now {{ organization.get_html_link|safe }}.
+        </p>
+    {% endif %}
+    {% if organization.position_type == 'elected' and organization.current_election %}
+        <p>
+            <a href="{{ organization.current_election.get_absolute_url|safe }}">
+                Elections
+            </a>
+            have been convoked.
+        </p>
+    {% endif %}
+{% else %}
+    <p>
+        {{ member.get_html_link|safe }} is not a member of
+        {{ organization.get_html_link|safe }} anymore.
+    </p>
+{% endif %}

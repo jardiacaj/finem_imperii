@@ -1,0 +1,10 @@
+{% load extra_filters %}
+
+<p>
+    Elections have been convoked to the position of
+    {{ organization.get_html_link|safe }}.
+</p>
+
+<p>
+    They will find place on {{ organization.current_election.turn|nice_turn }}.
+</p>

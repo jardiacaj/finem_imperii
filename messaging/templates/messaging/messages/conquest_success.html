@@ -1,0 +1,6 @@
+<p>
+    {{ tile_event.tile.get_html_link|safe }}, which was until now a
+    territory of {{ previous_owner.get_html_link|safe }},
+    has been conquered by
+    {{ tile_event.organization.get_html_link|safe }}!
+</p>

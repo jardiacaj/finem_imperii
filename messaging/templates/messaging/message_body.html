@@ -1,7 +1,1 @@
-{% if message.safe %}
-    {{ message.content|safe }}
-{% else %}
-    <p>
-        <pre class="wrapping">{{ message.content }}</pre>
-    </p>
-{% endif %}
+{{ message.content|safe }}

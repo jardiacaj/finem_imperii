@@ -1,0 +1,19 @@
+{% if new %}
+    <p>
+        {{ candidacy.candidate.get_html_link|safe }}
+        has presented itself to the election to
+        {{ candidacy.election.position.get_html_link|safe }}.
+    </p>
+{% elif retire %}
+    <p>
+        {{ candidacy.candidate.get_html_link|safe }}
+        has retired their candidacy to the election to
+        {{ candidacy.election.position.get_html_link|safe }}.
+    </p>
+{% else %}
+    <p>
+        {{ candidacy.candidate.get_html_link|safe }}
+        has edited changed their candidacy to the election to
+        {{ candidacy.election.position.get_html_link|safe }}.
+    </p>
+{% endif %}

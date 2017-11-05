@@ -70,8 +70,9 @@ class TurnProcessor:
         self.world.save()
 
         self.world.broadcast(
-            "It is now {}.".format(nice_turn(self.world.current_turn)),
-            'turn'
+            "messaging/messages/new_turn.html",
+            'turn',
+            {'world': self.world}
         )
 
     def character_pausing(self):
@@ -159,25 +160,17 @@ class TurnProcessor:
                 if unit.owner_character.cash < unit.monthly_cost():
                     unit.demobilize()
                     unit.owner_character.add_notification(
+                        'messaging/messages/unit_unpaid.html',
                         'unit',
-                        "You don't have the {} coins your unit {} demands as"
-                        "payment. It has demobilized.".format(
-                            unit.monthly_cost(),
-                            unit,
-                            unit.owner_character.save()
-                        )
+                        {'unit': unit}
                     )
                 else:
                     unit.owner_character.cash -= unit.monthly_cost()
                     unit.owner_character.save()
                     unit.owner_character.add_notification(
+                        'messaging/messages/unit_paid.html',
                         'unit',
-                        'You paid {} coins to your unit {}. You now have '
-                        '{} coins left.'.format(
-                            unit.monthly_cost(),
-                            unit,
-                            unit.owner_character.cash
-                        )
+                        {'unit': unit}
                     )
 
     def do_taxes(self):
@@ -220,21 +213,16 @@ class TurnProcessor:
             member.cash += member_share
             member.save()
 
-        message_content = "<p>Tax collection in {}.</p><ul>".format(state)
-        for settlement, cash in settlement_input:
-            message_content += "<li>{} produced {} coins.</li>".format(
-                settlement, cash
-            )
-        message_content += "</ul><p>Total: {} silver coins.</p>".format(
-            total_input)
-        message_content += "<p>Each member receives {} coins.</p>".format(
-            member_share)
-
         message = shortcuts.create_message(
-            message_content,
+            'messaging/messages/tax_collection.html',
             self.world,
             'taxes',
-            safe=True,
+            {
+                'organization': state,
+                'settlement_input': settlement_input,
+                'total_input': total_input,
+                'member_share': member_share
+            }
         )
         shortcuts.add_organization_recipient(message, state)
 
@@ -451,14 +439,12 @@ class TurnProcessor:
                 conquest.save()
                 send_notification_to_characters(
                     self.world.character_set,
+                    'messaging/messages/conquest_success.html',
                     CharacterMessage.CONQUEST,
-                    "{tile}, which was previously controlled by {previous}, "
-                    "has been conquered by {conqueror}!".format(
-                        tile=conquest.tile.get_html_link(),
-                        previous=previous_owner.get_html_link(),
-                        conqueror=conquest.organization.get_html_link()
-                    ),
-                    True
+                    {
+                        'tile_event': conquest,
+                        'previous_owner': previous_owner
+                    }
                 )
 
     def do_elections(self):
@@ -480,16 +466,10 @@ class TurnProcessor:
                 organization.convoke_elections(turns_to_next_election)
             elif organization.current_election.turn - organization.world.current_turn == 3:
                 message = shortcuts.create_message(
-                    "<p>Election for {} will be in 3 months.</p>"
-                    "<p>Now. no new candidates can "
-                    "present themselves to this election.</p>"
-                    "<p>Make sure to cast your vote before the "
-                    "election!</p>".format(
-                        organization.get_html_link(),
-                    ),
+                    'messaging/messages/elections_soon.html',
                     self.world,
-                    "elections",
-                    safe=True,
+                    'elections',
+                    {'election': organization.current_election},
                     link=organization.current_election.get_absolute_url()
                 )
 
@@ -499,12 +479,21 @@ class TurnProcessor:
             if character.travel_destination is None:
                 continue
 
-            travel_check = character.check_travelability(character.travel_destination)
+            travel_check = character.check_travelability(
+                character.travel_destination)
             if travel_check is not None:
                 pass
             else:
-                message = character.perform_travel(character.travel_destination)
-                character.add_notification(CharacterMessage.TRAVEL, message)
+                travel_time, destination = character.perform_travel(
+                    character.travel_destination)
+                character.add_notification(
+                    'messaging/messages/travel.html',
+                    CharacterMessage.TRAVEL,
+                    {
+                        'travel_time': travel_time,
+                        'destination': destination
+                    }
+                )
             character.travel_destination = None
             character.save()
 
@@ -512,11 +501,6 @@ class TurnProcessor:
         for character in self.world.character_set.all():
             character.hours_in_turn_left = 15*24
             if character.get_battle_participating_in() is not None:
-                character.add_notification(
-                    'battle',
-                    "Because you are taking part in a battle, you only "
-                    "have half as much time available."
-                )
                 character.hours_in_turn_left /= 2
             character.save()
 
@@ -688,8 +672,9 @@ def create_battle_from_conflict(conflict, tile):
     initialize_from_conflict(battle, conflict, tile)
 
     battle.tile.world.broadcast(
-        "A battle has started in {}".format(battle.tile),
+        'messaging/messages/battle_start.html',
         'battle',
+        {'battle': battle},
         battle.get_absolute_url()
     )
 

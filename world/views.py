@@ -802,7 +802,7 @@ def transfer_cash(request):
         "success"
     )
 
-    shortcuts.create_message(
+    message = shortcuts.create_message(
         'messaging/messages/cash_received.html',
         request.hero.world,
         "cash transfer",
@@ -811,5 +811,6 @@ def transfer_cash(request):
             'amount': transfer_cash_amount
         }
     )
+    shortcuts.add_character_recipient(message, to_character)
 
     return redirect('world:inventory')

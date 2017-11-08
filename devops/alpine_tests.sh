@@ -20,5 +20,5 @@ if [ -z "$CC_TEST_REPORTER_ID" ]; then
     echo "Not running codeclimate reporter (token missing)"
 else
     coverage xml
-    ./test-reporter-latest-linux-amd64 after-build --coverage-input-type coverage.py
+    ./test-reporter-latest-linux-amd64 after-build --coverage-input-type coverage.py || true
 fi

@@ -152,12 +152,17 @@ function BattleRenderer(battle_data) {
     };
 
     zis.generate_organization_materials = function () {
+        var loader = new THREE.TextureLoader();
+        zis.archer_texture = loader.load('/static/battle/icons/bow-and-arrow.png', zis.renderer.render);
+
         for (var organization_id in zis.organizations) {
             if (Object.prototype.hasOwnProperty.call(
                     zis.organizations, organization_id)) {
                 var organization = zis.organizations[organization_id];
                 organization.material = new THREE.MeshLambertMaterial({
-                    color: parseInt(organization.color, 16)
+                    color: parseInt(organization.color, 16),
+                    map: zis.archer_texture,
+                    transparent: true,
                 });
             }
         }
@@ -240,11 +245,11 @@ function BattleRenderer(battle_data) {
     zis.ground_material = new THREE.MeshLambertMaterial({color: 0x1A5B07});
     zis.ground_geometry = new THREE.CubeGeometry(300, 2, 300);
     zis.contubernium_geometry = new THREE.CubeGeometry(0.9, 0.9, 0.9);
-    zis.generate_organization_materials();
 
     /* CONSTRUCTION */
 
     zis.renderer = new BaseRenderer(40, 60, 0);
+    zis.generate_organization_materials();
     zis.renderer.picking_types['contubernium'] = zis.notify_contubernium_pick;
     zis.render_ground();
     zis.animated_update();

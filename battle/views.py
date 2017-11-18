@@ -55,6 +55,7 @@ def battlefield_view(request, battle_id):
     context = {
         'battle': battle,
         'heros_units': heros_units,
+        'hide_sidebar': True
     }
 
     return render(request, 'battle/battlefield_view.html', context=context)

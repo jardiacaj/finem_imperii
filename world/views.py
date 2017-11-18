@@ -35,7 +35,8 @@ def world_view(request, world_id):
         'battles': Battle.objects.filter(
             tile__world=world,
             current=True
-        )
+        ),
+        'hide_sidebar': True,
     }
     return render(request, 'world/view_world.html', context)
 

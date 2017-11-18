@@ -22,7 +22,7 @@
     <div class="container-fluid">
         {% cookielaw_banner %}
 
-        {% if request.hero %}
+        {% if request.hero and not hide_sidebar %}
             <div class="col-xs-12 col-md-3 well">
                 <p class="text-center">
                     It's {{ request.hero.world.get_current_date }} in
@@ -118,7 +118,7 @@
 
         {% block content %}{% endblock %}
 
-        {% if request.hero %}
+        {% if request.hero and not hide_sidebar %}
             </div>
         {% endif %}
     </div>

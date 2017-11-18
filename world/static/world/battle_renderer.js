@@ -57,7 +57,7 @@ function BattleRenderer(battle_data) {
         var unit = zis.units[contubernium.unit_id];
         var character = zis.characters[unit.character_id];
         var organization = zis.organizations[unit.organization_id];
-        return organization.material;
+        return organization.material[unit.type];
     };
 
     function contubernium_scale_factor(contubernium_in_turn) {
@@ -153,19 +153,42 @@ function BattleRenderer(battle_data) {
 
     zis.generate_organization_materials = function () {
         var loader = new THREE.TextureLoader();
-        zis.archer_texture = loader.load('/static/battle/icons/bow-and-arrow.png', zis.renderer.render);
+        var unit_type_index;
 
-        for (var organization_id in zis.organizations) {
-            if (Object.prototype.hasOwnProperty.call(
-                    zis.organizations, organization_id)) {
-                var organization = zis.organizations[organization_id];
-                organization.material = new THREE.MeshLambertMaterial({
-                    color: parseInt(organization.color, 16),
-                    map: zis.archer_texture,
-                    transparent: true,
-                });
+        var unit_types = ['infantry', 'archers'];
+        for (unit_type_index in unit_types) {
+            var unit_type = unit_types[unit_type_index];
+            var texture = loader.load('/static/battle/icons/units/' + unit_type + '.png', zis.renderer.render);
+
+            for (var organization_id in zis.organizations) {
+                if (Object.prototype.hasOwnProperty.call(
+                        zis.organizations, organization_id)) {
+
+                    var organization = zis.organizations[organization_id];
+                    var top_side_material = new THREE.MeshLambertMaterial({
+                        color: parseInt(organization.color, 16),
+                        map: texture
+                    });
+                    var other_sides_material = new THREE.MeshLambertMaterial({
+                        color: parseInt(organization.color, 16)
+                    });
+
+                    if (organization.material === undefined) {
+                        organization.material = [];
+                    }
+
+                    organization.material[unit_type] = [
+                        other_sides_material,
+                        other_sides_material,
+                        top_side_material,
+                        other_sides_material,
+                        other_sides_material,
+                        other_sides_material
+                    ];
+                }
             }
         }
+
     };
 
     zis.mouse_click_listener_notifier = function (event) {

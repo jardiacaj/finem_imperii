@@ -1,12 +1,13 @@
 - model: messaging.ServerMOTD
   fields:
-    title: Welcome to the alpha release
+    title: Welcome to this development server
     display_order: 0
     draft: false
     html_content: >
-      <p>This is an early public release. If you report any issues you
-      find to the <a href="https://github.com/jardiacaj/finem_imperii/issues/new">
-      GitHub page</a> of the project, you will be helping improve this game.</p>
+      <p>This seems to be your private development server.<p>
+      <p>Thanks a lot for helping me in this project :)</p>
+      <p>Found a bug? <a href="https://github.com/jardiacaj/finem_imperii/issues/new">
+      Please report it</a>, you will be helping improve this game.</p>
 
 - model: world.World
   pk: 1

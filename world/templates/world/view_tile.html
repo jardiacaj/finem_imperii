@@ -47,15 +47,13 @@
                 <div class="panel-heading"><h3 class="panel-title">Troops here</h3></div>
                 <div class="panel-body">
                     {% for unit in units %}
-                        <p>
-                            {{ unit.get_html_link|safe }}:
+                            {{ unit.get_html_link|safe }}
                             {% if unit.owner_character %}
-                                {{ unit.owner_character.get_html_link|safe }}
+                                ({{ unit.owner_character.get_html_link|safe }})
                             {% else %}
-                                {{ unit.get_violence_monopoly.get_html_link|safe }}
+                                ({{ unit.get_violence_monopoly.get_html_link|safe }})
                             {% endif %}
-                            &nbsp;&nbsp;&nbsp;&nbsp;{{ unit.location }}
-                        </p>
+                            &nbsp;&nbsp;&nbsp;&nbsp;{{ unit.location }}<br>
                     {% empty %}
                         None
                     {% endfor %}

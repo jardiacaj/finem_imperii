@@ -1,10 +1,14 @@
-import random
-
 import math
+import random
 
 from django.db import transaction
 from django.db.models.expressions import F
 
+import organization.models
+import unit.models
+import unit.recruitment
+import world.initialization
+import world.models
 from battle.battle_init import initialize_from_conflict, start_battle, \
     add_unit_to_battle_in_progress
 from battle.battle_tick import battle_turn
@@ -13,14 +17,9 @@ from finem_imperii.random import WeightedChoice, weighted_choice
 from messaging import shortcuts
 from messaging.helpers import send_notification_to_characters
 from messaging.models import CharacterMessage
-import world.models
-import organization.models
-import world.recruitment
-import world.initialization
-from organization.models import PositionElectionVote, PositionElection, \
-    Organization
-from world.models import Building, Settlement, NPC, WorldUnit, World
-from world.templatetags.extra_filters import nice_turn
+from organization.models import PositionElection, Organization
+from unit.models import WorldUnit
+from world.models import Building, Settlement, NPC, World
 
 
 def pass_turn(world):
@@ -92,18 +91,18 @@ class TurnProcessor:
             settlement.public_order += (10 - hunger_percent) * 10
         settlement.make_public_order_in_range()
 
-        non_barbarian_units = world.models.WorldUnit.objects.filter(
+        non_barbarian_units = unit.models.WorldUnit.objects.filter(
             location=settlement,
             owner_character__isnull=False
         )
 
         public_order_contributing_units = []
         settlement_vm = settlement.tile.controlled_by.get_violence_monopoly()
-        for unit in non_barbarian_units:
-            char_vm = unit.owner_character.get_violence_monopoly()
+        for non_barbarian_unit in non_barbarian_units:
+            char_vm = non_barbarian_unit.owner_character.get_violence_monopoly()
             if char_vm == settlement_vm:
                 public_order_contributing_units.append(
-                    unit
+                    non_barbarian_unit
                 )
         contributing_soldiers = sum(
             [unit.soldier.count() for unit in public_order_contributing_units]
@@ -407,16 +406,16 @@ class TurnProcessor:
             tile__world=self.world
         )
         for conquest in conquests_in_this_world:
-            present_mobilized_units = world.models.WorldUnit.objects\
+            present_mobilized_units = unit.models.WorldUnit.objects\
                 .filter(location__tile=conquest.tile)\
-                .exclude(status=world.models.WorldUnit.NOT_MOBILIZED)
+                .exclude(status=unit.models.WorldUnit.NOT_MOBILIZED)
             conquering_units = []
             defending_units = []
-            for unit in present_mobilized_units:
-                if unit.get_violence_monopoly() == conquest.organization:
-                    conquering_units.append(unit)
-                if unit.get_violence_monopoly() == conquest.tile.controlled_by.get_violence_monopoly():
-                    defending_units.append(unit)
+            for present_mobilized_unit in present_mobilized_units:
+                if present_mobilized_unit.get_violence_monopoly() == conquest.organization:
+                    conquering_units.append(present_mobilized_unit)
+                if present_mobilized_unit.get_violence_monopoly() == conquest.tile.controlled_by.get_violence_monopoly():
+                    defending_units.append(present_mobilized_unit)
 
             # stop conquest if no more units present
             if len(conquering_units) == 0:
@@ -425,8 +424,8 @@ class TurnProcessor:
                 continue
 
             # decrease counter
-            for unit in defending_units:
-                conquest.counter -= unit.get_fighting_soldiers().count()
+            for defending_unit in defending_units:
+                conquest.counter -= defending_unit.get_fighting_soldiers().count()
             if conquest.counter < 0:
                 conquest.counter = 0
 
@@ -534,7 +533,7 @@ def do_settlement_barbarian_generation(settlement: Settlement):
     if settlement.population < 40:
         return
 
-    pure_barbarian_units = world.models.WorldUnit.objects.filter(
+    pure_barbarian_units = unit.models.WorldUnit.objects.filter(
         location=settlement,
         owner_character__isnull=True
     )
@@ -542,7 +541,7 @@ def do_settlement_barbarian_generation(settlement: Settlement):
         [unit.soldier.count() for unit in pure_barbarian_units]
     )
 
-    non_barbarian_units = world.models.WorldUnit.objects.filter(
+    non_barbarian_units = unit.models.WorldUnit.objects.filter(
         location=settlement,
         owner_character__isnull=False
     )
@@ -573,17 +572,17 @@ def do_settlement_barbarian_generation(settlement: Settlement):
 
 
 def generate_barbarian_unit(recruitment_size, settlement):
-    soldiers = world.recruitment.sample_candidates(
-        world.recruitment.all_recruitable_soldiers_in_settlement(settlement),
+    soldiers = unit.recruitment.sample_candidates(
+        unit.recruitment.all_recruitable_soldiers_in_settlement(settlement),
         recruitment_size
     )
-    world.recruitment.recruit_unit(
+    unit.recruitment.recruit_unit(
         "Barbarians of {}".format(settlement),
         None,
         settlement,
         soldiers,
-        world.models.WorldUnit.CONSCRIPTION,
-        world.models.WorldUnit.INFANTRY
+        unit.models.WorldUnit.CONSCRIPTION,
+        unit.models.WorldUnit.INFANTRY
     )
 
 
@@ -610,8 +609,8 @@ def organizations_with_battle_ready_units(tile):
 
 def battle_ready_units_in_tile(tile):
     return tile.get_units().\
-        exclude(status=world.models.WorldUnit.NOT_MOBILIZED).\
-        exclude(status=world.models.WorldUnit.REGROUPING).\
+        exclude(status=unit.models.WorldUnit.NOT_MOBILIZED).\
+        exclude(status=unit.models.WorldUnit.REGROUPING).\
         exclude(battleunit__battle_side__battle__current=True)
 
 

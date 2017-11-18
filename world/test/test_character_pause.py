@@ -6,7 +6,8 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from world.models import Character, WorldUnit
+from world.models import Character
+from unit.models import WorldUnit
 from world.turn import TurnProcessor
 
 

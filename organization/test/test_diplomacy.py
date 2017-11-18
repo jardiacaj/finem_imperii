@@ -4,7 +4,8 @@ from django.urls.base import reverse
 from battle.models import BattleFormation, Order
 from organization.models import Capability, MilitaryStance, CapabilityProposal, \
     Organization, OrganizationRelationship
-from world.models import World, Character, Tile, TileEvent, WorldUnit, Settlement
+from world.models import World, Character, Tile, TileEvent, Settlement
+from unit.models import WorldUnit
 
 
 class TestDiplomacy(TestCase):

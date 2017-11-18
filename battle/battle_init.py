@@ -8,7 +8,7 @@ from battle.models import BattleFormation, BattleUnit, BattleContubernium, \
     BattleSide, BattleCharacter, Coordinates, BattleTurn, \
     BattleCharacterInTurn, BattleUnitInTurn, \
     BattleContuberniumInTurn, BattleSoldierInTurn, Battle
-from world.models import WorldUnit
+from unit.models import WorldUnit
 
 
 def create_contubernia(unit: BattleUnit):

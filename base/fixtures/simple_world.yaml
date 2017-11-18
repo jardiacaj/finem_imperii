@@ -34,7 +34,7 @@
   pk: 4
   fields:
     what: flee
-- model: world.WorldUnit
+- model: unit.WorldUnit
   pk: 4
   fields:
     owner_character_id: 2
@@ -93,7 +93,7 @@
   pk: 1
   fields:
     what: formation
-- model: world.WorldUnit
+- model: unit.WorldUnit
   pk: 1
   fields:
     owner_character_id: 5
@@ -112,7 +112,7 @@
   pk: 3
   fields:
     what: formation
-- model: world.WorldUnit
+- model: unit.WorldUnit
   pk: 3
   fields:
     owner_character_id: 5
@@ -141,7 +141,7 @@
   pk: 2
   fields:
     what: charge
-- model: world.WorldUnit
+- model: unit.WorldUnit
   pk: 2
   fields:
     owner_character_id: 6

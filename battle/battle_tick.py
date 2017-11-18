@@ -7,7 +7,7 @@ from django.db import transaction
 from battle.models import Battle, BattleCharacterInTurn, BattleUnitInTurn, BattleContuberniumInTurn, \
     BattleSoldierInTurn, Coordinates, Order, BattleUnit
 from finem_imperii.app_settings import BATTlE_TICKS_PER_TURN
-from world.models import WorldUnit
+from unit.models import WorldUnit
 
 
 def create_next_turn(battle: Battle):

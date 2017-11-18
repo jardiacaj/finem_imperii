@@ -89,7 +89,7 @@
                             <tr><td class="text-center">You own no units.</td></tr>
                         {% endfor %}
                         <tr><td colspan="100%" class="text-center">
-                            <a href="{% url 'world:recruit' %}"
+                            <a href="{% url 'unit:recruit' %}"
                                class="btn {% if request.hero.can_conscript %}btn-primary{% else %}btn-default{% endif %} btn-sm">
                                 To recruitment
                             </a>

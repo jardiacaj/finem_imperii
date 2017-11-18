@@ -3,7 +3,8 @@ from django.test import TestCase
 import world.initialization
 from organization.models import Organization, PositionElection
 from world.initialization import initialize_world
-from world.models import WorldUnit, Settlement, World
+from world.models import Settlement, World
+from unit.models import WorldUnit
 
 
 class TestInitialization(TestCase):

@@ -1,4 +1,6 @@
 import json
+
+import unit.models
 import world.models
 import world.templatetags.extra_filters
 
@@ -189,7 +191,7 @@ class Organization(models.Model):
             )
             conquering_units = tile.get_units()\
                 .filter(owner_character__in=self.character_members.all())\
-                .exclude(status=world.models.WorldUnit.NOT_MOBILIZED)
+                .exclude(status=unit.models.WorldUnit.NOT_MOBILIZED)
             if (
                 conquering_units.exists() and not conquest_tile_event.exists()
             ):

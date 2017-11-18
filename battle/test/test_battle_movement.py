@@ -10,7 +10,8 @@ from battle.models import Battle, BattleUnit, \
     BattleContuberniumInTurn, BattleUnitInTurn, Order, Coordinates
 from organization.models import Organization
 from world.initialization import initialize_unit
-from world.models import Tile, WorldUnit
+from world.models import Tile
+from unit.models import WorldUnit
 from world.turn import trigger_battles_in_tile
 
 

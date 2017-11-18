@@ -169,7 +169,7 @@ class BattleUnit(models.Model):
     battle_side = models.ForeignKey(BattleSide)
     owner = models.ForeignKey(BattleCharacter, blank=True, null=True)
     battle_organization = models.ForeignKey(BattleOrganization)
-    world_unit = models.ForeignKey('world.WorldUnit')
+    world_unit = models.ForeignKey('unit.WorldUnit')
     starting_x_pos = models.IntegerField(default=0)
     starting_z_pos = models.IntegerField(default=0)
     starting_manpower = models.IntegerField()

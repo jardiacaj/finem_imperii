@@ -6,7 +6,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from battle.battle_renderer import render_battle_for_view
 from battle.models import Battle
 from decorators import inchar_required
-from world.models import WorldUnit
+from unit.models import WorldUnit
 
 
 @inchar_required

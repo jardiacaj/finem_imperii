@@ -5,7 +5,8 @@ from battle.models import Battle
 from organization.models import Organization
 from world.admin import pass_turn
 from world.initialization import initialize_unit, initialize_settlement
-from world.models import Tile, WorldUnit, World, TileEvent, Settlement
+from world.models import Tile, World, TileEvent, Settlement
+from unit.models import WorldUnit
 from world.turn import organizations_with_battle_ready_units, \
     battle_ready_units_in_tile, \
     opponents_in_organization_list, get_largest_conflict_in_list, \

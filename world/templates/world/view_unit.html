@@ -6,7 +6,7 @@
         {% if unit.get_current_battle %}
             <a href="{{ unit.get_current_battle.get_absolute_url }}" class="btn btn-danger">In battle</a>
         {% endif %}
-        {{ unit }}
+        {{ unit.get_long_html_descriptor|safe }}
     </h1>
 
     <div class="row">

@@ -117,8 +117,7 @@
     <div class="col-md-4">
         {% for unit in request.hero.worldunit_set.all %}
             <p class="lead">
-                <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
-                <a href="{{ unit.get_absolute_url }}">{{ unit }}</a>
+                {{ unit.get_html_link|safe }}
             </p>
             <p>
                 In {{ unit.location }},
@@ -126,7 +125,7 @@
                 {{ unit.location.tile.controlled_by.get_html_link|safe }}
             </p>
             <p>
-                {{ unit.descriptor }}, {{ unit.status }}
+                {{ unit.status|capfirst }}
             </p>
             <p>
                 {{ unit.get_battle_side_pos_display|capfirst }}

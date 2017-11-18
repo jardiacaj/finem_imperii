@@ -991,8 +991,28 @@ class WorldUnit(models.Model):
     def __str__(self):
         return self.name
 
-    def descriptor(self):
-        return "{} {}".format(self.soldier.count(), self.type.capitalize())
+    def get_short_html_descriptor(self):
+        return '{} ' \
+               '<span class="unit-icon-{}" aria-hidden="true"></span>'.format(
+            self.soldier.count(),
+            self.type
+        )
+
+    def get_long_html_descriptor(self):
+        return '{} ' \
+               '<span class="unit-icon-{}" aria-hidden="true"></span> ' \
+               '{}'.format(
+            self.soldier.count(),
+            self.type,
+            self.name
+        )
+
+    def get_html_link(self):
+        return '{} <a href="{}">{}</a>'.format(
+            self.get_short_html_descriptor(),
+            self.get_absolute_url(),
+            self.name
+        )
 
     def get_absolute_url(self):
         return reverse('world:unit', kwargs={'unit_id': self.id})

@@ -48,15 +48,12 @@
                 <div class="panel-body">
                     {% for unit in units %}
                         <p>
-                            <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
-                            <b>{{ unit.descriptor }}</b>:
+                            {{ unit.get_html_link|safe }}:
                             {% if unit.owner_character %}
                                 {{ unit.owner_character.get_html_link|safe }}
                             {% else %}
                                 {{ unit.get_violence_monopoly.get_html_link|safe }}
-                            {% endif %} -
-                            <a href="{{ unit.get_absolute_url }}">{{ unit }}</a>
-                            <br>
+                            {% endif %}
                             &nbsp;&nbsp;&nbsp;&nbsp;{{ unit.location }}
                         </p>
                     {% empty %}

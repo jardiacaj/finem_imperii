@@ -47,10 +47,8 @@
         <ul>
             {% for unit in character.worldunit_set.all %}
                 <li>
-                    <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
-                    {{ unit.descriptor }} in
-                    {{ unit.location }}:
-                    <a href="{{ unit.get_absolute_url }}">{{ unit }}</a>
+                    {{ unit.get_html_link|safe }} in
+                    {{ unit.location }}
                     {% if unit.get_current_battle %}
                         <a
                                 href="{{ unit.get_current_battle.get_absolute_url }}"

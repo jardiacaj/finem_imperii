@@ -73,8 +73,7 @@
                         {% for unit in request.hero.worldunit_set.all %}
                             <tr>
                                 <td>
-                                    <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
-                                    <a href="{{ unit.get_absolute_url }}">{{ unit }}</a>
+                                    {{ unit.get_html_link|safe }}
                                     {% if unit.get_current_battle %}
                                         <a
                                                 href="{{ unit.get_current_battle.get_absolute_url }}"
@@ -83,8 +82,6 @@
                                     {% endif %}
                                 </td>
                                 <td>
-                                    {{ unit.descriptor }}
-                                    <br>
                                     {{ unit.status|capfirst }}
                                 </td>
                             </tr>

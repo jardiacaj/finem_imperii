@@ -6,14 +6,11 @@
             {% for battle_unit in battle_organization.battleunit_set.all %}
 
                 <li>
-                    <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
-                    {{ battle_unit.starting_manpower }}
-                    {{ battle_unit.type }}:
-                    {{ battle_unit.world_unit.name }}
+                    ({{ battle_unit.starting_manpower }})
+                    {{ battle_unit.world_unit.get_html_link|safe }}
+
                     {% if battle_unit.owner %}
-                        <ul><li>
-                            {{ battle_unit.owner.character.get_html_link|safe }}
-                        </li></ul>
+                        ({{ battle_unit.owner.character.get_html_link|safe }})
                     {% endif %}
                 </li>
 

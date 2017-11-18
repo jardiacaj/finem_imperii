@@ -35,9 +35,11 @@
 
                         <ul class="dropdown-menu" role="menu">
                             {% for character in user.character_set.all %}
-                                <li><a href="{{ character.activation_url }}">
-                                    {{ character.get_html_name|safe }}
-                                </a></li>
+                                {% if not character.paused %}
+                                    <li><a href="{{ character.activation_url }}">
+                                        {{ character.get_html_name|safe }}
+                                    </a></li>
+                                {% endif %}
                             {% endfor %}
                         </ul>
 
@@ -45,13 +47,12 @@
 
                     {% if request.hero %}
                         <li><p class="navbar-text">
-                            {{ request.hero.hours_in_turn_left|nice_hours }}
-                            left
-                            ({{ request.hero.hours_in_turn_left }}h)
+                            {{ request.hero.hours_in_turn_left }}
+                            hours left
                         </p></li>
 
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                        <li class="{% if request.hero.unread_messages.exists %}active{% endif %}">
+                            <a href="{% url 'messaging:home' %}" class="{% if request.hero.unread_messages.exists %}active{% endif %}">
                                 Messages
                                 {% if request.hero.unread_messages.exists %}
                                     <span class="badge">
@@ -59,36 +60,9 @@
                                         {{ request.hero.unread_messages.count }}
                                     </span>
                                 {% endif %}
-                                <span class="caret"></span>
                             </a>
-
-                            <ul class="dropdown-menu" role="menu">
-                                <li class="text-center"><a href="{% url 'messaging:home' %}">Read messages</a></li>
-                                <li class="text-center"><a href="{% url 'messaging:compose' %}">Write message</a></li>
-
-                                {% for message in request.hero.unread_messages.all %}
-                                    {% if forloop.first %}
-                                        <li class="text-center">
-                                            <a href="{% url 'messaging:mark_all_read'%}">Mark all as read</a>
-                                        </li>
-                                        <li class="divider"></li>
-                                    {% endif %}
-
-                                    <li>
-                                        <a href="{% url 'messaging:home' %}">
-                                            {% if message.sender %}
-                                                Message from {{ message.sender }}
-                                            {% else %}
-                                                {{ message.category|capfirst }} notification
-                                            {% endif %}
-                                        </a>
-                                    </li>
-
-                                {% empty %}
-                                    <li><p class="navbar-text">No unread messages</p></li>
-                                {% endfor %}
-                            </ul>
                         </li>
+
                     {% endif %}
 
                 {%  else %}

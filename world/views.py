@@ -255,9 +255,9 @@ class RecruitmentView(View):
             if request.hero.hours_in_turn_left < conscription_time:
                 return RecruitmentView.fail_post_with_error(
                     request,
-                    "You need {} to recruit a unit of {}, but you don't have "
-                    "that much time left in this turn.".format(
-                        nice_hours(conscription_time),
+                    "You need {} hours to recruit a unit of {}, but you don't "
+                    "have that much time left in this turn.".format(
+                        conscription_time,
                         target_soldier_count
                     )
                 )
@@ -461,7 +461,11 @@ class TravelView(View):
         if request.hero.location.tile == target_settlement.tile and \
                         travel_time <= request.hero.hours_in_turn_left:
             # travel instantly
-            message = request.hero.perform_travel(target_settlement)
+            request.hero.perform_travel(target_settlement)
+            message = "After travelling for {} hours you reached {}.".format(
+                travel_time,
+                target_settlement
+            )
             messages.success(request, message, extra_tags="success")
             return redirect('world:travel')
         else:

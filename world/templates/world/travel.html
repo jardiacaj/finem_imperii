@@ -28,8 +28,9 @@
 
     {% elif target_settlement %}
         <p>
-            The distance from your current location, {{ request.hero.location }}, to {{ target_settlement }} is
-            {{ travel_time|nice_hours }}.
+            The distance from your current location,
+            {{ request.hero.location }}, to {{ target_settlement }} is
+            {{ travel_time }} hours.
         </p>
 
         {% if request.hero.location.tile != target_settlement.tile %}

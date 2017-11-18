@@ -32,13 +32,16 @@ License: [GNU Affero General Public License v3.0](https://github.com/jardiacaj/f
  - [Server setup guide](https://github.com/jardiacaj/finem_imperii/blob/master/docs/4-server_setup.md)
  - [Code of conduct](https://github.com/jardiacaj/finem_imperii/blob/master/CODE_OF_CONDUCT.md)
 
-## UOC deliveries (videos in Catalan, texts in English)
+## UOC deliveries (videos in Catalan, text in English)
 
  - [Roadmap](https://github.com/jardiacaj/finem_imperii/blob/master/docs/5-roadmap.md)
- - [PAC2 text](https://github.com/jardiacaj/finem_imperii/blob/master/docs/5-PAC2.md)
- - [PAC2 video](https://www.youtube.com/watch?v=5st9PQ-c4mY)
- - [PAC3 text](https://github.com/jardiacaj/finem_imperii/blob/master/docs/5-PAC3.md)
- - [PAC3 video](https://www.youtube.com/watch?v=F-trGMinLgA)
- - [Final text (ODT)](https://github.com/jardiacaj/finem_imperii/blob/master/docs/final.fodt)
- - [Final video](https://www.youtube.com/watch?v=U3K7ZS2y5sg&list=PLFGHa89PbqVcDhu-ckluKqQ2UPWbCXYYd)
- - [Final presentation (ODP)](https://github.com/jardiacaj/finem_imperii/blob/master/docs/presentation.fodp)
+ - PAC2
+    - [text](https://github.com/jardiacaj/finem_imperii/blob/master/docs/5-PAC2.md)
+    - [video](https://www.youtube.com/watch?v=5st9PQ-c4mY)
+ - PAC3
+    - [text](https://github.com/jardiacaj/finem_imperii/blob/master/docs/5-PAC3.md)
+    - [video](https://www.youtube.com/watch?v=F-trGMinLgA)
+ - Final
+    - [text (ODT)](https://github.com/jardiacaj/finem_imperii/blob/master/docs/final.fodt)
+    - [video](https://www.youtube.com/watch?v=U3K7ZS2y5sg&list=PLFGHa89PbqVcDhu-ckluKqQ2UPWbCXYYd)
+    - [presentation (ODP)](https://github.com/jardiacaj/finem_imperii/blob/master/docs/presentation.fodp)

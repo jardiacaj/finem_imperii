@@ -19,9 +19,11 @@ def policy_proposal_context(proposal_content, context):
     except PolicyDocument.DoesNotExist:
         context['document'] = None
 
+
 def ban_proposal_context(proposal_content, context):
     context['character_to_ban'] = Character.objects.get(
         id=proposal_content['character_id'])
+
 
 def diplomacy_proposal_context(proposal_content, context):
     context['target_organization'] = Organization.objects.get(
@@ -30,14 +32,17 @@ def diplomacy_proposal_context(proposal_content, context):
         relationship=proposal_content['target_relationship']
     ).get_relationship_html()
 
+
 def conquest_proposal_context(proposal_content, context):
     context['target_tile'] = Tile.objects.get(
         id=proposal_content['tile_id'])
+
 
 def guilds_proposal_context(proposal_content, context):
     context['settlement'] = Settlement.objects.get(
         id=proposal_content['settlement_id']
     )
+
 
 def heir_proposal_context(proposal_content, context):
     context['first_heir'] = Character.objects.get(

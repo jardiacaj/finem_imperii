@@ -240,8 +240,7 @@ class Settlement(models.Model):
         try:
             return int(
                 self.get_residents().filter(able=False).count() /
-                self.get_residents().count()
-                * 100
+                self.get_residents().count() * 100
             )
         except ZeroDivisionError:
             return 0
@@ -250,8 +249,7 @@ class Settlement(models.Model):
         try:
             return int(
                 self.get_residents().filter(male=False).count() /
-                self.get_residents().count()
-                * 100
+                self.get_residents().count() * 100
             )
         except ZeroDivisionError:
             return 0
@@ -260,8 +258,7 @@ class Settlement(models.Model):
         try:
             return int(
                 self.get_residents().filter(male=True).count() /
-                self.get_residents().count()
-                * 100
+                self.get_residents().count()* 100
             )
         except ZeroDivisionError:
             return 0

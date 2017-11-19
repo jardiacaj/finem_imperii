@@ -32,7 +32,7 @@ class TestUnitActions(TestCase):
 
     def test_disband(self):
         response = self.client.post(
-            reverse('unit:unit_disband', kwargs={'unit_id': 2})
+            reverse('unit:disband', kwargs={'unit_id': 2})
         )
 
         self.assertRedirects(
@@ -57,7 +57,7 @@ class TestUnitActions(TestCase):
         )
 
         response = self.client.post(
-            reverse('unit:unit_conquest_action', kwargs={'unit_id': 2}),
+            reverse('unit:conquest_action', kwargs={'unit_id': 2}),
             data={
                 'action': 'support',
                 'conqueror_id': conqueror.id,
@@ -86,7 +86,7 @@ class TestUnitActions(TestCase):
         )
 
         response = self.client.post(
-            reverse('unit:unit_conquest_action', kwargs={'unit_id': 2}),
+            reverse('unit:conquest_action', kwargs={'unit_id': 2}),
             data={
                 'action': 'counter',
                 'conqueror_id': conqueror.id,

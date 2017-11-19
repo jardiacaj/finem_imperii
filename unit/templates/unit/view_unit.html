@@ -17,7 +17,7 @@
                         <td>Name</td>
                         <td>
                             {% if unit.owner_character == request.hero %}
-                                <form class="form-inline" role="form" method="post" action="{% url 'unit:rename_unit' unit.id %}">
+                                <form class="form-inline" role="form" method="post" action="{% url 'unit:rename' unit.id %}">
                                     {% csrf_token %}
                                     <input
                                             class="form-control form-control"
@@ -55,7 +55,7 @@
                         <td>Status</td>
                         <td>
                             {% if unit.owner_character == request.hero %}
-                                <form class="form-inline" role="form" method="post" action="{% url 'unit:unit_status_change' unit.id 'not mobilized' %}" style="display: inline">
+                                <form class="form-inline" role="form" method="post" action="{% url 'unit:status_change' unit.id 'not mobilized' %}" style="display: inline">
                                     {% csrf_token %}
                                     <button
                                         type="submit"
@@ -67,7 +67,7 @@
                                         Not mobilized
                                     </button>
                                 </form>
-                                <form class="form-inline" role="form" method="post" action="{% url 'unit:unit_status_change' unit.id 'standing' %}" style="display: inline">
+                                <form class="form-inline" role="form" method="post" action="{% url 'unit:status_change' unit.id 'standing' %}" style="display: inline">
                                     {% csrf_token %}
                                     <button
                                         type="submit"
@@ -79,7 +79,7 @@
                                         Standing
                                     </button>
                                 </form>
-                                <form class="form-inline" role="form" method="post" action="{% url 'unit:unit_status_change' unit.id 'following' %}" style="display: inline">
+                                <form class="form-inline" role="form" method="post" action="{% url 'unit:status_change' unit.id 'following' %}" style="display: inline">
                                     {% csrf_token %}
                                     <button
                                         type="submit"
@@ -124,7 +124,7 @@
                         <tr>
                             <td>Battle settings</td>
                             <td>
-                                <form class="form-inline" role="form" method="post" action="{% url 'unit:battle_settings_unit' unit.id %}">
+                                <form class="form-inline" role="form" method="post" action="{% url 'unit:battle_settings' unit.id %}">
                                     {% csrf_token %}
                                     <select class="form-control" name="battle_line" id="battle_line">
                                         <option value="0" {% if unit.battle_line == 0 %}selected{% endif %}>Advanced line</option>
@@ -153,7 +153,7 @@
                         <tr>
                             <td>Battle orders</td>
                             <td>
-                                <form class="form-inline" role="form" method="post" action="{% url 'unit:battle_orders_unit' unit.id %}">
+                                <form class="form-inline" role="form" method="post" action="{% url 'unit:battle_orders' unit.id %}">
                                     {% csrf_token %}
                                     <select class="form-control" name="battle_orders" id="battle_orders">
                                         <option value="charge" {% if unit.default_battle_orders.what == "charge" %}selected{% endif %}>Charge</option>
@@ -178,7 +178,7 @@
             {% if unit.owner_character == request.hero %}
                 <h4>Actions</h4>
                 <p>
-                    <form class="form-inline" role="form" method="post" action="{% url 'unit:unit_disband' unit.id %}">
+                    <form class="form-inline" role="form" method="post" action="{% url 'unit:disband' unit.id %}">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">
                             Disband
@@ -192,7 +192,7 @@
                             <p>
                                 Conquest of {{ conquest.tile }} by {{ conquest.organization.get_html_link|safe }}
                             </p>
-                            <form class="form-inline" role="form" method="post" action="{% url 'unit:unit_conquest_action' unit.id %}">
+                            <form class="form-inline" role="form" method="post" action="{% url 'unit:conquest_action' unit.id %}">
                                 {% csrf_token %}
                                 <input type="hidden" name="conqueror_id" value="{{ conquest.organization_id }}">
                                 <input

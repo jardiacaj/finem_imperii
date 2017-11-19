@@ -168,7 +168,7 @@ class RecruitmentView(View):
 
 @inchar_required
 @require_POST
-def unit_battle_orders(request, unit_id):
+def battle_orders(request, unit_id):
     unit = get_object_or_404(
         WorldUnit,
         id=unit_id,
@@ -184,7 +184,7 @@ def unit_battle_orders(request, unit_id):
 
 @inchar_required
 @require_POST
-def unit_status_change(request, unit_id, new_status):
+def status_change(request, unit_id, new_status):
     unit = get_object_or_404(
         WorldUnit,
         id=unit_id,
@@ -199,7 +199,7 @@ def unit_status_change(request, unit_id, new_status):
 
 @inchar_required
 @require_POST
-def unit_conquest_action(request, unit_id):
+def conquest_action(request, unit_id):
     unit = get_object_or_404(
         WorldUnit,
         id=unit_id,
@@ -236,7 +236,7 @@ def unit_conquest_action(request, unit_id):
 
 
 @inchar_required
-def unit_disband(request, unit_id):
+def disband(request, unit_id):
     unit = get_object_or_404(
         WorldUnit,
         id=unit_id,
@@ -263,7 +263,7 @@ def unit_view(request, unit_id):
 
 
 @inchar_required
-def unit_rename(request, unit_id):
+def rename(request, unit_id):
     unit = get_object_or_404(
         WorldUnit,
         id=unit_id,
@@ -277,7 +277,7 @@ def unit_rename(request, unit_id):
 
 @inchar_required
 @require_POST
-def unit_battle_settings(request, unit_id):
+def battle_settings(request, unit_id):
     unit = get_object_or_404(
         WorldUnit,
         id=unit_id,

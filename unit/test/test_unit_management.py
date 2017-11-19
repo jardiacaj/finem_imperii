@@ -32,7 +32,7 @@ class TestUnitManagement(TestCase):
 
     def test_unit_rename(self):
         response = self.client.post(
-            reverse('unit:rename_unit', kwargs={'unit_id': self.my_unit.id}),
+            reverse('unit:rename', kwargs={'unit_id': self.my_unit.id}),
             data={'name': "My new name"},
             follow=True
         )
@@ -42,7 +42,7 @@ class TestUnitManagement(TestCase):
 
     def test_unit_rename_denied(self):
         response = self.client.post(
-            reverse('unit:rename_unit', kwargs={'unit_id': self.not_my_unit.id}),
+            reverse('unit:rename', kwargs={'unit_id': self.not_my_unit.id}),
             data={'name': "My new name"}
         )
         self.assertEqual(response.status_code, 404)
@@ -51,7 +51,7 @@ class TestUnitManagement(TestCase):
 
     def test_unit_change_settings(self):
         response = self.client.post(
-            reverse('unit:battle_settings_unit', kwargs={'unit_id': self.my_unit.id}),
+            reverse('unit:battle_settings', kwargs={'unit_id': self.my_unit.id}),
             data={
                 'battle_line': 1,
                 'battle_side_pos': 2
@@ -65,7 +65,7 @@ class TestUnitManagement(TestCase):
 
     def test_unit_change_settings_frontest_line(self):
         response = self.client.post(
-            reverse('unit:battle_settings_unit', kwargs={'unit_id': self.my_unit.id}),
+            reverse('unit:battle_settings', kwargs={'unit_id': self.my_unit.id}),
             data={
                 'battle_line': 0,
                 'battle_side_pos': 2
@@ -79,7 +79,7 @@ class TestUnitManagement(TestCase):
 
     def test_unit_change_settings_rearest_line(self):
         response = self.client.post(
-            reverse('unit:battle_settings_unit', kwargs={'unit_id': self.my_unit.id}),
+            reverse('unit:battle_settings', kwargs={'unit_id': self.my_unit.id}),
             data={
                 'battle_line': 0,
                 'battle_side_pos': 4
@@ -93,7 +93,7 @@ class TestUnitManagement(TestCase):
 
     def test_unit_change_settings_minus_one_line(self):
         response = self.client.post(
-            reverse('unit:battle_settings_unit', kwargs={'unit_id': self.my_unit.id}),
+            reverse('unit:battle_settings', kwargs={'unit_id': self.my_unit.id}),
             data={
                 'battle_line': -1,
                 'battle_side_pos': 2
@@ -104,7 +104,7 @@ class TestUnitManagement(TestCase):
 
     def test_unit_change_settings_line_five(self):
         response = self.client.post(
-            reverse('unit:battle_settings_unit', kwargs={'unit_id': self.my_unit.id}),
+            reverse('unit:battle_settings', kwargs={'unit_id': self.my_unit.id}),
             data={
                 'battle_line': 5,
                 'battle_side_pos': 2
@@ -115,7 +115,7 @@ class TestUnitManagement(TestCase):
 
     def test_unit_change_orders(self):
         response = self.client.post(
-            reverse('unit:battle_orders_unit', kwargs={'unit_id': self.my_unit.id}),
+            reverse('unit:battle_orders', kwargs={'unit_id': self.my_unit.id}),
             data={
                 'battle_orders': 'flee'
             },
@@ -127,7 +127,7 @@ class TestUnitManagement(TestCase):
 
     def test_unit_change_settings_denied(self):
         response = self.client.post(
-            reverse('unit:battle_settings_unit', kwargs={'unit_id': self.not_my_unit.id}),
+            reverse('unit:battle_settings', kwargs={'unit_id': self.not_my_unit.id}),
             data={
                 'battle_line': 1,
                 'battle_side_pos': 2
@@ -141,7 +141,7 @@ class TestUnitManagement(TestCase):
     def test_unit_set_status(self):
         self.assertEqual(self.my_unit.status, WorldUnit.FOLLOWING)
         response = self.client.post(
-            reverse('unit:unit_status_change', kwargs={'unit_id': self.my_unit.id, 'new_status': WorldUnit.STANDING}),
+            reverse('unit:status_change', kwargs={'unit_id': self.my_unit.id, 'new_status': WorldUnit.STANDING}),
             follow=True
         )
         self.assertRedirects(response, self.my_unit.get_absolute_url())
@@ -151,7 +151,7 @@ class TestUnitManagement(TestCase):
     def test_unit_set_status_denied(self):
         self.assertEqual(self.not_my_unit.status, WorldUnit.FOLLOWING)
         response = self.client.post(
-            reverse('unit:unit_status_change', kwargs={'unit_id': self.not_my_unit.id, 'new_status': WorldUnit.STANDING}),
+            reverse('unit:status_change', kwargs={'unit_id': self.not_my_unit.id, 'new_status': WorldUnit.STANDING}),
             follow=True
         )
         self.assertEqual(response.status_code, 404)
@@ -161,7 +161,7 @@ class TestUnitManagement(TestCase):
     def test_unit_set_status_too_soon(self):
         self.assertEqual(self.my_unit.status, WorldUnit.FOLLOWING)
         response = self.client.post(
-            reverse('unit:unit_status_change', kwargs={'unit_id': self.my_unit.id, 'new_status': WorldUnit.NOT_MOBILIZED}),
+            reverse('unit:status_change', kwargs={'unit_id': self.my_unit.id, 'new_status': WorldUnit.NOT_MOBILIZED}),
             follow=True
         )
         self.assertRedirects(response, self.my_unit.get_absolute_url())
@@ -172,7 +172,7 @@ class TestUnitManagement(TestCase):
         self.assertEqual(self.my_unit.status, WorldUnit.FOLLOWING)
         pass_turn(self.my_unit.world)
         response = self.client.post(
-            reverse('unit:unit_status_change', kwargs={'unit_id': self.my_unit.id, 'new_status': WorldUnit.NOT_MOBILIZED}),
+            reverse('unit:status_change', kwargs={'unit_id': self.my_unit.id, 'new_status': WorldUnit.NOT_MOBILIZED}),
             follow=True
         )
         self.assertRedirects(response, self.my_unit.get_absolute_url())

@@ -5,7 +5,7 @@ from django.urls.base import reverse
 from django.views.generic.base import View
 
 from decorators import inchar_required
-from messaging.models import MessageRecipient, MessageRelationship, CharacterMessage, MessageRecipientGroup
+from messaging.models import MessageRecipient, MessageRelationship
 from messaging.shortcuts import create_message, add_character_recipient, \
     add_recipients_for_reply, add_organization_recipient
 from organization.models import Organization
@@ -23,12 +23,51 @@ def recipient_required_decorator(func):
 
 
 @inchar_required
-def home(request):
+def generic_message_list(request, tab, recipient_list,
+                         template='messaging/message_list.html'):
     context = {
-        'tab': 'new',
-        'recipient_list': request.hero.messagerecipient_set.filter(read=False)
+        'tab': tab,
+        'recipient_list': recipient_list
     }
-    return render(request, 'messaging/message_list.html', context)
+    return render(request, template, context)
+
+
+@inchar_required
+def home(request):
+    return generic_message_list(
+        request,
+        tab='new',
+        recipient_list=request.hero.messagerecipient_set.filter(read=False)
+    )
+
+
+@inchar_required
+def messages_list(request):
+    return generic_message_list(
+        request,
+        tab='all',
+        recipient_list=request.hero.messagerecipient_set.all()
+    )
+
+
+@inchar_required
+def favourites_list(request):
+    return generic_message_list(
+        request,
+        tab='favourites',
+        recipient_list=request.hero.messagerecipient_set.filter(
+            favourite=True
+        )
+    )
+
+
+@inchar_required
+def sent_list(request):
+    context = {
+        'tab': 'sent',
+        'message_list': request.hero.messages_sent
+    }
+    return render(request, 'messaging/sent_list.html', context)
 
 
 class ComposeView(View):
@@ -197,35 +236,6 @@ def mark_favourite(request, recipient_id):
     request.recipient.save()
     return redirect(
         request.META.get('HTTP_REFERER', reverse('messaging:home')))
-
-
-@inchar_required
-def messages_list(request):
-    context = {
-        'tab': 'all',
-        'recipient_list': request.hero.messagerecipient_set.all()
-    }
-    return render(request, 'messaging/message_list.html', context)
-
-
-@inchar_required
-def favourites_list(request):
-    context = {
-        'tab': 'favourites',
-        'recipient_list': request.hero.messagerecipient_set.filter(
-            favourite=True
-        )
-    }
-    return render(request, 'messaging/message_list.html', context)
-
-
-@inchar_required
-def sent_list(request):
-    context = {
-        'tab': 'sent',
-        'message_list': request.hero.messages_sent
-    }
-    return render(request, 'messaging/sent_list.html', context)
 
 
 @recipient_required_decorator

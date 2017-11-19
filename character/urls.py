@@ -1,11 +1,14 @@
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 
+from character.views.actions import activate, public_order
+from character.views.creation import CharacterCreationView, create
+from character.views.inventory import InventoryView, transfer_cash
+from character.views.pause import unpause, pause
+from character.views.travel import TravelView, travel_view_iframe
+from character.views.views import character_home, character_view, \
+    character_view_iframe
 from decorators import inchar_required
-from character.views import create, CharacterCreationView, \
-    activate, pause, unpause, character_home, \
-    TravelView, travel_view_iframe, public_order, character_view, \
-    character_view_iframe, InventoryView, transfer_cash
 
 urlpatterns = [
     url(r'^create$', create, name='create'),

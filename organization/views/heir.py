@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 
 from character.models import Character
-from organization.models import Capability
+from organization.models.capability import Capability
 from organization.views.proposal import capability_success
 from organization.views.decorator import capability_required_decorator
 

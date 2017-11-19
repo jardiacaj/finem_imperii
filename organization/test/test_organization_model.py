@@ -1,7 +1,10 @@
 from django.test import TestCase
 
-from organization.models import Organization, Capability, OrganizationRelationship, PositionElection, PositionCandidacy, \
+from organization.models.relationship import OrganizationRelationship, \
     MilitaryStance
+from organization.models.capability import Capability
+from organization.models.election import PositionElection, PositionCandidacy
+from organization.models.organization import Organization
 from world.models.geography import Tile
 from character.models import Character
 

@@ -1,7 +1,8 @@
 from django.test import TestCase
 from django.urls.base import reverse
 
-from organization.models import Capability, PolicyDocument
+from organization.models.document import PolicyDocument
+from organization.models.capability import Capability
 
 
 class TestDocuments(TestCase):

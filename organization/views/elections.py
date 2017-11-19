@@ -4,8 +4,10 @@ from django.views.decorators.http import require_POST
 
 from decorators import inchar_required
 from messaging import shortcuts
-from organization.models import Capability, PositionCandidacy, \
-    PositionElectionVote, Organization, PositionElection
+from organization.models.capability import Capability
+from organization.models.election import PositionElection, PositionCandidacy, \
+    PositionElectionVote
+from organization.models.organization import Organization
 from organization.views.proposal import capability_success
 from organization.views.decorator import capability_required_decorator
 

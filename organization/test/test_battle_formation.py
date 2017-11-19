@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls.base import reverse
 
 from battle.models import BattleFormation
-from organization.models import Capability, CapabilityProposal
+from organization.models.capability import Capability, CapabilityProposal
 
 
 class TestBattleFormation(TestCase):

@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.urls.base import reverse
 
 from messaging.models import CharacterMessage, MessageRecipientGroup, MessageRecipient, MessageRelationship
-from organization.models import Organization
+from organization.models.organization import Organization
 from character.models import Character
 
 

@@ -1,8 +1,9 @@
 from django.shortcuts import get_object_or_404, render
 from django.views import View
 
-from organization.models import PositionCandidacy, PositionElectionVote, \
-    Capability
+from organization.models.capability import Capability
+from organization.models.election import PositionCandidacy, \
+    PositionElectionVote
 from world.models.events import TileEvent
 
 

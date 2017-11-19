@@ -3,7 +3,8 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls.base import reverse
 
-from organization.models import Capability, MilitaryStance
+from organization.models.relationship import MilitaryStance
+from organization.models.capability import Capability
 
 
 class TestMilitaryOrders(TestCase):

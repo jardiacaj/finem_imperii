@@ -2,7 +2,7 @@ from unittest.case import skip
 
 from django.test import TestCase
 
-from organization.models import Organization
+from organization.models.organization import Organization
 from character.models import Character
 from world.models.buildings import Building
 from world.models.geography import Settlement

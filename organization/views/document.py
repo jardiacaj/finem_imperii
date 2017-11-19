@@ -5,7 +5,8 @@ from django.views import View
 
 from base.utils import redirect_back
 from decorators import inchar_required
-from organization.models import Capability, PolicyDocument
+from organization.models.document import PolicyDocument
+from organization.models.capability import Capability
 from organization.views.proposal import capability_success
 
 

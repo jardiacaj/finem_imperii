@@ -6,7 +6,8 @@ from django.db import models, transaction
 from django.urls import reverse
 from django.utils import timezone
 
-import organization.models
+import organization.models.capability
+import organization.models.organization
 import world.models.items
 import world.models.geography
 import unit.models
@@ -205,7 +206,7 @@ class Character(models.Model):
     def get_violence_monopoly(self):
         try:
             return self.organization_set.get(violence_monopoly=True)
-        except organization.models.Organization.DoesNotExist:
+        except organization.models.organization.Organization.DoesNotExist:
             return None
 
     def unread_messages(self):
@@ -250,13 +251,13 @@ class Character(models.Model):
 
     def can_take_grain_from_public_granary(self):
         return self.can_use_capability_in_current_location(
-            organization.models.Capability.TAKE_GRAIN
+            organization.models.capability.Capability.TAKE_GRAIN
         )
 
     def has_conscripting_capability_in_current_location(self):
         return (
             self.can_use_capability_in_current_location(
-                organization.models.Capability.CONSCRIPT
+                organization.models.capability.Capability.CONSCRIPT
             )
             and
             self.get_battle_participating_in() is None

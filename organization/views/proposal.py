@@ -7,8 +7,11 @@ from django.views import View
 
 from base.utils import redirect_back
 from character.models import Character
-from organization.models import Capability, CapabilityProposal, \
-    CapabilityVote, PolicyDocument, Organization, OrganizationRelationship
+from organization.models.relationship import OrganizationRelationship
+from organization.models.document import PolicyDocument
+from organization.models.capability import Capability, CapabilityProposal, \
+    CapabilityVote
+from organization.models.organization import Organization
 from world.models.geography import Tile, Settlement
 
 

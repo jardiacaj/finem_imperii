@@ -4,7 +4,8 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.views.decorators.http import require_POST
 
 from decorators import inchar_required
-from organization.models import Organization, OrganizationRelationship
+from organization.models.relationship import OrganizationRelationship
+from organization.models.organization import Organization
 
 
 @inchar_required

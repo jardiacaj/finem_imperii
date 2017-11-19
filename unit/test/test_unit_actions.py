@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls.base import reverse
 
-from organization.models import Organization
+from organization.models.organization import Organization
 from world.initialization import initialize_unit
 from world.models.events import TileEvent
 from character.models import Character

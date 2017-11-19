@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls.base import reverse
 
 from battle.models import Order
-from organization.models import Capability, CapabilityProposal
+from organization.models.capability import Capability, CapabilityProposal
 from world.models.events import TileEvent
 from world.models.geography import World, Tile, Settlement
 from character.models import Character

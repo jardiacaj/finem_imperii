@@ -3,7 +3,7 @@ from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse
 
 from decorators import inchar_required
-from organization.models import Capability
+from organization.models.capability import Capability
 
 
 def capability_required_decorator(func):

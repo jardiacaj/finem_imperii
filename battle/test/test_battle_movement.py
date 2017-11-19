@@ -8,7 +8,7 @@ from battle.battle_tick import battle_tick, optimistic_move_desire_formulation, 
     safe_move, euclidean_distance
 from battle.models import Battle, BattleUnit, \
     BattleContuberniumInTurn, BattleUnitInTurn, Order, Coordinates
-from organization.models import Organization
+from organization.models.organization import Organization
 from world.initialization import initialize_unit
 from world.models.geography import Tile
 from unit.models import WorldUnit

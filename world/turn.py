@@ -4,7 +4,8 @@ import random
 from django.db import transaction
 from django.db.models.expressions import F
 
-import organization.models
+import organization.models.organization
+import organization.models.relationship
 import unit.models
 import unit.recruitment
 import world.initialization
@@ -16,7 +17,8 @@ from finem_imperii.random import WeightedChoice, weighted_choice
 from messaging import shortcuts
 from messaging.helpers import send_notification_to_characters
 from messaging.models import CharacterMessage
-from organization.models import PositionElection, Organization
+from organization.models.election import PositionElection
+from organization.models.organization import Organization
 from unit.models import WorldUnit
 from world.models.buildings import Building
 from world.models.events import TileEvent
@@ -186,7 +188,7 @@ class TurnProcessor:
                 state.tax_countdown = 6
                 state.save()
 
-    def do_state_taxes(self, state: organization.models.Organization):
+    def do_state_taxes(self, state: organization.models.organization.Organization):
         if not state.character_members.exists():
             return
 
@@ -623,7 +625,7 @@ def opponents_in_organization_list(organizations, tile):
     while len(input_list):
         i = input_list.pop()
         for j in input_list:
-            if i.get_region_stance_to(j, tile).get_stance() == organization.models.MilitaryStance.AGGRESSIVE:
+            if i.get_region_stance_to(j, tile).get_stance() == organization.models.relationship.MilitaryStance.AGGRESSIVE:
                 potential_conflicts.append([[i, ], [j, ]])
     return potential_conflicts
 
@@ -637,13 +639,13 @@ def add_allies(conflict, tile):
             aggressive_to_all_in_other_side = True
             for state in other_conflict_side:
                 stance = candidate.get_region_stance_to(state, tile).get_stance()
-                if stance != organization.models.MilitaryStance.AGGRESSIVE:
+                if stance != organization.models.relationship.MilitaryStance.AGGRESSIVE:
                     aggressive_to_all_in_other_side = False
                     break
             aggressive_to_own_side = False
             for state in conflict_side:
                 stance = candidate.get_region_stance_to(state, tile).get_stance()
-                if stance == organization.models.MilitaryStance.AGGRESSIVE:
+                if stance == organization.models.relationship.MilitaryStance.AGGRESSIVE:
                     aggressive_to_own_side = True
                     break
             if aggressive_to_all_in_other_side and not aggressive_to_own_side:
@@ -698,13 +700,13 @@ def battle_joins(battle: Battle):
                 aggressive_to_all_in_other_side = True
                 for battle_state in other_side.battleorganization_set.all():
                     state = battle_state.organization
-                    if candidate_vm.get_region_stance_to(state, battle.tile).get_stance() != organization.models.MilitaryStance.AGGRESSIVE:
+                    if candidate_vm.get_region_stance_to(state, battle.tile).get_stance() != organization.models.relationship.MilitaryStance.AGGRESSIVE:
                         aggressive_to_all_in_other_side = False
                         break
                 aggressive_to_own_side = False
                 for battle_state in side.battleorganization_set.all():
                     state = battle_state.organization
-                    if candidate_vm.get_region_stance_to(state, battle.tile).get_stance() == organization.models.MilitaryStance.AGGRESSIVE:
+                    if candidate_vm.get_region_stance_to(state, battle.tile).get_stance() == organization.models.relationship.MilitaryStance.AGGRESSIVE:
                         aggressive_to_own_side = True
                         break
                 if aggressive_to_all_in_other_side and not aggressive_to_own_side:

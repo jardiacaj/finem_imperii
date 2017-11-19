@@ -7,7 +7,7 @@ from character.models import Character
 from messaging.models import MessageRecipient
 from messaging.shortcuts import create_message, add_recipients_for_reply, \
     add_character_recipient, add_organization_recipient
-from organization.models import Organization
+from organization.models.organization import Organization
 
 
 class ComposeException(Exception):

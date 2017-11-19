@@ -4,8 +4,9 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views import View
 
-from organization.models import Capability, Organization, \
-    OrganizationRelationship
+from organization.models.relationship import OrganizationRelationship
+from organization.models.capability import Capability
+from organization.models.organization import Organization
 from organization.views.proposal import capability_success
 
 

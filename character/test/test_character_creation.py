@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 
-from organization.models import Organization
+from organization.models.organization import Organization
 from character.models import Character
 
 

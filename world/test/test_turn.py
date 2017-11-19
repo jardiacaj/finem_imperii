@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls.base import reverse
 
 from battle.models import Battle
-from organization.models import Organization
+from organization.models.organization import Organization
 from world.admin import pass_turn
 from world.initialization import initialize_unit, initialize_settlement
 from world.models.events import TileEvent

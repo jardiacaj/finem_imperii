@@ -1,8 +1,9 @@
 from django.test import TestCase
 from django.urls.base import reverse
 
-from organization.models import Capability, Organization, \
-    OrganizationRelationship
+from organization.models.relationship import OrganizationRelationship
+from organization.models.capability import Capability
+from organization.models.organization import Organization
 
 
 class TestDiplomacy(TestCase):

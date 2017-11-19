@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls.base import reverse
 
-from organization.models import Organization
+from organization.models.organization import Organization
 from character.models import Character
 
 

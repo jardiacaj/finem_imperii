@@ -5,7 +5,8 @@ from battle.battle_init import initialize_from_conflict, start_battle
 from battle.battle_tick import battle_tick
 from battle.models import Battle, BattleCharacter, BattleUnit, BattleContubernium, BattleSoldier, BattleOrganization, \
     BattleContuberniumInTurn, BattleSoldierInTurn, BattleUnitInTurn, Order
-from organization.models import Organization, MilitaryStance
+from organization.models.relationship import MilitaryStance
+from organization.models.organization import Organization
 from world.initialization import initialize_unit, initialize_settlement
 from unit.models import WorldUnit
 from world.models.geography import Tile, World, Settlement

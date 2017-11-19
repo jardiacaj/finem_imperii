@@ -5,7 +5,7 @@ from math import sqrt
 from django.db import models
 from django.urls import reverse
 
-import organization.models
+import organization.models.organization
 import unit.models
 import world.models.buildings
 import world.models.npcs
@@ -57,7 +57,7 @@ class World(models.Model):
         return self.organization_set.filter(violence_monopoly=True)
 
     def get_barbaric_state(self):
-        return organization.models.Organization.objects.get(
+        return organization.models.organization.Organization.objects.get(
             world=self,
             barbaric=True
         )

@@ -253,7 +253,7 @@ class Character(models.Model):
             organization.models.Capability.TAKE_GRAIN
         )
 
-    def can_conscript(self):
+    def has_conscripting_capability_in_current_location(self):
         return (
             self.can_use_capability_in_current_location(
                 organization.models.Capability.CONSCRIPT

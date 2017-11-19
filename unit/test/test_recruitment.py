@@ -35,17 +35,17 @@ class TestRecruitment(TestCase):
         response = self.client.post(
             reverse('unit:recruit'),
             data={
-                "conscript_count": 30,
-                "conscript_unit_type": "infantry",
-                "conscript_pay": 3,
-                "conscript_men": "on",
-                "conscript_trained": "on",
-                "conscript_untrained": "on",
-                "conscript_skill_high": "on",
-                "conscript_skill_medium": "on",
-                "conscript_skill_low": "on",
-                "conscript_age_middle": "on",
-                "conscript_age_young": "on",
+                "count": 30,
+                "unit_type": "infantry",
+                "pay": 3,
+                "men": "on",
+                "trained": "on",
+                "untrained": "on",
+                "skill_high": "on",
+                "skill_medium": "on",
+                "skill_low": "on",
+                "age_middle": "on",
+                "age_young": "on",
                 "recruitment_type": "conscription"
             },
             follow=True
@@ -71,17 +71,17 @@ class TestRecruitment(TestCase):
         response = self.client.post(
             reverse('unit:recruit'),
             data={
-                "conscript_count": 30,
-                "conscript_unit_type": "infantry",
-                "conscript_pay": 3,
-                "conscript_men": "on",
-                "conscript_trained": "on",
-                "conscript_untrained": "on",
-                "conscript_skill_high": "on",
-                "conscript_skill_medium": "on",
-                "conscript_skill_low": "on",
-                "conscript_age_middle": "on",
-                "conscript_age_young": "on",
+                "count": 30,
+                "unit_type": "infantry",
+                "pay": 3,
+                "men": "on",
+                "trained": "on",
+                "untrained": "on",
+                "skill_high": "on",
+                "skill_medium": "on",
+                "skill_low": "on",
+                "age_middle": "on",
+                "age_young": "on",
                 "recruitment_type": "conscription"
             },
             follow=True
@@ -95,16 +95,16 @@ class TestRecruitment(TestCase):
         response = self.client.post(
             reverse('unit:recruit'),
             data={
-                "conscript_count": 30,
-                "conscript_unit_type": "infantry",
-                "conscript_pay": 3,
-                "conscript_trained": "on",
-                "conscript_untrained": "on",
-                "conscript_skill_high": "on",
-                "conscript_skill_medium": "on",
-                "conscript_skill_low": "on",
-                "conscript_age_middle": "on",
-                "conscript_age_young": "on",
+                "count": 30,
+                "unit_type": "infantry",
+                "pay": 3,
+                "trained": "on",
+                "untrained": "on",
+                "skill_high": "on",
+                "skill_medium": "on",
+                "skill_low": "on",
+                "age_middle": "on",
+                "age_young": "on",
                 "recruitment_type": "conscription"
             },
             follow=True
@@ -116,4 +116,4 @@ class TestRecruitment(TestCase):
 
     def test_can_recruit_method(self):
         character = Character.objects.get(id=6)
-        self.assertFalse(character.can_conscript())
+        self.assertFalse(character.has_conscripting_capability_in_current_location())

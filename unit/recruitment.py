@@ -72,12 +72,12 @@ class BadPopulation(Exception):
     pass
 
 
-def build_population_query_from_request(request, prefix, location):
+def build_population_query_from_request(request, location):
     args = {}
     for arg_name, arg_type in flag_types.items():
         arg = []
         for arg_element in arg_type:
-            request_field = '{}{}'.format(prefix, request_fields[arg_element])
+            request_field = request_fields[arg_element]
             if request.POST.get(request_field) is not None:
                 arg.append(arg_element)
         args[arg_name] = arg

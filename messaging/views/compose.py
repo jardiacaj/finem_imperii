@@ -1,73 +1,13 @@
 from django.contrib import messages
 from django.db import transaction
-from django.shortcuts import render, redirect, get_object_or_404
-from django.urls.base import reverse
-from django.views.generic.base import View
+from django.shortcuts import get_object_or_404, render, redirect
+from django.views import View
 
-from decorators import inchar_required
-from messaging.models import MessageRecipient, MessageRelationship
-from messaging.shortcuts import create_message, add_character_recipient, \
-    add_recipients_for_reply, add_organization_recipient
-from organization.models import Organization
 from character.models import Character
-
-
-def recipient_required_decorator(func):
-    @inchar_required
-    def inner(*args, **kwargs):
-        recipient_id = kwargs.get('recipient_id')
-        args[0].recipient = get_object_or_404(
-            MessageRecipient, id=recipient_id, character=args[0].hero)
-        return func(*args, **kwargs)
-    return inner
-
-
-@inchar_required
-def generic_message_list(request, tab, recipient_list,
-                         template='messaging/message_list.html'):
-    context = {
-        'tab': tab,
-        'recipient_list': recipient_list
-    }
-    return render(request, template, context)
-
-
-@inchar_required
-def home(request):
-    return generic_message_list(
-        request,
-        tab='new',
-        recipient_list=request.hero.messagerecipient_set.filter(read=False)
-    )
-
-
-@inchar_required
-def messages_list(request):
-    return generic_message_list(
-        request,
-        tab='all',
-        recipient_list=request.hero.messagerecipient_set.all()
-    )
-
-
-@inchar_required
-def favourites_list(request):
-    return generic_message_list(
-        request,
-        tab='favourites',
-        recipient_list=request.hero.messagerecipient_set.filter(
-            favourite=True
-        )
-    )
-
-
-@inchar_required
-def sent_list(request):
-    context = {
-        'tab': 'sent',
-        'message_list': request.hero.messages_sent
-    }
-    return render(request, 'messaging/sent_list.html', context)
+from messaging.models import MessageRecipient
+from messaging.shortcuts import create_message, add_recipients_for_reply, \
+    add_character_recipient, add_organization_recipient
+from organization.models import Organization
 
 
 class ComposeException(Exception):
@@ -192,61 +132,3 @@ class ComposeView(View):
             message.delete()
             raise ComposeView.RecipientBuildingException(
                 "Too many recipients.")
-
-
-@inchar_required
-def add_contact(request, character_id):
-    target_character = get_object_or_404(
-        Character, id=character_id, world=request.hero.world)
-    created = MessageRelationship.objects.get_or_create(
-        from_character=request.hero, to_character=target_character)[1]
-    if created:
-        messages.success(request, "Character added to contacts", "success")
-    return redirect(
-        request.META.get('HTTP_REFERER', reverse('character:character_home')))
-
-
-@inchar_required
-def remove_contact(request, character_id):
-    target_character = get_object_or_404(
-        Character, id=character_id, world=request.hero.world)
-    try:
-        target_relationship = MessageRelationship.objects.get(
-            from_character=request.hero, to_character=target_character)
-        target_relationship.delete()
-        messages.success(request, "Character removed contacts", "success")
-    except MessageRelationship.DoesNotExist:
-        pass
-    return redirect(
-        request.META.get('HTTP_REFERER', reverse('character:character_home')))
-
-
-@inchar_required
-def mark_all_read(request):
-    MessageRecipient.objects.filter(
-        character=request.hero, read=False).update(read=True)
-    return redirect(
-        request.META.get('HTTP_REFERER', reverse('character:character_home')))
-
-
-@recipient_required_decorator
-def mark_read(request, recipient_id):
-    request.recipient.read = not request.recipient.read
-    request.recipient.save()
-    return redirect(
-        request.META.get('HTTP_REFERER', reverse('messaging:home')))
-
-
-@recipient_required_decorator
-def mark_favourite(request, recipient_id):
-    request.recipient.favourite = not request.recipient.favourite
-    request.recipient.save()
-    return redirect(
-        request.META.get('HTTP_REFERER', reverse('messaging:home')))
-
-
-@recipient_required_decorator
-def reply(request, recipient_id, prefilled_text=''):
-    view = ComposeView()
-    return view.get(
-        request, reply_to=request.recipient, prefilled_text=prefilled_text)

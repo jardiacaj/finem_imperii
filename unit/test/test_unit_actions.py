@@ -21,7 +21,7 @@ class TestUnitActions(TestCase):
         user = auth.get_user(self.client)
         self.assertEqual(User.objects.get(id=1), user)
         self.client.get(
-            reverse('character:activate_character', kwargs={'char_id': 6}),
+            reverse('character:activate', kwargs={'char_id': 6}),
             follow=True
         )
 

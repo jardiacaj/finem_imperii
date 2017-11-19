@@ -20,7 +20,7 @@ class TestRecruitment(TestCase):
         )
         self.client.get(
             reverse(
-                'character:activate_character',
+                'character:activate',
                 kwargs={'char_id': self.character.id}
             ),
             follow=True

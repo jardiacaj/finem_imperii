@@ -43,7 +43,7 @@ class Character(models.Model):
 
     @property
     def activation_url(self):
-        return reverse('character:activate_character', kwargs={'char_id': self.id})
+        return reverse('character:activate', kwargs={'char_id': self.id})
 
     def inactivity_time(self):
         return timezone.now() - self.last_activation_time

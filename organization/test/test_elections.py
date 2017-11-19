@@ -38,7 +38,7 @@ class TestElections(TestCase):
 
     def log_in_as(self, char_id):
         self.client.get(
-            reverse('character:activate_character', kwargs={'char_id': char_id}),
+            reverse('character:activate', kwargs={'char_id': char_id}),
             follow=True
         )
 

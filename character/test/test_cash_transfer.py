@@ -20,7 +20,7 @@ class TestCashTransfer(TestCase):
         self.assertEqual(User.objects.get(id=1), user)
 
         self.client.get(
-            reverse('character:activate_character', kwargs={'char_id': 1}),
+            reverse('character:activate', kwargs={'char_id': 1}),
             follow=True
         )
         self.from_character = Character.objects.get(id=1)

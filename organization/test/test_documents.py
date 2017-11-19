@@ -13,7 +13,7 @@ class TestDocuments(TestCase):
             {'username': 'alice', 'password': 'test'},
         )
         self.client.get(
-            reverse('character:activate_character', kwargs={'char_id': 1}),
+            reverse('character:activate', kwargs={'char_id': 1}),
             follow=True
         )
         self.capability = Capability.objects.get(
@@ -64,7 +64,7 @@ class TestDocuments(TestCase):
         self.assertContains(response, 'Footitle')
 
         self.client.get(
-            reverse('character:activate_character', kwargs={'char_id': 9}),
+            reverse('character:activate', kwargs={'char_id': 9}),
             follow=True
         )
 
@@ -103,7 +103,7 @@ class TestDocuments(TestCase):
         self.assertContains(response, 'Footitle')
 
         self.client.get(
-            reverse('character:activate_character', kwargs={'char_id': 9}),
+            reverse('character:activate', kwargs={'char_id': 9}),
             follow=True
         )
 

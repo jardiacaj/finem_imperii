@@ -17,7 +17,7 @@ class TestHome(TestCase):
 
     def test_activate_character(self):
         response = self.client.get(
-            reverse('character:activate_character', kwargs={'char_id':1}),
+            reverse('character:activate', kwargs={'char_id':1}),
             follow=True
         )
         self.assertEqual(response.status_code, 200)

@@ -25,7 +25,7 @@ from world.renderer import render_world_for_view
 
 
 @login_required
-def create_character(request):
+def create(request):
     if not can_create_character(request.user):
         raise Http404()
 
@@ -33,11 +33,11 @@ def create_character(request):
         'worlds': World.objects.all()
     }
     return render(
-        request, 'world/create_character_step1.html', context=context)
+        request, 'character/create_step1.html', context=context)
 
 
 class CharacterCreationView(View):
-    template_name = 'world/create_character.html'
+    template_name = 'character/create_step2.html'
 
     def get(self, request, *args, **kwargs):
         if not can_create_character(request.user):
@@ -53,7 +53,7 @@ class CharacterCreationView(View):
     def fail_post_with_error(request, world_id, message):
         messages.add_message(
             request, messages.ERROR, message, extra_tags='danger')
-        return redirect('character:create_character', world_id=world_id)
+        return redirect('character:create', world_id=world_id)
 
     @transaction.atomic
     def post(self, request, *args, **kwargs):
@@ -65,7 +65,7 @@ class CharacterCreationView(View):
             world = World.objects.get(id=world_id)
         except World.DoesNotExist:
             messages.add_message(request, request.ERROR, "Invalid World")
-            return redirect('character:create_character')
+            return redirect('character:create')
 
         try:
             state_id = request.POST.get('state_id')
@@ -138,7 +138,7 @@ class CharacterCreationView(View):
 
 
 @login_required
-def activate_character(request, char_id):
+def activate(request, char_id):
     character = get_object_or_404(
         Character, pk=char_id, owner_user=request.user)
     request.session['character_id'] = character.id
@@ -149,7 +149,7 @@ def activate_character(request, char_id):
 
 @login_required
 @require_POST
-def pause_character(request):
+def pause(request):
     character = get_object_or_404(
         Character,
         pk=request.POST.get('character_id'),
@@ -173,7 +173,7 @@ def pause_character(request):
 
 @login_required
 @require_POST
-def unpause_character(request):
+def unpause(request):
     character = get_object_or_404(
         Character,
         pk=request.POST.get('character_id'),
@@ -200,11 +200,11 @@ def character_home(request):
     context = {
         'recipient_list': request.hero.messagerecipient_set.filter(read=False)
     }
-    return render(request, 'world/character_home.html', context=context)
+    return render(request, 'character/character_home.html', context=context)
 
 
 class TravelView(View):
-    template_name = 'world/travel.html'
+    template_name = 'character/travel.html'
 
     def get(self, request, settlement_id=None):
         if settlement_id is not None:
@@ -290,7 +290,7 @@ def travel_view_iframe(request, settlement_id=None):
         'regions': render_world_for_view(world),
         'target_settlement': target_settlement,
     }
-    return render(request, 'world/travel_map_iframe.html', context)
+    return render(request, 'character/travel_map_iframe.html', context)
 
 
 @inchar_required
@@ -342,7 +342,7 @@ def character_view(request, character_id):
         'character': character,
         'favourite': favourite
     }
-    return render(request, 'world/view_character.html', context=context)
+    return render(request, 'character/view_character.html', context=context)
 
 
 @inchar_required
@@ -356,11 +356,12 @@ def character_view_iframe(request, character_id):
         'character': character,
         'regions': render_world_for_view(character.world),
     }
-    return render(request, 'world/view_character_iframe.html', context)
+    return render(request,
+                  'character/view_character_iframe.html', context)
 
 
 class InventoryView(View):
-    template_name = 'world/view_inventory.html'
+    template_name = 'character/view_inventory.html'
 
     def get(self, request):
 
@@ -372,7 +373,7 @@ class InventoryView(View):
             ),
             'takeable_grain': request.hero.takeable_grain_from_public_granary()
         }
-        return render(request, 'world/view_inventory.html', context=context)
+        return render(request, 'character/view_inventory.html', context=context)
 
     @staticmethod
     def fail_post_with_error(request, message):

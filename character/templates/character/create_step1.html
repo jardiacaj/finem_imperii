@@ -16,7 +16,7 @@
                 <li>
                     <h4>{{ world }}</h4>
                     <p>{{ world.description }}</p>
-                    <a href="{% url 'character:create_character' world.id %}" class="btn btn-primary">Choose</a>
+                    <a href="{% url 'character:create' world.id %}" class="btn btn-primary">Choose</a>
                 </li>
             {% empty %}
                 <li>No worlds :(</li>

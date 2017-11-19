@@ -28,7 +28,7 @@ class TestCharacterPause(TestCase):
         character = Character.objects.get(id=1)
 
         response = self.client.post(
-            reverse('character:pause_character'),
+            reverse('character:pause'),
             data={'character_id': character.id},
             follow=True
         )
@@ -48,7 +48,7 @@ class TestCharacterPause(TestCase):
         self.assertEqual(character.worldunit_set.all()[0], unit)
 
         response = self.client.post(
-            reverse('character:pause_character'),
+            reverse('character:pause'),
             data={'character_id': character.id},
             follow=True
         )
@@ -72,7 +72,7 @@ class TestCharacterPause(TestCase):
         character = Character.objects.get(id=1)
 
         response = self.client.post(
-            reverse('character:pause_character'),
+            reverse('character:pause'),
             data={'character_id': character.id},
             follow=True
         )
@@ -88,7 +88,7 @@ class TestCharacterPause(TestCase):
         character.save()
 
         response = self.client.post(
-            reverse('character:unpause_character'),
+            reverse('character:unpause'),
             data={'character_id': character.id},
             follow=True
         )
@@ -109,7 +109,7 @@ class TestCharacterPause(TestCase):
         self.assertFalse(character.can_unpause())
 
         response = self.client.post(
-            reverse('character:pause_character'),
+            reverse('character:pause'),
             data={'character_id': character.id},
             follow=True
         )

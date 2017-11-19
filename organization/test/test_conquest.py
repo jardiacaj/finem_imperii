@@ -18,7 +18,7 @@ class TestConquest(TestCase):
             {'username': 'alice', 'password': 'test'},
         )
         self.client.get(
-            reverse('character:activate_character', kwargs={'char_id': 7}),
+            reverse('character:activate', kwargs={'char_id': 7}),
             follow=True
         )
 
@@ -136,7 +136,7 @@ class TestConquest(TestCase):
 
     def test_proposal(self):
         self.client.get(
-            reverse('character:activate_character', kwargs={'char_id': 8}),
+            reverse('character:activate', kwargs={'char_id': 8}),
             follow=True
         )
 
@@ -184,7 +184,7 @@ class TestConquest(TestCase):
 
     def test_proposal_fails_because_unit_is_not_mobilized(self):
         self.client.get(
-            reverse('character:activate_character', kwargs={'char_id': 8}),
+            reverse('character:activate', kwargs={'char_id': 8}),
             follow=True
         )
 

@@ -16,7 +16,7 @@ class TestSetHeir(TestCase):
 
     def test_view(self):
         self.client.get(
-            reverse('character:activate_character', kwargs={'char_id': 1}),
+            reverse('character:activate', kwargs={'char_id': 1}),
             follow=True
         )
         capability = Capability.objects.get(
@@ -30,7 +30,7 @@ class TestSetHeir(TestCase):
 
     def test_set_heir(self):
         self.client.get(
-            reverse('character:activate_character', kwargs={'char_id': 1}),
+            reverse('character:activate', kwargs={'char_id': 1}),
             follow=True
         )
         capability = Capability.objects.get(
@@ -58,7 +58,7 @@ class TestSetHeir(TestCase):
 
     def test_set_both_heirs(self):
         self.client.get(
-            reverse('character:activate_character', kwargs={'char_id': 1}),
+            reverse('character:activate', kwargs={'char_id': 1}),
             follow=True
         )
         capability = Capability.objects.get(
@@ -86,7 +86,7 @@ class TestSetHeir(TestCase):
 
     def test_proposal(self):
         self.client.get(
-            reverse('character:activate_character', kwargs={'char_id': 6}),
+            reverse('character:activate', kwargs={'char_id': 6}),
             follow=True
         )
         capability = Capability.objects.get(

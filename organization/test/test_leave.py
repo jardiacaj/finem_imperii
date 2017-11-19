@@ -14,7 +14,7 @@ class TestLeaveOrganization(TestCase):
             {'username': 'alice', 'password': 'test'},
         )
         self.client.get(
-            reverse('character:activate_character', kwargs={'char_id': 1}),
+            reverse('character:activate', kwargs={'char_id': 1}),
             follow=True
         )
 
@@ -84,7 +84,7 @@ class TestLeaveOrganization(TestCase):
 
     def test_president_leave_democracy(self):
         self.client.get(
-            reverse('character:activate_character', kwargs={'char_id': 4}),
+            reverse('character:activate', kwargs={'char_id': 4}),
             follow=True
         )
         organization = Organization.objects.get(name="Small Democracy")
@@ -104,7 +104,7 @@ class TestLeaveOrganization(TestCase):
 
     def test_president_step_out(self):
         self.client.get(
-            reverse('character:activate_character', kwargs={'char_id': 4}),
+            reverse('character:activate', kwargs={'char_id': 4}),
             follow=True
         )
         organization = Organization.objects.get(name="Democracy leader")

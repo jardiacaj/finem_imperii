@@ -17,7 +17,7 @@ class TestTravel(TestCase):
             {'username': 'alice', 'password': 'test'},
         )
         self.client.get(
-            reverse('character:activate_character', kwargs={'char_id': 1}),
+            reverse('character:activate', kwargs={'char_id': 1}),
             follow=True
         )
 
@@ -53,7 +53,7 @@ class TestTravel(TestCase):
 
     def test_travel_in_tile_with_unit(self):
         self.client.get(
-            reverse('character:activate_character', kwargs={'char_id': 2}),
+            reverse('character:activate', kwargs={'char_id': 2}),
             follow=True
         )
 

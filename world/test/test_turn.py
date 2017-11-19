@@ -107,7 +107,7 @@ class TestTurn(TestCase):
             {'username': 'alice', 'password': 'test'},
         )
         response = self.client.get(
-            reverse('character:activate_character', kwargs={'char_id': 3}),
+            reverse('character:activate', kwargs={'char_id': 3}),
             follow=True
         )
         self.assertRedirects(response, reverse('account:home'))

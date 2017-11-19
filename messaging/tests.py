@@ -84,9 +84,6 @@ class TestCompose(TestCase):
             follow=True
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.redirect_chain), 1)
-        self.assertEqual(response.redirect_chain[0][1], 302)
-        self.assertEqual(response.redirect_chain[0][0], reverse('messaging:compose'))
         self.assertEqual(CharacterMessage.objects.all().count(), 0)
 
     def test_send_too_long_message(self):

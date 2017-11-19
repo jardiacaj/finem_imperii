@@ -70,6 +70,10 @@ def sent_list(request):
     return render(request, 'messaging/sent_list.html', context)
 
 
+class ComposeException(Exception):
+    pass
+
+
 class ComposeView(View):
     def get(self,
             request, character_id=None, prefilled_text='', reply_to=None):
@@ -103,9 +107,12 @@ class ComposeView(View):
         )
 
         if not message_body:
-            messages.error(request, "Please write some message.", "danger")
-            return redirect(
-                request.META.get('HTTP_REFERER', reverse('messaging:compose')))
+            return self.fail_post_gracefully(
+                request,
+                reply_to,
+                message_body,
+                error_message="Please write some message."
+            )
 
         if len(message_body) > 10000:
             return self.fail_post_gracefully(

@@ -1,9 +1,10 @@
 from django.conf.urls import url
 
 from decorators import inchar_required
-from unit.views import RecruitmentView, battle_orders, status_change, \
-    conquest_action, disband, unit_view, rename, \
-    battle_settings
+from unit.views.actions import disband, conquest_action, rename
+from unit.views.recruitment import RecruitmentView
+from unit.views.settings import battle_settings, battle_orders, status_change
+from unit.views.unit import unit_view
 
 urlpatterns = [
     url(r'^recruit$', inchar_required(RecruitmentView.as_view()), name='recruit'),

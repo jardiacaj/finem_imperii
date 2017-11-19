@@ -61,7 +61,8 @@ class Organization(models.Model):
         max_length=15, choices=DECISION_TAKING_CHOICES)
     membership_type = models.CharField(
         max_length=15, choices=MEMBERSHIP_TYPE_CHOICES)
-    character_members = models.ManyToManyField('character.Character', blank=True)
+    character_members = models.ManyToManyField(
+        'character.Character', blank=True)
     organization_members = models.ManyToManyField('Organization', blank=True)
     election_period_months = models.IntegerField(default=0)
     current_election = models.ForeignKey(
@@ -509,7 +510,10 @@ class Capability(models.Model):
         return reverse('organization:capability', kwargs={'capability_id': self.id})
 
     def create_proposal(self, character, proposal_dict):
-        voted_proposal = self.organization.is_position or self.organization.decision_taking == Organization.DISTRIBUTED
+        voted_proposal = (
+            self.organization.is_position or
+          self.organization.decision_taking == Organization.DISTRIBUTED
+        )
         proposal = CapabilityProposal.objects.create(
             proposing_character=character,
             capability=self,
@@ -722,7 +726,10 @@ class CapabilityProposal(models.Model):
                     }
                 )
 
-            except (world.models.geography.Tile.DoesNotExist, Organization.DoesNotExist):
+            except (
+                    world.models.geography.Tile.DoesNotExist,
+                    Organization.DoesNotExist
+            ):
                 pass
 
         elif self.capability.type == Capability.BATTLE_FORMATION:
@@ -744,7 +751,8 @@ class CapabilityProposal(models.Model):
 
         elif self.capability.type == Capability.CONQUEST:
             try:
-                tile = world.models.geography.Tile.objects.get(id=proposal['tile_id'])
+                tile = world.models.geography.Tile.objects.get(
+                    id=proposal['tile_id'])
                 if proposal['stop']:
                     tile_event = world.models.events.TileEvent.objects.get(
                         tile=tile,
@@ -764,13 +772,13 @@ class CapabilityProposal(models.Model):
                 else:
                     if tile in \
                             applying_to.conquestable_tiles():
-                        tile_event = world.models.events.TileEvent.objects.create(
+                        tile_event = world.models.events.TileEvent.objects.\
+                                create(
                             tile=tile,
                             type=world.models.events.TileEvent.CONQUEST,
                             organization=applying_to,
                             counter=0,
-                            start_turn=applying_to.world.
-                                current_turn
+                            start_turn=applying_to.world.current_turn
                         )
                         self.announce_execution(
                             'conquest',
@@ -928,7 +936,8 @@ class CapabilityVote(models.Model):
 
 class PolicyDocument(models.Model):
     organization = models.ForeignKey(Organization)
-    parent = models.ForeignKey('PolicyDocument', related_name='children', null=True, blank=True)
+    parent = models.ForeignKey(
+        'PolicyDocument', related_name='children', null=True, blank=True)
     public = models.BooleanField(default=False)
     title = models.TextField(max_length=100)
     body = models.TextField()
@@ -938,7 +947,8 @@ class PolicyDocument(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('organization:document', kwargs={'document_id': self.id})
+        return reverse(
+            'organization:document', kwargs={'document_id': self.id})
 
     def get_html_link(self):
         return '<a href="{}">{}</a>'.format(

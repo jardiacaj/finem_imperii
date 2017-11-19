@@ -6,7 +6,7 @@ from django.views import View
 
 from organization.models import Capability, Organization, \
     OrganizationRelationship
-from organization.views.capabilities_generics import capability_success
+from organization.views.proposal import capability_success
 
 
 class DiplomacyCapabilityView(View):

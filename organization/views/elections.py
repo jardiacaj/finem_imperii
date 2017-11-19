@@ -6,7 +6,7 @@ from decorators import inchar_required
 from messaging import shortcuts
 from organization.models import Capability, PositionCandidacy, \
     PositionElectionVote, Organization, PositionElection
-from organization.views.capabilities_generics import capability_success
+from organization.views.proposal import capability_success
 from organization.views.decorator import capability_required_decorator
 
 

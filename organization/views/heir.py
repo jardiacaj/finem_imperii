@@ -4,7 +4,7 @@ from django.views.decorators.http import require_POST
 
 from character.models import Character
 from organization.models import Capability
-from organization.views.capabilities_generics import capability_success
+from organization.views.proposal import capability_success
 from organization.views.decorator import capability_required_decorator
 
 

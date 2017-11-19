@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.views import View
 
 from organization.models import Capability, Organization, MilitaryStance
-from organization.views.capabilities_generics import capability_success
+from organization.views.proposal import capability_success
 from world.models.geography import Tile
 
 

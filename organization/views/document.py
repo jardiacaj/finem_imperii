@@ -6,7 +6,7 @@ from django.views import View
 from base.utils import redirect_back
 from decorators import inchar_required
 from organization.models import Capability, PolicyDocument
-from organization.views.capabilities_generics import capability_success
+from organization.views.proposal import capability_success
 
 
 class DocumentCapabilityView(View):

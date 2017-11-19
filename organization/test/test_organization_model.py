@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from organization.models import Organization, Capability, OrganizationRelationship, PositionElection, PositionCandidacy, \
     MilitaryStance
-from world.models import Tile
+from world.models.geography import Tile
 from character.models import Character
 
 

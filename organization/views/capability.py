@@ -7,13 +7,14 @@ from django.views.decorators.http import require_POST
 from django.views.generic.base import View
 
 from battle.models import BattleFormation
+from character.models import Character
 from messaging import shortcuts
 from organization.models import Organization, PolicyDocument, Capability, \
     PositionCandidacy, PositionElectionVote, OrganizationRelationship, \
     MilitaryStance
 from organization.views.decorator import capability_required_decorator
-from world.models import Tile, TileEvent, Settlement
-from character.models import Character
+from world.models.geography import Tile, Settlement
+from world.models.events import TileEvent
 
 
 def capability_success(capability, request):

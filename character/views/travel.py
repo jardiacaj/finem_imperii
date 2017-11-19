@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 
 from decorators import inchar_required
-from world.models import Settlement
+from world.models.geography import Settlement
 from world.renderer import render_world_for_view
 
 

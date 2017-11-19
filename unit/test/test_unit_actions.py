@@ -5,9 +5,10 @@ from django.urls.base import reverse
 
 from organization.models import Organization
 from world.initialization import initialize_unit
-from world.models import TileEvent, Tile
+from world.models.events import TileEvent
 from character.models import Character
 from unit.models import WorldUnit
+from world.models.geography import Tile
 
 
 class TestUnitActions(TestCase):

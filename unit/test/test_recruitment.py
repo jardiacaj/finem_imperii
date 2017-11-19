@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls.base import reverse
 
 import world.initialization
-from world.models import NPC
+from world.models.npcs import NPC
 from character.models import Character
 from unit.models import WorldUnit
 

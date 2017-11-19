@@ -13,7 +13,7 @@ from decorators import inchar_required
 from unit.models import WorldUnit, unit_cost, WorldUnitStatusChangeException
 from unit.recruitment import build_population_query_from_request, \
     BadPopulation, sample_candidates, recruit_unit
-from world.models import TileEvent
+from world.models.events import TileEvent
 
 
 class RecruitmentView(View):

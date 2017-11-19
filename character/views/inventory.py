@@ -10,7 +10,7 @@ from django.views.decorators.http import require_POST
 from character.models import Character
 from decorators import inchar_required
 from messaging import shortcuts
-from world.models import InventoryItem
+from world.models.items import InventoryItem
 
 
 class InventoryView(View):

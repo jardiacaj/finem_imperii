@@ -1,12 +1,8 @@
 from django.test import TestCase
 from django.urls.base import reverse
 
-from battle.models import BattleFormation, Order
-from organization.models import Capability, MilitaryStance, CapabilityProposal, \
-    Organization, OrganizationRelationship
-from world.models import World, Tile, TileEvent, Settlement
-from character.models import Character
-from unit.models import WorldUnit
+from organization.models import Capability, Organization, \
+    OrganizationRelationship
 
 
 class TestDiplomacy(TestCase):

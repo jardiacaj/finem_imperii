@@ -1,7 +1,11 @@
 import math
+
 from django.test import TestCase
 
-from world.models import Building, NPC, Settlement, InventoryItem
+from world.models.buildings import Building
+from world.models.geography import Settlement
+from world.models.items import InventoryItem
+from world.models.npcs import NPC
 from world.turn import TurnProcessor
 
 

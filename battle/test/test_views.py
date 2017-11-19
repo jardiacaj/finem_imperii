@@ -5,7 +5,7 @@ from battle.battle_init import initialize_from_conflict, start_battle
 from battle.models import Battle
 from organization.models import Organization
 from world.initialization import initialize_unit
-from world.models import Tile
+from world.models.geography import Tile
 from unit.models import WorldUnit
 
 

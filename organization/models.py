@@ -2,8 +2,8 @@ import json
 
 import character.models
 import unit.models
-import world.models
 import world.templatetags.extra_filters
+import world.models.geography
 
 from django.db import models, transaction
 from django.contrib.auth.models import User
@@ -178,16 +178,16 @@ class Organization(models.Model):
     def conquestable_tiles(self):
         if not self.violence_monopoly:
             return None
-        candidate_tiles = world.models.Tile.objects \
+        candidate_tiles = world.models.geography.Tile.objects \
             .filter(world=self.world) \
             .exclude(controlled_by=self) \
-            .exclude(type__in=(world.models.Tile.SHORE,
-                               world.models.Tile.DEEPSEA))
+            .exclude(type__in=(world.models.geography.Tile.SHORE,
+                               world.models.geography.Tile.DEEPSEA))
         result = []
         for tile in candidate_tiles:
             conquest_tile_event = tile.tileevent_set.filter(
                 organization=self,
-                type=world.models.TileEvent.CONQUEST,
+                type=world.models.events.TileEvent.CONQUEST,
                 end_turn__isnull=True
             )
             conquering_units = tile.get_units()\
@@ -200,10 +200,11 @@ class Organization(models.Model):
         return result
 
     def get_open_proposals(self):
-        return CapabilityProposal.objects.filter(capability__organization=self, closed=False)
+        return CapabilityProposal.objects.filter(capability__organization=self,
+                                                 closed=False)
 
     def get_all_controlled_tiles(self):
-        return world.models.Tile.objects.filter(
+        return world.models.geography.Tile.objects.filter(
             controlled_by__in=self.get_descendants_list(including_self=True)
         )
 
@@ -704,7 +705,7 @@ class CapabilityProposal(models.Model):
                 target_organization = Organization.objects.get(
                     id=proposal['target_organization_id'])
                 if 'region_id' in proposal.keys():
-                    region = world.models.Tile.objects.get(
+                    region = world.models.geography.Tile.objects.get(
                         id=proposal['region_id'])
                     target_stance = applying_to.\
                         get_region_stance_to(target_organization, region)
@@ -721,7 +722,7 @@ class CapabilityProposal(models.Model):
                     }
                 )
 
-            except (world.models.Tile.DoesNotExist, Organization.DoesNotExist):
+            except (world.models.geography.Tile.DoesNotExist, Organization.DoesNotExist):
                 pass
 
         elif self.capability.type == Capability.BATTLE_FORMATION:
@@ -743,9 +744,9 @@ class CapabilityProposal(models.Model):
 
         elif self.capability.type == Capability.CONQUEST:
             try:
-                tile = world.models.Tile.objects.get(id=proposal['tile_id'])
+                tile = world.models.geography.Tile.objects.get(id=proposal['tile_id'])
                 if proposal['stop']:
-                    tile_event = world.models.TileEvent.objects.get(
+                    tile_event = world.models.events.TileEvent.objects.get(
                         tile=tile,
                         organization=applying_to,
                         end_turn__isnull=True
@@ -763,9 +764,9 @@ class CapabilityProposal(models.Model):
                 else:
                     if tile in \
                             applying_to.conquestable_tiles():
-                        tile_event = world.models.TileEvent.objects.create(
+                        tile_event = world.models.events.TileEvent.objects.create(
                             tile=tile,
-                            type=world.models.TileEvent.CONQUEST,
+                            type=world.models.events.TileEvent.CONQUEST,
                             organization=applying_to,
                             counter=0,
                             start_turn=applying_to.world.
@@ -786,13 +787,13 @@ class CapabilityProposal(models.Model):
                             tile.get_absolute_url()
                         )
 
-            except (world.models.Tile.DoesNotExist,
-                    world.models.TileEvent.DoesNotExist):
+            except (world.models.geography.Tile.DoesNotExist,
+                    world.models.events.TileEvent.DoesNotExist):
                 pass
 
         elif self.capability.type == Capability.GUILDS:
             try:
-                settlement = world.models.Settlement.objects.get(
+                settlement = world.models.geography.Settlement.objects.get(
                     id=proposal['settlement_id']
                 )
                 if (
@@ -800,7 +801,7 @@ class CapabilityProposal(models.Model):
                          applying_to.get_all_controlled_tiles())
                         and
                         (proposal['option'] in
-                         [choice[0] for choice in world.models.Settlement
+                         [choice[0] for choice in world.models.geography.Settlement
                                  .GUILDS_CHOICES])
                 ):
                     settlement.guilds_setting = proposal['option']
@@ -809,7 +810,7 @@ class CapabilityProposal(models.Model):
                         'guilds',
                         {'settlement': settlement}
                     )
-            except world.models.Settlement.DoesNotExist:
+            except world.models.geography.Settlement.DoesNotExist:
                 pass
 
         elif self.capability.type == Capability.HEIR:

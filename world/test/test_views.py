@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.urls.base import reverse
 
 from character.models import Character
-from world.models import World
+from world.models.geography import World
 
 
 class TestTileView(TestCase):

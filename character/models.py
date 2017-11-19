@@ -7,11 +7,12 @@ from django.urls import reverse
 from django.utils import timezone
 
 import organization.models
-import world.models
+import world.models.items
+import world.models.geography
+import unit.models
 from battle.models import BattleCharacter
 from messaging import shortcuts
 from messaging.models import CharacterMessage
-from unit.models import WorldUnit
 
 
 class Character(models.Model):
@@ -143,8 +144,8 @@ class Character(models.Model):
 
     def travel_time(self, target_settlement):
         distance = self.location.distance_to(target_settlement)
-        if (self.location.tile.type == world.models.Tile.MOUNTAIN
-            or target_settlement.tile.type == world.models.Tile.MOUNTAIN):
+        if (self.location.tile.type == world.models.geography.Tile.MOUNTAIN
+            or target_settlement.tile.type == world.models.geography.Tile.MOUNTAIN):
             distance *= 2
         if self.location.tile.get_current_battles().exists():
             distance *= 2
@@ -176,12 +177,12 @@ class Character(models.Model):
         return None
 
     def perform_travel(self, destination):
-        for unit in self.worldunit_set.filter(
-                status=WorldUnit.FOLLOWING,
+        for travelling_unit in self.worldunit_set.filter(
+                status=unit.models.WorldUnit.FOLLOWING,
                 location=self.location
         ):
-            unit.location = destination
-            unit.save()
+            travelling_unit.location = destination
+            travelling_unit.save()
 
         travel_time = self.travel_time(destination)
         self.location = destination
@@ -236,7 +237,7 @@ class Character(models.Model):
         return self.total_carrying_capacity() - self.carrying_weight()
 
     def carrying_items(self):
-        return world.models.InventoryItem.objects.filter(
+        return world.models.items.InventoryItem.objects.filter(
             owner_character=self,
             location=None
         )
@@ -296,12 +297,12 @@ class Character(models.Model):
 
     def inventory_object(self, type):
         try:
-            return world.models.InventoryItem.objects.get(
+            return world.models.items.InventoryItem.objects.get(
                 type=type,
                 owner_character=self,
                 location=None
             )
-        except world.models.InventoryItem.DoesNotExist:
+        except world.models.items.InventoryItem.DoesNotExist:
             return None
 
     def carrying_quantity(self, type):
@@ -314,7 +315,7 @@ class Character(models.Model):
     def add_to_inventory(self, type, quantity):
         inventory_object = self.inventory_object(type)
         if inventory_object is None:
-            world.models.InventoryItem.objects.create(
+            world.models.items.InventoryItem.objects.create(
                 type=type,
                 owner_character=self,
                 quantity=quantity

@@ -12,7 +12,8 @@ from character.models import Character
 from messaging import shortcuts
 from name_generator.name_generator import get_names, get_surnames
 from organization.models import Organization
-from world.models import World, Settlement, InventoryItem
+from world.models.geography import World, Settlement
+from world.models.items import InventoryItem
 
 
 @login_required

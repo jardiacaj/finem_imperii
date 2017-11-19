@@ -7,8 +7,9 @@ from battle.models import Battle, BattleCharacter, BattleUnit, BattleContuberniu
     BattleContuberniumInTurn, BattleSoldierInTurn, BattleUnitInTurn, Order
 from organization.models import Organization, MilitaryStance
 from world.initialization import initialize_unit, initialize_settlement
-from world.models import Tile, NPC, Settlement, World
 from unit.models import WorldUnit
+from world.models.geography import Tile, World, Settlement
+from world.models.npcs import NPC
 from world.turn import trigger_battles_in_tile, TurnProcessor, \
     generate_barbarian_unit, battle_joins
 

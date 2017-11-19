@@ -2,7 +2,7 @@ import math
 from django.test import TestCase
 
 from world.initialization import initialize_settlement
-from world.models import Building, NPC, Settlement, InventoryItem
+from world.models.geography import Settlement
 from world.turn import TurnProcessor
 
 

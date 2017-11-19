@@ -3,8 +3,8 @@ from enum import Enum
 
 from django.db.models.query_utils import Q
 
+import world.models.npcs
 from battle.models import Order
-from world.models import NPC
 from unit.models import WorldUnit
 
 
@@ -36,21 +36,21 @@ flag_queries = {
     Gender.MALE: Q(male=True),
     Training.TRAINED: Q(trained_soldier=True),
     Training.UNTRAINED: Q(trained_soldier=False),
-    Skill.HIGH: Q(skill_fighting__gte=NPC.TOP_SKILL_LIMIT),
+    Skill.HIGH: Q(skill_fighting__gte=world.models.npcs.NPC.TOP_SKILL_LIMIT),
     Skill.MEDIUM: Q(
-        skill_fighting__gte=NPC.MEDIUM_SKILL_LIMIT,
-        skill_fighting__lt=NPC.TOP_SKILL_LIMIT),
-    Skill.LOW: Q(skill_fighting__lt=NPC.MEDIUM_SKILL_LIMIT),
+        skill_fighting__gte=world.models.npcs.NPC.MEDIUM_SKILL_LIMIT,
+        skill_fighting__lt=world.models.npcs.NPC.TOP_SKILL_LIMIT),
+    Skill.LOW: Q(skill_fighting__lt=world.models.npcs.NPC.MEDIUM_SKILL_LIMIT),
     Age.VERY_YOUNG: Q(
-        age_months__gte=NPC.VERY_YOUNG_AGE_LIMIT,
-        age_months__lt=NPC.YOUNG_AGE_LIMIT),
+        age_months__gte=world.models.npcs.NPC.VERY_YOUNG_AGE_LIMIT,
+        age_months__lt=world.models.npcs.NPC.YOUNG_AGE_LIMIT),
     Age.YOUNG: Q(
-        age_months__gte=NPC.YOUNG_AGE_LIMIT,
-        age_months__lt=NPC.MIDDLE_AGE_LIMIT),
+        age_months__gte=world.models.npcs.NPC.YOUNG_AGE_LIMIT,
+        age_months__lt=world.models.npcs.NPC.MIDDLE_AGE_LIMIT),
     Age.MIDDLE: Q(
-        age_months__gte=NPC.MIDDLE_AGE_LIMIT,
-        age_months__lt=NPC.OLD_AGE_LIMIT),
-    Age.OLD: Q(age_months__gte=NPC.OLD_AGE_LIMIT)
+        age_months__gte=world.models.npcs.NPC.MIDDLE_AGE_LIMIT,
+        age_months__lt=world.models.npcs.NPC.OLD_AGE_LIMIT),
+    Age.OLD: Q(age_months__gte=world.models.npcs.NPC.OLD_AGE_LIMIT)
 }
 
 request_fields = {

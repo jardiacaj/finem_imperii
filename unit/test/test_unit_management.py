@@ -5,7 +5,6 @@ from django.urls.base import reverse
 
 from battle.models import Order
 from world.initialization import initialize_unit
-from world.models import World
 from unit.models import WorldUnit
 from world.turn import pass_turn
 

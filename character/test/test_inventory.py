@@ -2,7 +2,7 @@ from django.contrib import auth
 from django.test import TestCase
 from django.urls.base import reverse
 
-from world.models import World, InventoryItem
+from world.models.items import InventoryItem
 from character.models import Character
 
 

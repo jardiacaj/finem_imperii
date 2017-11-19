@@ -3,7 +3,8 @@ from django.urls.base import reverse
 
 from battle.models import Order
 from organization.models import Capability, CapabilityProposal
-from world.models import World, Tile, TileEvent, Settlement
+from world.models.events import TileEvent
+from world.models.geography import World, Tile, Settlement
 from character.models import Character
 from unit.models import WorldUnit
 

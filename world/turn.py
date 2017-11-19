@@ -8,7 +8,6 @@ import organization.models
 import unit.models
 import unit.recruitment
 import world.initialization
-import world.models
 from battle.battle_init import initialize_from_conflict, start_battle, \
     add_unit_to_battle_in_progress
 from battle.battle_tick import battle_turn
@@ -19,7 +18,10 @@ from messaging.helpers import send_notification_to_characters
 from messaging.models import CharacterMessage
 from organization.models import PositionElection, Organization
 from unit.models import WorldUnit
-from world.models import Building, Settlement, NPC, World
+from world.models.buildings import Building
+from world.models.events import TileEvent
+from world.models.geography import World, Settlement
+from world.models.npcs import NPC
 
 
 def pass_turn(world):
@@ -393,15 +395,15 @@ class TurnProcessor:
             building.save()
 
     def do_barbarian_generation(self):
-        world_settlements = world.models.Settlement.objects.filter(
+        world_settlements = Settlement.objects.filter(
             tile__world=self.world
         )
         for settlement in world_settlements:
             do_settlement_barbarian_generation(settlement)
 
     def do_conquests(self):
-        conquests_in_this_world = world.models.TileEvent.objects.filter(
-            type=world.models.TileEvent.CONQUEST,
+        conquests_in_this_world = TileEvent.objects.filter(
+            type=TileEvent.CONQUEST,
             end_turn__isnull=True,
             tile__world=self.world
         )

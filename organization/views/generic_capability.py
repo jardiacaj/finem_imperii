@@ -5,11 +5,12 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views import View
 
+from character.models import Character
 from organization.models import Capability, PositionCandidacy, \
     PositionElectionVote, CapabilityProposal, CapabilityVote, PolicyDocument, \
     Organization, OrganizationRelationship
-from world.models import TileEvent, Tile, Settlement
-from character.models import Character
+from world.models.events import TileEvent
+from world.models.geography import Tile, Settlement
 
 
 def candidacy_capability_context(request, capability, context):

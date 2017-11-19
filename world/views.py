@@ -4,7 +4,8 @@ from battle.models import Battle
 from character.models import Character
 from decorators import inchar_required
 from unit.models import WorldUnit
-from world.models import World, Tile, TileEvent
+from world.models.events import TileEvent
+from world.models.geography import World, Tile
 from world.renderer import render_world_for_view
 from world.turn import field_output_months
 

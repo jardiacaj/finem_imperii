@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls.base import reverse
 
 from organization.models import Capability
-from world.models import Settlement
+from world.models.geography import Settlement
 
 
 class TestGuildSetting(TestCase):

@@ -1,9 +1,6 @@
-from django.contrib import auth
-from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls.base import reverse
 
-from world.models import World
 from character.models import Character
 from world.turn import TurnProcessor
 

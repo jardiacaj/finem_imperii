@@ -7,13 +7,57 @@ from django.views import View
 
 from base.utils import redirect_back
 from character.models import Character
-from organization.models import Capability, CapabilityProposal, CapabilityVote, \
-    PolicyDocument, \
-    Organization, OrganizationRelationship
+from organization.models import Capability, CapabilityProposal, \
+    CapabilityVote, PolicyDocument, Organization, OrganizationRelationship
 from world.models.geography import Tile, Settlement
 
 
+def policy_proposal_context(proposal_content, context):
+    try:
+        context['document'] = PolicyDocument.objects.get(
+            id=proposal_content['document_id'])
+    except PolicyDocument.DoesNotExist:
+        context['document'] = None
+
+def ban_proposal_context(proposal_content, context):
+    context['character_to_ban'] = Character.objects.get(
+        id=proposal_content['character_id'])
+
+def diplomacy_proposal_context(proposal_content, context):
+    context['target_organization'] = Organization.objects.get(
+        id=proposal_content['target_organization_id'])
+    context['target_relationship_html'] = OrganizationRelationship(
+        relationship=proposal_content['target_relationship']
+    ).get_relationship_html()
+
+def conquest_proposal_context(proposal_content, context):
+    context['target_tile'] = Tile.objects.get(
+        id=proposal_content['tile_id'])
+
+def guilds_proposal_context(proposal_content, context):
+    context['settlement'] = Settlement.objects.get(
+        id=proposal_content['settlement_id']
+    )
+
+def heir_proposal_context(proposal_content, context):
+    context['first_heir'] = Character.objects.get(
+        id=proposal_content['first_heir'])
+    context['second_heir'] = (
+        None if proposal_content['second_heir'] == 0 else
+        Character.objects.get(id=proposal_content['second_heir'])
+    )
+
+
 class ProposalView(View):
+    context_decorators = {
+        Capability.POLICY_DOCUMENT: policy_proposal_context,
+        Capability.BAN: ban_proposal_context,
+        Capability.DIPLOMACY: diplomacy_proposal_context,
+        Capability.CONQUEST: conquest_proposal_context,
+        Capability.GUILDS: guilds_proposal_context,
+        Capability.HEIR: heir_proposal_context,
+    }
+
     def check(self, request, proposal_id):
         proposal = get_object_or_404(CapabilityProposal, id=proposal_id)
         if not proposal.capability.organization.character_is_member(
@@ -43,39 +87,9 @@ class ProposalView(View):
                 proposal.capability.type),
         }
 
-        if proposal.capability.type == Capability.POLICY_DOCUMENT:
-            try:
-                context['document'] = PolicyDocument.objects.get(
-                    id=proposal_content['document_id'])
-            except PolicyDocument.DoesNotExist:
-                context['document'] = None
-
-        elif proposal.capability.type == Capability.BAN:
-            context['character_to_ban'] = Character.objects.get(
-                id=proposal_content['character_id'])
-
-        elif proposal.capability.type == Capability.DIPLOMACY:
-            context['target_organization'] = Organization.objects.get(
-                id=proposal_content['target_organization_id'])
-            context['target_relationship_html'] = OrganizationRelationship(
-                relationship=proposal_content['target_relationship']
-            ).get_relationship_html()
-
-        elif proposal.capability.type == Capability.CONQUEST:
-            context['target_tile'] = Tile.objects.get(
-                id=proposal_content['tile_id'])
-
-        elif proposal.capability.type == Capability.GUILDS:
-            context['settlement'] = Settlement.objects.get(
-                id=proposal_content['settlement_id']
-            )
-
-        elif proposal.capability.type == Capability.HEIR:
-            context['first_heir'] = Character.objects.get(
-                id=proposal_content['first_heir'])
-            context['second_heir'] = (
-                None if proposal_content['second_heir'] == 0 else
-                Character.objects.get(id=proposal_content['second_heir'])
+        if proposal.capability.type in self.context_decorators.keys():
+            self.context_decorators[proposal.capability.type](
+                proposal_content, context
             )
 
         return render(request, 'organization/proposal.html', context)

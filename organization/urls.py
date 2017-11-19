@@ -14,7 +14,7 @@ from organization.views.elections import elect_capability_view, \
     present_candidacy_capability_view, election_list_view, election_view
 from organization.views.decorator import capability_required_decorator
 from organization.views.proposal import ProposalView
-from organization.views.capabilitiy import CapabilityView
+from organization.views.capability import CapabilityView
 from organization.views.organization import organization_view, leave_view
 
 urlpatterns = [

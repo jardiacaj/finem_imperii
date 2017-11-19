@@ -1,15 +1,20 @@
 from django.conf.urls import url
 
 from decorators import inchar_required
-from organization.views.capability import banning_view, conquest_view, \
-    guilds_settings_view, formation_view, election_convoke_view, \
-    candidacy_view, \
-    elect_view, DocumentCapabilityView, DiplomacyCapabilityView, \
-    MilitaryStanceCapabilityView, heir_view
+from organization.views.heir import heir_capability_view
+from organization.views.ban import banning_capability_view
+from organization.views.conquest import conquest_capability_view
+from organization.views.guilds import guilds_settings_capability_view
+from organization.views.document import DocumentCapabilityView, document_view
+from organization.views.diplomacy import DiplomacyCapabilityView
+from organization.views.military_stance import MilitaryStanceCapabilityView
+from organization.views.battle_formation import formation_capability_view
+from organization.views.elections import elect_capability_view, \
+    election_convoke_capability_view, \
+    present_candidacy_capability_view, election_list_view, election_view
 from organization.views.decorator import capability_required_decorator
-from organization.views.generic_capability import ProposalView, CapabilityView
-from organization.views.regular import organization_view, election_list_view, \
-    election_view, document_view, leave_view
+from organization.views.capabilities_generics import ProposalView, CapabilityView
+from organization.views.organization import organization_view, leave_view
 
 urlpatterns = [
     url(r'^(?P<organization_id>[0-9]+)$',
@@ -28,21 +33,21 @@ urlpatterns = [
         inchar_required(capability_required_decorator(CapabilityView.as_view())),
         name='capability'),
     url(r'^capability/(?P<capability_id>[0-9]+)/ban$',
-        banning_view, name='banning_capability'),
+        banning_capability_view, name='banning_capability'),
     url(r'^capability/(?P<capability_id>[0-9]+)/conquer',
-        conquest_view, name='conquest_capability'),
+        conquest_capability_view, name='conquest_capability'),
     url(r'^capability/(?P<capability_id>[0-9]+)/guilds',
-        guilds_settings_view, name='guilds_capability'),
+        guilds_settings_capability_view, name='guilds_capability'),
     url(r'^capability/(?P<capability_id>[0-9]+)/formation',
-        formation_view, name='battle_formation_capability'),
+        formation_capability_view, name='battle_formation_capability'),
     url(r'^capability/(?P<capability_id>[0-9]+)/convoke_elections',
-        election_convoke_view, name='election_convoke_capability'),
+        election_convoke_capability_view, name='election_convoke_capability'),
     url(r'^capability/(?P<capability_id>[0-9]+)/candidacy',
-        candidacy_view, name='candidacy_capability'),
+        present_candidacy_capability_view, name='candidacy_capability'),
     url(r'^capability/(?P<capability_id>[0-9]+)/elect',
-        elect_view, name='elect_capability'),
+        elect_capability_view, name='elect_capability'),
     url(r'^capability/(?P<capability_id>[0-9]+)/heir',
-        heir_view, name='heir_capability'),
+        heir_capability_view, name='heir_capability'),
     url(r'^capability/(?P<capability_id>[0-9]+)/document/(?P<document_id>[0-9]+)?$',
         inchar_required(capability_required_decorator(DocumentCapabilityView.as_view())),
         name='document_capability'),

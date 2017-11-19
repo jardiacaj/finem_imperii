@@ -74,6 +74,14 @@ def conquest_capability_context(request, capability, context):
 
 
 class CapabilityView(View):
+    context_decorators = {
+        Capability.CANDIDACY: candidacy_capability_context,
+        Capability.ELECT: elect_capability_context,
+        Capability.DIPLOMACY: diplomacy_capability_context,
+        Capability.MILITARY_STANCE: military_stance_capability_context,
+        Capability.CONQUEST: conquest_capability_context,
+    }
+
     def get(self, request, capability_id):
         capability = get_object_or_404(Capability, id=capability_id)
 
@@ -91,21 +99,19 @@ class CapabilityView(View):
 
         return render(request, 'organization/capability.html', context)
 
-    context_decorators = {
-        Capability.CANDIDACY: candidacy_capability_context,
-        Capability.ELECT: elect_capability_context,
-        Capability.DIPLOMACY: diplomacy_capability_context,
-        Capability.MILITARY_STANCE: military_stance_capability_context,
-        Capability.CONQUEST: conquest_capability_context,
-    }
-
 
 class ProposalView(View):
     def check(self, request, proposal_id):
         proposal = get_object_or_404(CapabilityProposal, id=proposal_id)
-        if not proposal.capability.organization.character_is_member(request.hero):
+        if not proposal.capability.organization.character_is_member(
+                request.hero):
             messages.error(request, "You cannot do that", "danger")
-            return redirect(request.META.get('HTTP_REFERER', reverse('character:character_home')))
+            return redirect(
+                request.META.get(
+                    'HTTP_REFERER',
+                    reverse('character:character_home')
+                )
+            )
 
     def get(self, request, proposal_id):
         check_result = self.check(request, proposal_id)
@@ -124,24 +130,31 @@ class ProposalView(View):
             'proposal': proposal,
             'proposal_content': proposal_content,
             'heros_vote': heros_vote,
-            'subtemplate': 'organization/proposals/{}.html'.format(proposal.capability.type),
+            'subtemplate': 'organization/proposals/{}.html'.format(
+                proposal.capability.type),
         }
 
         if proposal.capability.type == Capability.POLICY_DOCUMENT:
             try:
-                context['document'] = PolicyDocument.objects.get(id=proposal_content['document_id'])
+                context['document'] = PolicyDocument.objects.get(
+                    id=proposal_content['document_id'])
             except PolicyDocument.DoesNotExist:
                 context['document'] = None
 
         elif proposal.capability.type == Capability.BAN:
-            context['character_to_ban'] = Character.objects.get(id=proposal_content['character_id'])
+            context['character_to_ban'] = Character.objects.get(
+                id=proposal_content['character_id'])
 
         elif proposal.capability.type == Capability.DIPLOMACY:
-            context['target_organization'] = Organization.objects.get(id=proposal_content['target_organization_id'])
-            context['target_relationship_html'] = OrganizationRelationship(relationship=proposal_content['target_relationship']).get_relationship_html()
+            context['target_organization'] = Organization.objects.get(
+                id=proposal_content['target_organization_id'])
+            context['target_relationship_html'] = OrganizationRelationship(
+                relationship=proposal_content['target_relationship']
+            ).get_relationship_html()
 
         elif proposal.capability.type == Capability.CONQUEST:
-            context['target_tile'] = Tile.objects.get(id=proposal_content['tile_id'])
+            context['target_tile'] = Tile.objects.get(
+                id=proposal_content['tile_id'])
 
         elif proposal.capability.type == Capability.GUILDS:
             context['settlement'] = Settlement.objects.get(
@@ -167,15 +180,37 @@ class ProposalView(View):
 
         if proposal.closed:
             messages.error(request, "Voting closed", "danger")
-            return redirect(request.META.get('HTTP_REFERER', reverse('character:character_home')))
+            return redirect(
+                request.META.get(
+                    'HTTP_REFERER',
+                    reverse('character:character_home')
+                )
+            )
 
         issued_vote = request.POST.get('vote')
         if issued_vote not in dict(CapabilityVote.VOTE_CHOICES).keys():
             messages.error(request, "Invalid vote", "danger")
-            return redirect(request.META.get('HTTP_REFERER', reverse('character:character_home')))
+            return redirect(
+                request.META.get(
+                    'HTTP_REFERER',
+                    reverse('character:character_home')
+                )
+            )
 
         proposal.issue_vote(request.hero, issued_vote)
 
         messages.success(request, "Your vote has been issued.", "success")
 
         return redirect(proposal.get_absolute_url())
+
+
+def capability_success(capability, request):
+    if capability.organization.decision_taking == Organization.DEMOCRATIC:
+        messages.success(
+            request,
+            "A proposal has been created.",
+            "success"
+        )
+    else:
+        messages.success(request, "Done!", "success")
+    return redirect(capability.organization.get_absolute_url())

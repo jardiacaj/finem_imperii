@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views import View
 
+from base.utils import redirect_back
 from decorators import inchar_required
 from organization.models import Capability, PolicyDocument
 from organization.views.capabilities_generics import capability_success
@@ -29,13 +30,8 @@ class DocumentCapabilityView(View):
 
     def post(self, request, capability_id, document_id=None):
         if 'delete' in request.POST.keys() and document_id is None:
-            messages.error(request, "You cannot do that", "danger")
-            return redirect(
-                request.META.get(
-                    'HTTP_REFERER',
-                     reverse('character:character_home')
-                )
-            )
+            return redirect_back(request, reverse('character:character_home'),
+                                 error_message="You cannot do that")
 
         capability = get_object_or_404(
             Capability, id=capability_id, type=Capability.POLICY_DOCUMENT)
@@ -63,8 +59,8 @@ def document_view(request, document_id):
     hero_is_member = document.organization.character_is_member(request.hero)
 
     if not document.public and not hero_is_member:
-        messages.error(request, "You cannot view this document", "danger")
-        return redirect(request.META.get('HTTP_REFERER', reverse('character:character_home')))
+        return redirect_back(request, reverse('character:character_home'),
+                             error_message="You cannot view this document")
 
     context = {
         'document': document,

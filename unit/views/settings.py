@@ -3,6 +3,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 
+from base.utils import redirect_back
 from battle.models import Order
 from decorators import inchar_required
 from unit.models import WorldUnit, WorldUnitStatusChangeException
@@ -21,7 +22,7 @@ def battle_orders(request, unit_id):
         raise Http404("Invalid orders")
     unit.default_battle_orders = Order.objects.create(what=battle_orders)
     unit.save()
-    return redirect(request.META.get('HTTP_REFERER', unit.get_absolute_url()))
+    return redirect_back(request, unit.get_absolute_url())
 
 
 @inchar_required
@@ -36,7 +37,7 @@ def status_change(request, unit_id, new_status):
         unit.change_status(new_status)
     except WorldUnitStatusChangeException as e:
         messages.error(request, str(e), "danger")
-    return redirect(request.META.get('HTTP_REFERER', unit.get_absolute_url()))
+    return redirect_back(request, unit.get_absolute_url())
 
 
 @inchar_required
@@ -54,4 +55,4 @@ def battle_settings(request, unit_id):
     unit.battle_side_pos = battle_side_pos
     unit.battle_line = battle_line
     unit.save()
-    return redirect(request.META.get('HTTP_REFERER', unit.get_absolute_url()))
+    return redirect_back(request, unit.get_absolute_url())

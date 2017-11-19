@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.views.decorators.http import require_POST
 
+from base.utils import redirect_back
 from character.models import Character
 from organization.models import Capability
 from organization.views.capabilities_generics import capability_success
@@ -18,9 +19,8 @@ def banning_capability_view(request, capability_id):
     character_to_ban = get_object_or_404(
         Character, id=request.POST.get('character_to_ban_id'))
     if character_to_ban not in capability.applying_to.character_members.all():
-        messages.error(request, "You cannot do that", "danger")
-        return redirect(request.META.get('HTTP_REFERER',
-                                         reverse('character:character_home')))
+        return redirect_back(request, reverse('character:character_home'),
+                             error_message="You cannot do that")
 
     proposal = {'character_id': character_to_ban.id}
     capability.create_proposal(request.hero, proposal)

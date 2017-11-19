@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 
+from base.utils import redirect_back
 from character.models import Character
 from decorators import inchar_required
 from messaging.models import MessageRelationship
@@ -15,8 +16,7 @@ def add_contact(request, character_id):
         from_character=request.hero, to_character=target_character)[1]
     if created:
         messages.success(request, "Character added to contacts", "success")
-    return redirect(
-        request.META.get('HTTP_REFERER', reverse('character:character_home')))
+    return redirect_back(request, reverse('character:character_home'))
 
 
 @inchar_required
@@ -30,5 +30,4 @@ def remove_contact(request, character_id):
         messages.success(request, "Character removed contacts", "success")
     except MessageRelationship.DoesNotExist:
         pass
-    return redirect(
-        request.META.get('HTTP_REFERER', reverse('character:character_home')))
+    return redirect_back(request, reverse('character:character_home'))

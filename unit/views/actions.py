@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.views.decorators.http import require_POST
 
+from base.utils import redirect_back
 from decorators import inchar_required
 from unit.models import WorldUnit
 from world.models.events import TileEvent
@@ -43,7 +44,7 @@ def conquest_action(request, unit_id):
     else:
         messages.error(request, "Invalid action")
 
-    return redirect(request.META.get('HTTP_REFERER', unit.get_absolute_url()))
+    return redirect_back(request, unit.get_absolute_url())
 
 
 @inchar_required
@@ -68,4 +69,4 @@ def rename(request, unit_id):
     if request.POST.get('name'):
         unit.name = request.POST.get('name')
         unit.save()
-    return redirect(request.META.get('HTTP_REFERER', unit.get_absolute_url()))
+    return redirect_back(request, unit.get_absolute_url())

@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views import View
 
+from base.utils import redirect_back
 from character.models import Character
 from organization.models import Capability, PositionCandidacy, \
     PositionElectionVote, CapabilityProposal, CapabilityVote, PolicyDocument, \
@@ -106,12 +107,8 @@ class ProposalView(View):
         if not proposal.capability.organization.character_is_member(
                 request.hero):
             messages.error(request, "You cannot do that", "danger")
-            return redirect(
-                request.META.get(
-                    'HTTP_REFERER',
-                    reverse('character:character_home')
-                )
-            )
+            return redirect_back(request, reverse('character:character_home'),
+                                 error_message="You cannot do that")
 
     def get(self, request, proposal_id):
         check_result = self.check(request, proposal_id)
@@ -179,23 +176,13 @@ class ProposalView(View):
         proposal = get_object_or_404(CapabilityProposal, id=proposal_id)
 
         if proposal.closed:
-            messages.error(request, "Voting closed", "danger")
-            return redirect(
-                request.META.get(
-                    'HTTP_REFERER',
-                    reverse('character:character_home')
-                )
-            )
+            return redirect_back(request, reverse('character:character_home'),
+                                 error_message="Voting closed")
 
         issued_vote = request.POST.get('vote')
         if issued_vote not in dict(CapabilityVote.VOTE_CHOICES).keys():
-            messages.error(request, "Invalid vote", "danger")
-            return redirect(
-                request.META.get(
-                    'HTTP_REFERER',
-                    reverse('character:character_home')
-                )
-            )
+            return redirect_back(request, reverse('character:character_home'),
+                                 error_message="Invalid vote")
 
         proposal.issue_vote(request.hero, issued_vote)
 

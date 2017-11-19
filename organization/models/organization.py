@@ -2,15 +2,15 @@ from django.db import models, transaction
 from django.urls import reverse
 from django.utils.html import escape
 
+import organization.models.capability
+import organization.models.document
+import organization.models.election
+import organization.models.relationship
 import unit.models
 import world.models
 from battle.models import BattleFormation
 from messaging import shortcuts
 
-import organization.models.document
-import organization.models.capability
-import organization.models.relationship
-import organization.models.election
 
 class Organization(models.Model):
     DEMOCRATIC = 'democratic'  # decisions are voted among members

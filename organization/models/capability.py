@@ -4,11 +4,12 @@ from django.db import models
 from django.urls import reverse
 
 import character.models
+import organization.models.document
+import organization.models.organization
 import world.models
 from battle.models import BattleFormation
 from messaging import shortcuts
-import organization.models.organization
-import organization.models.document
+
 
 class Capability(models.Model):
     BAN = 'ban'

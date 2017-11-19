@@ -4,7 +4,8 @@ from django.test import TestCase
 
 from organization.models import Organization
 from world.initialization import initialize_settlement
-from world.models import Building, Settlement, Character
+from world.models import Building, Settlement
+from character.models import Character
 from world.turn import TurnProcessor
 
 

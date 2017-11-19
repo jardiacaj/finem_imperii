@@ -9,7 +9,7 @@ from messaging.models import MessageRecipient, MessageRelationship, CharacterMes
 from messaging.shortcuts import create_message, add_character_recipient, \
     add_recipients_for_reply, add_organization_recipient
 from organization.models import Organization
-from world.models import Character
+from character.models import Character
 
 
 def recipient_required_decorator(func):
@@ -157,7 +157,7 @@ def add_contact(request, character_id):
     if created:
         messages.success(request, "Character added to contacts", "success")
     return redirect(
-        request.META.get('HTTP_REFERER', reverse('world:character_home')))
+        request.META.get('HTTP_REFERER', reverse('character:character_home')))
 
 
 @inchar_required
@@ -172,7 +172,7 @@ def remove_contact(request, character_id):
     except MessageRelationship.DoesNotExist:
         pass
     return redirect(
-        request.META.get('HTTP_REFERER', reverse('world:character_home')))
+        request.META.get('HTTP_REFERER', reverse('character:character_home')))
 
 
 @inchar_required
@@ -180,7 +180,7 @@ def mark_all_read(request):
     MessageRecipient.objects.filter(
         character=request.hero, read=False).update(read=True)
     return redirect(
-        request.META.get('HTTP_REFERER', reverse('world:character_home')))
+        request.META.get('HTTP_REFERER', reverse('character:character_home')))
 
 
 @recipient_required_decorator

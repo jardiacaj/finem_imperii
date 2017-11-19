@@ -56,7 +56,7 @@
                         </td>
                         <td style="vertical-align: middle" class="text-right">
                             {% if character.can_unpause %}
-                                <form action="{% url 'world:unpause_character' %}" method="post">
+                                <form action="{% url 'character:unpause_character' %}" method="post">
                                     {% csrf_token %}
                                     <input type="hidden" name="character_id" value="{{ character.id }}">
 
@@ -72,7 +72,7 @@
                                 </form>
                             {% endif %}
                             {% if character.can_pause %}
-                                <form action="{% url 'world:pause_character' %}" method="post">
+                                <form action="{% url 'character:pause_character' %}" method="post">
                                     {% csrf_token %}
                                     <input type="hidden" name="character_id" value="{{ character.id }}">
 
@@ -105,7 +105,7 @@
         <p class="text-center">
             {% if can_create_character %}
                 <a class="btn btn-primary"
-                   href="{% url 'world:create_character' %}">
+                   href="{% url 'character:create_character' %}">
                     Create a new character
                 </a>
             {% else %}

@@ -8,7 +8,8 @@ from django.views import View
 from organization.models import Capability, PositionCandidacy, \
     PositionElectionVote, CapabilityProposal, CapabilityVote, PolicyDocument, \
     Organization, OrganizationRelationship
-from world.models import TileEvent, Character, Tile, Settlement
+from world.models import TileEvent, Tile, Settlement
+from character.models import Character
 
 
 def candidacy_capability_context(request, capability, context):
@@ -103,7 +104,7 @@ class ProposalView(View):
         proposal = get_object_or_404(CapabilityProposal, id=proposal_id)
         if not proposal.capability.organization.character_is_member(request.hero):
             messages.error(request, "You cannot do that", "danger")
-            return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
+            return redirect(request.META.get('HTTP_REFERER', reverse('character:character_home')))
 
     def get(self, request, proposal_id):
         check_result = self.check(request, proposal_id)
@@ -165,12 +166,12 @@ class ProposalView(View):
 
         if proposal.closed:
             messages.error(request, "Voting closed", "danger")
-            return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
+            return redirect(request.META.get('HTTP_REFERER', reverse('character:character_home')))
 
         issued_vote = request.POST.get('vote')
         if issued_vote not in dict(CapabilityVote.VOTE_CHOICES).keys():
             messages.error(request, "Invalid vote", "danger")
-            return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
+            return redirect(request.META.get('HTTP_REFERER', reverse('character:character_home')))
 
         proposal.issue_vote(request.hero, issued_vote)
 

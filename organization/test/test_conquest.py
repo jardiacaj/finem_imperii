@@ -3,7 +3,8 @@ from django.urls.base import reverse
 
 from battle.models import Order
 from organization.models import Capability, CapabilityProposal
-from world.models import World, Character, Tile, TileEvent, Settlement
+from world.models import World, Tile, TileEvent, Settlement
+from character.models import Character
 from unit.models import WorldUnit
 
 
@@ -17,7 +18,7 @@ class TestConquest(TestCase):
             {'username': 'alice', 'password': 'test'},
         )
         self.client.get(
-            reverse('world:activate_character', kwargs={'char_id': 7}),
+            reverse('character:activate_character', kwargs={'char_id': 7}),
             follow=True
         )
 
@@ -135,7 +136,7 @@ class TestConquest(TestCase):
 
     def test_proposal(self):
         self.client.get(
-            reverse('world:activate_character', kwargs={'char_id': 8}),
+            reverse('character:activate_character', kwargs={'char_id': 8}),
             follow=True
         )
 
@@ -183,7 +184,7 @@ class TestConquest(TestCase):
 
     def test_proposal_fails_because_unit_is_not_mobilized(self):
         self.client.get(
-            reverse('world:activate_character', kwargs={'char_id': 8}),
+            reverse('character:activate_character', kwargs={'char_id': 8}),
             follow=True
         )
 

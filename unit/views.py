@@ -244,7 +244,7 @@ def unit_disband(request, unit_id):
     )
     unit.disband()
     messages.success(request, 'Your unit has been disbanded.', 'success')
-    return redirect(reverse('world:character_home'))
+    return redirect(reverse('character:character_home'))
 
 
 @inchar_required

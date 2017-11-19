@@ -12,7 +12,8 @@ from organization.models import Organization, PolicyDocument, Capability, \
     PositionCandidacy, PositionElectionVote, OrganizationRelationship, \
     MilitaryStance
 from organization.views.decorator import capability_required_decorator
-from world.models import Character, Tile, TileEvent, Settlement
+from world.models import Tile, TileEvent, Settlement
+from character.models import Character
 
 
 def capability_success(capability, request):
@@ -208,7 +209,7 @@ def banning_view(request, capability_id):
     if character_to_ban not in capability.applying_to.character_members.all():
         messages.error(request, "You cannot do that", "danger")
         return redirect(request.META.get('HTTP_REFERER',
-                                         reverse('world:character_home')))
+                                         reverse('character:character_home')))
 
     proposal = {'character_id': character_to_ban.id}
     capability.create_proposal(request.hero, proposal)
@@ -344,7 +345,7 @@ class DocumentCapabilityView(View):
         if 'delete' in request.POST.keys() and document_id is None:
             messages.error(request, "You cannot do that", "danger")
             return redirect(request.META.get('HTTP_REFERER',
-                                             reverse('world:character_home')))
+                                             reverse('character:character_home')))
 
         capability = get_object_or_404(
             Capability, id=capability_id, type=Capability.POLICY_DOCUMENT)

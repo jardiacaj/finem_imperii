@@ -2,7 +2,8 @@ from django.test import TestCase
 
 from organization.models import Organization, Capability, OrganizationRelationship, PositionElection, PositionCandidacy, \
     MilitaryStance
-from world.models import Character, Tile
+from world.models import Tile
+from character.models import Character
 
 
 class TestOrganizationModel(TestCase):

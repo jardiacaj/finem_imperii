@@ -5,7 +5,8 @@ from django.urls.base import reverse
 
 from organization.models import Organization
 from world.initialization import initialize_unit
-from world.models import TileEvent, Tile, Character
+from world.models import TileEvent, Tile
+from character.models import Character
 from unit.models import WorldUnit
 
 
@@ -20,7 +21,7 @@ class TestUnitActions(TestCase):
         user = auth.get_user(self.client)
         self.assertEqual(User.objects.get(id=1), user)
         self.client.get(
-            reverse('world:activate_character', kwargs={'char_id': 6}),
+            reverse('character:activate_character', kwargs={'char_id': 6}),
             follow=True
         )
 
@@ -36,7 +37,7 @@ class TestUnitActions(TestCase):
 
         self.assertRedirects(
             response,
-            reverse('world:character_home')
+            reverse('character:character_home')
         )
         self.my_unit.refresh_from_db()
         self.assertIsNone(self.my_unit.location)

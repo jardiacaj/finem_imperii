@@ -18,7 +18,7 @@ class TestBattleViews(TestCase):
             {'username': 'alice', 'password': 'test'},
         )
         self.client.get(
-            reverse('world:activate_character', kwargs={'char_id': 5}),
+            reverse('character:activate_character', kwargs={'char_id': 5}),
             follow=True
         )
         initialize_unit(WorldUnit.objects.get(id=1))
@@ -73,7 +73,7 @@ class TestBattleViews(TestCase):
 
     def test_orders_view_when_not_participating(self):
         self.client.get(
-            reverse('world:activate_character', kwargs={'char_id': 3}),
+            reverse('character:activate_character', kwargs={'char_id': 3}),
             follow=True
         )
         response = self.client.get(reverse('battle:set_orders', kwargs={'battle_id': self.battle.id}), follow=True)

@@ -2,7 +2,8 @@ from django.contrib import auth
 from django.test import TestCase
 from django.urls.base import reverse
 
-from world.models import World, Character, InventoryItem
+from world.models import World, InventoryItem
+from character.models import Character
 
 
 class TestInventory(TestCase):
@@ -15,7 +16,7 @@ class TestInventory(TestCase):
         )
         user = auth.get_user(self.client)
         self.client.get(
-            reverse('world:activate_character', kwargs={'char_id': 1}),
+            reverse('character:activate_character', kwargs={'char_id': 1}),
             follow=True
         )
 
@@ -26,7 +27,7 @@ class TestInventory(TestCase):
         granary_bushels_object.quantity = 100
         granary_bushels_object.save()
 
-        response = self.client.get(reverse('world:inventory'))
+        response = self.client.get(reverse('character:inventory'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Take grain from granary")
 
@@ -38,13 +39,13 @@ class TestInventory(TestCase):
         bushels_object.save()
 
         response = self.client.post(
-            reverse('world:inventory'),
+            reverse('character:inventory'),
             data={
                 'action': 'load',
                 'bushels': 99
             }
         )
-        self.assertRedirects(response, reverse('world:inventory'))
+        self.assertRedirects(response, reverse('character:inventory'))
 
         bushels_object.refresh_from_db()
         self.assertEqual(bushels_object.quantity, 1)
@@ -75,13 +76,13 @@ class TestInventory(TestCase):
         self.assertEqual(inv_cart.quantity, 10)
 
         response = self.client.post(
-            reverse('world:inventory'),
+            reverse('character:inventory'),
             data={
                 'action': 'load',
                 'bushels': 1000
             }
         )
-        self.assertRedirects(response, reverse('world:inventory'))
+        self.assertRedirects(response, reverse('character:inventory'))
 
         inv_bush = character.inventory_object(InventoryItem.GRAIN)
         self.assertEqual(inv_bush.quantity, 1000)
@@ -101,13 +102,13 @@ class TestInventory(TestCase):
         )
 
         response = self.client.post(
-            reverse('world:inventory'),
+            reverse('character:inventory'),
             data={
                 'action': 'unload',
                 'bushels': 99
             }
         )
-        self.assertRedirects(response, reverse('world:inventory'))
+        self.assertRedirects(response, reverse('character:inventory'))
 
         character_bushels_object.refresh_from_db()
         self.assertEqual(character_bushels_object.quantity, 1)

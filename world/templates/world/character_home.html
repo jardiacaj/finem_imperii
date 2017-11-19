@@ -34,7 +34,7 @@
         {% endif %}
 
         {% if request.hero.can_work_public_order %}
-            <form class="form-horizontal" method="post" action="{% url 'world:public_order' %}">
+            <form class="form-horizontal" method="post" action="{% url 'character:public_order' %}">
                 <fieldset>
                     {% csrf_token %}
                     <p>

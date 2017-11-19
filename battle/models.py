@@ -156,7 +156,7 @@ class BattleOrganization(models.Model):
 
 class BattleCharacter(models.Model):
     battle_organization = models.ForeignKey(BattleOrganization)
-    character = models.ForeignKey('world.Character')
+    character = models.ForeignKey('character.Character')
     present_in_battle = models.BooleanField()
 
 

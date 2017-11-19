@@ -13,7 +13,7 @@ class TestViews(TestCase):
             {'username': 'alice', 'password': 'test'},
         )
         response = self.client.get(
-            reverse('world:activate_character', kwargs={'char_id': 1}),
+            reverse('character:activate_character', kwargs={'char_id': 1}),
             follow=True
         )
 

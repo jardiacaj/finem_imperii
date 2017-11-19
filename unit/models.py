@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models import Avg, F
 from django.urls import reverse
 
+import character.models
 import world.models
 from battle.models import BattleUnit
 
@@ -78,7 +79,7 @@ class WorldUnit(models.Model):
         (5, "flanking far right"),
     )
 
-    owner_character = models.ForeignKey('world.Character', blank=True, null=True)
+    owner_character = models.ForeignKey('character.Character', blank=True, null=True)
     world = models.ForeignKey('world.World', blank=True, null=True)
     location = models.ForeignKey('world.Settlement', blank=True, null=True)
     origin = models.ForeignKey('world.Settlement', related_name='units_originating')
@@ -160,7 +161,7 @@ class WorldUnit(models.Model):
 
     def change_status(self, new_status):
         if (
-                self.owner_character.profile != world.models.Character.COMMANDER and
+                self.owner_character.profile != character.models.Character.COMMANDER and
                 self.owner_character.location != self.location
         ):
             raise WorldUnitStatusChangeException(

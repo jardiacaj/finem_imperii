@@ -17,13 +17,13 @@ class TestMilitaryOrders(TestCase):
         user = auth.get_user(self.client)
         self.assertEqual(User.objects.get(id=1), user)
         response = self.client.get(
-            reverse('world:activate_character', kwargs={'char_id': 1}),
+            reverse('character:activate_character', kwargs={'char_id': 1}),
             follow=True
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.redirect_chain), 1)
         self.assertEqual(response.redirect_chain[0][1], 302)
-        self.assertEqual(response.redirect_chain[0][0], reverse('world:character_home'))
+        self.assertEqual(response.redirect_chain[0][0], reverse('character:character_home'))
 
     def test_view(self):
         capability = Capability.objects.get(

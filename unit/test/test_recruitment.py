@@ -2,7 +2,8 @@ from django.test import TestCase
 from django.urls.base import reverse
 
 import world.initialization
-from world.models import Character, NPC
+from world.models import NPC
+from character.models import Character
 from unit.models import WorldUnit
 
 
@@ -19,7 +20,7 @@ class TestRecruitment(TestCase):
         )
         self.client.get(
             reverse(
-                'world:activate_character',
+                'character:activate_character',
                 kwargs={'char_id': self.character.id}
             ),
             follow=True

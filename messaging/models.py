@@ -67,7 +67,7 @@ class CharacterMessage(models.Model):
     creation_time = models.DateTimeField(auto_now_add=True)
     creation_turn = models.IntegerField()
     sender = models.ForeignKey(
-        'world.Character', related_name='messages_sent', blank=True, null=True)
+        'character.Character', related_name='messages_sent', blank=True, null=True)
     category = models.CharField(
         max_length=20, choices=CATEGORY_CHOICES, blank=True, null=True)
     link = models.TextField(blank=True, null=True)
@@ -113,7 +113,7 @@ class MessageRecipient(models.Model):
     message = models.ForeignKey(CharacterMessage)
     group = models.ForeignKey(MessageRecipientGroup, blank=True, null=True)
     read = models.BooleanField(default=False)
-    character = models.ForeignKey('world.Character')
+    character = models.ForeignKey('character.Character')
     favourite = models.BooleanField(default=False)
 
     def get_mark_read_url(self):
@@ -131,6 +131,6 @@ class MessageRelationship(models.Model):
             ("from_character", "to_character"),
         )
 
-    from_character = models.ForeignKey('world.Character')
+    from_character = models.ForeignKey('character.Character')
     to_character = models.ForeignKey(
-        'world.Character', related_name='message_relationships_to')
+        'character.Character', related_name='message_relationships_to')

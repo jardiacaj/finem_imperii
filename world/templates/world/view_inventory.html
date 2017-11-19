@@ -13,7 +13,7 @@
         {{ request.hero.cash }} silver coins.
 
         {% if request.hero.location.character_set.all|length > 1 %}
-            <form action="{% url 'world:transfer_cash' %}" class="form-horizontal col-lg-12" method="post">
+            <form action="{% url 'character:transfer_cash' %}" class="form-horizontal col-lg-12" method="post">
                 {% csrf_token %}
 
                 <input type="hidden" name="from_character_id" value="{{ request.hero.id }}">

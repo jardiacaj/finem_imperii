@@ -1,8 +1,7 @@
 from django.contrib import admin
 
 from world.initialization import initialize_world
-from world.models import Region, Tile, Settlement, Building, NPC, Character, \
-    World
+from world.models import Region, Tile, Settlement, Building, NPC, World
 from world.turn import pass_turn as pass_turn_func
 
 admin.site.register(Region)
@@ -10,12 +9,6 @@ admin.site.register(Tile)
 admin.site.register(Settlement)
 admin.site.register(Building)
 admin.site.register(NPC)
-
-
-@admin.register(Character)
-class CharacterAdmin(admin.ModelAdmin):
-    list_display = ('name', 'profile', 'owner_user', 'location')
-    list_filter = ('world', )
 
 
 def initialize_world_admin_action(modeladmin, request, queryset):

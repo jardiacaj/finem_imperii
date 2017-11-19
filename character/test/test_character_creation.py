@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from organization.models import Organization
-from world.models import Character
+from character.models import Character
 
 
 class TestCharacterCreation(TestCase):
@@ -22,21 +22,21 @@ class TestCharacterCreation(TestCase):
 
     def test_step1_view(self):
         response = self.client.post(
-            reverse('world:create_character'),
+            reverse('character:create_character'),
             follow=True
         )
         self.assertEqual(response.status_code, 200)
 
     def test_step2_view(self):
         response = self.client.post(
-            reverse('world:create_character', kwargs={'world_id': 2}),
+            reverse('character:create_character', kwargs={'world_id': 2}),
             follow=True
         )
         self.assertEqual(response.status_code, 200)
 
     def test_create_commander_in_kingdom(self):
         response = self.client.post(
-            reverse('world:create_character', kwargs={'world_id': 2}),
+            reverse('character:create_character', kwargs={'world_id': 2}),
             data={
                 'state_id': Organization.objects.get(name="Small Kingdom").id,
                 'name': 'Rusbel',
@@ -53,14 +53,14 @@ class TestCharacterCreation(TestCase):
         self.assertEqual(response.redirect_chain[0][1], 302)
         self.assertEqual(
             response.redirect_chain[0][0],
-            reverse('world:activate_character', kwargs={'char_id': new_character.id})
+            reverse('character:activate_character', kwargs={'char_id': new_character.id})
         )
         self.assertEqual(response.redirect_chain[1][1], 302)
-        self.assertEqual(response.redirect_chain[1][0], reverse('world:character_home'))
+        self.assertEqual(response.redirect_chain[1][0], reverse('character:character_home'))
 
     def test_create_trader_in_commonwealth(self):
         response = self.client.post(
-            reverse('world:create_character', kwargs={'world_id': 2}),
+            reverse('character:create_character', kwargs={'world_id': 2}),
             data={
                 'state_id': Organization.objects.get(name="Small Commonwealth").id,
                 'name': 'Rusbel',
@@ -77,14 +77,14 @@ class TestCharacterCreation(TestCase):
         self.assertEqual(response.redirect_chain[0][1], 302)
         self.assertEqual(
             response.redirect_chain[0][0],
-            reverse('world:activate_character', kwargs={'char_id': new_character.id})
+            reverse('character:activate_character', kwargs={'char_id': new_character.id})
         )
         self.assertEqual(response.redirect_chain[1][1], 302)
-        self.assertEqual(response.redirect_chain[1][0], reverse('world:character_home'))
+        self.assertEqual(response.redirect_chain[1][0], reverse('character:character_home'))
 
     def test_create_barbaric_bureaucrat(self):
         response = self.client.post(
-            reverse('world:create_character', kwargs={'world_id': 2}),
+            reverse('character:create_character', kwargs={'world_id': 2}),
             data={
                 'state_id': Organization.objects.get(name="Barbarians of Parvus").id,
                 'name': 'Rusbel',
@@ -101,7 +101,7 @@ class TestCharacterCreation(TestCase):
         self.assertEqual(response.redirect_chain[0][1], 302)
         self.assertEqual(
             response.redirect_chain[0][0],
-            reverse('world:activate_character', kwargs={'char_id': new_character.id})
+            reverse('character:activate_character', kwargs={'char_id': new_character.id})
         )
         self.assertEqual(response.redirect_chain[1][1], 302)
-        self.assertEqual(response.redirect_chain[1][0], reverse('world:character_home'))
+        self.assertEqual(response.redirect_chain[1][0], reverse('character:character_home'))

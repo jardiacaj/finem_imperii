@@ -1,5 +1,6 @@
 import json
 
+import character.models
 import unit.models
 import world.models
 import world.templatetags.extra_filters
@@ -60,7 +61,7 @@ class Organization(models.Model):
         max_length=15, choices=DECISION_TAKING_CHOICES)
     membership_type = models.CharField(
         max_length=15, choices=MEMBERSHIP_TYPE_CHOICES)
-    character_members = models.ManyToManyField('world.Character', blank=True)
+    character_members = models.ManyToManyField('character.Character', blank=True)
     organization_members = models.ManyToManyField('Organization', blank=True)
     election_period_months = models.IntegerField(default=0)
     current_election = models.ForeignKey(
@@ -68,10 +69,10 @@ class Organization(models.Model):
     last_election = models.ForeignKey(
         'PositionElection', blank=True, null=True, related_name='+')
     heir_first = models.ForeignKey(
-        'world.Character', blank=True, null=True,
+        'character.Character', blank=True, null=True,
         related_name='first_heir_to')
     heir_second = models.ForeignKey(
-        'world.Character', blank=True, null=True,
+        'character.Character', blank=True, null=True,
         related_name='second_heir_to')
     tax_countdown = models.SmallIntegerField(default=0)
 
@@ -448,7 +449,7 @@ class PositionCandidacy(models.Model):
             ("election", "candidate"),
         )
     election = models.ForeignKey(PositionElection)
-    candidate = models.ForeignKey('world.Character')
+    candidate = models.ForeignKey('character.Character')
     description = models.TextField()
     retired = models.BooleanField(default=False)
 
@@ -459,7 +460,7 @@ class PositionElectionVote(models.Model):
             ("election", "voter"),
         )
     election = models.ForeignKey(PositionElection)
-    voter = models.ForeignKey('world.Character')
+    voter = models.ForeignKey('character.Character')
     candidacy = models.ForeignKey(PositionCandidacy, blank=True, null=True)
 
 
@@ -539,7 +540,7 @@ class Capability(models.Model):
 
 
 class CapabilityProposal(models.Model):
-    proposing_character = models.ForeignKey('world.Character')
+    proposing_character = models.ForeignKey('character.Character')
     capability = models.ForeignKey(Capability)
     proposal_json = models.TextField()
     vote_end_turn = models.IntegerField()
@@ -630,7 +631,7 @@ class CapabilityProposal(models.Model):
 
         elif self.capability.type == Capability.BAN:
             try:
-                character_to_ban = world.models.Character.objects.get(
+                character_to_ban = character.models.Character.objects.get(
                     id=proposal['character_id']
                 )
                 applying_to.remove_member(character_to_ban)
@@ -638,7 +639,7 @@ class CapabilityProposal(models.Model):
                     'ban',
                     {'banned_character': character_to_ban}
                 )
-            except world.models.Character.DoesNotExist:
+            except character.models.Character.DoesNotExist:
                 pass
 
         elif self.capability.type == Capability.CONVOKE_ELECTIONS:
@@ -813,7 +814,7 @@ class CapabilityProposal(models.Model):
 
         elif self.capability.type == Capability.HEIR:
             try:
-                first_heir = world.models.Character.objects.get(
+                first_heir = character.models.Character.objects.get(
                     id=proposal['first_heir'])
                 if (
                         first_heir in applying_to.get_heir_candidates()
@@ -823,7 +824,7 @@ class CapabilityProposal(models.Model):
                     applying_to.save()
 
                     second_heir = None if proposal['second_heir'] == 0 else \
-                        world.models.Character.objects.get(
+                        character.models.Character.objects.get(
                             id=proposal['second_heir']
                         )
                     if second_heir is None or (
@@ -839,7 +840,7 @@ class CapabilityProposal(models.Model):
                         applying_to.get_violence_monopoly()
                     )
 
-            except world.models.Character.DoesNotExist:
+            except character.models.Character.DoesNotExist:
                 pass
 
         else:
@@ -920,7 +921,7 @@ class CapabilityVote(models.Model):
     )
 
     proposal = models.ForeignKey(CapabilityProposal)
-    voter = models.ForeignKey('world.Character')
+    voter = models.ForeignKey('character.Character')
     vote = models.CharField(max_length=10, choices=VOTE_CHOICES)
 
 

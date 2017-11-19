@@ -75,7 +75,7 @@
 
         function click_callback(region, settlement) {
             if (settlement !== undefined) {
-                window.location.href = '{% url 'world:travel' %}' + settlement.settlement.id
+                window.location.href = '{% url 'character:travel' %}' + settlement.settlement.id
             }
         }
 
@@ -92,9 +92,9 @@
             class="placeholder travel_map_iframe"
             scrolling="no"
             {% if target_settlement %}
-                src="{% url 'world:travel_iframe' target_settlement.id %}"
+                src="{% url 'character:travel_iframe' target_settlement.id %}"
             {% else %}
-                src="{% url 'world:travel_iframe' %}"
+                src="{% url 'character:travel_iframe' %}"
             {% endif %}
     ></iframe>
 

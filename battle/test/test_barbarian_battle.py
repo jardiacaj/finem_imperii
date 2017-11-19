@@ -20,7 +20,7 @@ class TestBarbarianBattle(TestCase):
             {'username': 'alice', 'password': 'test'},
         )
         self.client.get(
-            reverse('world:activate_character', kwargs={'char_id': 7}),
+            reverse('character:activate_character', kwargs={'char_id': 7}),
             follow=True
         )
 

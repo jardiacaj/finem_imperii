@@ -9,7 +9,7 @@
     is_superuser: true
 
 
-- model: world.Character
+- model: character.Character
   pk: 1
   fields:
     name: King
@@ -20,7 +20,7 @@
     cash: 10000
     profile: commander
 
-- model: world.Character
+- model: character.Character
   pk: 2
   fields:
     name: Kingdom Member
@@ -50,7 +50,7 @@
     generation_size: 100
     default_battle_orders: 4
 
-- model: world.Character
+- model: character.Character
   pk: 3
   fields:
     name: Stateless char
@@ -60,7 +60,7 @@
     cash: 10000
     profile: commander
 
-- model: world.Character
+- model: character.Character
   pk: 4
   fields:
     name: Democracy Leader
@@ -70,7 +70,7 @@
     cash: 10000
     profile: commander
 
-- model: world.Character
+- model: character.Character
   pk: 8
   fields:
     name: Democracy Member
@@ -80,7 +80,7 @@
     cash: 10000
     profile: bureaucrat
 
-- model: world.Character
+- model: character.Character
   pk: 5
   fields:
     name: Warrior
@@ -128,7 +128,7 @@
     generation_size: 60
     default_battle_orders: 3
 
-- model: world.Character
+- model: character.Character
   pk: 6
   fields:
     name: Commonwealth Warrior
@@ -157,7 +157,7 @@
     generation_size: 30
     default_battle_orders: 2
 
-- model: world.Character
+- model: character.Character
   pk: 7
   fields:
     name: Commonwealth Lord
@@ -167,7 +167,7 @@
     cash: 10000
     profile: bureaucrat
 
-- model: world.Character
+- model: character.Character
   pk: 9
   fields:
     name: Barbarian
@@ -177,7 +177,7 @@
     cash: 10000
     profile: commander
 
-- model: world.Character
+- model: character.Character
   pk: 10
   fields:
     name: Paused character

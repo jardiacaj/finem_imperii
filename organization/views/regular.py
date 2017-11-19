@@ -31,7 +31,7 @@ def document_view(request, document_id):
 
     if not document.public and not hero_is_member:
         messages.error(request, "You cannot view this document", "danger")
-        return redirect(request.META.get('HTTP_REFERER', reverse('world:character_home')))
+        return redirect(request.META.get('HTTP_REFERER', reverse('character:character_home')))
 
     context = {
         'document': document,

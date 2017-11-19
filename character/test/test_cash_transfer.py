@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 
-from world.models import Character
+from character.models import Character
 
 
 class TestCashTransfer(TestCase):
@@ -20,7 +20,7 @@ class TestCashTransfer(TestCase):
         self.assertEqual(User.objects.get(id=1), user)
 
         self.client.get(
-            reverse('world:activate_character', kwargs={'char_id': 1}),
+            reverse('character:activate_character', kwargs={'char_id': 1}),
             follow=True
         )
         self.from_character = Character.objects.get(id=1)
@@ -34,7 +34,7 @@ class TestCashTransfer(TestCase):
         to_character_cash_before_transfer = to_character.cash
 
         response = self.client.post(
-            reverse('world:transfer_cash'),
+            reverse('character:transfer_cash'),
             data={
                 'to_character_id': to_character.id,
                 'transfer_cash_amount': 100,
@@ -42,7 +42,7 @@ class TestCashTransfer(TestCase):
             follow=True
         )
 
-        self.assertRedirects(response, reverse('world:inventory'))
+        self.assertRedirects(response, reverse('character:inventory'))
 
         self.from_character.refresh_from_db()
         to_character.refresh_from_db()
@@ -60,7 +60,7 @@ class TestCashTransfer(TestCase):
         to_character_cash_before_transfer = to_character.cash
 
         response = self.client.post(
-            reverse('world:transfer_cash'),
+            reverse('character:transfer_cash'),
             data={
                 'to_character_id': to_character.id,
                 'transfer_cash_amount': 100,
@@ -68,7 +68,7 @@ class TestCashTransfer(TestCase):
             follow=True
         )
 
-        self.assertRedirects(response, reverse('world:inventory'))
+        self.assertRedirects(response, reverse('character:inventory'))
 
         self.from_character.refresh_from_db()
         to_character.refresh_from_db()
@@ -86,7 +86,7 @@ class TestCashTransfer(TestCase):
         to_character_cash_before_transfer = to_character.cash
 
         response = self.client.post(
-            reverse('world:transfer_cash'),
+            reverse('character:transfer_cash'),
             data={
                 'to_character_id': to_character.id,
                 'transfer_cash_amount': 1000000000000,
@@ -94,7 +94,7 @@ class TestCashTransfer(TestCase):
             follow=True
         )
 
-        self.assertRedirects(response, reverse('world:inventory'))
+        self.assertRedirects(response, reverse('character:inventory'))
 
         self.from_character.refresh_from_db()
         to_character.refresh_from_db()
@@ -112,7 +112,7 @@ class TestCashTransfer(TestCase):
         to_character_cash_before_transfer = to_character.cash
 
         response = self.client.post(
-            reverse('world:transfer_cash'),
+            reverse('character:transfer_cash'),
             data={
                 'to_character_id': to_character.id,
                 'transfer_cash_amount': -100,
@@ -120,7 +120,7 @@ class TestCashTransfer(TestCase):
             follow=True
         )
 
-        self.assertRedirects(response, reverse('world:inventory'))
+        self.assertRedirects(response, reverse('character:inventory'))
 
         self.from_character.refresh_from_db()
         to_character.refresh_from_db()

@@ -13,7 +13,7 @@ class TestDocuments(TestCase):
             {'username': 'alice', 'password': 'test'},
         )
         self.client.get(
-            reverse('world:activate_character', kwargs={'char_id': 1}),
+            reverse('character:activate_character', kwargs={'char_id': 1}),
             follow=True
         )
         self.capability = Capability.objects.get(
@@ -64,7 +64,7 @@ class TestDocuments(TestCase):
         self.assertContains(response, 'Footitle')
 
         self.client.get(
-            reverse('world:activate_character', kwargs={'char_id': 9}),
+            reverse('character:activate_character', kwargs={'char_id': 9}),
             follow=True
         )
 
@@ -103,12 +103,12 @@ class TestDocuments(TestCase):
         self.assertContains(response, 'Footitle')
 
         self.client.get(
-            reverse('world:activate_character', kwargs={'char_id': 9}),
+            reverse('character:activate_character', kwargs={'char_id': 9}),
             follow=True
         )
 
         response = self.client.get(document.get_absolute_url())
-        self.assertRedirects(response, reverse('world:character_home'))
+        self.assertRedirects(response, reverse('character:character_home'))
 
     def test_edit_document(self):
         response = self.client.post(

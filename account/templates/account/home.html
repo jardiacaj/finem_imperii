@@ -16,7 +16,7 @@
         {% endif %}
         {% for message in server_messages %}
             <h3>{{ message.title }}</h3>
-            {{ message.html_content }}
+            {{ message.get_html_content }}
         {% empty %}
             <p>None configured.</p>
         {% endfor %}

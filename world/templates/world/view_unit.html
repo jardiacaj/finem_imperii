@@ -37,9 +37,9 @@
                         <td>Owner</td>
                         <td>
                             {% if unit.owner_character %}
-                                {{ unit.owner_character.get_html_link|safe }}
+                                {{ unit.owner_character.get_html_link }}
                             {% else %}
-                                {{ unit.get_violence_monopoly.get_html_link|safe }}
+                                {{ unit.get_violence_monopoly.get_html_link }}
                             {% endif %}
                         </td>
                     </tr>
@@ -103,16 +103,16 @@
                     <tr>
                         <td>Location</td>
                         <td>
-                            {{ unit.location }} ({{ unit.location.tile.get_html_link|safe }},
-                            {{ unit.location.tile.controlled_by.get_html_link|safe }}
+                            {{ unit.location }} ({{ unit.location.tile.get_html_link }},
+                            {{ unit.location.tile.controlled_by.get_html_link }}
                             )
                         </td>
                     </tr>
                     <tr>
                         <td>Origin</td>
                         <td>
-                            {{ unit.origin }} ({{ unit.origin.tile.get_html_link|safe }},
-                            {{ unit.origin.tile.controlled_by.get_html_link|safe }}
+                            {{ unit.origin }} ({{ unit.origin.tile.get_html_link }},
+                            {{ unit.origin.tile.controlled_by.get_html_link }}
                             )
                         </td>
                     </tr>
@@ -190,7 +190,7 @@
                     {% for conquest in conquests %}
                         <div class="well text-center">
                             <p>
-                                Conquest of {{ conquest.tile }} by {{ conquest.organization.get_html_link|safe }}
+                                Conquest of {{ conquest.tile }} by {{ conquest.organization.get_html_link }}
                             </p>
                             <form class="form-inline" role="form" method="post" action="{% url 'world:unit_conquest_action' unit.id %}">
                                 {% csrf_token %}

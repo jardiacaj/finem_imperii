@@ -1,19 +1,19 @@
 {% if new %}
     <p>
-        {{ candidacy.candidate.get_html_link|safe }}
+        {{ candidacy.candidate.get_html_link }}
         has presented itself to the election to
-        {{ candidacy.election.position.get_html_link|safe }}.
+        {{ candidacy.election.position.get_html_link }}.
     </p>
 {% elif retire %}
     <p>
-        {{ candidacy.candidate.get_html_link|safe }}
+        {{ candidacy.candidate.get_html_link }}
         has retired their candidacy to the election to
-        {{ candidacy.election.position.get_html_link|safe }}.
+        {{ candidacy.election.position.get_html_link }}.
     </p>
 {% else %}
     <p>
-        {{ candidacy.candidate.get_html_link|safe }}
+        {{ candidacy.candidate.get_html_link }}
         has edited changed their candidacy to the election to
-        {{ candidacy.election.position.get_html_link|safe }}.
+        {{ candidacy.election.position.get_html_link }}.
     </p>
 {% endif %}

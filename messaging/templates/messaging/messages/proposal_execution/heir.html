@@ -1,14 +1,14 @@
 {% load extra_filters %}
 
 <p>
-    {{ proposal.capability.applying_to.heir_first.get_html_link|safe }}
+    {{ proposal.capability.applying_to.heir_first.get_html_link }}
     is now the heir to
-    {{ proposal.capability.applying_to.get_html_link|safe }}
+    {{ proposal.capability.applying_to.get_html_link }}
 </p>
 
 {% if proposal.capability.applying_to.heir_second %}
     <p>
-        {{ proposal.capability.applying_to.heir_second.get_html_link|safe }}
+        {{ proposal.capability.applying_to.heir_second.get_html_link }}
         is second in the line of succession.
     </p>
 {% endif %}

@@ -1,22 +1,22 @@
 {% if relationship.relationship == 'war' %}
     <p>
-        {{ relationship.from_organization.get_html_link|safe }}
+        {{ relationship.from_organization.get_html_link }}
         declared war on
-        {{ relationship.to_organization.get_html_link|safe }}!
+        {{ relationship.to_organization.get_html_link }}!
     </p>
 {% elif previous_relationship == 'war' and relationship.relationship == 'peace' %}
     <p>
-        {{ relationship.from_organization.get_html_link|safe }}
+        {{ relationship.from_organization.get_html_link }}
         and
-        {{ relationship.to_organization.get_html_link|safe }}
+        {{ relationship.to_organization.get_html_link }}
         have made peace.
     </p>
 {% elif previous_relationship == 'war' and relationship.relationship != 'war' %}
     <p>
         The war between
-        {{ relationship.from_organization.get_html_link|safe }}
+        {{ relationship.from_organization.get_html_link }}
         and
-        {{ relationship.to_organization.get_html_link|safe }}
+        {{ relationship.to_organization.get_html_link }}
         has ended.
     </p>
     <p>
@@ -25,9 +25,9 @@
     </p>
 {% else %}
     <p>
-        {{ relationship.from_organization.get_html_link|safe }}
+        {{ relationship.from_organization.get_html_link }}
         and
-        {{ relationship.to_organization.get_html_link|safe }}
+        {{ relationship.to_organization.get_html_link }}
         now have the following relationship:
         {{ relationship.relationship }}.
     </p>

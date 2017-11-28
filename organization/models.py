@@ -6,7 +6,7 @@ from django.db import models, transaction
 from django.contrib.auth.models import User
 from django.db.models.aggregates import Count
 from django.urls.base import reverse
-from django.utils.html import escape
+from django.utils.html import escape, format_html
 
 from battle.models import BattleFormation
 from messaging import shortcuts
@@ -309,11 +309,11 @@ class Organization(models.Model):
         else:
             suffix = ''
 
-        return template.format(
-            name=escape(self.name),
-            icon=icon,
-            suffix=suffix
-        )
+        return format_html(template,
+                           name=escape(self.name),
+                           icon=icon,
+                           suffix=suffix
+                           )
 
     def get_bootstrap_icon(self):
         template = '<span style="color: #{color}" ' \
@@ -333,16 +333,16 @@ class Organization(models.Model):
             icon = "triangle-top"
         else:
             icon = "option-vertical"
-        return template.format(
-            icon=icon,
-            color=escape(self.color),
-        )
+        return format_html(template,
+                           icon=icon,
+                           color=escape(self.color)
+                           )
 
     def get_html_link(self):
-        return '<a href="{}">{}</a>'.format(
-            self.get_absolute_url(),
-            self.get_html_name()
-        )
+        return format_html('<a href="{url}">{name}</a>',
+                           url=self.get_absolute_url(),
+                           name=self.get_html_name()
+                           )
 
     def current_elections_can_vote_in(self):
         result = []
@@ -937,10 +937,10 @@ class PolicyDocument(models.Model):
         return reverse('organization:document', kwargs={'document_id': self.id})
 
     def get_html_link(self):
-        return '<a href="{}">{}</a>'.format(
-            self.get_absolute_url(),
-            self.title,
-        )
+        return format_html('<a href="{url}">{name}</a>',
+                           url=self.get_absolute_url(),
+                           name=self.title
+                           )
 
 
 class OrganizationRelationship(models.Model):
@@ -1001,13 +1001,16 @@ class OrganizationRelationship(models.Model):
     @staticmethod
     def _format_relationship(relationship, relationship_name):
         template = '<span class="label label-{badge_type}">{name}</span>'
-        return template.format(
-            name=relationship_name.capitalize(),
-            badge_type=OrganizationRelationship._get_badge_type(relationship)
-        )
+        return format_html(template,
+                           name=relationship_name.capitalize(),
+                           badge_type=OrganizationRelationship._get_badge_type(relationship)
+                           )
 
     def get_relationship_html(self):
-        return OrganizationRelationship._format_relationship(self.relationship, self.get_relationship_display())
+        return OrganizationRelationship._format_relationship(
+            self.relationship,
+            self.get_relationship_display()
+        )
 
     def get_desired_relationship_html(self):
         if self.desired_relationship is None:
@@ -1114,7 +1117,7 @@ class MilitaryStance(models.Model):
         else:
             bootstrap_type = 'default'
 
-        return '<span class="label label-{bootstrap_type}">{stance}</span>'.format(
-            bootstrap_type=bootstrap_type,
-            stance=stance
-        )
+        return format_html('<span class="label label-{bootstrap_type}">{stance}</span>',
+                           bootstrap_type=bootstrap_type,
+                           stance=stance
+                           )

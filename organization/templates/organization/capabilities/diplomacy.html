@@ -17,15 +17,15 @@
         <tbody>
             {% for state in states %}
                 <tr>
-                    <td>{{ state.get_html_link|safe }}</td>
-                    <td>{{ state.relationship_out.get_relationship_html|safe }}</td>
+                    <td>{{ state.get_html_link }}</td>
+                    <td>{{ state.relationship_out.get_relationship_html }}</td>
                     <td>
                         {% if state.relationship_in.is_proposal %}
-                            Received: {{ state.relationship_in.get_desired_relationship_html|safe }}
+                            Received: {{ state.relationship_in.get_desired_relationship_html }}
                         {% endif %}
 
                         {% if state.relationship_out.is_proposal %}
-                            Sent: {{ state.relationship_out.get_desired_relationship_html|safe }}
+                            Sent: {{ state.relationship_out.get_desired_relationship_html }}
                         {% endif %}
                     </td>
                     <td>

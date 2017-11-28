@@ -1,8 +1,8 @@
-<h3>{{ capability.applying_to.get_html_link|safe }} - {{ target_organization.get_html_link|safe }} relationship</h3>
+<h3>{{ capability.applying_to.get_html_link }} - {{ target_organization.get_html_link }} relationship</h3>
 
 <div class="col-md-6">
     <h4>Current relationship</h4>
-    <p class="lead text-center">{{ relationship_out.get_relationship_html|safe }}</p>
+    <p class="lead text-center">{{ relationship_out.get_relationship_html }}</p>
 </div>
 
 <div class="col-md-6">
@@ -10,7 +10,7 @@
     <h4>Received proposal</h4>
     {% if relationship_in.is_proposal %}
         <div class="lead text-center">
-            {{ relationship_in.get_desired_relationship_html|safe }}
+            {{ relationship_in.get_desired_relationship_html }}
             {% include 'organization/capabilities/diplomacy_target_subtemplate.html' with target_relationship='accept' button_type='primary' button_text='Accept' %}
             {% include 'organization/capabilities/diplomacy_target_subtemplate.html' with target_relationship='refuse' button_type='primary' button_text='Refuse' %}
         </div>
@@ -22,7 +22,7 @@
     <div class="text-center">
         {% if relationship_out.is_proposal %}
             <p class="lead">
-                Sent proposal: {{ relationship_out.get_desired_relationship_html|safe }}
+                Sent proposal: {{ relationship_out.get_desired_relationship_html }}
             </p>
             {% include 'organization/capabilities/diplomacy_target_subtemplate.html' with target_relationship='take back' button_type='primary' button_text='Take back proposal' %}
         {% else %}

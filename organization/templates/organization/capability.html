@@ -6,12 +6,12 @@
 
     <h5>
         {% if capability.applying_to != capability.organization %}
-            {{ capability.organization.get_html_link|safe }} on
+            {{ capability.organization.get_html_link }} on
         {% endif %}
-        {{ capability.applying_to.get_html_link|safe }}
+        {{ capability.applying_to.get_html_link }}
         {% if capability.stemming_from %}
             as delegated by
-            {{ capability.stemming_from.organization.get_html_link|safe }}
+            {{ capability.stemming_from.organization.get_html_link }}
         {% endif %}
     </h5>
 

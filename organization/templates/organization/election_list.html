@@ -4,7 +4,7 @@
 
 {% block content %}
 
-    <h1 class="page-header">Elections for {{ organization.get_html_link|safe }}</h1>
+    <h1 class="page-header">Elections for {{ organization.get_html_link }}</h1>
 
     <ul>
         {% for election in organization.positionelection_set.all %}

@@ -1,5 +1,5 @@
 <h2>
-    Tax collection in {{ organization.get_html_link|safe }}
+    Tax collection in {{ organization.get_html_link }}
 </h2>
 
 <p>
@@ -9,7 +9,7 @@
 <table class="table table-striped table-hover table-condensed">
     {% for settlement, cash in settlement_input %}
         <tr>
-            <td>{{ settlement }}, {{ settlement.tile.get_html_link|safe }}</td>
+            <td>{{ settlement }}, {{ settlement.tile.get_html_link }}</td>
             <td class="text-right">{{ cash }} coins</td>
         </tr>
     {% endfor %}

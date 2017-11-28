@@ -35,7 +35,7 @@
             {% for organization in character.organization_set.all %}
                 <li>
                     {% if not organization.is_position %}Member of{% endif %}
-                    {{ organization.get_html_link|safe }}
+                    {{ organization.get_html_link }}
                 </li>
             {% empty %}
                 <li>No positions or memberships.</li>
@@ -70,7 +70,7 @@
         <h3>Location</h3>
         <p>
             {{ character.location }} in
-            {{ character.location.tile.get_html_link|safe }}
+            {{ character.location.tile.get_html_link }}
         </p>
         <iframe
                 id="tile_map"

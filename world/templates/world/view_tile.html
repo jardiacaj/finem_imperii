@@ -7,7 +7,7 @@
     <h1 class="page-header">
         {{ tile }}
         <small>
-            {{ tile.controlled_by.get_html_link|safe }}
+            {{ tile.controlled_by.get_html_link }}
         </small>
     </h1>
 
@@ -27,7 +27,7 @@
 
             {% for conquest in conquests %}
                 <p class="alert alert-danger text-center">
-                    {{ conquest.organization.get_html_link|safe }} is occupying this region.
+                    {{ conquest.organization.get_html_link }} is occupying this region.
                 </p>
             {% endfor %}
 
@@ -36,7 +36,7 @@
                 <div class="panel-heading"><h3 class="panel-title">Characters here</h3></div>
                 <div class="panel-body">
                     {% for character in characters.all %}
-                        {{ character.get_html_link|safe }} - {{ character.location }}<br>
+                        {{ character.get_html_link }} - {{ character.location }}<br>
                     {% empty %}
                         No one
                     {% endfor %}
@@ -51,9 +51,9 @@
                             <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
                             <b>{{ unit.descriptor }}</b>:
                             {% if unit.owner_character %}
-                                {{ unit.owner_character.get_html_link|safe }}
+                                {{ unit.owner_character.get_html_link }}
                             {% else %}
-                                {{ unit.get_violence_monopoly.get_html_link|safe }}
+                                {{ unit.get_violence_monopoly.get_html_link }}
                             {% endif %} -
                             <a href="{{ unit.get_absolute_url }}">{{ unit }}</a>
                             <br>

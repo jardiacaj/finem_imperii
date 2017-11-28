@@ -297,9 +297,7 @@ class RecruitmentView(View):
                     request, "You can't recruit that many soldiers."
                 )
 
-
             # get candidates
-
             try:
                 candidates = build_population_query_from_request(
                     request, prefix, request.hero.location

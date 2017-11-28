@@ -30,7 +30,7 @@
                 </p>
                 <p class="text-center">
                     You are in {{ request.hero.location }}, a {{ request.hero.location.size_name }} in
-                    {{ request.hero.location.tile.get_html_link|safe }}.
+                    {{ request.hero.location.tile.get_html_link }}.
                 </p>
                 <iframe
                         id="minimap"
@@ -40,9 +40,9 @@
                 ></iframe>
 
                 <p class="text-center">
-                    {{ request.hero.location.tile.get_html_link|safe }}
+                    {{ request.hero.location.tile.get_html_link }}
                     is controlled by
-                    {{ request.hero.location.tile.controlled_by.get_violence_monopoly.get_html_link|safe }}.
+                    {{ request.hero.location.tile.controlled_by.get_violence_monopoly.get_html_link }}.
                 </p>
 
                 {% for battle in request.hero.location.tile.get_current_battles %}
@@ -60,7 +60,7 @@
                     {% for organization in request.hero.organization_set.all %}
                         <li>
                             {% if not organization.is_position %}Member of{% endif %}
-                            {{ organization.get_html_link|safe }}
+                            {{ organization.get_html_link }}
                         </li>
                     {% endfor %}
                 </ul>

@@ -1,6 +1,6 @@
 <ul>
     {% for battle_organization in side.battleorganization_set.all %}
-        <li class="lead">{{ battle_organization.organization.get_html_link|safe }}</li>
+        <li class="lead">{{ battle_organization.organization.get_html_link }}</li>
 
         <ul>
             {% for battle_unit in battle_organization.battleunit_set.all %}
@@ -12,7 +12,7 @@
                     {{ battle_unit.world_unit.name }}
                     {% if battle_unit.owner %}
                         <ul><li>
-                            {{ battle_unit.owner.character.get_html_link|safe }}
+                            {{ battle_unit.owner.character.get_html_link }}
                         </li></ul>
                     {% endif %}
                 </li>

@@ -1,17 +1,17 @@
 {% if winners.count == 1 %}
     <p>
-        The elections to {{ election.position.get_html_link|safe }}
-        have been won by {{ winner.get_html_link|safe }}.
+        The elections to {{ election.position.get_html_link }}
+        have been won by {{ winner.get_html_link }}.
     </p>
 {% elif winners.count == 0 %}
     <p>
-        The elections to {{ election.position.get_html_link|safe }}
+        The elections to {{ election.position.get_html_link }}
         resulted in no valid voted. New elections will be convoked
         automatically.
     </p>
 {% else %}
     <p>
-        The elections to {{ election.position.get_html_link|safe }}
+        The elections to {{ election.position.get_html_link }}
         resulted in a tie. New elections will be convoked
         automatically.
     </p>

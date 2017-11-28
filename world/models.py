@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from django.db.models.aggregates import Avg
 from django.db.models.expressions import F
 from django.utils import timezone
+from django.utils.html import format_html
 
 from battle.models import BattleUnit, BattleSoldierInTurn, BattleCharacter
 from messaging import shortcuts
@@ -64,10 +65,10 @@ class World(models.Model):
         return turn_to_date(self.current_turn)
 
     def get_html_link(self):
-        return '<a href="{}">{}</a>'.format(
-            self.get_absolute_url(),
-            self.name
-        )
+        return format_html('<a href="{url}">{name}</a>',
+                           url=self.get_absolute_url(),
+                           name=self.name
+                           )
 
     def get_absolute_url(self):
         return reverse('world:world', kwargs={'world_id': self.id})
@@ -121,9 +122,10 @@ class Tile(models.Model):
         return reverse('world:tile', kwargs={'tile_id': self.id})
 
     def get_html_link(self):
-        return '<a href="{url}">{name}</a>'.format(
-            url=self.get_absolute_url(), name=self.name
-        )
+        return format_html('<a href="{url}">{name}</a>',
+                           url=self.get_absolute_url(),
+                           name=self.name
+                           )
 
     def get_absolute_coords(self):
         return Point(x=self.x_pos, z=self.z_pos)
@@ -699,13 +701,12 @@ class Character(models.Model):
             )
         if target_settlement.tile.distance_to(self.location.tile) > 1.5:
             return "You can only travel to contiguous regions."
-        if (self.travel_destination is not None
-            and self.travel_destination != target_settlement):
-            return "You cant travel to {} because you are already travelling" \
-                   " to {}.".format(
-                target_settlement,
-                self.travel_destination
-            )
+        if self.travel_destination is not None \
+                and self.travel_destination != target_settlement:
+            return "You cant travel to {} because you are already travelling to {}.".format(
+                    target_settlement,
+                    self.travel_destination
+                    )
         return None
 
     def perform_travel(self, destination):
@@ -758,11 +759,13 @@ class Character(models.Model):
         return result
 
     def get_html_link(self):
-        return '<a href="{}">{}</a>'.format(
-            self.get_absolute_url(), self.get_html_name()
-        )
+        return format_html('<a href="{url}">{name}</a>',
+                           url=self.get_absolute_url(),
+                           name=self.get_html_name()
+                           )
 
-    def total_carrying_capacity(self):
+    @staticmethod
+    def total_carrying_capacity():
         return 100
 
     def remaining_carrying_capacity(self):

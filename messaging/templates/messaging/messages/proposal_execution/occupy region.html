@@ -2,13 +2,13 @@
 
 <p>
     {% if action == 'stop' %}
-        {{ proposal.capability.applying_to.get_html_link|safe }}
+        {{ proposal.capability.applying_to.get_html_link }}
         stopped the conquest of
-        {{ tile_event.tile.get_html_link|safe }}.
+        {{ tile_event.tile.get_html_link }}.
     {% else %}
-        {{ proposal.capability.applying_to.get_html_link|safe }}
+        {{ proposal.capability.applying_to.get_html_link }}
         started conquering
-        {{ tile_event.tile.get_html_link|safe }}.
+        {{ tile_event.tile.get_html_link }}.
     {% endif %}
 </p>
 {% include 'messaging/messages/proposal_execution/vote_result.html' %}

@@ -6,7 +6,7 @@
 {% block content %}
 
     <h1 class="page-header">
-        {{ request.hero.get_html_name|safe }}
+        {{ request.hero.get_html_name }}
         <small>
             {{ request.hero.profile|capfirst }}
             <a href="{{ request.hero.get_absolute_url }}">
@@ -77,19 +77,19 @@
     <div class="col-md-4">
         {% for organization in request.hero.organization_set.all %}
             <p class="lead">
-                {{ organization.get_html_link|safe }}
+                {{ organization.get_html_link }}
             </p>
 
             {% if organization.current_election %}
                 <p>
                     <a href="{{ organization.current_election.get_absolute_url }}" class="btn btn-sm btn-primary button_margin">
-                        Election to {{ organization.get_html_name|safe }}
+                        Election to {{ organization.get_html_name }}
                     </a>
                 </p>
             {% endif %}
             {% for election in organization.current_elections_can_vote_in %}
                 <a href="{{ election.get_absolute_url }}" class="btn btn-sm btn-primary button_margin">
-                    Election to {{ election.applying_to.get_html_name|safe }}
+                    Election to {{ election.applying_to.get_html_name }}
                 </a>
             {% endfor %}
             {% for proposal in organization.get_open_proposals.all %}
@@ -104,7 +104,7 @@
                     <a href="{{ capability.get_absolute_url }}" class="btn btn-primary btn-sm button_margin">
                         {{ capability.get_type_display|capfirst }}
                         {% if capability.applying_to != organization %}
-                            in {{ capability.applying_to.get_html_name|safe }}
+                            in {{ capability.applying_to.get_html_name }}
                         {% endif %}
                     </a>
                 {% empty %}
@@ -122,8 +122,8 @@
             </p>
             <p>
                 In {{ unit.location }},
-                {{ unit.location.tile.get_html_link|safe }},
-                {{ unit.location.tile.controlled_by.get_html_link|safe }}
+                {{ unit.location.tile.get_html_link }},
+                {{ unit.location.tile.controlled_by.get_html_link }}
             </p>
             <p>
                 {{ unit.descriptor }}, {{ unit.status }}

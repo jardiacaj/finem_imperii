@@ -2,7 +2,7 @@
     <div class="panel-heading">
         <span class="lead">
             {% if recipient.message.sender %}
-                Message from {{ recipient.message.sender.get_html_link|safe }}
+                Message from {{ recipient.message.sender.get_html_link }}
             {% else %}
                 {{ recipient.message.get_category_display|capfirst }}
             {% endif %}

@@ -30,7 +30,7 @@
                         <h3 class="panel-title">
                             {{ candidacy.candidate }}
                             {% if candidacy.candidate == capability.applying_to.get_position_occupier %}
-                                - {{ capability.applying_to.get_html_link|safe }}
+                                - {{ capability.applying_to.get_html_link }}
                             {% endif %}
                             {% if candidacy.retired %}(candidate retired)
                             {% elif heros_vote.candidacy == candidacy %}(you voted this)

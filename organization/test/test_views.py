@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls.base import reverse
 
-from organization.models import Organization
+from organization.models.organization import Organization
 
 
 class TestViews(TestCase):
@@ -13,7 +13,7 @@ class TestViews(TestCase):
             {'username': 'alice', 'password': 'test'},
         )
         response = self.client.get(
-            reverse('world:activate_character', kwargs={'char_id': 1}),
+            reverse('character:activate', kwargs={'char_id': 1}),
             follow=True
         )
 

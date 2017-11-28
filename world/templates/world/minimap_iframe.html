@@ -19,9 +19,9 @@
 
     <div class="minimap_travel_button">
         {% if request.hero.travel_destination %}
-            <a href="{% url 'world:travel' %}" class="btn btn-default" target="_parent">Travelling to {{ request.hero.travel_destination }}</a>
+            <a href="{% url 'character:travel' %}" class="btn btn-default" target="_parent">Travelling to {{ request.hero.travel_destination }}</a>
         {% else %}
-            <a href="{% url 'world:travel' %}" class="btn {% if request.hero.can_travel %}btn-primary{% else %}btn-default{% endif %}" target="_parent">Travel</a>
+            <a href="{% url 'character:travel' %}" class="btn {% if request.hero.can_travel %}btn-primary{% else %}btn-default{% endif %}" target="_parent">Travel</a>
         {% endif %}
     </div>
 

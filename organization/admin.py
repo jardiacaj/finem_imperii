@@ -1,7 +1,13 @@
 from django.contrib import admin
 
-from organization.models import Organization, PositionElection, PositionCandidacy, PositionElectionVote, Capability, \
-    CapabilityProposal, CapabilityVote, PolicyDocument, OrganizationRelationship, MilitaryStance
+from organization.models.relationship import OrganizationRelationship, \
+    MilitaryStance
+from organization.models.document import PolicyDocument
+from organization.models.capability import Capability, CapabilityProposal, \
+    CapabilityVote
+from organization.models.election import PositionElection, PositionCandidacy, \
+    PositionElectionVote
+from organization.models.organization import Organization
 
 admin.site.register(PositionElection)
 admin.site.register(PositionCandidacy)

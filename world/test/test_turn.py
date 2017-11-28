@@ -2,14 +2,17 @@ from django.test import TestCase
 from django.urls.base import reverse
 
 from battle.models import Battle
-from organization.models import Organization
+from organization.models.organization import Organization
 from world.admin import pass_turn
 from world.initialization import initialize_unit, initialize_settlement
-from world.models import Tile, WorldUnit, World, TileEvent, Settlement
+from world.models.events import TileEvent
+from world.models.geography import Tile, World, Settlement
+from unit.models import WorldUnit
 from world.turn import organizations_with_battle_ready_units, \
     battle_ready_units_in_tile, \
     opponents_in_organization_list, get_largest_conflict_in_list, \
-    create_battle_from_conflict, TurnProcessor, do_settlement_barbarian_generation
+    create_battle_from_conflict, TurnProcessor, \
+    do_settlement_barbarian_generation
 
 
 class TestEmortuusTurn(TestCase):
@@ -106,7 +109,7 @@ class TestTurn(TestCase):
             {'username': 'alice', 'password': 'test'},
         )
         response = self.client.get(
-            reverse('world:activate_character', kwargs={'char_id': 3}),
+            reverse('character:activate', kwargs={'char_id': 3}),
             follow=True
         )
         self.assertRedirects(response, reverse('account:home'))

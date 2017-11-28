@@ -17,12 +17,12 @@
     <!-- cookie law -->
     <script src="{% static 'cookielaw/js/cookielaw.js' %}?{{ git_rev }}"></script>
 
-    {% include "base/navbar.html" %}
+    {% include "base/topnav.html" %}
 
     <div class="container-fluid">
         {% cookielaw_banner %}
 
-        {% if request.hero %}
+        {% if request.hero and not hide_sidebar %}
             <div class="col-xs-12 col-md-3 well">
                 <p class="text-center">
                     It's {{ request.hero.world.get_current_date }} in
@@ -73,8 +73,7 @@
                         {% for unit in request.hero.worldunit_set.all %}
                             <tr>
                                 <td>
-                                    <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
-                                    <a href="{{ unit.get_absolute_url }}">{{ unit }}</a>
+                                    {{ unit.get_html_link }}
                                     {% if unit.get_current_battle %}
                                         <a
                                                 href="{{ unit.get_current_battle.get_absolute_url }}"
@@ -83,8 +82,6 @@
                                     {% endif %}
                                 </td>
                                 <td>
-                                    {{ unit.descriptor }}
-                                    <br>
                                     {{ unit.status|capfirst }}
                                 </td>
                             </tr>
@@ -92,7 +89,7 @@
                             <tr><td class="text-center">You own no units.</td></tr>
                         {% endfor %}
                         <tr><td colspan="100%" class="text-center">
-                            <a href="{% url 'world:recruit' %}"
+                            <a href="{% url 'unit:recruit' %}"
                                class="btn {% if request.hero.can_conscript %}btn-primary{% else %}btn-default{% endif %} btn-sm">
                                 To recruitment
                             </a>
@@ -101,7 +98,7 @@
                 </table>
 
                 <span class="pull-right">
-                    <a href="{% url 'world:inventory' %}" class="btn btn-sm btn-primary">
+                    <a href="{% url 'character:inventory' %}" class="btn btn-sm btn-primary">
                         Manage
                     </a>
                 </span>
@@ -121,7 +118,7 @@
 
         {% block content %}{% endblock %}
 
-        {% if request.hero %}
+        {% if request.hero and not hide_sidebar %}
             </div>
         {% endif %}
     </div>
@@ -129,8 +126,7 @@
     <footer class="footer">
         <div class="container">
             <p class="text-muted">
-                Finem Imperii - {% include 'base/build.html' %}<br>
-                <a href="http://joanardiaca.net">Joan Ardiaca Jové</a>
+                <a href="{% url 'help:about' %}">Finem Imperii</a> - {% include 'base/build.html' %}
             </p>
         </div>
     </footer>

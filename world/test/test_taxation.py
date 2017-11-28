@@ -2,9 +2,10 @@ from unittest.case import skip
 
 from django.test import TestCase
 
-from organization.models import Organization
-from world.initialization import initialize_settlement
-from world.models import Building, Settlement, Character
+from organization.models.organization import Organization
+from character.models import Character
+from world.models.buildings import Building
+from world.models.geography import Settlement
 from world.turn import TurnProcessor
 
 

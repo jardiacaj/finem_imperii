@@ -1,8 +1,8 @@
 from django.test import TestCase
 from django.urls.base import reverse
 
-from organization.models import Capability
-from world.models import Settlement
+from organization.models.capability import Capability
+from world.models.geography import Settlement
 
 
 class TestGuildSetting(TestCase):
@@ -15,7 +15,7 @@ class TestGuildSetting(TestCase):
             {'username': 'alice', 'password': 'test'},
         )
         self.client.get(
-            reverse('world:activate_character', kwargs={'char_id': 7}),
+            reverse('character:activate', kwargs={'char_id': 7}),
             follow=True
         )
 

@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'base',
     'account',
     'world',
+    'unit',
+    'character',
     'battle',
     'organization',
     'messaging',

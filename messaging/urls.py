@@ -1,8 +1,13 @@
 from django.conf.urls import url
 
 from decorators import inchar_required
-from messaging.views import mark_all_read, messages_list, home, mark_read, mark_favourite, favourites_list, \
-    sent_list, add_contact, remove_contact, ComposeView, reply
+from messaging.views.compose import ComposeView
+from messaging.views.contacts import add_contact, remove_contact
+from messaging.views.markings import mark_all_read, mark_read, \
+    mark_favourite
+from messaging.views.message_lists import messages_list, home, \
+    favourites_list, sent_list
+from messaging.views.reply import reply
 
 urlpatterns = [
     url(r'^$', home, name='home'),

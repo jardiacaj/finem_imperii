@@ -1,9 +1,11 @@
 from django.test import TestCase
 
 import world.initialization
-from organization.models import Organization, PositionElection
+from organization.models.election import PositionElection
+from organization.models.organization import Organization
 from world.initialization import initialize_world
-from world.models import WorldUnit, Settlement, World
+from world.models.geography import Settlement, World
+from unit.models import WorldUnit
 
 
 class TestInitialization(TestCase):

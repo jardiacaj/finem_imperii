@@ -1,0 +1,84 @@
+/*
+Flaticon icon font: Flaticon
+Creation date: 22/12/2016 08:46
+*/
+
+@font-face {
+    font-family: "Flaticon";
+    src: url("./Flaticon.eot");
+    src: url("./Flaticon.eot?#iefix") format("embedded-opentype"),
+        url("./Flaticon.woff") format("woff"),
+        url("./Flaticon.ttf") format("truetype"),
+        url("./Flaticon.svg#Flaticon") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    @font-face {
+        font-family: "Flaticon";
+        src: url("./Flaticon.svg#Flaticon") format("svg");
+    }
+}
+
+[class^="flaticon-"]:before, [class*=" flaticon-"]:before,
+[class^="flaticon-"]:after, [class*=" flaticon-"]:after,
+[class^="unit-icon-"]:before, [class*=" unit-icon-"]:before,
+[class^="unit-icon-"]:after, [class*=" unit-icon-"]:after{
+    font-family: Flaticon;
+    font-style: normal;
+}
+
+.flaticon-alchemy:before { content: "\f100"; }
+.flaticon-alchemy-1:before { content: "\f101"; }
+.flaticon-archery:before { content: "\f102"; }
+.flaticon-axe:before { content: "\f103"; }
+.flaticon-axe-1:before { content: "\f104"; }
+.flaticon-axes:before { content: "\f105"; }
+.flaticon-bow-and-arrow:before { content: "\f106"; }
+.flaticon-caravel:before { content: "\f107"; }
+.flaticon-castle:before { content: "\f108"; }
+.flaticon-castle-1:before { content: "\f109"; }
+.flaticon-castle-2:before { content: "\f10a"; }
+.flaticon-castle-3:before { content: "\f10b"; }
+.flaticon-chest:before { content: "\f10c"; }
+.flaticon-crossbow:before { content: "\f10d"; }
+.flaticon-crown:before { content: "\f10e"; }
+.flaticon-crown-1:before { content: "\f10f"; }
+.flaticon-crown-2:before { content: "\f110"; }
+.flaticon-dagger:before { content: "\f111"; }
+.flaticon-excalibur:before { content: "\f112"; }
+.flaticon-fanfare:before { content: "\f113"; }
+.flaticon-fanfare-1:before { content: "\f114"; }
+.flaticon-flag:before { content: "\f115"; }
+.flaticon-goblet:before { content: "\f116"; }
+.flaticon-jewelry:before { content: "\f117"; }
+.flaticon-money-bag:before { content: "\f118"; }
+.flaticon-necklace:before { content: "\f119"; }
+.flaticon-poison:before { content: "\f11a"; }
+.flaticon-quiver:before { content: "\f11b"; }
+.flaticon-scroll:before { content: "\f11c"; }
+.flaticon-scroll-1:before { content: "\f11d"; }
+.flaticon-shield:before { content: "\f11e"; }
+.flaticon-shield-1:before { content: "\f11f"; }
+.flaticon-shield-2:before { content: "\f120"; }
+.flaticon-shield-3:before { content: "\f121"; }
+.flaticon-sign:before { content: "\f122"; }
+.flaticon-spellbook:before { content: "\f123"; }
+.flaticon-stained-glass-window:before { content: "\f124"; }
+.flaticon-standard:before { content: "\f125"; }
+.flaticon-standard-1:before { content: "\f126"; }
+.flaticon-standard-2:before { content: "\f127"; }
+.flaticon-sword:before { content: "\f128"; }
+.flaticon-sword-1:before { content: "\f129"; }
+.flaticon-swords:before { content: "\f12a"; }
+.flaticon-torch:before { content: "\f12b"; }
+.flaticon-tower:before { content: "\f12c"; }
+.flaticon-tower-1:before { content: "\f12d"; }
+.flaticon-tower-2:before { content: "\f12e"; }
+.flaticon-trebuchet:before { content: "\f12f"; }
+.flaticon-viking:before { content: "\f130"; }
+.flaticon-viking-ship:before { content: "\f131"; }
+
+.unit-icon-infantry:before { content: "\f128"; }
+.unit-icon-archers:before { content: "\f106"; }

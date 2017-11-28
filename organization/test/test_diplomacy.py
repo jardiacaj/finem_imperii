@@ -1,10 +1,9 @@
 from django.test import TestCase
 from django.urls.base import reverse
 
-from battle.models import BattleFormation, Order
-from organization.models import Capability, MilitaryStance, CapabilityProposal, \
-    Organization, OrganizationRelationship
-from world.models import World, Character, Tile, TileEvent, WorldUnit, Settlement
+from organization.models.relationship import OrganizationRelationship
+from organization.models.capability import Capability
+from organization.models.organization import Organization
 
 
 class TestDiplomacy(TestCase):
@@ -16,7 +15,7 @@ class TestDiplomacy(TestCase):
             {'username': 'alice', 'password': 'test'},
         )
         self.client.get(
-            reverse('world:activate_character', kwargs={'char_id': 1}),
+            reverse('character:activate', kwargs={'char_id': 1}),
             follow=True
         )
 
@@ -88,7 +87,7 @@ class TestDiplomacy(TestCase):
         self.assertEqual(relationship.desired_relationship, 'friendship')
 
         self.client.get(
-            reverse('world:activate_character', kwargs={'char_id': 7}),
+            reverse('character:activate', kwargs={'char_id': 7}),
             follow=True
         )
 
@@ -162,7 +161,7 @@ class TestDiplomacy(TestCase):
         self.assertEqual(relationship.desired_relationship, 'friendship')
 
         self.client.get(
-            reverse('world:activate_character', kwargs={'char_id': 7}),
+            reverse('character:activate', kwargs={'char_id': 7}),
             follow=True
         )
 

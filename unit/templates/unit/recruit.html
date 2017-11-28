@@ -1,0 +1,142 @@
+{% extends "base/base.html" %}
+
+{% load extra_filters %}
+
+{% block content %}
+
+    <h1 class="page-header">Recruitment</h1>
+
+    {% if not can_recruit %}
+        <div class="alert alert-danger">
+            <p>
+                You can't currently recruit an unit, either because you are not
+                allowed to recruit in your current location (are you in enemy
+                territory?) or because you are taking part in a battle.
+            </p>
+        </div>
+    {% endif %}
+
+    <p>
+        You may recruit up to {{ request.hero.max_soldiers }} soldiers in
+        up to {{ request.hero.max_units }} units.
+    </p>
+
+    <!--
+    <p>To form a new unit, you can choose different options.</p>
+    <ol>
+        <li>
+            You may <b>conscript</b> forces from the local population.
+            <ul>
+                <li>Pro: it's almost always possible and cheap to conscript units.</li>
+                <li>Con: conscripted units will probably lack proper training.</li>
+            </ul>
+        </li>
+        <li>
+            You may form a <b>professional unit</b> of soldiers.
+            <ul>
+                <li>Pro: properly trained and better willingness to fight.</li>
+                <li>Con: more expensive.</li>
+            </ul>
+        </li>
+        <li>
+            You may hire <b>mercenaries</b>.
+            <ul>
+                <li>Pro: mostly true battle-hardened fighters.</li>
+                <li>Con: most expensive, sporadic availability.</li>
+            </ul>
+        </li>
+    </ol>
+    -->
+
+    <div class="well">
+        <h4>Conscription</h4>
+
+        <p>Conscripting soldiers from {{ request.hero.location }}.</p>
+
+        <p>
+            This will take you
+            {{ request.hero.location.base_conscription_cost }} hours plus one
+            hour for each five soldiers to conscript.
+        </p>
+
+        <p>
+            It will cost you 1 silver coin per soldier.
+        </p>
+
+        <form class="form-horizontal" role="form" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="recruitment_type" value="conscription">
+
+            <div class="form-group">
+                <label for="count">Max soldier count (unit size)</label>
+                <input class="form-control" id="count" name="count" type="number" min="1">
+            </div>
+
+            <div class="form-group">
+                <label for="unit_type">Unit type</label>
+                <select class="form-control" id="unit_type" name="unit_type">
+                    <option value="infantry">Infantry</option>
+                    <option value="archers">Archers</option>
+                    {% comment %}
+                    {% for type in unit_types %}
+                        <option value="{{ type }}">{{ type|capfirst }}</option>
+                    {% endfor %}
+                    {% endcomment %}
+                </select>
+            </div>
+
+            <h4>Conscripts profile</h4>
+
+            <div class="form-group">
+                <h6>Gender</h6>
+                <input type="checkbox" name="men" id="men" checked="checked">
+                <label for="men">Men</label>
+                <br>
+                <input type="checkbox" name="women" id="women">
+                <label for="women">Women</label>
+            </div>
+
+            <div class="form-group">
+                <h6>Training</h6>
+                <input type="checkbox" name="trained" id="trained" checked="checked">
+                <label for="trained">Trained</label>
+                <br>
+                <input type="checkbox" name="untrained" id="untrained" checked="checked">
+                <label for="untrained">Untrained</label>
+            </div>
+
+            <div class="form-group">
+                <h6>Ability</h6>
+                <input type="checkbox" name="skill_high" id="skill_high" checked="checked">
+                <label for="skill_high">High skill</label>
+                <br>
+                <input type="checkbox" name="skill_medium" id="skill_medium" checked="checked">
+                <label for="skill_medium">Average skill</label>
+                <br>
+                <input type="checkbox" name="skill_low" id="skill_low" checked="checked">
+                <label for="skill_low">Low skill</label>
+            </div>
+
+            <div class="form-group">
+                <h6>Age</h6>
+                <input type="checkbox" name="age_old" id="age_old">
+                <label for="age_old">Old age</label>
+                <br>
+                <input type="checkbox" name="age_middle" id="age_middle" checked="checked">
+                <label for="age_middle">Middle age</label>
+                <br>
+                <input type="checkbox" name="age_young" id="age_young" checked="checked">
+                <label for="age_young">Young age</label>
+                <br>
+                <input type="checkbox" name="age_very_young" id="age_very_young">
+                <label for="age_very_young">Very young age</label>
+            </div>
+
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary">Conscript</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+

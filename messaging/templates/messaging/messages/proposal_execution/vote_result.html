@@ -1,7 +1,7 @@
 {% if proposal.democratic %}
     <p>
         This was a proposal by
-        {{ proposal.proposing_character.get_html_link|safe }}
+        {{ proposal.proposing_character.get_html_link }}
         which received {{ proposal.votes_yea.count }} positive,
         {{ proposal.votes_nay.count }} negative and
         {{ proposal.votes_invalid.count }} invalid votes.

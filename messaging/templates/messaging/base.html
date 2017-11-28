@@ -26,6 +26,17 @@
         </li>
     </ul>
 
+    {% if tab == 'new' %}
+        <div>
+            <br>
+            <p class="text-center">
+                <a
+                        class="btn btn-primary"
+                        href="{% url 'messaging:mark_all_read'%}">Mark all as read</a>
+            </p>
+        </div>
+    {% endif %}
+
     {% block messaging_content %}
     {% endblock %}
 

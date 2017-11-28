@@ -5,9 +5,12 @@ from battle.battle_init import initialize_from_conflict, start_battle
 from battle.battle_tick import battle_tick
 from battle.models import Battle, BattleCharacter, BattleUnit, BattleContubernium, BattleSoldier, BattleOrganization, \
     BattleContuberniumInTurn, BattleSoldierInTurn, BattleUnitInTurn, Order
-from organization.models import Organization, MilitaryStance
+from organization.models.relationship import MilitaryStance
+from organization.models.organization import Organization
 from world.initialization import initialize_unit, initialize_settlement
-from world.models import Tile, WorldUnit, NPC, Settlement, World
+from unit.models import WorldUnit
+from world.models.geography import Tile, World, Settlement
+from world.models.npcs import NPC
 from world.turn import trigger_battles_in_tile, TurnProcessor, \
     generate_barbarian_unit, battle_joins
 
@@ -52,7 +55,7 @@ class TestBattleStart(TestCase):
             {'username': 'alice', 'password': 'test'},
         )
         self.client.get(
-            reverse('world:activate_character', kwargs={'char_id': 5}),
+            reverse('character:activate', kwargs={'char_id': 5}),
             follow=True
         )
         initialize_unit(WorldUnit.objects.get(id=1))
@@ -225,7 +228,7 @@ class TestBattleStartWithAllies(TestCase):
             {'username': 'alice', 'password': 'test'},
         )
         self.client.get(
-            reverse('world:activate_character', kwargs={'char_id': 5}),
+            reverse('character:activate', kwargs={'char_id': 5}),
             follow=True
         )
         self.tile = Tile.objects.get(id=108)

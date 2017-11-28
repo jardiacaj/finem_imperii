@@ -3,11 +3,11 @@ import random
 
 from django.db import transaction
 
+import world.models.npcs
+import world.models.buildings
 from finem_imperii.random import WeightedChoice, weighted_choice
 from name_generator.name_generator import generate_name
-from organization.models import Organization
-from world.models import Building, NPC
-from world.turn import do_settlement_barbarian_generation
+from world.models.npcs import NPC
 
 
 class AlreadyInitializedException(Exception):
@@ -41,10 +41,17 @@ def initialize_tile(tile):
 
 def initialize_settlement(settlement):
     logging.info("Initializing settlement {}".format(settlement))
-    residences = settlement.building_set.filter(type=Building.RESIDENCE).all()
-    fields = settlement.building_set.filter(type=Building.GRAIN_FIELD).all()
+    residences = settlement.building_set.filter(
+        type=world.models.buildings.Building.RESIDENCE).all()
+    fields = settlement.building_set.filter(
+        type=world.models.buildings.Building.GRAIN_FIELD).all()
     total_field_workplaces = sum(field.max_workers() for field in fields)
-    other_workplaces = settlement.building_set.exclude(type__in=(Building.RESIDENCE, Building.GRAIN_FIELD)).all()
+    other_workplaces = settlement.building_set.exclude(
+        type__in=(
+            world.models.buildings.Building.RESIDENCE,
+            world.models.buildings.Building.GRAIN_FIELD
+        )
+    ).all()
     total_other_workplaces = sum(j.max_workers() for j in other_workplaces)
 
     settlement.population = settlement.population_default
@@ -56,7 +63,9 @@ def initialize_settlement(settlement):
         npc = generate_npc(i, residences, settlement)
         npc.save()
 
-    settlement.building_set.filter(type=Building.GRAIN_FIELD).update(
+    settlement.building_set.filter(
+        type=world.models.buildings.Building.GRAIN_FIELD
+    ).update(
         field_production_counter=1500
     )
 
@@ -86,7 +95,7 @@ def generate_npc(i, residences, settlement):
         workplace=None,
         unit=None,
         trained_soldier=(random.getrandbits(
-            4) == 0) if age_months >= NPC.VERY_YOUNG_AGE_LIMIT else False,
+            4) == 0) if age_months >= world.models.npcs.NPC.VERY_YOUNG_AGE_LIMIT else False,
         skill_fighting=random.randint(0, 80)
     )
     return npc
@@ -94,7 +103,7 @@ def generate_npc(i, residences, settlement):
 
 def initialize_unit(unit):
     for i in range(unit.generation_size):
-        NPC.objects.create(
+        world.models.npcs.NPC.objects.create(
             name="Soldier {} of {}".format(i, unit),
             male=random.getrandbits(1),
             able=True,

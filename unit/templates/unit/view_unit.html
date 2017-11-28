@@ -1,0 +1,352 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+
+    <h1 class="page-header">
+        {% if unit.get_current_battle %}
+            <a href="{{ unit.get_current_battle.get_absolute_url }}" class="btn btn-danger">In battle</a>
+        {% endif %}
+        {{ unit.get_long_html_descriptor }}
+    </h1>
+
+    <div class="row">
+        <div class="col-sm-9">
+            <table class="table table-striped table-hover">
+                <tbody>
+                    <tr>
+                        <td>Name</td>
+                        <td>
+                            {% if unit.owner_character == request.hero %}
+                                <form class="form-inline" role="form" method="post" action="{% url 'unit:rename' unit.id %}">
+                                    {% csrf_token %}
+                                    <input
+                                            class="form-control form-control"
+                                            type="text"
+                                            value="{{ unit.name }}"
+                                            maxlength="100"
+                                            name="name"
+                                    >
+                                    <button type="submit" class="btn btn-primary btn-sm">Rename</button>
+                                </form>
+                            {% else %}
+                                {{ unit.name }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Owner</td>
+                        <td>
+                            {% if unit.owner_character %}
+                                {{ unit.owner_character.get_html_link }}
+                            {% else %}
+                                {{ unit.get_violence_monopoly.get_html_link }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Soldiers</td>
+                        <td>
+                            {{ unit.soldier.all|length }}
+                            {{ unit.get_type_display|capfirst }}
+                            ({{ unit.get_recruitment_type_display }})
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Status</td>
+                        <td>
+                            {% if unit.owner_character == request.hero %}
+                                <form class="form-inline" role="form" method="post" action="{% url 'unit:status_change' unit.id 'not mobilized' %}" style="display: inline">
+                                    {% csrf_token %}
+                                    <button
+                                        type="submit"
+                                        class="btn btn-sm
+                                        {% if unit.status == 'not mobilized' %}disabled btn-success
+                                        {% elif unit.get_current_battle %}disabled btn-default
+                                        {% else %}btn-default
+                                        {% endif %}">
+                                        Not mobilized
+                                    </button>
+                                </form>
+                                <form class="form-inline" role="form" method="post" action="{% url 'unit:status_change' unit.id 'standing' %}" style="display: inline">
+                                    {% csrf_token %}
+                                    <button
+                                        type="submit"
+                                        class="btn btn-sm
+                                        {% if unit.status == 'standing' %}disabled btn-success
+                                        {% elif unit.get_current_battle %}disabled btn-default
+                                        {% else %}btn-default
+                                        {% endif %}">
+                                        Standing
+                                    </button>
+                                </form>
+                                <form class="form-inline" role="form" method="post" action="{% url 'unit:status_change' unit.id 'following' %}" style="display: inline">
+                                    {% csrf_token %}
+                                    <button
+                                        type="submit"
+                                        class="btn btn-sm
+                                        {% if unit.status == 'following' %}disabled btn-success
+                                        {% elif unit.get_current_battle %}disabled btn-default
+                                        {% else %}btn-default
+                                        {% endif %}">
+                                        Following
+                                    </button>
+                                </form>
+
+                                {% if unit.get_current_battle %}
+                                    Can't change status when in a battle
+                                {% endif %}
+                            {% else %}
+                                {{ unit.get_status_display|capfirst }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Location</td>
+                        <td>
+                            {{ unit.location }} ({{ unit.location.tile.get_html_link }},
+                            {{ unit.location.tile.controlled_by.get_html_link }}
+                            )
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Origin</td>
+                        <td>
+                            {{ unit.origin }} ({{ unit.origin.tile.get_html_link }},
+                            {{ unit.origin.tile.controlled_by.get_html_link }}
+                            )
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Average skill</td>
+                        <td>{{ unit.average_fighting_skill }}%</td>
+                    </tr>
+                    {% if unit.owner_character == request.hero %}
+                        <tr>
+                            <td>Battle settings</td>
+                            <td>
+                                <form class="form-inline" role="form" method="post" action="{% url 'unit:battle_settings' unit.id %}">
+                                    {% csrf_token %}
+                                    <select class="form-control" name="battle_line" id="battle_line">
+                                        <option value="0" {% if unit.battle_line == 0 %}selected{% endif %}>Advanced line</option>
+                                        <option value="1" {% if unit.battle_line == 1 %}selected{% endif %}>Front line</option>
+                                        <option value="2" {% if unit.battle_line == 2 %}selected{% endif %}>Middle line</option>
+                                        <option value="3" {% if unit.battle_line == 3 %}selected{% endif %}>Rear line</option>
+                                        <option value="4" {% if unit.battle_line == 4 %}selected{% endif %}>Rearguard</option>
+                                    </select>
+                                    <select class="form-control" name="battle_side_pos" id="battle_side_pos">
+                                        <option value="-5" {% if unit.battle_side_pos == -5 %}selected{% endif %}>Flanking far left</option>
+                                        <option value="-4" {% if unit.battle_side_pos == -4 %}selected{% endif %}>Flanking left</option>
+                                        <option value="-3" {% if unit.battle_side_pos == -3 %}selected{% endif %}>Cover left flank</option>
+                                        <option value="-2" {% if unit.battle_side_pos == -2 %}selected{% endif %}>Left side</option>
+                                        <option value="-1" {% if unit.battle_side_pos == -1 %}selected{% endif %}>Left-center</option>
+                                        <option value="0" {% if unit.battle_side_pos == 0 %}selected{% endif %}>Center</option>
+                                        <option value="1" {% if unit.battle_side_pos == 1 %}selected{% endif %}>Right-center</option>
+                                        <option value="2" {% if unit.battle_side_pos == 2 %}selected{% endif %}>Right side</option>
+                                        <option value="3" {% if unit.battle_side_pos == 3 %}selected{% endif %}>Cover right flank</option>
+                                        <option value="4" {% if unit.battle_side_pos == 4 %}selected{% endif %}>Flanking right</option>
+                                        <option value="5" {% if unit.battle_side_pos == 5 %}selected{% endif %}>Flanking far right</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-primary btn-sm">Save</button>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Battle orders</td>
+                            <td>
+                                <form class="form-inline" role="form" method="post" action="{% url 'unit:battle_orders' unit.id %}">
+                                    {% csrf_token %}
+                                    <select class="form-control" name="battle_orders" id="battle_orders">
+                                        <option value="charge" {% if unit.default_battle_orders.what == "charge" %}selected{% endif %}>Charge</option>
+                                        <option value="formation" {% if unit.default_battle_orders.what == "formation" %}selected{% endif %}>Advance in formation</option>
+                                        <option value="stand" {% if unit.default_battle_orders.what == "stand" %}selected{% endif %}>Keep ground</option>
+                                        <option value="flee" {% if unit.default_battle_orders.what == "flee" %}selected{% endif %}>Flee</option>
+                                        <option value="ranged and charge" {% if unit.default_battle_orders.what == "ranged and charge" %}selected{% endif %}>Ranged attack, then charge</option>
+                                        <option value="ranged and flee" {% if unit.default_battle_orders.what == "ranged and flee" %}selected{% endif %}>Ranged attack, then flee</option>
+                                        <option value="ranged and stand" {% if unit.default_battle_orders.what == "ranged and stand" %}selected{% endif %}>Ranged attack, then stand</option>
+                                        <option value="stand and keep distance" {% if unit.default_battle_orders.what == "stand and keep distance" %}selected{% endif %}>Stand and keep distance</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-primary btn-sm">Save</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-sm-3">
+            {% if unit.owner_character == request.hero %}
+                <h4>Actions</h4>
+                <p>
+                    <form class="form-inline" role="form" method="post" action="{% url 'unit:disband' unit.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">
+                            Disband
+                        </button>
+                    </form>
+                </p>
+
+                {% if unit.status != 'not mobilized' and unit.location == request.hero.location %}
+                    {% for conquest in conquests %}
+                        <div class="well text-center">
+                            <p>
+                                Conquest of {{ conquest.tile }} by {{ conquest.organization.get_html_link }}
+                            </p>
+                            <form class="form-inline" role="form" method="post" action="{% url 'unit:conquest_action' unit.id %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="conqueror_id" value="{{ conquest.organization_id }}">
+                                <input
+                                        class="form-control"
+                                        name="hours"
+                                        type="number"
+                                        min="1"
+                                        placeholder="hours, max {{ request.hero.hours_in_turn_left }}"
+                                        required="required"
+                                >
+                                <button
+                                        name="action"
+                                        value="support"
+                                        type="submit"
+                                        class="btn btn-primary btn-sm"
+                                        onclick="return confirm('Are you sure?')"
+                                >
+                                    Support
+                                </button>
+                                <button
+                                        name="action"
+                                        value="counter"
+                                        type="submit"
+                                        class="btn btn-primary btn-sm"
+                                        onclick="return confirm('Are you sure?')"
+                                >
+                                    Counter
+                                </button>
+                            </form>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="panel-title">Gender</h3></div>
+            <div class="panel-body">
+                <canvas id="gender_chart"></canvas>
+                <script>
+                    var ctx = $('#gender_chart');
+                    var data = {
+                        labels: [
+                            {% for key,value in unit.soldier.gender_distribution.items %}
+                                "{{ key|capfirst }}",
+                            {% endfor %}
+                        ],
+                        datasets: [
+                            {
+                                data: [
+                                    {% for key,value in unit.soldier.gender_distribution.items %}
+                                        {{ value }},
+                                    {% endfor %}
+                                ],
+                                backgroundColor: ["#3b3b3b", "#6e6e6e", ],
+                                hoverBackgroundColor: ["#3b3b3b",  "#6e6e6e", ]
+                            }]
+                    };
+                    var my_gender_chart = new Chart(ctx,{type: 'pie', data: data, options: {}});
+                </script>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="panel-title">Skill level</h3></div>
+            <div class="panel-body">
+                <canvas id="skill_chart"></canvas>
+                <script>
+                    var ctx = $('#skill_chart');
+                    var data = {
+                        labels: [
+                            {% for key,value in unit.soldier.skill_distribution.items %}
+                                "{{ key|capfirst }}",
+                            {% endfor %}
+                        ],
+                        datasets: [
+                            {
+                                data: [
+                                    {% for key,value in unit.soldier.skill_distribution.items %}
+                                        {{ value }},
+                                    {% endfor %}
+                                ],
+                                backgroundColor: ["#405840", "#595e2e", "#703b41"],
+                                hoverBackgroundColor: ["#405840", "#595e2e", "#703b41"],
+                            }]
+                    };
+                    var my_skill_chart = new Chart(ctx,{type: 'pie', data: data, options: {}});
+                </script>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="panel-title">Age</h3></div>
+            <div class="panel-body">
+                <canvas id="age_chart"></canvas>
+                <script>
+                    var ctx = $('#age_chart');
+                    var data = {
+                        labels: [
+                            {% for key,value in unit.soldier.age_distribution.items %}
+                                "{{ key|capfirst }}",
+                            {% endfor %}
+                        ],
+                        datasets: [
+                            {
+                                data: [
+                                    {% for key,value in unit.soldier.age_distribution.items %}
+                                        {{ value }},
+                                    {% endfor %}
+                                ],
+                                backgroundColor: ["#57292b", "#595e2e", "#282d59", "#405840", "#703b41"],
+                                hoverBackgroundColor: ["#57292b", "#595e2e", "#282d59", "#405840", "#703b41"],
+                            }]
+                    };
+                    var my_age_chart = new Chart(ctx,{type: 'pie', data: data, options: {}});
+                </script>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="panel-title">Professionality</h3></div>
+            <div class="panel-body">
+                <canvas id="professionality_chart"></canvas>
+                <script>
+                    var ctx = $('#professionality_chart');
+                    var data = {
+                        labels: [
+                            {% for key,value in unit.soldier.professionality_distribution.items %}
+                                "{{ key|capfirst }}",
+                            {% endfor %}
+                        ],
+                        datasets: [
+                            {
+                                data: [
+                                    {% for key,value in unit.soldier.professionality_distribution.items %}
+                                        {{ value }},
+                                    {% endfor %}
+                                ],
+                                backgroundColor: ["#3b3b3b", "#6e6e6e", ],
+                                hoverBackgroundColor: ["#3b3b3b", "#6e6e6e", ]
+                            }]
+                    };
+                    var my_professionality_chart = new Chart(ctx,{type: 'pie', data: data, options: {}});
+                </script>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

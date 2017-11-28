@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls.base import reverse
 
 from battle.models import BattleFormation
-from organization.models import Capability, CapabilityProposal
+from organization.models.capability import Capability, CapabilityProposal
 
 
 class TestBattleFormation(TestCase):
@@ -14,7 +14,7 @@ class TestBattleFormation(TestCase):
             {'username': 'alice', 'password': 'test'},
         )
         self.client.get(
-            reverse('world:activate_character', kwargs={'char_id': 1}),
+            reverse('character:activate', kwargs={'char_id': 1}),
             follow=True
         )
 
@@ -64,7 +64,7 @@ class TestBattleFormation(TestCase):
 
     def test_proposal_view(self):
         self.client.get(
-            reverse('world:activate_character', kwargs={'char_id': 4}),
+            reverse('character:activate', kwargs={'char_id': 4}),
             follow=True
         )
 

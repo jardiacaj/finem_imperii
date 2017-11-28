@@ -8,9 +8,10 @@ from battle.battle_tick import battle_tick, optimistic_move_desire_formulation, 
     safe_move, euclidean_distance
 from battle.models import Battle, BattleUnit, \
     BattleContuberniumInTurn, BattleUnitInTurn, Order, Coordinates
-from organization.models import Organization
+from organization.models.organization import Organization
 from world.initialization import initialize_unit
-from world.models import Tile, WorldUnit
+from world.models.geography import Tile
+from unit.models import WorldUnit
 from world.turn import trigger_battles_in_tile
 
 
@@ -32,7 +33,7 @@ class TestBattleMovement(TestCase):
             {'username': 'alice', 'password': 'test'},
         )
         self.client.get(
-            reverse('world:activate_character', kwargs={'char_id': 5}),
+            reverse('character:activate', kwargs={'char_id': 5}),
             follow=True
         )
         initialize_unit(WorldUnit.objects.get(id=1))

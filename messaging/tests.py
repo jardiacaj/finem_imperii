@@ -4,8 +4,8 @@ from django.test import TestCase
 from django.urls.base import reverse
 
 from messaging.models import CharacterMessage, MessageRecipientGroup, MessageRecipient, MessageRelationship
-from organization.models import Organization
-from world.models import Character
+from organization.models.organization import Organization
+from character.models import Character
 
 
 class TestMessageModel(TestCase):
@@ -55,13 +55,13 @@ class TestCompose(TestCase):
         user = auth.get_user(self.client)
         self.assertEqual(User.objects.get(id=1), user)
         response = self.client.get(
-            reverse('world:activate_character', kwargs={'char_id': 1}),
+            reverse('character:activate', kwargs={'char_id': 1}),
             follow=True
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.redirect_chain), 1)
         self.assertEqual(response.redirect_chain[0][1], 302)
-        self.assertEqual(response.redirect_chain[0][0], reverse('world:character_home'))
+        self.assertEqual(response.redirect_chain[0][0], reverse('character:character_home'))
 
     def test_compose_view(self):
         response = self.client.get(reverse('messaging:compose'))
@@ -84,9 +84,6 @@ class TestCompose(TestCase):
             follow=True
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.redirect_chain), 1)
-        self.assertEqual(response.redirect_chain[0][1], 302)
-        self.assertEqual(response.redirect_chain[0][0], reverse('messaging:compose'))
         self.assertEqual(CharacterMessage.objects.all().count(), 0)
 
     def test_send_too_long_message(self):
@@ -394,7 +391,7 @@ class TestCompose(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.redirect_chain), 1)
         self.assertEqual(response.redirect_chain[0][1], 302)
-        self.assertEqual(response.redirect_chain[0][0], reverse('world:character_home'))
+        self.assertEqual(response.redirect_chain[0][0], reverse('character:character_home'))
         self.assertTrue(MessageRecipient.objects.filter(character_id=1, group=None, read=True).exists())
         self.assertFalse(MessageRecipient.objects.filter(character_id=1, group=None, read=False).exists())
 
@@ -513,7 +510,7 @@ class TestCompose(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.redirect_chain), 1)
         self.assertEqual(response.redirect_chain[0][1], 302)
-        self.assertEqual(response.redirect_chain[0][0], reverse('world:character_home'))
+        self.assertEqual(response.redirect_chain[0][0], reverse('character:character_home'))
         self.assertTrue(MessageRelationship.objects.filter(from_character_id=1, to_character=target_character).exists())
 
         response = self.client.get(reverse('messaging:compose'))
@@ -526,7 +523,7 @@ class TestCompose(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.redirect_chain), 1)
         self.assertEqual(response.redirect_chain[0][1], 302)
-        self.assertEqual(response.redirect_chain[0][0], reverse('world:character_home'))
+        self.assertEqual(response.redirect_chain[0][0], reverse('character:character_home'))
         self.assertTrue(MessageRelationship.objects.filter(from_character_id=1, to_character=target_character).exists())
 
         response = self.client.get(reverse('messaging:compose'))
@@ -539,7 +536,7 @@ class TestCompose(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.redirect_chain), 1)
         self.assertEqual(response.redirect_chain[0][1], 302)
-        self.assertEqual(response.redirect_chain[0][0], reverse('world:character_home'))
+        self.assertEqual(response.redirect_chain[0][0], reverse('character:character_home'))
         self.assertFalse(MessageRelationship.objects.filter(from_character_id=1, to_character=target_character).exists())
 
         response = self.client.get(reverse('messaging:compose'))
@@ -552,7 +549,7 @@ class TestCompose(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.redirect_chain), 1)
         self.assertEqual(response.redirect_chain[0][1], 302)
-        self.assertEqual(response.redirect_chain[0][0], reverse('world:character_home'))
+        self.assertEqual(response.redirect_chain[0][0], reverse('character:character_home'))
         self.assertFalse(MessageRelationship.objects.filter(from_character_id=1, to_character=target_character).exists())
 
         response = self.client.get(reverse('messaging:compose'))

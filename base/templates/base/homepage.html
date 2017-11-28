@@ -46,7 +46,7 @@
         <h3>News</h3>
         {% for message in server_messages %}
             <h4>{{ message.title }}</h4>
-            {{ message.html_content|safe }}
+            {{ message.html_content }}
         {% endfor %}
     </div>
 {% endblock %}

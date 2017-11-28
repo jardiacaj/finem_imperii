@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls.base import reverse
 
-from organization.models import Capability
+from organization.models.capability import Capability
 
 
 class TestCapabilities(TestCase):
@@ -13,7 +13,7 @@ class TestCapabilities(TestCase):
             {'username': 'alice', 'password': 'test'},
         )
         self.client.get(
-            reverse('world:activate_character', kwargs={'char_id': 1}),
+            reverse('character:activate', kwargs={'char_id': 1}),
             follow=True
         )
 
@@ -25,7 +25,7 @@ class TestCapabilities(TestCase):
         )
 
         response = self.client.get(capability.get_absolute_url())
-        self.assertRedirects(response, reverse('world:character_home'))
+        self.assertRedirects(response, reverse('character:character_home'))
 
     def test_disallowed_capability_post(self):
         capability = Capability.objects.get(
@@ -35,4 +35,4 @@ class TestCapabilities(TestCase):
         )
 
         response = self.client.post(capability.get_absolute_url())
-        self.assertRedirects(response, reverse('world:character_home'))
+        self.assertRedirects(response, reverse('character:character_home'))

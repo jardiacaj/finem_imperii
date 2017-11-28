@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 
-from world.models import Character
+from character.models import Character
 
 
 def can_create_character(user: User) -> bool:

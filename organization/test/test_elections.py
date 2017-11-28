@@ -1,8 +1,11 @@
 from django.test import TestCase
 from django.urls.base import reverse
 
-from organization.models import Capability, CapabilityProposal, Organization, \
-    PositionElection, PositionCandidacy, CapabilityVote, PositionElectionVote
+from organization.models.capability import Capability, CapabilityProposal, \
+    CapabilityVote
+from organization.models.election import PositionElection, PositionCandidacy, \
+    PositionElectionVote
+from organization.models.organization import Organization
 
 
 class TestElections(TestCase):
@@ -38,7 +41,7 @@ class TestElections(TestCase):
 
     def log_in_as(self, char_id):
         self.client.get(
-            reverse('world:activate_character', kwargs={'char_id': char_id}),
+            reverse('character:activate', kwargs={'char_id': char_id}),
             follow=True
         )
 

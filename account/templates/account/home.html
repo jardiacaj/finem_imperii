@@ -16,7 +16,7 @@
         {% endif %}
         {% for message in server_messages %}
             <h3>{{ message.title }}</h3>
-            {{ message.get_html_content }}
+            {{ message.html_content|safe }}
         {% empty %}
             <p>None configured.</p>
         {% endfor %}
@@ -29,7 +29,7 @@
                 {% for character in user.character_set.all %}
                     <tr>
                         <td style="vertical-align: middle">
-                            {{ character.get_html_name }}
+                            {{ character.get_html_name|safe }}
                             {% if character.unread_messages.exists %}
                                 <span class="badge">
                                     <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>

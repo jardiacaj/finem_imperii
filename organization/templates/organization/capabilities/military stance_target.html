@@ -1,9 +1,9 @@
 <h3>
-    Military stance of {{ capability.applying_to.get_html_link }} to {{ target_organization.get_html_link }}
+    Military stance of {{ capability.applying_to.get_html_link|safe }} to {{ target_organization.get_html_link|safe }}
 </h3>
 
 <div class="col-md-6">
-    <h4>General military stance: {{ stance.get_html_stance }}</h4>
+    <h4>General military stance: {{ stance.get_html_stance|safe }}</h4>
     <p>
         {% if stance.stance_type == 'default' %}
             Automatic (set by diplomatic relationship)
@@ -51,7 +51,7 @@
                 {% if region.stance.stance_type == 'default' %}
                     default
                 {% else %}
-                    {{ region.stance.get_html_stance }}
+                    {{ region.stance.get_html_stance|safe }}
                 {% endif %}
             </p>
 

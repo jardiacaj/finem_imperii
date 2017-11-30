@@ -1,16 +1,16 @@
 <ul>
     {% for battle_organization in side.battleorganization_set.all %}
-        <li class="lead">{{ battle_organization.organization.get_html_link }}</li>
+        <li class="lead">{{ battle_organization.organization.get_html_link|safe }}</li>
 
         <ul>
             {% for battle_unit in battle_organization.battleunit_set.all %}
 
                 <li>
                     ({{ battle_unit.starting_manpower }})
-                    {{ battle_unit.world_unit.get_html_link }}
+                    {{ battle_unit.world_unit.get_html_link|safe }}
 
                     {% if battle_unit.owner %}
-                        ({{ battle_unit.owner.character.get_html_link }})
+                        ({{ battle_unit.owner.character.get_html_link|safe }})
                     {% endif %}
                 </li>
 

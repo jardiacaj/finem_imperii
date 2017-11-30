@@ -4,7 +4,7 @@
 
 {% block content %}
 
-    <h1 class="page-header">Election to {{ election.position.get_html_link }}</h1>
+    <h1 class="page-header">Election to {{ election.position.get_html_link|safe }}</h1>
 
     <div class="row">
         <div class="col-md-6 col-md-offset-3">

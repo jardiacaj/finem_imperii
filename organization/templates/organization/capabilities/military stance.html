@@ -1,6 +1,6 @@
 <p>
     You have been assigned the responsibility of deciding the military stance of
-    {{ capability.applying_to.get_html_link }} against other realms.
+    {{ capability.applying_to.get_html_link|safe }} against other realms.
 </p>
 
 <h4>Military stances</h4>
@@ -17,7 +17,7 @@
     <tbody>
         {% for state in states %}
             <tr>
-                <td>{{ state.get_html_link }}</td>
+                <td>{{ state.get_html_link|safe }}</td>
                 <td>
                     {{ state.default_stance.get_stance|capfirst }}
                     {% if state.default_stance.stance_type == 'default' %}

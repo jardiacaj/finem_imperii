@@ -3,22 +3,22 @@
 {% block content %}
 
     <h1 class="page-header">
-        {{ organization.get_html_name }}
+        {{ organization.get_html_name|safe }}
     </h1>
 
     <div class="row">
         <div class="col-md-6">
             <p>{{ organization.description }}</p>
             {% if organization.heir_first %}
-                <p>First heir: {{ organization.heir_first.get_html_link }}</p>
+                <p>First heir: {{ organization.heir_first.get_html_link|safe }}</p>
             {% endif %}
             {% if organization.heir_second %}
-                <p>Second heir: {{ organization.heir_second.get_html_link }}</p>
+                <p>Second heir: {{ organization.heir_second.get_html_link|safe }}</p>
             {% endif %}
         </div>
         <div class="col-md-6 lead">
             {% if organization.get_position_occupier %}
-                {{ organization.get_position_occupier.get_html_link }}<br>
+                {{ organization.get_position_occupier.get_html_link|safe }}<br>
             {% endif %}
             {{ organization.name }}
             {% if organization.violence_monopoly and not organization.barbaric %}
@@ -28,22 +28,22 @@
                 <br><b>Barbaric <span class="glyphicon glyphicon-fire" aria-hidden="true"></span></b>
             {% endif %}
             {% if organization.owner %}
-                <br>Owned by {{ organization.owner.get_html_link }}
+                <br>Owned by {{ organization.owner.get_html_link|safe }}
             {% endif %}
             {% if organization.leader %}
-                <br>Lead by {{ organization.leader.get_html_link }}
+                <br>Lead by {{ organization.leader.get_html_link|safe }}
             {% endif %}
             {% if organization.leaded_organizations.all %}
                 <br>Leader of
                 {% for leaded_orga in organization.leaded_organizations.all %}
-                    {{ leaded_orga.get_html_link }}
+                    {{ leaded_orga.get_html_link|safe }}
                     {% if not forloop.last %},{% endif %}
                 {% endfor %}
             {% endif %}
             {% if organization.owned_organizations.all %}
                 <br>Owner of
                     {% for owned_orga in organization.owned_organizations.all %}
-                        {{ owned_orga.get_html_link }}
+                        {{ owned_orga.get_html_link|safe }}
                         {% if not forloop.last %},{% endif %}
                     {% endfor %}
             {% endif %}
@@ -62,10 +62,10 @@
             <ul>
                 {% for tile in organization.get_all_controlled_tiles %}
                     <li>
-                        {{ tile.get_html_link }}
+                        {{ tile.get_html_link|safe }}
                         {% if tile.controlled_by != organization %}
                             (controlled by
-                            {{ tile.controlled_by.get_html_link }})
+                            {{ tile.controlled_by.get_html_link|safe }})
                         {% endif %}
                     </li>
                 {% empty %}
@@ -95,7 +95,7 @@
                 <br>
             {% endif %}
             {% for election in organization.current_elections_can_vote_in %}
-                Can currently vote for new {{ election.applying_to.get_html_link }}
+                Can currently vote for new {{ election.applying_to.get_html_link|safe }}
                 {% if can_use_capabilities %}
                     <a class="btn btn-primary" href="{{ election.get_absolute_url }}">
                         Vote
@@ -124,7 +124,7 @@
                 {% if organization.membership_type == 'character' %}
                     {% for char_member in organization.character_members.all %}
                         <li>
-                            {{ char_member.get_html_link }}
+                            {{ char_member.get_html_link|safe }}
                             ({{ char_member.get_profile_display }})
                         </li>
                     {% empty %}
@@ -132,7 +132,7 @@
                     {% endfor %}
                 {% elif organization.membership_type == 'organization' %}
                     {% for org_member in organization.organization_members.all %}
-                        <li>{{ org_member.get_html_link }}</li>
+                        <li>{{ org_member.get_html_link|safe }}</li>
                     {% empty %}
                         <li>None</li>
                     {% endfor %}
@@ -144,7 +144,7 @@
             <h4>Relationships</h4>
             <ul>
                 {% for relationship in relationships.all %}
-                    <li>{{ relationship.get_relationship_html }} {{ relationship.to_organization.get_html_link }}</li>
+                    <li>{{ relationship.get_relationship_html|safe }} {{ relationship.to_organization.get_html_link|safe }}</li>
                 {% endfor %}
             </ul>
         {% endif %}

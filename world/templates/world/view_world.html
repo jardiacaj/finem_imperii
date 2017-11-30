@@ -40,7 +40,7 @@
 
         <ul>
             {% for state in world.get_violence_monopolies %}
-                <li>{{ state.get_html_link }}</li>
+                <li>{{ state.get_html_link|safe }}</li>
             {% empty %}
                 <li>None</li>
             {% endfor %}
@@ -67,7 +67,7 @@
         <ul>
             {% for character in world.character_set.all %}
                 <li>
-                    {{ character.get_html_link }}
+                    {{ character.get_html_link|safe }}
                 </li>
             {% endfor %}
         </ul>

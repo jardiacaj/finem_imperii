@@ -16,7 +16,7 @@
                     <div class="col-md-6">
                         <div class="well">
                             <label class="btn {% if state.barbaric %}btn-default{% else %}btn-primary{% endif %}">
-                                <input type="radio" name="state_id" value="{{ state.id }}"> {{ state.get_html_name }}
+                                <input type="radio" name="state_id" value="{{ state.id }}"> {{ state.get_html_name|safe }}
                             </label>
                             {% if state.barbaric %}
                                 <p><b>
@@ -29,7 +29,7 @@
                             <p>{{ state.get_all_controlled_tiles|length }} regions</p>
                             <p>
                                 {% if state.leader %}
-                                    Leader: {{ state.leader.get_html_name }}
+                                    Leader: {{ state.leader.get_html_name|safe }}
                                 {% else %}
                                     Fully horizontal Realm.
                                 {% endif %}

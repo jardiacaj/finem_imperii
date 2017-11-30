@@ -1,21 +1,21 @@
 <h2>Welcome, {{ character }}!</h2>
 
 <p>
-    You are starting as a member of {{ state.get_html_link }}, a realm in
-    {{ state.world.get_html_link }}.
+    You are starting as a member of {{ state.get_html_link|safe }}, a realm in
+    {{ state.world.get_html_link|safe }}.
 </p>
 
 <p>
     A good way to start your journey is to write a message
-    to the other members of {{ state.get_html_link }} asking for orders
+    to the other members of {{ state.get_html_link|safe }} asking for orders
     or guidance on how you can be useful.
 </p>
 
 <p>
     It is encouraged that you role play your character. This
     means that you should try to write in the voice of your
-    character, {{ character.get_html_link }}, an inhabitant of
-    {{ state.world.get_html_link }}, instead
+    character, {{ character.get_html_link|safe }}, an inhabitant of
+    {{ state.world.get_html_link|safe }}, instead
     of your own, a person playing a computer game. You may want to
     come up with a fictional history of your
     character and presenting yourself to the other characters.

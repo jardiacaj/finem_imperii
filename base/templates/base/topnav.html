@@ -22,7 +22,7 @@
                     {% if request.hero %}
                         <li class="active">
                             <a href="{{ request.hero.activation_url }}" class="active">
-                                {{ request.hero.get_html_name }}
+                                {{ request.hero.get_html_name|safe }}
                             </a>
                         </li>
                     {% endif %}
@@ -37,7 +37,7 @@
                             {% for character in user.character_set.all %}
                                 {% if not character.paused %}
                                     <li><a href="{{ character.activation_url }}">
-                                        {{ character.get_html_name }}
+                                        {{ character.get_html_name|safe }}
                                     </a></li>
                                 {% endif %}
                             {% endfor %}

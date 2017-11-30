@@ -6,6 +6,6 @@
         {% else %}
             start occupying
         {% endif %}
-        {{ target_tile.get_html_link }}
+        {{ target_tile.get_html_link|safe }}
     </p>
 </blockquote>

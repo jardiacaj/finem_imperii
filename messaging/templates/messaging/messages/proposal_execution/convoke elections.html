@@ -2,7 +2,7 @@
 
 <p>
     Elections have been convoked for the position of
-    {{ election.position.get_html_link }}. These will take place on
+    {{ election.position.get_html_link|safe }}. These will take place on
     {{ election.turn|nice_turn }}.
 </p>
 {% include 'messaging/messages/proposal_execution/vote_result.html' %}

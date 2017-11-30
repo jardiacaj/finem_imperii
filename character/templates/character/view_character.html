@@ -3,7 +3,7 @@
 {% block content %}
 
     <h1 class="page-header">
-        {{ character.get_html_name }}{% if character.paused %} (paused){% endif %}
+        {{ character.get_html_name|safe }}{% if character.paused %} (paused){% endif %}
         <small>
             {{ character.get_profile_display|capfirst }}
         </small>
@@ -35,7 +35,7 @@
             {% for organization in character.organization_set.all %}
                 <li>
                     {% if not organization.is_position %}Member of{% endif %}
-                    {{ organization.get_html_link }}
+                    {{ organization.get_html_link|safe }}
                 </li>
             {% empty %}
                 <li>No positions or memberships.</li>
@@ -47,7 +47,7 @@
         <ul>
             {% for unit in character.worldunit_set.all %}
                 <li>
-                    {{ unit.get_html_link }} in
+                    {{ unit.get_html_link|safe }} in
                     {{ unit.location }}
                     {% if unit.get_current_battle %}
                         <a
@@ -68,7 +68,7 @@
         <h3>Location</h3>
         <p>
             {{ character.location }} in
-            {{ character.location.tile.get_html_link }}
+            {{ character.location.tile.get_html_link|safe }}
         </p>
         <iframe
                 id="tile_map"

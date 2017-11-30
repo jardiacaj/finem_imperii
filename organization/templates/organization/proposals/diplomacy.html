@@ -12,6 +12,6 @@
             propose
         {% endif %}
 
-        <b>{{ target_relationship_html }} with {{ target_organization.get_html_link }}</b>.
+        <b>{{ target_relationship_html|safe }} with {{ target_organization.get_html_link|safe }}</b>.
     </p>
 </blockquote>

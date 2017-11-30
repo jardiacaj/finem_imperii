@@ -2,6 +2,6 @@
     <p>
         {{ proposal.proposing_character }} proposes to
         {{ proposal_content.option }} in
-        {{ settlement }} ({{ settlement.tile.get_html_link }})
+        {{ settlement }} ({{ settlement.tile.get_html_link|safe }})
     </p>
 </blockquote>

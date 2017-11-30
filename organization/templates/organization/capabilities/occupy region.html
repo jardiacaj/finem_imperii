@@ -10,7 +10,7 @@
             {% csrf_token %}
             <input type="hidden" name="tile_to_conquest_id" value="{{ tile.id }}">
             <span class="form-group form-inline">
-                {{ tile.get_html_link }} - controlled by {{ tile.controlled_by.get_violence_monopoly.get_html_link }}
+                {{ tile.get_html_link|safe }} - controlled by {{ tile.controlled_by.get_violence_monopoly.get_html_link|safe }}
                 <button type="submit" class="btn btn-primary btn-sm" onclick="return confirm('Are you sure?')">
                     Start conquest
                 </button>
@@ -31,7 +31,7 @@
                 <input type="hidden" name="tile_to_conquest_id" value="{{ conquest.tile.id }}">
                 <input type="hidden" name="stop" value="1">
                 <span class="form-group form-inline">
-                    {{ conquest.tile.get_html_link }} - controlled by {{ conquest.tile.controlled_by.get_violence_monopoly.get_html_link }}
+                    {{ conquest.tile.get_html_link|safe }} - controlled by {{ conquest.tile.controlled_by.get_violence_monopoly.get_html_link|safe }}
                     <button type="submit" class="btn btn-primary btn-sm" onclick="return confirm('Are you sure?')">
                         Stop
                     </button>

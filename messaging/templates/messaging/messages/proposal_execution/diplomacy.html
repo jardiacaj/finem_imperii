@@ -2,27 +2,27 @@
 
 <p>
     {% if action_type == 'propose' and has_to_be_agreed %}
-        {{ proposal.capability.applies_to.get_html_link }} proposed
-        {{ target_organization.get_html_link}} the following diplomatic
+        {{ proposal.capability.applies_to.get_html_link|safe }} proposed
+        {{ target_organization.get_html_link|safe}} the following diplomatic
         relationship: <b>{{ target_relationship }}</b>.
     {% elif action_type == 'propose' and not has_to_be_agreed %}
-        {{ proposal.capability.applies_to.get_html_link }} declared it
+        {{ proposal.capability.applies_to.get_html_link|safe }} declared it
         has now the following diplomatic relationship with
-        {{ target_organization.get_html_link}}:
+        {{ target_organization.get_html_link|safe}}:
         <b>{{ target_relationship }}</b>.
     {% elif action_type == 'accept' %}
-        {{ proposal.capability.applies_to.get_html_link }} accepted
-        {{ target_organization.get_html_link}}'s proposal for this new
+        {{ proposal.capability.applies_to.get_html_link|safe }} accepted
+        {{ target_organization.get_html_link|safe}}'s proposal for this new
         diplomatic relationship:
         <b>{{ target_relationship }}</b>.
     {% elif action_type == 'take back' %}
-        {{ proposal.capability.applies_to.get_html_link }} has taken
-        back it's proposal to {{ target_organization.get_html_link}}'s
+        {{ proposal.capability.applies_to.get_html_link|safe }} has taken
+        back it's proposal to {{ target_organization.get_html_link|safe}}'s
         to establish the following diplomatic relationship:
         <b>{{ target_relationship }}</b>.
     {% elif action_type == 'refuse' %}
-        {{ proposal.capability.applies_to.get_html_link }} has refused
-        {{ target_organization.get_html_link}}'s proposal
+        {{ proposal.capability.applies_to.get_html_link|safe }} has refused
+        {{ target_organization.get_html_link|safe}}'s proposal
         to establish the following diplomatic relationship:
         <b>{{ target_relationship }}</b>.
     {% endif %}

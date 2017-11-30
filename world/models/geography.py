@@ -4,6 +4,7 @@ from math import sqrt
 
 from django.db import models
 from django.urls import reverse
+from django.utils.html import format_html
 
 import organization.models.organization
 import unit.models
@@ -69,10 +70,10 @@ class World(models.Model):
         return turn_to_date(self.current_turn)
 
     def get_html_link(self):
-        return '<a href="{}">{}</a>'.format(
-            self.get_absolute_url(),
-            self.name
-        )
+        return format_html('<a href="{url}">{name}</a>',
+                           url=self.get_absolute_url(),
+                           name=self.name
+                           )
 
     def get_absolute_url(self):
         return reverse('world:world', kwargs={'world_id': self.id})
@@ -126,9 +127,10 @@ class Tile(models.Model):
         return reverse('world:tile', kwargs={'tile_id': self.id})
 
     def get_html_link(self):
-        return '<a href="{url}">{name}</a>'.format(
-            url=self.get_absolute_url(), name=self.name
-        )
+        return format_html('<a href="{url}">{name}</a>',
+                           url=self.get_absolute_url(),
+                           name=self.name
+                           )
 
     def get_absolute_coords(self):
         return Point(x=self.x_pos, z=self.z_pos)

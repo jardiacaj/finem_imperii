@@ -1,4 +1,5 @@
 from django.db import models, transaction
+from django.utils.html import format_html
 
 
 class OrganizationRelationship(models.Model):
@@ -65,7 +66,10 @@ class OrganizationRelationship(models.Model):
         )
 
     def get_relationship_html(self):
-        return OrganizationRelationship._format_relationship(self.relationship, self.get_relationship_display())
+        return OrganizationRelationship._format_relationship(
+            self.relationship,
+            self.get_relationship_display()
+        )
 
     def get_desired_relationship_html(self):
         if self.desired_relationship is None:
@@ -122,7 +126,10 @@ class OrganizationRelationship(models.Model):
         return MilitaryStance.AVOID_BATTLE
 
     def __str__(self):
-        return "Relationship {} to {}".format(self.from_organization, self.to_organization)
+        return "Relationship {} to {}".format(
+            self.from_organization,
+            self.to_organization
+        )
 
 
 class MilitaryStance(models.Model):
@@ -172,7 +179,8 @@ class MilitaryStance(models.Model):
         else:
             bootstrap_type = 'default'
 
-        return '<span class="label label-{bootstrap_type}">{stance}</span>'.format(
+        return format_html(
+            '<span class="label label-{bootstrap_type}">{stance}</span>',
             bootstrap_type=bootstrap_type,
             stance=stance
         )

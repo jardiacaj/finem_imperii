@@ -20,6 +20,7 @@
             {% elif target_settlement %}
                 map.add_travel_line({{ request.hero.location_id }}, {{ target_settlement.id }});
             {% endif %}
+            map.add_political_markings();
         })
     </script>
 

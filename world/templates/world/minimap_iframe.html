@@ -14,6 +14,7 @@
                 map.add_travel_line({{ request.hero.location_id }}, {{ request.hero.travel_destination_id }});
             {% endif %}
             map.click_callback = map.link_click_to_view_callback;
+            map.add_political_markings();
         })
     </script>
 

@@ -50,5 +50,8 @@ def render_settlement_for_view(settlement: Settlement):
 
 
 def render_organization_for_view(organization: Organization):
-    result = {'color': organization.color}
+    result = {
+        'color': organization.color,
+        'barbaric': organization.barbaric
+    }
     return escape_all_non_number_dict_elements(result)

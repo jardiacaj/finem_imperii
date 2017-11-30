@@ -41,6 +41,62 @@ function MapRenderer(world_data) {
             window.parent.location = '/tile/' + region.region.id;
     };
 
+    /* WARNING: Ugly code ahead */
+    zis.add_political_markings = function () {
+        for (var region_id in zis.regions)  {
+            if (Object.prototype.hasOwnProperty.call(zis.regions, region_id)) {
+                var region = world_data.regions[region_id];
+                var organization = zis.organizations[region.controlled_by];
+                if (organization.barbaric) continue;
+
+                var geometry = new THREE.PlaneGeometry(1, 0.02);
+
+                var mesh = new THREE.Mesh( geometry, organization.political_marking_material );
+
+                mesh.position.x = region.x_pos - 1;
+                mesh.position.z = region.z_pos - 0.51;
+                mesh.position.y = region.y_pos + 0.51;
+
+                mesh.rotateX(-Math.PI/2);
+
+                zis.renderer.scene.add(mesh);
+
+                mesh = new THREE.Mesh( geometry, organization.political_marking_material );
+
+                mesh.position.x = region.x_pos - 1;
+                mesh.position.z = region.z_pos - 1.49;
+                mesh.position.y = region.y_pos + 0.51;
+
+                mesh.rotateX(-Math.PI/2);
+
+                zis.renderer.scene.add(mesh);
+
+                geometry = new THREE.PlaneGeometry(0.02, 1);
+
+                mesh = new THREE.Mesh( geometry, organization.political_marking_material );
+
+                mesh.position.x = region.x_pos - 0.51;
+                mesh.position.z = region.z_pos - 1;
+                mesh.position.y = region.y_pos + 0.51;
+
+                mesh.rotateX(-Math.PI/2);
+
+                zis.renderer.scene.add(mesh);
+
+                mesh = new THREE.Mesh( geometry, organization.political_marking_material );
+
+                mesh.position.x = region.x_pos - 1.49;
+                mesh.position.z = region.z_pos - 1;
+                mesh.position.y = region.y_pos + 0.51;
+
+                mesh.rotateX(-Math.PI/2);
+
+                zis.renderer.scene.add(mesh);
+            }
+        }
+        zis.renderer.render();
+    };
+
     /* INTERNALS */
 
     zis.mouse_click_listener_notifier = function (event) {
@@ -191,6 +247,11 @@ function MapRenderer(world_data) {
         if (Object.prototype.hasOwnProperty.call(zis.organizations, organization_id)) {
             var organization = zis.organizations[organization_id];
             organization.settlement_material = new THREE.MeshBasicMaterial({color: parseInt(organization.color, 16)});
+            organization.political_marking_material = new THREE.MeshBasicMaterial({
+                color: parseInt(organization.color, 16),
+                transparent: true,
+                opacity: 1
+            });
         }
     }
 

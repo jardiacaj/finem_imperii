@@ -25,11 +25,12 @@ def world_view(request, world_id):
 
 
 @inchar_required
-def world_view_iframe(request, world_id):
+def world_view_iframe(request, world_id, political=1):
     world = get_object_or_404(World, id=world_id)
     context = {
         'world': world,
-        'world_data': render_world_for_view(world)
+        'world_data': render_world_for_view(world),
+        'political': political
     }
     return render(request, 'world/view_world_iframe.html', context)
 
@@ -49,7 +50,7 @@ def tile_view(request, tile_id):
 
 
 @inchar_required
-def tile_view_iframe(request, tile_id):
+def tile_view_iframe(request, tile_id, political=1):
     tile = get_object_or_404(Tile, id=tile_id, world=request.hero.world)
     context = {
         'tile': tile,
@@ -60,5 +61,7 @@ def tile_view_iframe(request, tile_id):
 
 @inchar_required
 def minimap_view(request):
-    context = {'world_data': render_world_for_view(request.hero.world)}
+    context = {
+        'world_data': render_world_for_view(request.hero.world)
+    }
     return render(request, 'world/minimap_iframe.html', context)

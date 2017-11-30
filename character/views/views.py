@@ -41,7 +41,7 @@ def character_view_iframe(request, character_id):
     )
     context = {
         'character': character,
-        'regions': render_world_for_view(character.world),
+        'world_data': render_world_for_view(character.world),
     }
     return render(request,
                   'character/view_character_iframe.html', context)

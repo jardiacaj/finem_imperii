@@ -2,9 +2,9 @@ from django.db import models
 
 from django.db.models import Avg, F
 from django.urls import reverse
+from django.utils.html import format_html
 
 import character.models
-import world.models
 from battle.models import BattleUnit
 
 
@@ -79,10 +79,14 @@ class WorldUnit(models.Model):
         (5, "flanking far right"),
     )
 
-    owner_character = models.ForeignKey('character.Character', blank=True, null=True)
+    owner_character = models.ForeignKey(
+        'character.Character',
+        blank=True, null=True)
     world = models.ForeignKey('world.World', blank=True, null=True)
     location = models.ForeignKey('world.Settlement', blank=True, null=True)
-    origin = models.ForeignKey('world.Settlement', related_name='units_originating')
+    origin = models.ForeignKey(
+        'world.Settlement',
+        related_name='units_originating')
     name = models.CharField(max_length=100)
     recruitment_type = models.CharField(
         max_length=30, choices=RECRUITMENT_CHOICES
@@ -127,27 +131,26 @@ class WorldUnit(models.Model):
         return self.name
 
     def get_short_html_descriptor(self):
-        return '{} ' \
-               '<span class="unit-icon-{}" aria-hidden="true"></span>'.format(
+        return format_html(
+            '{} <span class="unit-icon-{}" aria-hidden="true"></span>',
             self.soldier.count(),
             self.type
         )
 
     def get_long_html_descriptor(self):
-        return '{} ' \
-               '<span class="unit-icon-{}" aria-hidden="true"></span> ' \
-               '{}'.format(
+        return format_html(
+            '{} <span class="unit-icon-{}" aria-hidden="true"></span> {}',
             self.soldier.count(),
             self.type,
             self.name
         )
 
     def get_html_link(self):
-        return '{} <a href="{}">{}</a>'.format(
-            self.get_short_html_descriptor(),
-            self.get_absolute_url(),
-            self.name
-        )
+        return format_html('{descriptor} <a href="{url}">{name}</a>',
+                           descriptor=self.get_short_html_descriptor(),
+                           url=self.get_absolute_url(),
+                           name=self.name
+                           )
 
     def get_absolute_url(self):
         return reverse('unit:unit', kwargs={'unit_id': self.id})

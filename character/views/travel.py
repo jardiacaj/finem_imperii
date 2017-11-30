@@ -92,7 +92,7 @@ def travel_view_iframe(request, settlement_id=None):
     world = request.hero.world
     context = {
         'world': world,
-        'regions': render_world_for_view(world),
+        'world_data': render_world_for_view(world),
         'target_settlement': target_settlement,
     }
     return render(request, 'character/travel_map_iframe.html', context)

@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.utils.html import format_html
 
 
 class PolicyDocument(models.Model):
@@ -19,7 +20,7 @@ class PolicyDocument(models.Model):
             'organization:document', kwargs={'document_id': self.id})
 
     def get_html_link(self):
-        return '<a href="{}">{}</a>'.format(
-            self.get_absolute_url(),
-            self.title,
-        )
+        return format_html('<a href="{url}">{name}</a>',
+                           url=self.get_absolute_url(),
+                           name=self.title,
+                           )

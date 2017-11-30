@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls.base import reverse
+from django.utils.html import format_html
 
 
 class ServerMOTD(models.Model):
@@ -10,6 +11,9 @@ class ServerMOTD(models.Model):
     html_content = models.TextField()
     display_order = models.SmallIntegerField()
     draft = models.BooleanField(default=True)
+
+    def get_html_content(self):
+        return format_html(self.html_content)
 
     def __str__(self):
         return self.title

@@ -1,6 +1,7 @@
 from django.db import models, transaction
 from django.urls import reverse
 from django.utils.html import escape, format_html
+from django.utils.safestring import mark_safe
 
 import organization.models.capability
 import organization.models.document
@@ -313,11 +314,12 @@ class Organization(models.Model):
         else:
             suffix = ''
 
-        return format_html(template,
-                           name=escape(self.name),
-                           icon=icon,
-                           suffix=suffix
-                           )
+        return format_html(
+            template,
+            name=self.name,
+            icon=mark_safe(icon),
+            suffix=mark_safe(suffix)
+        )
 
     def get_bootstrap_icon(self):
         template = '<span style="color: #{color}" ' \
@@ -343,10 +345,11 @@ class Organization(models.Model):
                            )
 
     def get_html_link(self):
-        return format_html('<a href="{url}">{name}</a>',
-                           url=self.get_absolute_url(),
-                           name=self.get_html_name()
-                           )
+        return format_html(
+            '<a href="{url}">{name}</a>',
+            url=mark_safe(self.get_absolute_url()),
+            name=mark_safe(self.get_html_name())
+        )
 
     def current_elections_can_vote_in(self):
         result = []

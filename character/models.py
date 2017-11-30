@@ -6,6 +6,7 @@ from django.db import models, transaction
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 
 import organization.models.capability
 import organization.models.organization
@@ -228,10 +229,11 @@ class Character(models.Model):
         return result
 
     def get_html_link(self):
-        return format_html('<a href="{url}">{name}</a>',
-                           url=self.get_absolute_url(),
-                           name=self.get_html_name()
-                           )
+        return format_html(
+            '<a href="{url}">{name}</a>',
+            url=mark_safe(self.get_absolute_url()),
+            name=mark_safe(self.get_html_name())
+        )
 
     @staticmethod
     def total_carrying_capacity():

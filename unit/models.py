@@ -5,7 +5,6 @@ from django.urls import reverse
 from django.utils.html import format_html
 
 import character.models
-import world.models
 from battle.models import BattleUnit
 
 
@@ -80,12 +79,14 @@ class WorldUnit(models.Model):
         (5, "flanking far right"),
     )
 
-    owner_character = models.ForeignKey('character.Character',
+    owner_character = models.ForeignKey(
+        'character.Character',
         blank=True, null=True)
     world = models.ForeignKey('world.World', blank=True, null=True)
     location = models.ForeignKey('world.Settlement', blank=True, null=True)
-    origin = models.ForeignKey('world.Settlement',
-       related_name='units_originating')
+    origin = models.ForeignKey(
+        'world.Settlement',
+        related_name='units_originating')
     name = models.CharField(max_length=100)
     recruitment_type = models.CharField(
         max_length=30, choices=RECRUITMENT_CHOICES

@@ -181,6 +181,6 @@ class MilitaryStance(models.Model):
 
         return format_html(
             '<span class="label label-{bootstrap_type}">{stance}</span>',
-           bootstrap_type=bootstrap_type,
-           stance=stance
-       )
+            bootstrap_type=bootstrap_type,
+            stance=stance
+        )

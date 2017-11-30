@@ -12,6 +12,11 @@ class TravelView(View):
     template_name = 'character/travel.html'
 
     def get(self, request, settlement_id=None):
+        context = {
+            'hide_sidebar': True,
+            'target_settlement': None
+        }
+
         if settlement_id is not None:
             target_settlement = get_object_or_404(
                 Settlement,
@@ -25,12 +30,9 @@ class TravelView(View):
                 return redirect('character:travel')
 
             travel_time = request.hero.travel_time(target_settlement)
-            context = {
-                'target_settlement': target_settlement,
-                'travel_time': travel_time
-            }
-        else:
-            context = {'target_settlement': None}
+
+            context['target_settlement'] = target_settlement
+            context['travel_time'] = travel_time
 
         return render(request, self.template_name, context)
 

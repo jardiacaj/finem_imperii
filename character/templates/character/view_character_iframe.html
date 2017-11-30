@@ -6,7 +6,7 @@
 
     <script>
         $(function () {
-            var map = new MapRenderer({{ regions|safe }});
+            var map = new MapRenderer({{ world_data|safe }});
             map.focus_to_region({{ character.location.tile.id }});
             map.highlight_settlement({{ character.location_id }});
             map.enable_region_tags();

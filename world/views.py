@@ -29,7 +29,7 @@ def world_view_iframe(request, world_id):
     world = get_object_or_404(World, id=world_id)
     context = {
         'world': world,
-        'regions': render_world_for_view(world)
+        'world_data': render_world_for_view(world)
     }
     return render(request, 'world/view_world_iframe.html', context)
 
@@ -53,7 +53,7 @@ def tile_view_iframe(request, tile_id):
     tile = get_object_or_404(Tile, id=tile_id, world=request.hero.world)
     context = {
         'tile': tile,
-        'regions': render_world_for_view(tile.world)
+        'world_data': render_world_for_view(tile.world)
     }
     return render(request, 'world/view_tile_iframe.html', context)
 

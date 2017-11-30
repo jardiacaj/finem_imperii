@@ -1,4 +1,6 @@
-from battle.models import Battle, BattleSoldierInTurn
+from django.utils.html import conditional_escape
+
+from battle.models import Battle
 from finem_imperii.app_settings import BATTlE_TICKS_PER_TURN
 
 
@@ -11,13 +13,15 @@ def render_battle_for_view(battle: Battle):
         for battle_organization in battle_side.battleorganization_set.all():
             organizations[battle_organization.id] = {
                 'z': battle_side.z,
-                'name': battle_organization.organization.name,
+                'name': conditional_escape(
+                    battle_organization.organization.name),
                 'color': battle_organization.organization.color,
             }
             for battle_character in battle_organization.battlecharacter_set.all():
                 characters[battle_character.id] = {
                     'organization_id': battle_organization.id,
-                    'name': battle_character.character.name,
+                    'name': conditional_escape(
+                        battle_character.character.name),
                     'in_turn': {}
                 }
                 for battle_character_in_turn in battle_character.battlecharacterinturn_set.all():
@@ -27,8 +31,8 @@ def render_battle_for_view(battle: Battle):
                 units[battle_unit.id] = {
                     'character_id': battle_unit.owner_id,
                     'organization_id': battle_unit.battle_organization_id,
-                    'name': battle_unit.name,
-                    'type': battle_unit.type,
+                    'name': conditional_escape(battle_unit.name),
+                    'type': conditional_escape(battle_unit.type),
                     'in_turn': {}
                 }
                 for battle_unit_in_turn in battle_unit.battleunitinturn_set.all():
@@ -48,7 +52,8 @@ def render_battle_for_view(battle: Battle):
                             'x_pos': contubernium_in_turn.x_pos,
                             'z_pos': contubernium_in_turn.z_pos,
                             'ammo_remaining': contubernium_in_turn.ammo_remaining,
-                            'attack_type': contubernium_in_turn.attack_type_this_turn,
+                            'attack_type': conditional_escape(
+                                contubernium_in_turn.attack_type_this_turn),
                             'attack_target':
                                 contubernium_in_turn.contubernium_attacked_this_turn.battle_contubernium_id
                                 if contubernium_in_turn.contubernium_attacked_this_turn

@@ -36,6 +36,7 @@ class PositionElection(models.Model):
 
         if len(winners) != 1:
             self.position.convoke_elections()
+            winning_candidate = None
         else:
             winning_candidacy = winners[0]
             winning_candidate = winning_candidacy.candidate
@@ -51,7 +52,7 @@ class PositionElection(models.Model):
             {
                 'election': self,
                 'winner_count': len(winners),
-                'winner': None if len(winners) != 1 else winning_candidate
+                'winner': winning_candidate
             },
             link=self.get_absolute_url()
         )

@@ -20,11 +20,22 @@ class Command(BaseCommand):
                     'World with id {} does not exist'.format(world_id))
 
             try:
-                with perf_timer('{} initialization'.format(world)):
+                with perf_timer('{} ({}) initialization'.format(
+                    world,
+                    world_id
+                )):
                     initialize_world(world)
             except AlreadyInitializedException:
-                raise CommandError('{} is already initialized'.format(world))
+                raise CommandError('{} ({}) is already initialized'.format(
+                    world,
+                    world_id
+                ))
 
             self.stdout.write(
-                self.style.SUCCESS('Successfully initialized {}'.format(world))
+                self.style.SUCCESS(
+                    'Successfully initialized {} ({})'.format(
+                        world,
+                        world_id
+                    )
+                )
             )

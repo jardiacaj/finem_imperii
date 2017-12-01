@@ -25,24 +25,6 @@ def info_view(request, battle_id):
 
 
 @inchar_required
-def set_orders(request, battle_id):
-    battle = get_object_or_404(Battle, pk=battle_id, current=True)
-    heros_units = WorldUnit.objects.filter(
-        battleunit__in=battle.get_units_in_battle().filter(world_unit__owner_character=request.hero)
-    )
-
-    if not heros_units.exists():
-        raise Http404
-
-    context = {
-        'battle': battle,
-        'heros_units': heros_units,
-    }
-
-    return render(request, 'battle/orders_view.html', context=context)
-
-
-@inchar_required
 def battlefield_view(request, battle_id):
     battle = get_object_or_404(Battle, pk=battle_id)
     heros_units = WorldUnit.objects.filter(

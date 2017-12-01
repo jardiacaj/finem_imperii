@@ -61,20 +61,3 @@ class TestBattleViews(TestCase):
         start_battle(self.battle)
         response = self.client.get(reverse('battle:battlefield_iframe', kwargs={'battle_id': self.battle.id}), follow=True)
         self.assertEqual(response.status_code, 200)
-
-    def test_orders_view_when_not_started(self):
-        response = self.client.get(reverse('battle:set_orders', kwargs={'battle_id': self.battle.id}), follow=True)
-        self.assertEqual(response.status_code, 200)
-
-    def test_orders_view_when_started(self):
-        start_battle(self.battle)
-        response = self.client.get(reverse('battle:set_orders', kwargs={'battle_id': self.battle.id}), follow=True)
-        self.assertEqual(response.status_code, 200)
-
-    def test_orders_view_when_not_participating(self):
-        self.client.get(
-            reverse('character:activate', kwargs={'char_id': 3}),
-            follow=True
-        )
-        response = self.client.get(reverse('battle:set_orders', kwargs={'battle_id': self.battle.id}), follow=True)
-        self.assertEqual(response.status_code, 404)

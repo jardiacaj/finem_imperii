@@ -137,3 +137,20 @@ class NPC(models.Model):
 
         if unit and unit.soldier.count() == 0:
             unit.disband()
+
+    def get_health_icon(self):
+        return "●◕◑◔☠"[self.wound_status]
+
+    def get_age(self):
+        return int(self.age_months/12)
+
+    def get_skill_display(self):
+        return "high" if self.skill_fighting > NPC.TOP_SKILL_LIMIT else \
+                "medium" if self.skill_fighting > NPC.MEDIUM_SKILL_LIMIT else \
+                "low"
+
+    def get_hunger_display(self):
+        return "satiated" if self.hunger <= 0 else \
+               "hungry" if self.hunger == 1 else\
+               "very hungry" if self.hunger in (2,3) else \
+               "starving"

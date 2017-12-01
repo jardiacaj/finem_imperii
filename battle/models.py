@@ -283,11 +283,11 @@ class BattleSoldierInTurn(models.Model):
     HEAVY_WOUND = 3
     DEAD = 4
     WOUND_STATUS_CHOICES = (
-       (UNINJURED, UNINJURED),
-       (LIGHT_WOUND, LIGHT_WOUND),
-       (MEDIUM_WOUND, MEDIUM_WOUND),
-       (HEAVY_WOUND, HEAVY_WOUND),
-       (DEAD, DEAD),
+       (UNINJURED, "uninjured"),
+       (LIGHT_WOUND, "lightly wounds"),
+       (MEDIUM_WOUND, "wounded"),
+       (HEAVY_WOUND, "heavy wounds"),
+       (DEAD, "dead"),
     )
 
     ATTACK_CHANGE_MULTIPLIERS = {

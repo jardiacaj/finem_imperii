@@ -3,10 +3,7 @@ from django.urls import reverse
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 
-import organization.models.capability
-import organization.models.document
-import organization.models.election
-import organization.models.relationship
+from organization.models import capability, election, relationship
 import unit.models
 import world.models
 from battle.models import BattleFormation
@@ -152,12 +149,12 @@ class Organization(models.Model):
     def organizations_character_can_apply_capabilities_to_this_with(
             self, character, capability_type):
         result = []
-        capabilities = organization.models.capability.Capability.objects.filter(
+        capabilities = capability.Capability.objects.filter(
             applying_to=self, type=capability_type)
-        for capability in capabilities:
-            if capability.organization.character_can_use_capabilities(
+        for possible_caps in capabilities:
+            if possible_caps.organization.character_can_use_capabilities(
                     character):
-                result.append(capability.organization)
+                result.append(possible_caps.organization)
         return result
 
     def character_is_member(self, character):
@@ -199,7 +196,7 @@ class Organization(models.Model):
         return result
 
     def get_open_proposals(self):
-        return organization.models.capability.CapabilityProposal.objects.filter(
+        return capability.CapabilityProposal.objects.filter(
             capability__organization=self,
             closed=False
         )
@@ -218,12 +215,12 @@ class Organization(models.Model):
         return list(self.character_members.all())[0]
 
     def get_relationship_to(self, target_organization):
-        return organization.models.relationship.OrganizationRelationship.objects.get_or_create(
+        return relationship.OrganizationRelationship.objects.get_or_create(
             defaults={
-                'relationship': (organization.models.relationship.OrganizationRelationship.WAR
+                'relationship': (relationship.OrganizationRelationship.WAR
                                  if target_organization.barbaric or
                                     self.barbaric else
-                                 organization.models.relationship.OrganizationRelationship.PEACE)
+                                 relationship.OrganizationRelationship.PEACE)
             },
             from_organization=self,
             to_organization=target_organization
@@ -233,20 +230,20 @@ class Organization(models.Model):
         return organization.get_relationship_to(self)
 
     def get_default_stance_to(self, state):
-        return organization.models.relationship.MilitaryStance.objects.get_or_create(
+        return relationship.MilitaryStance.objects.get_or_create(
             from_organization=self,
             to_organization=state,
             region=None
         )[0]
 
     def get_region_stances_to(self, state):
-        return organization.models.relationship.MilitaryStance.objects.filter(
+        return relationship.MilitaryStance.objects.filter(
             from_organization=self,
             to_organization=state,
         ).exclude(region=None)
 
     def get_region_stance_to(self, state, region):
-        return organization.models.relationship.MilitaryStance.objects.get_or_create(
+        return relationship.MilitaryStance.objects.get_or_create(
             from_organization=self,
             to_organization=state,
             region=region
@@ -268,15 +265,15 @@ class Organization(models.Model):
     def convoke_elections(self, months_to_election=6):
         if not self.is_position:
             raise Exception("Elections only work for positions")
-        election = organization.models.election.PositionElection.objects.create(
+        new_election = election.PositionElection.objects.create(
             position=self,
             turn=self.world.current_turn + months_to_election
         )
-        self.current_election = election
+        self.current_election = new_election
         self.save()
         if self.get_position_occupier() is not None:
-            organization.models.election.PositionCandidacy.objects.create(
-                election=election,
+            election.PositionCandidacy.objects.create(
+                election=new_election,
                 candidate=self.get_position_occupier(),
                 description="Automatic candidacy for incumbent character."
             )
@@ -286,7 +283,7 @@ class Organization(models.Model):
             self.world,
             'elections',
             {'organization': self},
-            link=election.get_absolute_url()
+            link=new_election.get_absolute_url()
         )
         shortcuts.add_organization_recipient(
             message,
@@ -353,13 +350,13 @@ class Organization(models.Model):
 
     def current_elections_can_vote_in(self):
         result = []
-        elect_capabilities = organization.models.capability.Capability.objects.filter(
-            type=organization.models.capability.Capability.ELECT,
+        elect_capabilities = capability.Capability.objects.filter(
+            type=capability.Capability.ELECT,
             organization=self
         )
-        for capability in elect_capabilities:
-            if capability.applying_to.current_election is not None:
-                result.append(capability)
+        for elect_capability in elect_capabilities:
+            if elect_capability.applying_to.current_election is not None:
+                result.append(elect_capability)
         return result
 
     def get_heir_candidates(self):

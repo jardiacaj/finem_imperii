@@ -10,8 +10,7 @@ from django.utils.safestring import mark_safe
 
 import organization.models.capability
 import organization.models.organization
-import world.models.items
-import world.models.geography
+from world.models import items, geography
 import unit.models
 from battle.models import BattleCharacter
 from messaging import shortcuts
@@ -59,7 +58,8 @@ class Character(models.Model):
         if not self.can_pause():
             return
 
-        if self.hours_since_last_activation() > self.inactivity_hours_allowed():
+        if self.hours_since_last_activation() > \
+                self.inactivity_hours_allowed():
             self.pause()
 
     def inactivity_hours_allowed(self):
@@ -147,8 +147,10 @@ class Character(models.Model):
 
     def travel_time(self, target_settlement):
         distance = self.location.distance_to(target_settlement)
-        if (self.location.tile.type == world.models.geography.Tile.MOUNTAIN
-            or target_settlement.tile.type == world.models.geography.Tile.MOUNTAIN):
+        if (
+                self.location.tile.type == geography.Tile.MOUNTAIN
+                or target_settlement.tile.type == geography.Tile.MOUNTAIN
+        ):
             distance *= 2
         if self.location.tile.get_current_battles().exists():
             distance *= 2
@@ -170,13 +172,15 @@ class Character(models.Model):
             )
         if target_settlement.tile.distance_to(self.location.tile) > 1.5:
             return "You can only travel to contiguous regions."
-        if (self.travel_destination is not None
-            and self.travel_destination != target_settlement):
+        if (
+                self.travel_destination is not None
+                and self.travel_destination != target_settlement
+        ):
             return "You cant travel to {} because you are already travelling" \
                    " to {}.".format(
-                target_settlement,
-                self.travel_destination
-            )
+                        target_settlement,
+                        self.travel_destination
+                   )
         return None
 
     def perform_travel(self, destination):
@@ -243,7 +247,7 @@ class Character(models.Model):
         return self.total_carrying_capacity() - self.carrying_weight()
 
     def carrying_items(self):
-        return world.models.items.InventoryItem.objects.filter(
+        return items.InventoryItem.objects.filter(
             owner_character=self,
             location=None
         )
@@ -274,10 +278,10 @@ class Character(models.Model):
 
         organizations_local_vm = local_violence_monopoly. \
             organizations_character_can_apply_capabilities_to_this_with(
-            self, capability_type)
+                self, capability_type)
         organizations_controlled_by = self.location.tile.controlled_by \
             .organizations_character_can_apply_capabilities_to_this_with(
-            self, capability_type)
+                self, capability_type)
         return (
             organizations_local_vm
             or
@@ -303,12 +307,12 @@ class Character(models.Model):
 
     def inventory_object(self, type):
         try:
-            return world.models.items.InventoryItem.objects.get(
+            return items.InventoryItem.objects.get(
                 type=type,
                 owner_character=self,
                 location=None
             )
-        except world.models.items.InventoryItem.DoesNotExist:
+        except items.InventoryItem.DoesNotExist:
             return None
 
     def carrying_quantity(self, type):
@@ -321,7 +325,7 @@ class Character(models.Model):
     def add_to_inventory(self, type, quantity):
         inventory_object = self.inventory_object(type)
         if inventory_object is None:
-            world.models.items.InventoryItem.objects.create(
+            items.InventoryItem.objects.create(
                 type=type,
                 owner_character=self,
                 quantity=quantity

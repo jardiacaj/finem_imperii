@@ -246,7 +246,7 @@ class CapabilityProposal(models.Model):
                         reverse_relationship.desired_relationship = None
                         reverse_relationship.save()
 
-            except Organization.DoesNotExist:
+            except organization.models.organization.Organization.DoesNotExist:
                 pass
 
         elif self.capability.type == Capability.MILITARY_STANCE:

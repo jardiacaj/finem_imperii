@@ -84,45 +84,48 @@
 
     <div class="col-md-6">
         <h4><small>Proposals</small></h4>
-        <h4><small>Elections</small></h4>
-
-        {% for organization in request.hero.organization_set.all %}
-            <p class="lead">
-                {{ organization.get_html_link|safe }}
-            </p>
-
-            {% if organization.current_election %}
-                <p>
-                    <a href="{{ organization.current_election.get_absolute_url }}" class="btn btn-sm btn-primary button_margin">
-                        Election to {{ organization.get_html_name|safe }}
-                    </a>
-                </p>
-            {% endif %}
-            {% for election in organization.current_elections_can_vote_in %}
-                <a href="{{ election.get_absolute_url }}" class="btn btn-sm btn-primary button_margin">
-                    Election to {{ election.applying_to.get_html_name|safe }}
-                </a>
-            {% endfor %}
-            {% for proposal in organization.get_open_proposals.all %}
-                <p>
-                    <a href="{{ proposal.get_absolute_url }}" class="btn btn-sm btn-primary button_margin">
-                        {{ proposal|capfirst }}
-                    </a>
-                </p>
-            {% endfor %}
-            <p>
-                {% for capability in organization.capability_set.all %}
-                    <a href="{{ capability.get_absolute_url }}" class="btn btn-primary btn-sm button_margin">
-                        {{ capability.get_type_display|capfirst }}
-                        {% if capability.applying_to != organization %}
-                            in {{ capability.applying_to.get_html_name|safe }}
-                        {% endif %}
-                    </a>
-                {% empty %}
-                    None
+        <ul>
+            {% for organization in request.hero.organization_set.all %}
+                {% for proposal in organization.get_open_proposals.all %}
+                    <li>
+                        <a href="{{ proposal.get_absolute_url }}">
+                            {{ proposal|capfirst }}
+                        </a>
+                    </li>
                 {% endfor %}
-            </p>
-        {% endfor %}
+            {% endfor %}
+        </ul>
+
+        <h4><small>Elections</small></h4>
+        <ul>
+            {% for organization in request.hero.organization_set.all %}
+                {% if organization.current_election %}
+                    <li>
+                        <a href="{{ organization.current_election.get_absolute_url }}">
+                            Elections for {{ organization.get_html_name }}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+
+        <h4><small>Capabilities</small></h4>
+
+        <ul>
+            {% for organization in request.hero.organization_set.all %}
+                {% for capability in organization.capability_set.all %}
+                    <li>
+                        <a href="{{ capability.get_absolute_url }}">
+                            {{ capability.organization.get_short_html_name }}:
+                            {{ capability.get_type_display|capfirst }}
+                            {% if capability.applying_to != organization %}
+                                -&gt; {{ capability.applying_to.get_short_html_name|safe }}
+                            {% endif %}
+                        </a>
+                    </li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
     </div>
 
 {% endblock %}

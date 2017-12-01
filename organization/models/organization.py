@@ -301,12 +301,15 @@ class Organization(models.Model):
             kwargs={'organization_id': self.id}
         )
 
-    def get_html_name(self):
+    def get_short_html_name(self):
+        return self.get_html_name(include_occupier=False)
+
+    def get_html_name(self, include_occupier=True):
         template = '{name}{icon}{suffix}'
         icon = self.get_bootstrap_icon()
 
         occupier = self.get_position_occupier()
-        if occupier:
+        if occupier and include_occupier:
             suffix = '<small>{}</small>'.format(occupier.name)
         else:
             suffix = ''

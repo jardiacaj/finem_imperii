@@ -5,7 +5,8 @@ import django
 from django.db import transaction
 
 from battle.models import Battle, BattleCharacterInTurn, BattleUnitInTurn, BattleContuberniumInTurn, \
-    BattleSoldierInTurn, Coordinates, Order, BattleUnit
+    BattleSoldierInTurn, Coordinates, Order
+from context_managers import perf_timer
 from finem_imperii.app_settings import BATTlE_TICKS_PER_TURN
 from unit.models import WorldUnit
 
@@ -496,12 +497,15 @@ def check_end(battle: Battle):
 
 
 def battle_tick(battle: Battle):
-    create_next_turn(battle)
-    unit_movement(battle)
-    unit_attack(battle)
-    if check_end(battle):
-        battle.current = False
-        battle.save()
+    with perf_timer(
+            "Tick {} for {}".format(battle.get_latest_turn().num, battle)
+    ):
+        create_next_turn(battle)
+        unit_movement(battle)
+        unit_attack(battle)
+        if check_end(battle):
+            battle.current = False
+            battle.save()
 
 
 def battle_turn(battle: Battle):

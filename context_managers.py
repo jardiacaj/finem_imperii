@@ -2,11 +2,13 @@ from contextlib import contextmanager
 
 import time
 
+import logging
+
 
 @contextmanager
 def perf_timer(name):
     start_time = time.time()
-    print('[{}] ...'.format(name))
+    logging.info('[{}] ...'.format(name))
     yield
     elapsed = time.time() - start_time
-    print('[{}] in {} ms'.format(name, int(elapsed * 1000)))
+    logging.info('[{}] in {} ms'.format(name, int(elapsed * 1000)))

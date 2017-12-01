@@ -1,3 +1,5 @@
+import logging
+
 from django.core.management.base import BaseCommand, CommandError
 
 from context_managers import perf_timer
@@ -12,6 +14,8 @@ class Command(BaseCommand):
         parser.add_argument('world_id', nargs='+', type=int)
 
     def handle(self, *args, **options):
+        logging.getLogger().setLevel(logging.INFO)
+
         for world_id in options['world_id']:
             try:
                 world = World.objects.get(pk=world_id)

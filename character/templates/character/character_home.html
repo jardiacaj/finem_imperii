@@ -128,8 +128,8 @@
                 {{ unit.status|capfirst }}
             </p>
             <p>
-                {{ unit.get_battle_side_pos_display|capfirst }}
-                {{ unit.get_battle_line_display }}
+                {{ unit.get_battle_line_display|capfirst  }},
+                {{ unit.get_battle_side_pos_display }}
                 <br>
                 Orders: {{ unit.default_battle_orders.what }}
             </p>

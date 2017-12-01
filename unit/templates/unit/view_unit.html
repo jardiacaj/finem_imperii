@@ -124,49 +124,10 @@
                         <tr>
                             <td>Battle settings</td>
                             <td>
-                                <form class="form-inline" role="form" method="post" action="{% url 'unit:battle_settings' unit.id %}">
-                                    {% csrf_token %}
-                                    <select class="form-control" name="battle_line" id="battle_line">
-                                        <option value="0" {% if unit.battle_line == 0 %}selected{% endif %}>Advanced line</option>
-                                        <option value="1" {% if unit.battle_line == 1 %}selected{% endif %}>Front line</option>
-                                        <option value="2" {% if unit.battle_line == 2 %}selected{% endif %}>Middle line</option>
-                                        <option value="3" {% if unit.battle_line == 3 %}selected{% endif %}>Rear line</option>
-                                        <option value="4" {% if unit.battle_line == 4 %}selected{% endif %}>Rearguard</option>
-                                    </select>
-                                    <select class="form-control" name="battle_side_pos" id="battle_side_pos">
-                                        <option value="-5" {% if unit.battle_side_pos == -5 %}selected{% endif %}>Flanking far left</option>
-                                        <option value="-4" {% if unit.battle_side_pos == -4 %}selected{% endif %}>Flanking left</option>
-                                        <option value="-3" {% if unit.battle_side_pos == -3 %}selected{% endif %}>Cover left flank</option>
-                                        <option value="-2" {% if unit.battle_side_pos == -2 %}selected{% endif %}>Left side</option>
-                                        <option value="-1" {% if unit.battle_side_pos == -1 %}selected{% endif %}>Left-center</option>
-                                        <option value="0" {% if unit.battle_side_pos == 0 %}selected{% endif %}>Center</option>
-                                        <option value="1" {% if unit.battle_side_pos == 1 %}selected{% endif %}>Right-center</option>
-                                        <option value="2" {% if unit.battle_side_pos == 2 %}selected{% endif %}>Right side</option>
-                                        <option value="3" {% if unit.battle_side_pos == 3 %}selected{% endif %}>Cover right flank</option>
-                                        <option value="4" {% if unit.battle_side_pos == 4 %}selected{% endif %}>Flanking right</option>
-                                        <option value="5" {% if unit.battle_side_pos == 5 %}selected{% endif %}>Flanking far right</option>
-                                    </select>
-                                    <button type="submit" class="btn btn-primary btn-sm">Save</button>
-                                </form>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Battle orders</td>
-                            <td>
-                                <form class="form-inline" role="form" method="post" action="{% url 'unit:battle_orders' unit.id %}">
-                                    {% csrf_token %}
-                                    <select class="form-control" name="battle_orders" id="battle_orders">
-                                        <option value="charge" {% if unit.default_battle_orders.what == "charge" %}selected{% endif %}>Charge</option>
-                                        <option value="formation" {% if unit.default_battle_orders.what == "formation" %}selected{% endif %}>Advance in formation</option>
-                                        <option value="stand" {% if unit.default_battle_orders.what == "stand" %}selected{% endif %}>Keep ground</option>
-                                        <option value="flee" {% if unit.default_battle_orders.what == "flee" %}selected{% endif %}>Flee</option>
-                                        <option value="ranged and charge" {% if unit.default_battle_orders.what == "ranged and charge" %}selected{% endif %}>Ranged attack, then charge</option>
-                                        <option value="ranged and flee" {% if unit.default_battle_orders.what == "ranged and flee" %}selected{% endif %}>Ranged attack, then flee</option>
-                                        <option value="ranged and stand" {% if unit.default_battle_orders.what == "ranged and stand" %}selected{% endif %}>Ranged attack, then stand</option>
-                                        <option value="stand and keep distance" {% if unit.default_battle_orders.what == "stand and keep distance" %}selected{% endif %}>Stand and keep distance</option>
-                                    </select>
-                                    <button type="submit" class="btn btn-primary btn-sm">Save</button>
-                                </form>
+                                {{ unit.get_battle_line_display|capfirst }},
+                                {{ unit.get_battle_side_pos_display }}.
+                                Orders: {{ unit.default_battle_orders.what }}
+                                {% include 'unit/battle_settings_modal_include.html' with unit=unit %}
                             </td>
                         </tr>
                     {% endif %}

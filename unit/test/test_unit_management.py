@@ -48,12 +48,19 @@ class TestUnitManagement(TestCase):
         self.not_my_unit.refresh_from_db()
         self.assertNotEqual(self.not_my_unit.name, "My new name")
 
+    def test_unit_change_settings_modal_http_get(self):
+        response = self.client.get(
+            reverse('unit:battle_settings', kwargs={'unit_id': self.my_unit.id})
+        )
+        self.assertEqual(response.status_code, 405)
+
     def test_unit_change_settings(self):
         response = self.client.post(
             reverse('unit:battle_settings', kwargs={'unit_id': self.my_unit.id}),
             data={
                 'battle_line': 1,
-                'battle_side_pos': 2
+                'battle_side_pos': 2,
+                'battle_orders': 'flee'
             },
             follow=True
         )
@@ -67,7 +74,8 @@ class TestUnitManagement(TestCase):
             reverse('unit:battle_settings', kwargs={'unit_id': self.my_unit.id}),
             data={
                 'battle_line': 0,
-                'battle_side_pos': 2
+                'battle_side_pos': 2,
+                'battle_orders': 'flee'
             },
             follow=True
         )
@@ -81,7 +89,8 @@ class TestUnitManagement(TestCase):
             reverse('unit:battle_settings', kwargs={'unit_id': self.my_unit.id}),
             data={
                 'battle_line': 0,
-                'battle_side_pos': 4
+                'battle_side_pos': 4,
+                'battle_orders': 'flee'
             },
             follow=True
         )
@@ -95,7 +104,8 @@ class TestUnitManagement(TestCase):
             reverse('unit:battle_settings', kwargs={'unit_id': self.my_unit.id}),
             data={
                 'battle_line': -1,
-                'battle_side_pos': 2
+                'battle_side_pos': 2,
+                'battle_orders': 'flee'
             },
             follow=True
         )
@@ -106,7 +116,8 @@ class TestUnitManagement(TestCase):
             reverse('unit:battle_settings', kwargs={'unit_id': self.my_unit.id}),
             data={
                 'battle_line': 5,
-                'battle_side_pos': 2
+                'battle_side_pos': 2,
+                'battle_orders': 'flee'
             },
             follow=True
         )
@@ -114,8 +125,10 @@ class TestUnitManagement(TestCase):
 
     def test_unit_change_orders(self):
         response = self.client.post(
-            reverse('unit:battle_orders', kwargs={'unit_id': self.my_unit.id}),
+            reverse('unit:battle_settings', kwargs={'unit_id': self.my_unit.id}),
             data={
+                'battle_line': 0,
+                'battle_side_pos': 4,
                 'battle_orders': 'flee'
             },
             follow=True
@@ -124,12 +137,25 @@ class TestUnitManagement(TestCase):
         self.my_unit.refresh_from_db()
         self.assertEqual(self.my_unit.default_battle_orders.what, Order.FLEE)
 
+    def test_unit_change_orders_badly(self):
+        response = self.client.post(
+            reverse('unit:battle_settings', kwargs={'unit_id': self.my_unit.id}),
+            data={
+                'battle_line': 0,
+                'battle_side_pos': 4,
+                'battle_orders': 'BAD'
+            },
+            follow=True
+        )
+        self.assertEqual(response.status_code, 404)
+
     def test_unit_change_settings_denied(self):
         response = self.client.post(
             reverse('unit:battle_settings', kwargs={'unit_id': self.not_my_unit.id}),
             data={
                 'battle_line': 1,
-                'battle_side_pos': 2
+                'battle_side_pos': 2,
+                'battle_orders': 'flee'
             }
         )
         self.assertEqual(response.status_code, 404)

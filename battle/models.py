@@ -329,7 +329,7 @@ class Order(models.Model):
        (MOVE, MOVE),
        (FLEE, FLEE),
        (CHARGE, CHARGE),
-       (ADVANCE_IN_FORMATION, ADVANCE_IN_FORMATION),
+       (ADVANCE_IN_FORMATION, "advance maintaining formation"),
        (RANGED_AND_CHARGE, "ranged attack, then charge"),
        (RANGED_AND_FLEE, "ranged attack, then flee"),
        (RANGED_AND_STAND, "ranged attack, then stand"),

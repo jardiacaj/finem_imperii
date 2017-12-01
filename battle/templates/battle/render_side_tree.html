@@ -10,7 +10,22 @@
                     {{ battle_unit.world_unit.get_html_link|safe }}
 
                     {% if battle_unit.owner %}
-                        ({{ battle_unit.owner.character.get_html_link|safe }})
+                        {% if battle_unit.owner.character == request.hero %}
+                            <ul>
+                                <li>
+                                    {{ battle_unit.world_unit.get_battle_line_display|capfirst }}
+                                    {{ battle_unit.world_unit.get_battle_side_pos_display }}
+                                </li>
+                                <li>
+                                    Orders: {{ battle_unit.world_unit.default_battle_orders.get_what_display }}
+                                </li>
+                                <li>
+                                    {% include 'unit/battle_settings_modal_include.html' with unit=battle_unit.world_unit %}
+                                </li>
+                            </ul>
+                        {% else %}
+                            ({{ battle_unit.owner.character.get_html_link|safe }})
+                        {% endif %}
                     {% endif %}
                 </li>
 

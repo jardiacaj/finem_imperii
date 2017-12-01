@@ -8,9 +8,7 @@ from world.renderer import render_world_for_view
 
 @inchar_required
 def character_home(request):
-    context = {
-        'recipient_list': request.hero.messagerecipient_set.filter(read=False)
-    }
+    context = {}
     return render(request, 'character/character_home.html', context=context)
 
 

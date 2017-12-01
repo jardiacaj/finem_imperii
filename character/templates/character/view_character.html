@@ -11,21 +11,23 @@
 
     <div class="col-md-6">
 
-        <a href="{% url 'messaging:compose_character' character.id %}" class="btn btn-primary">
-            <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
-            Message
-        </a>
+        {% if character != request.hero %}
+            <a href="{% url 'messaging:compose_character' character.id %}" class="btn btn-primary">
+                <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+                Message
+            </a>
 
-        {% if favourite %}
-            <a href="{% url 'messaging:remove_contact' character.id %}" class="btn btn-primary">
-            <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-                Remove from contacts
-            </a>
-        {% else %}
-            <a href="{% url 'messaging:add_contact' character.id %}" class="btn btn-primary">
-            <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
-                Add to contacts
-            </a>
+            {% if favourite %}
+                <a href="{% url 'messaging:remove_contact' character.id %}" class="btn btn-primary">
+                <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                    Remove from contacts
+                </a>
+            {% else %}
+                <a href="{% url 'messaging:add_contact' character.id %}" class="btn btn-primary">
+                <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+                    Add to contacts
+                </a>
+            {% endif %}
         {% endif %}
 
 

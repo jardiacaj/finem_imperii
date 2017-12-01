@@ -722,7 +722,7 @@
 - model: organization.Capability
   fields:
     organization_id: 114
-    type: 'military orders'
+    type: 'military stance'
     applying_to: 114
 - model: organization.Capability
   fields:

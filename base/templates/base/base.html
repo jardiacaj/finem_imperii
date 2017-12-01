@@ -86,14 +86,14 @@
                                 </td>
                             </tr>
                         {% empty %}
-                            <tr><td class="text-center">You own no units.</td></tr>
+                            <tr><td class="text-center">
+                                You own no units.<br>
+                                <a href="{% url 'unit:recruit' %}"
+                                   class="btn {% if request.hero.has_conscripting_capability_in_current_location %}btn-primary{% else %}btn-default{% endif %} btn-sm">
+                                    Recruit
+                                </a>
+                            </td></tr>
                         {% endfor %}
-                        <tr><td colspan="100%" class="text-center">
-                            <a href="{% url 'unit:recruit' %}"
-                               class="btn {% if request.hero.can_conscript %}btn-primary{% else %}btn-default{% endif %} btn-sm">
-                                To recruitment
-                            </a>
-                        </td></tr>
                     </tbody>
                 </table>
 

@@ -7,8 +7,8 @@ from django.urls import reverse
 from django.utils import timezone
 
 from character.models import Character
+from turn.turn import TurnProcessor
 from unit.models import WorldUnit
-from world.turn import TurnProcessor
 
 
 class TestCharacterPause(TestCase):

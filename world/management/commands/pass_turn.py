@@ -3,8 +3,8 @@ import logging
 from django.core.management.base import BaseCommand, CommandError
 
 from context_managers import perf_timer
+from turn.turn import pass_turn
 from world.models.geography import World
-from world.turn import pass_turn
 
 
 class Command(BaseCommand):

@@ -2,11 +2,11 @@ import math
 
 from django.test import TestCase
 
+from turn.turn import TurnProcessor
 from world.models.buildings import Building
 from world.models.geography import Settlement
 from world.models.items import InventoryItem
 from world.models.npcs import NPC
-from world.turn import TurnProcessor
 
 
 class TestFieldProduction(TestCase):

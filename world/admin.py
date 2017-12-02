@@ -1,10 +1,10 @@
 from django.contrib import admin
 
+from turn.turn import pass_turn as pass_turn_func
 from world.initialization import initialize_world
 from world.models.buildings import Building
 from world.models.geography import Region, Tile, Settlement, World
 from world.models.npcs import NPC
-from world.turn import pass_turn as pass_turn_func
 
 admin.site.register(Region)
 admin.site.register(Tile)

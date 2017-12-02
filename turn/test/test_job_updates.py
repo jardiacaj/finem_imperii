@@ -1,9 +1,9 @@
 from django.test import TestCase
 
+from turn.turn import TurnProcessor
 from world.initialization import initialize_settlement
 from world.models.buildings import Building
 from world.models.geography import Settlement
-from world.turn import TurnProcessor
 
 
 class TestJobUpdates(TestCase):

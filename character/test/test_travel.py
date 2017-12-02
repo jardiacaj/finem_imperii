@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls.base import reverse
 
 from character.models import Character
-from world.turn import TurnProcessor
+from turn.turn import TurnProcessor
 
 
 class TestTravel(TestCase):

@@ -3,16 +3,16 @@ from django.urls.base import reverse
 
 from battle.models import Battle
 from organization.models.organization import Organization
-from world.admin import pass_turn
-from world.initialization import initialize_unit, initialize_settlement
-from world.models.events import TileEvent
-from world.models.geography import Tile, World, Settlement
-from unit.models import WorldUnit
-from world.turn import organizations_with_battle_ready_units, \
+from turn.turn import organizations_with_battle_ready_units, \
     battle_ready_units_in_tile, \
     opponents_in_organization_list, get_largest_conflict_in_list, \
     create_battle_from_conflict, TurnProcessor, \
     do_settlement_barbarian_generation
+from unit.models import WorldUnit
+from world.admin import pass_turn
+from world.initialization import initialize_unit, initialize_settlement
+from world.models.events import TileEvent
+from world.models.geography import Tile, World, Settlement
 
 
 class TestEmortuusTurn(TestCase):

@@ -3,16 +3,17 @@ from django.urls.base import reverse
 
 from battle.battle_init import initialize_from_conflict, start_battle
 from battle.battle_tick import battle_tick
-from battle.models import Battle, BattleCharacter, BattleUnit, BattleContubernium, BattleSoldier, BattleOrganization, \
+from battle.models import Battle, BattleCharacter, BattleUnit, \
+    BattleContubernium, BattleSoldier, BattleOrganization, \
     BattleContuberniumInTurn, BattleSoldierInTurn, BattleUnitInTurn, Order
-from organization.models.relationship import MilitaryStance
 from organization.models.organization import Organization
-from world.initialization import initialize_unit, initialize_settlement
+from organization.models.relationship import MilitaryStance
+from turn.turn import trigger_battles_in_tile, TurnProcessor, \
+    generate_barbarian_unit, battle_joins
 from unit.models import WorldUnit
+from world.initialization import initialize_unit, initialize_settlement
 from world.models.geography import Tile, World, Settlement
 from world.models.npcs import NPC
-from world.turn import trigger_battles_in_tile, TurnProcessor, \
-    generate_barbarian_unit, battle_joins
 
 
 class MiscTests(TestCase):

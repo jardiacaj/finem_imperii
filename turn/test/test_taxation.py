@@ -1,12 +1,10 @@
-from unittest.case import skip
-
 from django.test import TestCase
 
-from organization.models.organization import Organization
 from character.models import Character
+from organization.models.organization import Organization
+from turn.turn import TurnProcessor
 from world.models.buildings import Building
 from world.models.geography import Settlement
-from world.turn import TurnProcessor
 
 
 class TestTaxation(TestCase):

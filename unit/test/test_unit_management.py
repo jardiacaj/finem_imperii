@@ -4,9 +4,9 @@ from django.test import TestCase
 from django.urls.base import reverse
 
 from battle.models import Order
-from world.initialization import initialize_unit
+from turn.turn import pass_turn
 from unit.models import WorldUnit
-from world.turn import pass_turn
+from world.initialization import initialize_unit
 
 
 class TestUnitManagement(TestCase):

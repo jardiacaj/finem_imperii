@@ -9,7 +9,7 @@ from turn.battle import organizations_with_battle_ready_units, \
     get_largest_conflict_in_list, create_battle_from_conflict
 from turn.conquest import worldwide_do_conquests
 from turn.demography import do_settlement_population_changes
-from turn.unit import do_unit_payment
+from turn.unit import do_unit_debt_increase
 from unit.models import WorldUnit
 from world.admin import pass_turn
 from world.initialization import initialize_unit, initialize_settlement
@@ -193,7 +193,7 @@ class TestTurn(TestCase):
     def test_unit_debt_increase(self):
         unit = WorldUnit.objects.get(id=4)
         initialize_unit(unit)
-        do_unit_payment(unit)
+        do_unit_debt_increase(unit)
         self.assertEqual(unit.owners_debt, 100)
 
     def test_unit_debt_for_barbarian_unit(self):
@@ -201,5 +201,5 @@ class TestTurn(TestCase):
         unit.owner_character = None
         unit.save()
         initialize_unit(unit)
-        do_unit_payment(unit)
+        do_unit_debt_increase(unit)
         self.assertEqual(unit.owners_debt, 0)

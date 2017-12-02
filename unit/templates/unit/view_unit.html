@@ -136,12 +136,27 @@
         </div>
 
         <div class="col-sm-3">
-            {% if unit.owner_character == request.hero %}
-                <h4>Actions</h4>
-                <p>
-                    Debt: {{ unit.owners_debt }}
-                </p>
+            <h4>Actions</h4>
+            <p>
+                <form class="form-inline" role="form" method="post" action="{% url 'unit:pay_debt' unit.id %}">
+                    {% if unit.owner_character == request.hero %}
+                        Due payment: {{ unit.owners_debt }}
+                    {% endif %}
+                    {% csrf_token %}
+                    <input
+                            class="form-control form-control"
+                            type="number"
+                            value=""
+                            min="1"
+                            max="{% if request.hero.cash < unit.owners_debt %}{{ request.hero.cash }}{% else %}{{ unit.owners_debt }}{% endif %}"
+                            name="amount"
+                            placeholder="Pay debt"
+                    >
+                    <button type="submit" class="btn btn-primary btn-sm">Pay debt</button>
+                </form>
+            </p>
 
+            {% if unit.owner_character == request.hero %}
                 <p>
                     <form class="form-inline" role="form" method="post" action="{% url 'unit:disband' unit.id %}">
                         {% csrf_token %}

@@ -5,7 +5,7 @@ from world.models.geography import World
 def worldwide_unit_maintenance(world: World):
     for unit in world.worldunit_set.all():
         do_unit_status_update(unit)
-        do_unit_payment(unit)
+        do_unit_debt_increase(unit)
 
 
 def do_unit_status_update(unit: WorldUnit):
@@ -20,6 +20,6 @@ def do_unit_status_update(unit: WorldUnit):
         unit.save()
 
 
-def do_unit_payment(unit: WorldUnit):
+def do_unit_debt_increase(unit: WorldUnit):
     if unit.owner_character and unit.status != WorldUnit.NOT_MOBILIZED:
         unit.owners_debt += unit.monthly_cost()

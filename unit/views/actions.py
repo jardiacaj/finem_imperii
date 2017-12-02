@@ -11,6 +11,27 @@ from world.models.events import TileEvent
 
 @inchar_required
 @require_POST
+def pay_debt(request, unit_id):
+    unit = get_object_or_404(WorldUnit, id=unit_id)
+
+    amount = int(request.POST.get('amount', 0))
+    if amount < 0:
+        return redirect_back(request, unit.get_absolute_url, "Invalid amount")
+    if amount > request.hero.cash:
+        return redirect_back(request, unit.get_absolute_url,
+                             "You don't have that much money")
+
+    amount = min(amount, unit.owners_debt)
+    request.hero.cash -= amount
+    request.hero.save()
+    unit.owners_debt -= amount
+    unit.save()
+    messages.success(request, "You paid {} coins of debt.".format(amount))
+    return redirect_back(request, unit.get_absolute_url())
+
+
+@inchar_required
+@require_POST
 def conquest_action(request, unit_id):
     unit = get_object_or_404(
         WorldUnit,

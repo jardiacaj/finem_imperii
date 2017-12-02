@@ -4,7 +4,11 @@
     </li>
     {% if battle.started %}
         <li role="presentation" {% if active == 'battlefield' %}class="active"{% endif %}>
-            <a href="{% url "battle:battlefield" battle.id %}">BATTLEFIELD</a>
+            <a href="{% url "battle:battlefield" battle.id %}">
+                <span class="flaticon-sword-1" aria-hidden="true"></span>
+                BATTLEFIELD
+                <span class="flaticon-sword-1" aria-hidden="true"></span>
+            </a>
         </li>
     {% endif %}
 </ul>

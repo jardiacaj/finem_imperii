@@ -191,3 +191,17 @@ class TestTurn(TestCase):
         self.assertTrue(
             settlement.worldunit_set.filter(owner_character__isnull=True).exists()
         )
+
+    def test_unit_debt_increase(self):
+        unit = WorldUnit.objects.get(id=4)
+        initialize_unit(unit)
+        TurnProcessor.do_unit_payment(None, unit)
+        self.assertEqual(unit.owners_debt, 100)
+
+    def test_unit_debt_for_barbarian_unit(self):
+        unit = WorldUnit.objects.get(id=4)
+        unit.owner_character = None
+        unit.save()
+        initialize_unit(unit)
+        TurnProcessor.do_unit_payment(None, unit)
+        self.assertEqual(unit.owners_debt, 0)

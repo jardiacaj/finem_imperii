@@ -101,6 +101,7 @@ class WorldUnit(models.Model):
         default=0, help_text="Only used in tests that need generated units"
     )
     default_battle_orders = models.ForeignKey('battle.Order')
+    owners_debt = models.IntegerField(default=0)
 
     @staticmethod
     def get_unit_types(nice=False):

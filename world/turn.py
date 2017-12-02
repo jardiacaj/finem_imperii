@@ -149,32 +149,22 @@ class TurnProcessor:
 
     def do_unit_maintenance(self):
         for unit in self.world.worldunit_set.all():
-            if unit.status == WorldUnit.REGROUPING:
-                if (
-                        unit.owner_character is not None and
-                        unit.location == unit.owner_character.location):
-                    unit.status = WorldUnit.FOLLOWING
-                else:
-                    unit.status = WorldUnit.STANDING
-                unit.save()
+            self.do_unit_status_update(unit)
+            self.do_unit_payment(unit)
 
-            if unit.owner_character and unit.status != WorldUnit.NOT_MOBILIZED:
-                cost = unit.soldier.count()
-                if unit.owner_character.cash < unit.monthly_cost():
-                    unit.demobilize()
-                    unit.owner_character.add_notification(
-                        'messaging/messages/unit_unpaid.html',
-                        'unit',
-                        {'unit': unit}
-                    )
-                else:
-                    unit.owner_character.cash -= unit.monthly_cost()
-                    unit.owner_character.save()
-                    unit.owner_character.add_notification(
-                        'messaging/messages/unit_paid.html',
-                        'unit',
-                        {'unit': unit}
-                    )
+    def do_unit_status_update(self, unit):
+        if unit.status == WorldUnit.REGROUPING:
+            if (
+                    unit.owner_character is not None and
+                    unit.location == unit.owner_character.location):
+                unit.status = WorldUnit.FOLLOWING
+            else:
+                unit.status = WorldUnit.STANDING
+            unit.save()
+
+    def do_unit_payment(self, unit):
+        if unit.owner_character and unit.status != WorldUnit.NOT_MOBILIZED:
+            unit.owners_debt += unit.monthly_cost()
 
     def do_taxes(self):
         for state in self.world.get_violence_monopolies():
@@ -188,7 +178,8 @@ class TurnProcessor:
                 state.tax_countdown = 6
                 state.save()
 
-    def do_state_taxes(self, state: organization.models.organization.Organization):
+    def do_state_taxes(
+            self, state: organization.models.organization.Organization):
         if not state.character_members.exists():
             return
 

@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404
 from battle.models import Battle
 from character.models import Character
 from decorators import inchar_required
-from turn.turn import field_output_months
+from turn.building_production import field_output_months
 from unit.models import WorldUnit
 from world.models.events import TileEvent
 from world.models.geography import World, Tile

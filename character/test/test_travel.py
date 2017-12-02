@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls.base import reverse
 
 from character.models import Character
-from turn.turn import TurnProcessor
+from turn.character import worldwide_character_travels
 
 
 class TestTravel(TestCase):
@@ -79,8 +79,7 @@ class TestTravel(TestCase):
         self.assertEqual(character.hours_in_turn_left, 15*24)
         self.assertEqual(character.travel_destination_id, 1002)
 
-        turn_processor = TurnProcessor(character.world)
-        turn_processor.do_travels()
+        worldwide_character_travels(character.world)
 
         character.refresh_from_db()
         self.assertEqual(character.location_id, 1002)

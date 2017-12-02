@@ -2,7 +2,7 @@ import math
 
 from django.test import TestCase
 
-from turn.turn import TurnProcessor
+from turn.building_production import do_building_production
 from world.models.buildings import Building
 from world.models.geography import Settlement
 from world.models.items import InventoryItem
@@ -33,8 +33,7 @@ class TestFieldProduction(TestCase):
                 skill_fighting=0
             )
 
-        turn_processor = TurnProcessor(settlement.tile.world)
-        turn_processor.do_building_production(buildings)
+        do_building_production(buildings)
 
         buildings.refresh_from_db()
         self.assertEqual(buildings.quantity, 3110)
@@ -67,8 +66,7 @@ class TestFieldProduction(TestCase):
                 skill_fighting=0
             )
 
-        turn_processor = TurnProcessor(settlement.tile.world)
-        turn_processor.do_building_production(buildings)
+        do_building_production(buildings)
 
         buildings.refresh_from_db()
         self.assertEqual(buildings.quantity, 100)
@@ -101,8 +99,7 @@ class TestFieldProduction(TestCase):
                 skill_fighting=0
             )
 
-        turn_processor = TurnProcessor(settlement.tile.world)
-        turn_processor.do_building_production(buildings)
+        do_building_production(buildings)
 
         buildings.refresh_from_db()
         self.assertEqual(buildings.quantity, 100)
@@ -135,8 +132,7 @@ class TestFieldProduction(TestCase):
                 skill_fighting=0
             )
 
-        turn_processor = TurnProcessor(settlement.tile.world)
-        turn_processor.do_building_production(buildings)
+        do_building_production(buildings)
 
         buildings.refresh_from_db()
         self.assertEqual(buildings.quantity, 10)
@@ -172,8 +168,7 @@ class TestFieldProduction(TestCase):
                 skill_fighting=0
             )
 
-        turn_processor = TurnProcessor(settlement.tile.world)
-        turn_processor.do_building_production(buildings)
+        do_building_production(buildings)
 
         buildings.refresh_from_db()
         self.assertEqual(buildings.quantity, 100)
@@ -197,8 +192,7 @@ class TestFieldProduction(TestCase):
         settlement.tile.world.current_turn = 8
         settlement.tile.world.save()
 
-        turn_processor = TurnProcessor(settlement.tile.world)
-        turn_processor.do_building_production(buildings)
+        do_building_production(buildings)
 
         buildings.refresh_from_db()
         self.assertEqual(buildings.field_production_counter, 0)
@@ -228,8 +222,7 @@ class TestGuildProduction(TestCase):
                 skill_fighting=0
             )
 
-        turn_processor = TurnProcessor(settlement.tile.world)
-        turn_processor.do_building_production(guild)
+        do_building_production(guild)
 
         guild.refresh_from_db()
         self.assertEqual(guild.quantity, 1)

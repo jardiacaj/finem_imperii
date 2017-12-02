@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from turn.turn import TurnProcessor
+from turn.demography import do_settlement_food_consumption
 from world.initialization import initialize_settlement
 from world.models.geography import Settlement
 
@@ -18,8 +18,7 @@ class TestFoodConsumption(TestCase):
 
         initialize_settlement(settlement)
 
-        turn_processor = TurnProcessor(settlement.tile.world)
-        turn_processor.do_settlement_food_consumption(settlement)
+        do_settlement_food_consumption(settlement)
 
         bushels.refresh_from_db()
         self.assertEqual(bushels.quantity, 100)
@@ -34,8 +33,7 @@ class TestFoodConsumption(TestCase):
 
         initialize_settlement(settlement)
 
-        turn_processor = TurnProcessor(settlement.tile.world)
-        turn_processor.do_settlement_food_consumption(settlement)
+        do_settlement_food_consumption(settlement)
 
         bushels.refresh_from_db()
         self.assertEqual(bushels.quantity, 0)
@@ -52,8 +50,7 @@ class TestFoodConsumption(TestCase):
 
         initialize_settlement(settlement)
 
-        turn_processor = TurnProcessor(settlement.tile.world)
-        turn_processor.do_settlement_food_consumption(settlement)
+        do_settlement_food_consumption(settlement)
 
         bushels.refresh_from_db()
         self.assertEqual(bushels.quantity, 0)
@@ -73,16 +70,14 @@ class TestFoodConsumption(TestCase):
         settlement.npc_set.all().update(hunger=2)
         self.assertEqual(settlement.npc_set.filter(hunger=2).count(), 10)
 
-        turn_processor = TurnProcessor(settlement.tile.world)
-        turn_processor.do_settlement_food_consumption(settlement)
+        do_settlement_food_consumption(settlement)
 
         bushels.refresh_from_db()
         self.assertEqual(bushels.quantity, 10)
 
         self.assertEqual(settlement.npc_set.filter(hunger=1).count(), 10)
 
-        turn_processor = TurnProcessor(settlement.tile.world)
-        turn_processor.do_settlement_food_consumption(settlement)
+        do_settlement_food_consumption(settlement)
 
         bushels.refresh_from_db()
         self.assertEqual(bushels.quantity, 0)

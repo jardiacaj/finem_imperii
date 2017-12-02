@@ -3,11 +3,13 @@ from django.urls.base import reverse
 
 from battle.models import Battle
 from organization.models.organization import Organization
-from turn.turn import organizations_with_battle_ready_units, \
-    battle_ready_units_in_tile, \
-    opponents_in_organization_list, get_largest_conflict_in_list, \
-    create_battle_from_conflict, TurnProcessor, \
-    do_settlement_barbarian_generation
+from turn.barbarians import do_settlement_barbarian_generation
+from turn.battle import organizations_with_battle_ready_units, \
+    battle_ready_units_in_tile, opponents_in_organization_list, \
+    get_largest_conflict_in_list, create_battle_from_conflict
+from turn.conquest import worldwide_do_conquests
+from turn.demography import do_settlement_population_changes
+from turn.unit import do_unit_payment
 from unit.models import WorldUnit
 from world.admin import pass_turn
 from world.initialization import initialize_unit, initialize_settlement
@@ -34,8 +36,7 @@ class TestTurn(TestCase):
         settlement.npc_set.all().delete()
         settlement.update_population()
         self.assertEqual(settlement.population, 0)
-        processor = TurnProcessor(settlement.tile.world)
-        processor.do_settlement_population_changes(settlement)
+        do_settlement_population_changes(settlement)
         self.assertEqual(settlement.population, 5)
 
     def test_organizations_with_battle_ready_units(self):
@@ -124,8 +125,7 @@ class TestTurn(TestCase):
             counter=0,
             start_turn=0
         )
-        processor = TurnProcessor(tile.world)
-        processor.do_conquests()
+        worldwide_do_conquests(tile.world)
 
         tile.refresh_from_db()
         self.assertNotEqual(tile.controlled_by, conqueror)
@@ -143,8 +143,7 @@ class TestTurn(TestCase):
             counter=0,
             start_turn=0
         )
-        processor = TurnProcessor(tile.world)
-        processor.do_conquests()
+        worldwide_do_conquests(tile.world)
 
         tile.refresh_from_db()
         self.assertNotEqual(tile.controlled_by, conqueror)
@@ -162,8 +161,7 @@ class TestTurn(TestCase):
             counter=100000,
             start_turn=0
         )
-        processor = TurnProcessor(tile.world)
-        processor.do_conquests()
+        worldwide_do_conquests(tile.world)
 
         tile.refresh_from_db()
         self.assertEqual(tile.controlled_by, conqueror)
@@ -195,7 +193,7 @@ class TestTurn(TestCase):
     def test_unit_debt_increase(self):
         unit = WorldUnit.objects.get(id=4)
         initialize_unit(unit)
-        TurnProcessor.do_unit_payment(None, unit)
+        do_unit_payment(unit)
         self.assertEqual(unit.owners_debt, 100)
 
     def test_unit_debt_for_barbarian_unit(self):
@@ -203,5 +201,5 @@ class TestTurn(TestCase):
         unit.owner_character = None
         unit.save()
         initialize_unit(unit)
-        TurnProcessor.do_unit_payment(None, unit)
+        do_unit_payment(unit)
         self.assertEqual(unit.owners_debt, 0)

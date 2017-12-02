@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from character.models import Character
-from turn.turn import TurnProcessor
+from turn.character import worldwide_pause_characters
 from unit.models import WorldUnit
 
 
@@ -127,8 +127,7 @@ class TestCharacterPause(TestCase):
         character = Character.objects.get(id=1)
         character.last_activation_time = timezone.now() - timedelta(days=30)
         character.save()
-        turn_processor = TurnProcessor(character.world)
-        turn_processor.character_pausing()
+        worldwide_pause_characters(character.world)
         character.refresh_from_db()
         self.assertTrue(character.paused)
 
@@ -136,7 +135,6 @@ class TestCharacterPause(TestCase):
         character = Character.objects.get(id=1)
         character.last_activation_time = timezone.now()
         character.save()
-        turn_processor = TurnProcessor(character.world)
-        turn_processor.character_pausing()
+        worldwide_pause_characters(character.world)
         character.refresh_from_db()
         self.assertFalse(character.paused)

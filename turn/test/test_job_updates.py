@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from turn.turn import TurnProcessor
+from turn.npc_jobs import settlement_job_updates
 from world.initialization import initialize_settlement
 from world.models.buildings import Building
 from world.models.geography import Settlement
@@ -14,8 +14,7 @@ class TestJobUpdates(TestCase):
 
     def test_guild_default(self):
         initialize_settlement(self.settlement)
-        turn_processor = TurnProcessor(self.settlement.tile.world)
-        turn_processor.do_settlement_job_updates(self.settlement)
+        settlement_job_updates(self.settlement)
         self.assertEqual(
             self.settlement.guilds_setting, Settlement.GUILDS_KEEP)
         self.assertTrue(
@@ -29,8 +28,7 @@ class TestJobUpdates(TestCase):
         self.settlement.guilds_setting = Settlement.GUILDS_PROMOTE
         self.settlement.save()
         initialize_settlement(self.settlement)
-        turn_processor = TurnProcessor(self.settlement.tile.world)
-        turn_processor.do_settlement_job_updates(self.settlement)
+        settlement_job_updates(self.settlement)
         self.assertTrue(
             self.settlement.get_residents().filter(
                 workplace__type=Building.GRAIN_FIELD).exists())
@@ -43,8 +41,7 @@ class TestJobUpdates(TestCase):
 
     def test_guild_prohibit(self):
         initialize_settlement(self.settlement)
-        turn_processor = TurnProcessor(self.settlement.tile.world)
-        turn_processor.do_settlement_job_updates(self.settlement)
+        settlement_job_updates(self.settlement)
         guild = self.settlement.building_set.get(type=Building.GUILD)
         for worker in list(self.settlement.get_residents().filter(
                 workplace__type=Building.GRAIN_FIELD))[:30]:
@@ -56,7 +53,7 @@ class TestJobUpdates(TestCase):
 
         self.settlement.guilds_setting = Settlement.GUILDS_PROHIBIT
         self.settlement.save()
-        turn_processor.do_settlement_job_updates(self.settlement)
+        settlement_job_updates(self.settlement)
         self.assertTrue(
             self.settlement.get_residents().filter(
                 workplace__type=Building.GRAIN_FIELD).exists())
@@ -66,8 +63,7 @@ class TestJobUpdates(TestCase):
 
     def test_guild_restrict(self):
         initialize_settlement(self.settlement)
-        turn_processor = TurnProcessor(self.settlement.tile.world)
-        turn_processor.do_settlement_job_updates(self.settlement)
+        settlement_job_updates(self.settlement)
         guild = self.settlement.building_set.get(type=Building.GUILD)
         for worker in list(self.settlement.get_residents().filter(
                 workplace__type=Building.GRAIN_FIELD))[:30]:
@@ -79,7 +75,7 @@ class TestJobUpdates(TestCase):
 
         self.settlement.guilds_setting = Settlement.GUILDS_RESTRICT
         self.settlement.save()
-        turn_processor.do_settlement_job_updates(self.settlement)
+        settlement_job_updates(self.settlement)
         self.assertTrue(
             self.settlement.get_residents().filter(
                 workplace__type=Building.GRAIN_FIELD).exists())

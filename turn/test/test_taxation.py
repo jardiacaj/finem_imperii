@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from character.models import Character
 from organization.models.organization import Organization
-from turn.turn import TurnProcessor
+from turn.taxes import worldwide_taxes
 from world.models.buildings import Building
 from world.models.geography import Settlement
 
@@ -15,8 +15,7 @@ class TestTaxation(TestCase):
         state.tax_countdown = 7
         state.save()
 
-        turn_processor = TurnProcessor(state.world)
-        turn_processor.do_taxes()
+        worldwide_taxes(state.world)
 
         state.refresh_from_db()
         self.assertEqual(state.tax_countdown, 6)
@@ -27,8 +26,7 @@ class TestTaxation(TestCase):
         guild.field_production_counter = 100
         guild.save()
 
-        turn_processor = TurnProcessor(settlement.tile.world)
-        turn_processor.do_taxes()
+        worldwide_taxes(settlement.tile.world)
 
         state = settlement.tile.controlled_by.get_violence_monopoly()
         self.assertEqual(state.tax_countdown, 6)

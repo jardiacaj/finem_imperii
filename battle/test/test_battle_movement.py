@@ -8,7 +8,7 @@ from battle.battle_tick import battle_tick, optimistic_move_desire_formulation, 
 from battle.models import Battle, BattleUnit, \
     BattleContuberniumInTurn, BattleUnitInTurn, Order, Coordinates
 from organization.models.organization import Organization
-from turn.turn import trigger_battles_in_tile
+from turn.battle import trigger_battles_in_tile
 from unit.models import WorldUnit
 from world.initialization import initialize_unit
 from world.models.geography import Tile

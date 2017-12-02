@@ -5,7 +5,7 @@ from battle.battle_init import start_battle
 from battle.battle_tick import battle_tick
 from battle.models import Battle, BattleUnit, Order, BattleOrganization, \
     BattleCharacter, BattleSoldier, BattleSoldierInTurn
-from turn.turn import trigger_battles_in_tile
+from turn.battle import trigger_battles_in_tile
 from unit.models import WorldUnit
 from world.initialization import initialize_unit
 from world.models.geography import Tile, World

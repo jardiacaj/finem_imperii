@@ -129,6 +129,7 @@ class RecruitmentView(View):
                 unit_type
             )
             unit.mobilize()
+            unit.status = WorldUnit.FOLLOWING
 
             request.hero.hours_in_turn_left -= request.hero.location.\
                 conscription_time(target_soldier_count)

@@ -8,8 +8,9 @@ from battle.models import Battle, BattleCharacter, BattleUnit, \
     BattleContuberniumInTurn, BattleSoldierInTurn, BattleUnitInTurn, Order
 from organization.models.organization import Organization
 from organization.models.relationship import MilitaryStance
-from turn.turn import trigger_battles_in_tile, TurnProcessor, \
-    generate_barbarian_unit, battle_joins
+from turn.barbarians import generate_barbarian_unit
+from turn.battle import trigger_battles_in_tile, battle_joins, \
+    worldwide_trigger_battles, worldwide_battle_joins
 from unit.models import WorldUnit
 from world.initialization import initialize_unit, initialize_settlement
 from world.models.geography import Tile, World, Settlement
@@ -30,14 +31,13 @@ class BattleBarbarians(TestCase):
 
     def test_battle_with_barbarians(self):
         world = World.objects.get(id=2)
-        turn_processor = TurnProcessor(world)
         unit_of_kingrom_member = WorldUnit.objects.get(id=4)
         initialize_unit(unit_of_kingrom_member)
         kingdom_member = unit_of_kingrom_member.owner_character
         settlement = kingdom_member.location
         initialize_settlement(settlement)
         generate_barbarian_unit(30, settlement)
-        turn_processor.trigger_battles()
+        worldwide_trigger_battles(world)
         self.assertTrue(settlement.tile.get_current_battles().exists())
         battle = settlement.tile.get_current_battles()[0]
         start_battle(battle)
@@ -318,8 +318,8 @@ class TestBattleStartWithAllies(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_battle_create_from_units_with_allies(self):
-        turn_processor = TurnProcessor(World.objects.get(id=2))
-        turn_processor.trigger_battles()
+        world = World.objects.get(id=2)
+        worldwide_trigger_battles(world)
 
         self.assertTrue(Battle.objects.exists())
 
@@ -389,8 +389,8 @@ class TestBattleStartWithAllies(TestCase):
         self.unit_of_warrior.location_id = 1001
         self.unit_of_warrior.save()
 
-        turn_processor = TurnProcessor(World.objects.get(id=2))
-        turn_processor.trigger_battles()
+        world = World.objects.get(id=2)
+        worldwide_trigger_battles(world)
 
         self.assertTrue(Battle.objects.exists())
 
@@ -459,7 +459,7 @@ class TestBattleStartWithAllies(TestCase):
         self.unit_of_warrior.location_id = 1007
         self.unit_of_warrior.save()
 
-        turn_processor.battle_joins()
+        worldwide_battle_joins(world)
         self.assertTrue(
             BattleUnit.objects.filter(world_unit=self.unit_of_warrior,
                                       starting_manpower=30).exists()
@@ -470,8 +470,8 @@ class TestBattleStartWithAllies(TestCase):
         self.unit_of_commonwealth.location_id = 1001
         self.unit_of_commonwealth.save()
 
-        turn_processor = TurnProcessor(World.objects.get(id=2))
-        turn_processor.trigger_battles()
+        world = World.objects.get(id=2)
+        worldwide_trigger_battles(world)
 
         self.assertTrue(Battle.objects.exists())
 
@@ -540,7 +540,7 @@ class TestBattleStartWithAllies(TestCase):
         self.unit_of_commonwealth.location_id = 1007
         self.unit_of_commonwealth.save()
 
-        turn_processor.battle_joins()
+        worldwide_battle_joins(world)
 
         self.assertTrue(
             BattleOrganization.objects.filter(side__battle=self.battle,

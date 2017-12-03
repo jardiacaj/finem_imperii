@@ -2,7 +2,6 @@ import logging
 
 from django.core.management.base import BaseCommand, CommandError
 
-from context_managers import perf_timer
 from world.initialization import initialize_world, AlreadyInitializedException
 from world.models.geography import World
 
@@ -24,11 +23,7 @@ class Command(BaseCommand):
                     'World with id {} does not exist'.format(world_id))
 
             try:
-                with perf_timer('{} ({}) initialization'.format(
-                    world,
-                    world_id
-                )):
-                    initialize_world(world)
+                initialize_world(world)
             except AlreadyInitializedException:
                 raise CommandError('{} ({}) is already initialized'.format(
                     world,

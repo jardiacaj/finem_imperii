@@ -2,7 +2,6 @@ import logging
 
 from django.core.management.base import BaseCommand, CommandError
 
-from context_managers import perf_timer
 from turn.turn import pass_turn
 from world.models.geography import World
 
@@ -24,10 +23,7 @@ class Command(BaseCommand):
                     world_id
                 ))
 
-            with perf_timer('Turn in {} ({})'.format(
-                world, world_id
-            )):
-                pass_turn(world)
+            pass_turn(world)
 
             self.stdout.write(
                 self.style.SUCCESS(

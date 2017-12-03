@@ -5,6 +5,7 @@ from django.db import transaction
 
 import world.models.npcs
 import world.models.buildings
+from context_managers import perf_timer
 from finem_imperii.random import WeightedChoice, weighted_choice
 from name_generator.name_generator import generate_name
 from world.models.npcs import NPC
@@ -16,17 +17,19 @@ class AlreadyInitializedException(Exception):
 
 @transaction.atomic
 def initialize_world(world):
-    logging.info("Initializing world {}".format(world))
-    if world.initialized:
-        raise AlreadyInitializedException("World {} already initialized!".format(world))
-    for organization in world.organization_set.all():
-        initialize_organization(organization)
-    for unit in world.worldunit_set.all():
-        initialize_unit(unit)
-    for tile in world.tile_set.all():
-        initialize_tile(tile)
-    world.initialized = True
-    world.save()
+    with perf_timer('Initializing world {} ({})'.format(
+            world, world.id)):
+        if world.initialized:
+            raise AlreadyInitializedException(
+                "World {} already initialized!".format(world))
+        for organization in world.organization_set.all():
+            initialize_organization(organization)
+        for unit in world.worldunit_set.all():
+            initialize_unit(unit)
+        for tile in world.tile_set.all():
+            initialize_tile(tile)
+        world.initialized = True
+        world.save()
 
 
 def initialize_organization(organization):
@@ -34,40 +37,41 @@ def initialize_organization(organization):
 
 
 def initialize_tile(tile):
-    logging.info("Initializing tile {}".format(tile))
     for settlement in tile.settlement_set.all():
         initialize_settlement(settlement)
 
 
 def initialize_settlement(settlement):
-    logging.info("Initializing settlement {}".format(settlement))
-    residences = settlement.building_set.filter(
-        type=world.models.buildings.Building.RESIDENCE).all()
-    fields = settlement.building_set.filter(
-        type=world.models.buildings.Building.GRAIN_FIELD).all()
-    total_field_workplaces = sum(field.max_workers() for field in fields)
-    other_workplaces = settlement.building_set.exclude(
-        type__in=(
-            world.models.buildings.Building.RESIDENCE,
-            world.models.buildings.Building.GRAIN_FIELD
+    with perf_timer('Initializing settlement {} ({}), pop. {}'.format(
+            settlement, settlement.id, settlement.population_default)):
+        
+        residences = settlement.building_set.filter(
+            type=world.models.buildings.Building.RESIDENCE).all()
+        fields = settlement.building_set.filter(
+            type=world.models.buildings.Building.GRAIN_FIELD).all()
+        total_field_workplaces = sum(field.max_workers() for field in fields)
+        other_workplaces = settlement.building_set.exclude(
+            type__in=(
+                world.models.buildings.Building.RESIDENCE,
+                world.models.buildings.Building.GRAIN_FIELD
+            )
+        ).all()
+        total_other_workplaces = sum(j.max_workers() for j in other_workplaces)
+
+        settlement.population = settlement.population_default
+        settlement.save()
+
+        assigned_workers = 0
+
+        for i in range(settlement.population):
+            npc = generate_npc(i, residences, settlement)
+            npc.save()
+
+        settlement.building_set.filter(
+            type=world.models.buildings.Building.GRAIN_FIELD
+        ).update(
+            field_production_counter=1500
         )
-    ).all()
-    total_other_workplaces = sum(j.max_workers() for j in other_workplaces)
-
-    settlement.population = settlement.population_default
-    settlement.save()
-
-    assigned_workers = 0
-
-    for i in range(settlement.population):
-        npc = generate_npc(i, residences, settlement)
-        npc.save()
-
-    settlement.building_set.filter(
-        type=world.models.buildings.Building.GRAIN_FIELD
-    ).update(
-        field_production_counter=1500
-    )
 
 
 def generate_npc(i, residences, settlement):
@@ -102,20 +106,22 @@ def generate_npc(i, residences, settlement):
 
 
 def initialize_unit(unit):
-    for i in range(unit.generation_size):
-        world.models.npcs.NPC.objects.create(
-            name="Soldier {} of {}".format(i, unit),
-            male=random.getrandbits(1),
-            able=True,
-            age_months=20*12,
-            origin=unit.location,
-            residence=None,
-            location=unit.location,
-            workplace=None,
-            unit=unit,
-            trained_soldier=random.getrandbits(4) == 0,
-            skill_fighting=random.randint(0, 80)
-        )
+    with perf_timer('Initializing unit {} ({})'.format(
+            unit, unit.id)):
+        for i in range(unit.generation_size):
+            world.models.npcs.NPC.objects.create(
+                name="Soldier {} of {}".format(i, unit),
+                male=random.getrandbits(1),
+                able=True,
+                age_months=20*12,
+                origin=unit.location,
+                residence=None,
+                location=unit.location,
+                workplace=None,
+                unit=unit,
+                trained_soldier=random.getrandbits(4) == 0,
+                skill_fighting=random.randint(0, 80)
+            )
 
-    unit.generation_size = 0
-    unit.save()
+        unit.generation_size = 0
+        unit.save()

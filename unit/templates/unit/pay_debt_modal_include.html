@@ -1,0 +1,62 @@
+<button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+        data-target="#unit_debt_modal_{{ unit.id }}">
+    Pay debt
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="unit_debt_modal_{{ unit.id }}" tabindex="-1"
+     role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form class="form-horizontal" method="post"
+                  action="{% url 'unit:pay_debt' unit.id %}">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        Debt payment for {{ unit.get_long_html_descriptor|safe }}
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %}
+
+                    <p>
+                        {% if unit.owner_character == request.hero %}
+                            Due payment: {{ unit.owners_debt }}
+                        {% else %}
+                            Because you don't own this unit, the debt of its
+                            owner to it is unknown to you.
+                        {% endif %}
+                    </p>
+
+                    <div class="form-group">
+                        <label for="debt"
+                               class="col-sm-3 control-label">Pay debt</label>
+                        <div class="col-sm-9">
+                            <input
+                                    id="debt"
+                                    class="form-control form-control"
+                                    type="number"
+                                    value=""
+                                    min="1"
+                                    max="{{ request.hero.cash }}"
+                                    name="amount"
+                                    placeholder="Coins"
+                            >
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"
+                            data-dismiss="modal">Close
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Pay
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

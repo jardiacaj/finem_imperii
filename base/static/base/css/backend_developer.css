@@ -87,6 +87,7 @@ pre.wrapping {
     color: #000000;
     text-shadow: #FFF 0px 0px 2px;
     -webkit-font-smoothing: antialiased;
+    pointer-events: none;
 }
 
 .settlement_tag {
@@ -100,6 +101,7 @@ pre.wrapping {
     color: #000000;
     text-shadow: #FFF 0px 0px 2px;
     -webkit-font-smoothing: antialiased;
+    pointer-events: none;
 }
 
 .formation-drawing {

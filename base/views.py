@@ -4,7 +4,7 @@ from messaging.models import ServerMOTD
 
 
 def homepage(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         return redirect('account:home')
     else:
         context = {

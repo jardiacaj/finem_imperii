@@ -33,9 +33,9 @@ class OrganizationRelationship(models.Model):
     }
 
     from_organization = models.ForeignKey(
-        'Organization', related_name='relationships_stemming')
+        'Organization', models.CASCADE, related_name='relationships_stemming')
     to_organization = models.ForeignKey(
-        'Organization', related_name='relationships_receiving')
+        'Organization', models.CASCADE, related_name='relationships_receiving')
     relationship = models.CharField(
         max_length=20, choices=RELATIONSHIP_CHOICES, default=PEACE)
     desired_relationship = models.CharField(
@@ -150,11 +150,11 @@ class MilitaryStance(models.Model):
     )
 
     from_organization = models.ForeignKey(
-        'Organization', related_name='mil_stances_stemming')
+        'Organization', models.CASCADE, related_name='mil_stances_stemming')
     to_organization = models.ForeignKey(
-        'Organization', related_name='mil_stances_receiving')
+        'Organization', models.CASCADE, related_name='mil_stances_receiving')
     region = models.ForeignKey(
-        'world.Tile', related_name='+', null=True, blank=True)
+        'world.Tile', models.CASCADE, related_name='+', null=True, blank=True)
     stance_type = models.CharField(
         max_length=20, choices=STANCE_CHOICES, default=DEFAULT)
 

@@ -2,7 +2,7 @@ from collections import namedtuple, defaultdict
 
 import math
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 from django.db.models.aggregates import Sum, Avg
 
@@ -30,12 +30,17 @@ class BattleFormation(models.Model):
     formation = models.CharField(max_length=15, choices=FORMATION_CHOICES)
     element_size = models.IntegerField(null=True, blank=True)
     spacing = models.IntegerField(null=True, blank=True)
-    organization = models.ForeignKey('organization.Organization')
-    battle = models.ForeignKey('Battle', null=True, blank=True)
+    organization = models.ForeignKey(
+        'organization.Organization',
+        on_delete=models.CASCADE
+    )
+    battle = models.ForeignKey('Battle',
+                               null=True, blank=True, on_delete=models.CASCADE
+                               )
 
 
 class Battle(models.Model):
-    tile = models.ForeignKey('world.Tile')
+    tile = models.ForeignKey('world.Tile', on_delete=models.CASCADE)
     current = models.BooleanField(default=True)
     started = models.BooleanField(default=False)
     start_turn = models.IntegerField()
@@ -71,7 +76,8 @@ class BattleTurn(models.Model):
         unique_together = (
             ("battle", "num"),
         )
-    battle = models.ForeignKey(Battle)
+
+    battle = models.ForeignKey(Battle, on_delete=models.CASCADE)
     num = models.IntegerField()
 
     def test_contubernia_superposition(self):
@@ -84,7 +90,8 @@ class BattleTurn(models.Model):
 
     def get_contubernia_by_desired_position(self) -> dict:
         result = defaultdict(list)
-        for contubernium in BattleContuberniumInTurn.objects.filter(battle_turn=self, desires_pos=True):
+        for contubernium in BattleContuberniumInTurn.objects.filter(
+                battle_turn=self, desires_pos=True):
             result[contubernium.desired_coordinates()].append(contubernium)
         return result
 
@@ -108,7 +115,7 @@ class BattleTurn(models.Model):
 
 
 class BattleSide(models.Model):
-    battle = models.ForeignKey(Battle)
+    battle = models.ForeignKey(Battle, on_delete=models.CASCADE)
     z = models.BooleanField(default=False)
 
     def get_largest_organization(self):
@@ -146,30 +153,44 @@ class BattleSide(models.Model):
 
 
 class BattleOrganization(models.Model):
-    side = models.ForeignKey(BattleSide)
-    organization = models.ForeignKey('organization.Organization')
+    side = models.ForeignKey(BattleSide, on_delete=models.CASCADE)
+    organization = models.ForeignKey(
+        'organization.Organization', on_delete=models.PROTECT)
 
     def get_initial_manpower(self):
-        return BattleUnit.objects.filter(battle_organization=self).\
+        return BattleUnit.objects.filter(battle_organization=self). \
             aggregate(Sum('starting_manpower'))['starting_manpower__sum']
 
 
 class BattleCharacter(models.Model):
-    battle_organization = models.ForeignKey(BattleOrganization)
-    character = models.ForeignKey('character.Character')
+    battle_organization = models.ForeignKey(
+        BattleOrganization,
+        on_delete=models.CASCADE
+    )
+    character = models.ForeignKey(
+        'character.Character',
+        on_delete=models.PROTECT
+    )
     present_in_battle = models.BooleanField()
 
 
 class BattleCharacterInTurn(models.Model):
-    battle_character = models.ForeignKey(BattleCharacter)
-    battle_turn = models.ForeignKey(BattleTurn)
+    battle_character = models.ForeignKey(
+        BattleCharacter, on_delete=models.CASCADE)
+    battle_turn = models.ForeignKey(BattleTurn, on_delete=models.CASCADE)
 
 
 class BattleUnit(models.Model):
-    battle_side = models.ForeignKey(BattleSide)
-    owner = models.ForeignKey(BattleCharacter, blank=True, null=True)
-    battle_organization = models.ForeignKey(BattleOrganization)
-    world_unit = models.ForeignKey('unit.WorldUnit')
+    battle_side = models.ForeignKey(BattleSide, on_delete=models.CASCADE)
+    owner = models.ForeignKey(
+        BattleCharacter,
+        blank=True, null=True,
+        on_delete=models.CASCADE
+    )
+    battle_organization = models.ForeignKey(
+        BattleOrganization, on_delete=models.CASCADE)
+    world_unit = models.ForeignKey(
+        'unit.WorldUnit', on_delete=models.PROTECT)
     starting_x_pos = models.IntegerField(default=0)
     starting_z_pos = models.IntegerField(default=0)
     starting_manpower = models.IntegerField()
@@ -203,13 +224,16 @@ class BattleUnit(models.Model):
 
 
 class BattleUnitInTurn(models.Model):
-    battle_unit = models.ForeignKey(BattleUnit)
-    battle_character_in_turn = models.ForeignKey(BattleCharacterInTurn,
-                                                 blank=True, null=True)
-    battle_turn = models.ForeignKey(BattleTurn)
+    battle_unit = models.ForeignKey(BattleUnit, on_delete=models.CASCADE)
+    battle_character_in_turn = models.ForeignKey(
+        BattleCharacterInTurn,
+        blank=True, null=True,
+        on_delete=models.CASCADE
+    )
+    battle_turn = models.ForeignKey(BattleTurn, on_delete=models.CASCADE)
     x_pos = models.IntegerField()
     z_pos = models.IntegerField()
-    order = models.ForeignKey('Order', null=True)
+    order = models.ForeignKey('Order', null=True, on_delete=models.CASCADE)
 
     def coordinates(self):
         return Coordinates(self.x_pos, self.z_pos)
@@ -225,7 +249,7 @@ class BattleUnitInTurn(models.Model):
 
 
 class BattleContubernium(models.Model):
-    battle_unit = models.ForeignKey(BattleUnit)
+    battle_unit = models.ForeignKey(BattleUnit, on_delete=models.CASCADE)
     starting_x_pos = models.IntegerField(default=0)
     starting_z_pos = models.IntegerField(default=0)
     x_offset_to_unit = models.IntegerField(
@@ -248,9 +272,12 @@ class BattleContuberniumInTurn(models.Model):
         unique_together = [
             ["battle_turn", "x_pos", "z_pos"],
         ]
-    battle_contubernium = models.ForeignKey(BattleContubernium)
-    battle_unit_in_turn = models.ForeignKey(BattleUnitInTurn)
-    battle_turn = models.ForeignKey(BattleTurn)
+
+    battle_contubernium = models.ForeignKey(
+        BattleContubernium, on_delete=models.CASCADE)
+    battle_unit_in_turn = models.ForeignKey(
+        BattleUnitInTurn, on_delete=models.CASCADE)
+    battle_turn = models.ForeignKey(BattleTurn, on_delete=models.CASCADE)
     x_pos = models.IntegerField()
     z_pos = models.IntegerField()
     moved_this_turn = models.BooleanField(default=False)
@@ -262,18 +289,20 @@ class BattleContuberniumInTurn(models.Model):
         max_length=15, blank=True, null=True, choices=ATTACK_TYPE_CHOICES)
     contubernium_attacked_this_turn = models.ForeignKey(
         "BattleContuberniumInTurn",
-        blank=True, null=True)
+        blank=True, null=True, on_delete=models.CASCADE)
 
     def coordinates(self):
         return Coordinates(self.x_pos, self.z_pos)
 
     def desired_coordinates(self):
-        return Coordinates(self.desired_x_pos, self.desired_z_pos) if self.desires_pos else None
+        return Coordinates(self.desired_x_pos,
+                           self.desired_z_pos) if self.desires_pos else None
 
 
 class BattleSoldier(models.Model):
-    world_npc = models.ForeignKey('world.NPC')
-    battle_contubernium = models.ForeignKey(BattleContubernium)
+    world_npc = models.ForeignKey('world.NPC', on_delete=models.PROTECT)
+    battle_contubernium = models.ForeignKey(
+        BattleContubernium, on_delete=models.CASCADE)
 
 
 class BattleSoldierInTurn(models.Model):
@@ -283,11 +312,11 @@ class BattleSoldierInTurn(models.Model):
     HEAVY_WOUND = 3
     DEAD = 4
     WOUND_STATUS_CHOICES = (
-       (UNINJURED, "uninjured"),
-       (LIGHT_WOUND, "lightly wounds"),
-       (MEDIUM_WOUND, "wounded"),
-       (HEAVY_WOUND, "heavy wounds"),
-       (DEAD, "dead"),
+        (UNINJURED, "uninjured"),
+        (LIGHT_WOUND, "lightly wounds"),
+        (MEDIUM_WOUND, "wounded"),
+        (HEAVY_WOUND, "heavy wounds"),
+        (DEAD, "dead"),
     )
 
     ATTACK_CHANGE_MULTIPLIERS = {
@@ -298,9 +327,11 @@ class BattleSoldierInTurn(models.Model):
         DEAD: 0,
     }
 
-    battle_soldier = models.ForeignKey(BattleSoldier)
-    battle_contubernium_in_turn = models.ForeignKey(BattleContuberniumInTurn)
-    battle_turn = models.ForeignKey(BattleTurn)
+    battle_soldier = models.ForeignKey(BattleSoldier, on_delete=models.CASCADE)
+    battle_contubernium_in_turn = models.ForeignKey(
+        BattleContuberniumInTurn, on_delete=models.CASCADE)
+    battle_turn = models.ForeignKey(
+        BattleTurn, on_delete=models.CASCADE)
     wound_status = models.SmallIntegerField(
         choices=WOUND_STATUS_CHOICES, default=UNINJURED
     )
@@ -325,15 +356,15 @@ class Order(models.Model):
     RANGED_AND_STAND = 'ranged and stand'
     STAND_AND_DISTANCE = 'stand and keep distance'
     WHAT_CHOICES = (
-       (STAND, STAND),
-       (MOVE, MOVE),
-       (FLEE, FLEE),
-       (CHARGE, CHARGE),
-       (ADVANCE_IN_FORMATION, "advance maintaining formation"),
-       (RANGED_AND_CHARGE, "ranged attack, then charge"),
-       (RANGED_AND_FLEE, "ranged attack, then flee"),
-       (RANGED_AND_STAND, "ranged attack, then stand"),
-       (STAND_AND_DISTANCE, STAND_AND_DISTANCE),
+        (STAND, STAND),
+        (MOVE, MOVE),
+        (FLEE, FLEE),
+        (CHARGE, CHARGE),
+        (ADVANCE_IN_FORMATION, "advance maintaining formation"),
+        (RANGED_AND_CHARGE, "ranged attack, then charge"),
+        (RANGED_AND_FLEE, "ranged attack, then flee"),
+        (RANGED_AND_STAND, "ranged attack, then stand"),
+        (STAND_AND_DISTANCE, STAND_AND_DISTANCE),
     )
     ORDER_PRIORITY = {
         STAND: 4,
@@ -356,7 +387,7 @@ class Order(models.Model):
 
 
 class BattleObject(models.Model):
-    battle = models.ForeignKey(Battle)
+    battle = models.ForeignKey(Battle, on_delete=models.CASCADE)
 
 
 class BattleObjectInTurn(models.Model):
@@ -364,7 +395,8 @@ class BattleObjectInTurn(models.Model):
         index_together = [
             ["battle_turn", "x_pos", "z_pos"],
         ]
-    battle_object = models.ForeignKey(BattleObject)
-    battle_turn = models.ForeignKey(BattleTurn)
+
+    battle_object = models.ForeignKey(BattleObject, on_delete=models.CASCADE)
+    battle_turn = models.ForeignKey(BattleTurn, on_delete=models.CASCADE)
     x_pos = models.IntegerField()
     z_pos = models.IntegerField()

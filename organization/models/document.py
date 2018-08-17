@@ -4,9 +4,10 @@ from django.utils.html import format_html
 
 
 class PolicyDocument(models.Model):
-    organization = models.ForeignKey('Organization')
+    organization = models.ForeignKey('Organization', models.CASCADE)
     parent = models.ForeignKey(
-        'PolicyDocument', related_name='children', null=True, blank=True)
+        'PolicyDocument', models.SET_NULL, related_name='children', null=True,
+        blank=True)
     public = models.BooleanField(default=False)
     title = models.TextField(max_length=100)
     body = models.TextField()

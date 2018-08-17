@@ -9,7 +9,7 @@ from messaging.models import ServerMOTD
 
 
 def register_view(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         return redirect('account:home')
     if request.POST:
         username = request.POST.get('username')
@@ -71,7 +71,7 @@ def login_view(request):
             )
             return redirect('account:login')
     else:
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             return redirect('account:home')
         else:
             return render(request, 'account/login.html')

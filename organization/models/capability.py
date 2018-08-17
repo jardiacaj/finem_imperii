@@ -44,20 +44,24 @@ class Capability(models.Model):
         (TAXES, 'manage taxation'),
     )
 
-    organization = models.ForeignKey('Organization')
+    organization = models.ForeignKey('Organization', models.CASCADE)
     type = models.CharField(max_length=20, choices=TYPE_CHOICES)
     applying_to = models.ForeignKey(
-        'Organization', related_name='capabilities_to_this')
+        'Organization', models.CASCADE, related_name='capabilities_to_this')
     stemming_from = models.ForeignKey(
-        'Capability', null=True, blank=True, related_name='transfers')
+        'Capability', models.CASCADE,
+        null=True, blank=True,
+        related_name='transfers'
+    )
 
     def get_absolute_url(self):
-        return reverse('organization:capability', kwargs={'capability_id': self.id})
+        return reverse('organization:capability',
+                       kwargs={'capability_id': self.id})
 
     def create_proposal(self, character, proposal_dict):
         voted_proposal = (
-            self.organization.is_position or
-            self.organization.decision_taking == organization.models.organization.Organization.DISTRIBUTED
+                self.organization.is_position or
+                self.organization.decision_taking == organization.models.organization.Organization.DISTRIBUTED
         )
         proposal = CapabilityProposal.objects.create(
             proposing_character=character,
@@ -73,7 +77,7 @@ class Capability(models.Model):
             proposal.issue_vote(character, CapabilityVote.YEA)
 
     def is_passive(self):
-        return self.type in (self.CONSCRIPT, self.TAKE_GRAIN, )
+        return self.type in (self.CONSCRIPT, self.TAKE_GRAIN,)
 
     def is_individual_action(self):
         return self.is_passive() or self.type in (self.ELECT, self.CANDIDACY)
@@ -90,8 +94,9 @@ class Capability(models.Model):
 
 
 class CapabilityProposal(models.Model):
-    proposing_character = models.ForeignKey('character.Character')
-    capability = models.ForeignKey(Capability)
+    proposing_character = models.ForeignKey(
+        'character.Character', models.PROTECT)
+    capability = models.ForeignKey(Capability, models.CASCADE)
     proposal_json = models.TextField()
     vote_end_turn = models.IntegerField()
     executed = models.BooleanField(default=False)
@@ -163,7 +168,7 @@ class CapabilityProposal(models.Model):
                     document.title = proposal.get('title')
                     document.body = proposal.get('body')
                     document.public = proposal.get('public') is not None
-                    document.last_modified_turn = self.capability.\
+                    document.last_modified_turn = self.capability. \
                         organization.world.current_turn
                     document.save()
 
@@ -207,7 +212,7 @@ class CapabilityProposal(models.Model):
                 target_organization = organization.models.organization.Organization.objects.get(
                     id=proposal['target_organization_id'])
                 target_relationship = proposal['target_relationship']
-                changing_relationship = applying_to.\
+                changing_relationship = applying_to. \
                     get_relationship_to(target_organization)
                 reverse_relationship = changing_relationship.reverse_relation()
                 action_type = proposal['type']
@@ -223,7 +228,7 @@ class CapabilityProposal(models.Model):
                             'reverse_relationship': reverse_relationship,
                             'has_to_be_agreed':
                                 changing_relationship.
-                                target_has_to_be_agreed_upon(
+                                    target_has_to_be_agreed_upon(
                                     target_relationship)
                         }
                     )
@@ -256,10 +261,10 @@ class CapabilityProposal(models.Model):
                 if 'region_id' in proposal.keys():
                     region = world.models.geography.Tile.objects.get(
                         id=proposal['region_id'])
-                    target_stance = applying_to.\
+                    target_stance = applying_to. \
                         get_region_stance_to(target_organization, region)
                 else:
-                    target_stance = applying_to.\
+                    target_stance = applying_to. \
                         get_default_stance_to(target_organization)
                 target_stance.stance_type = proposal.get('target_stance')
                 target_stance.save()
@@ -304,7 +309,7 @@ class CapabilityProposal(models.Model):
                         organization=applying_to,
                         end_turn__isnull=True
                     )
-                    tile_event.end_turn = applying_to.\
+                    tile_event.end_turn = applying_to. \
                         world.current_turn
                     tile_event.save()
                     self.announce_execution(
@@ -317,8 +322,8 @@ class CapabilityProposal(models.Model):
                 else:
                     if tile in \
                             applying_to.conquestable_tiles():
-                        tile_event = world.models.events.TileEvent.objects.\
-                                create(
+                        tile_event = world.models.events.TileEvent.objects. \
+                            create(
                             tile=tile,
                             type=world.models.events.TileEvent.CONQUEST,
                             organization=applying_to,
@@ -354,8 +359,9 @@ class CapabilityProposal(models.Model):
                          applying_to.get_all_controlled_tiles())
                         and
                         (proposal['option'] in
-                         [choice[0] for choice in world.models.geography.Settlement
-                                 .GUILDS_CHOICES])
+                         [choice[0] for choice in
+                          world.models.geography.Settlement
+                                  .GUILDS_CHOICES])
                 ):
                     settlement.guilds_setting = proposal['option']
                     settlement.save()
@@ -400,7 +406,7 @@ class CapabilityProposal(models.Model):
         else:
             raise Exception(
                 "Executing unknown capability action_type '{}'"
-                .format(self.capability.type)
+                    .format(self.capability.type)
             )
 
         self.executed = True
@@ -421,7 +427,8 @@ class CapabilityProposal(models.Model):
 
     def delete_disallowed_votes(self):
         for vote in self.capabilityvote_set.all():
-            if not self.capability.organization.character_is_member(vote.voter):
+            if not self.capability.organization.character_is_member(
+                    vote.voter):
                 vote.delete()
 
     def execute_if_enough_votes(self):
@@ -455,7 +462,8 @@ class CapabilityProposal(models.Model):
         return self.capabilityvote_set.filter(vote=CapabilityVote.INVALID)
 
     def get_absolute_url(self):
-        return reverse('organization:proposal', kwargs={'proposal_id': self.id})
+        return reverse('organization:proposal',
+                       kwargs={'proposal_id': self.id})
 
     def __str__(self):
         return "{} proposal by {}".format(
@@ -474,6 +482,6 @@ class CapabilityVote(models.Model):
         (INVALID, INVALID),
     )
 
-    proposal = models.ForeignKey(CapabilityProposal)
-    voter = models.ForeignKey('character.Character')
+    proposal = models.ForeignKey(CapabilityProposal, models.CASCADE)
+    voter = models.ForeignKey('character.Character', models.PROTECT)
     vote = models.CharField(max_length=10, choices=VOTE_CHOICES)

@@ -28,17 +28,20 @@ class Character(models.Model):
     )
 
     name = models.CharField(max_length=100)
-    world = models.ForeignKey('world.World')
-    location = models.ForeignKey('world.Settlement')
+    world = models.ForeignKey('world.World', models.PROTECT)
+    location = models.ForeignKey('world.Settlement', models.PROTECT)
     oath_sworn_to = models.ForeignKey(
-        'organization.Organization', null=True, blank=True
+        'organization.Organization',
+        null=True, blank=True,
+        on_delete=models.DO_NOTHING
     )
-    owner_user = models.ForeignKey(User)
+    owner_user = models.ForeignKey(User, models.CASCADE)
     cash = models.IntegerField(default=0)
     hours_in_turn_left = models.IntegerField(default=15*24)
     travel_destination = models.ForeignKey(
         'world.Settlement',
-        null=True, blank=True, related_name='travellers_heading'
+        null=True, blank=True, related_name='travellers_heading',
+        on_delete=models.SET_NULL
     )
     profile = models.CharField(max_length=20, choices=PROFILE_CHOICES)
     last_activation_time = models.DateTimeField(default=timezone.now)

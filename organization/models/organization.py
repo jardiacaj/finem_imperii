@@ -32,7 +32,7 @@ class Organization(models.Model):
         (ELECTED, ELECTED),
     )
 
-    world = models.ForeignKey('world.World')
+    world = models.ForeignKey('world.World', models.CASCADE)
     name = models.CharField(max_length=100)
     color = models.CharField(
         max_length=6, default="FFFFFF", help_text="Format: RRGGBB (hex)")
@@ -42,10 +42,10 @@ class Organization(models.Model):
     position_type = models.CharField(
         max_length=15, choices=POSITION_TYPE_CHOICES, blank=True, default='')
     owner = models.ForeignKey(
-        'Organization', null=True, blank=True,
+        'Organization', models.SET_NULL, null=True, blank=True,
         related_name='owned_organizations')
     leader = models.ForeignKey(
-        'Organization', null=True, blank=True,
+        'Organization', models.SET_NULL, null=True, blank=True,
         related_name='leaded_organizations')
     owner_and_leader_locked = models.BooleanField(
         help_text="If set, this organization will have always the same "
@@ -61,14 +61,16 @@ class Organization(models.Model):
     organization_members = models.ManyToManyField('Organization', blank=True)
     election_period_months = models.IntegerField(default=0)
     current_election = models.ForeignKey(
-        'PositionElection', blank=True, null=True, related_name='+')
+        'PositionElection', models.SET_NULL, blank=True, null=True,
+        related_name='+')
     last_election = models.ForeignKey(
-        'PositionElection', blank=True, null=True, related_name='+')
+        'PositionElection', models.SET_NULL, blank=True, null=True,
+        related_name='+')
     heir_first = models.ForeignKey(
-        'character.Character', blank=True, null=True,
+        'character.Character', models.SET_NULL, blank=True, null=True,
         related_name='first_heir_to')
     heir_second = models.ForeignKey(
-        'character.Character', blank=True, null=True,
+        'character.Character', models.SET_NULL, blank=True, null=True,
         related_name='second_heir_to')
     tax_countdown = models.SmallIntegerField(default=0)
 
@@ -186,11 +188,11 @@ class Organization(models.Model):
                 type=world.models.events.TileEvent.CONQUEST,
                 end_turn__isnull=True
             )
-            conquering_units = tile.get_units()\
-                .filter(owner_character__in=self.character_members.all())\
+            conquering_units = tile.get_units() \
+                .filter(owner_character__in=self.character_members.all()) \
                 .exclude(status=unit.models.WorldUnit.NOT_MOBILIZED)
             if (
-                conquering_units.exists() and not conquest_tile_event.exists()
+                    conquering_units.exists() and not conquest_tile_event.exists()
             ):
                 result.append(tile)
         return result
@@ -364,5 +366,5 @@ class Organization(models.Model):
 
     def get_heir_candidates(self):
         # TODO this works only for violence monopolies
-        return self.get_violence_monopoly().\
+        return self.get_violence_monopoly(). \
             get_membership_including_descendants()

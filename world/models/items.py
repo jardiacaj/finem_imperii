@@ -11,9 +11,10 @@ class InventoryItem(models.Model):
 
     type = models.CharField(max_length=20, choices=TYPE_CHOICES)
     quantity = models.PositiveIntegerField(default=1)
-    owner_character = models.ForeignKey('character.Character',
+    owner_character = models.ForeignKey('character.Character', models.SET_NULL,
                                         blank=True, null=True)
-    location = models.ForeignKey('world.Building', blank=True, null=True)
+    location = models.ForeignKey('world.Building', models.PROTECT, blank=True,
+                                 null=True)
 
     def __str__(self):
         return "{} {}".format(self.quantity, self.get_type_display())

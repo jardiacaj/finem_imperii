@@ -7,10 +7,11 @@ from messaging import shortcuts
 
 
 class PositionElection(models.Model):
-    position = models.ForeignKey('Organization')
+    position = models.ForeignKey('Organization', models.CASCADE)
     turn = models.IntegerField()
     closed = models.BooleanField(default=False)
-    winner = models.ForeignKey('PositionCandidacy', blank=True, null=True)
+    winner = models.ForeignKey('PositionCandidacy', models.SET_NULL,
+                               blank=True, null=True)
 
     def open_candidacies(self):
         return self.positioncandidacy_set.filter(retired=False)
@@ -70,7 +71,7 @@ class PositionElection(models.Model):
 
     def get_results(self):
         return self.positioncandidacy_set.all().annotate(
-            num_votes=Count('positionelectionvote'))\
+            num_votes=Count('positionelectionvote')) \
             .order_by('-num_votes')
 
     def get_absolute_url(self):
@@ -91,8 +92,9 @@ class PositionCandidacy(models.Model):
         unique_together = (
             ("election", "candidate"),
         )
-    election = models.ForeignKey(PositionElection)
-    candidate = models.ForeignKey('character.Character')
+
+    election = models.ForeignKey(PositionElection, models.CASCADE)
+    candidate = models.ForeignKey('character.Character', models.PROTECT)
     description = models.TextField()
     retired = models.BooleanField(default=False)
 
@@ -102,6 +104,8 @@ class PositionElectionVote(models.Model):
         unique_together = (
             ("election", "voter"),
         )
-    election = models.ForeignKey(PositionElection)
-    voter = models.ForeignKey('character.Character')
-    candidacy = models.ForeignKey(PositionCandidacy, blank=True, null=True)
+
+    election = models.ForeignKey(PositionElection, models.CASCADE)
+    voter = models.ForeignKey('character.Character', models.PROTECT)
+    candidacy = models.ForeignKey(PositionCandidacy, models.CASCADE,
+                                  blank=True, null=True)

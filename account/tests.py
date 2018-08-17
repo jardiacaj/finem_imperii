@@ -212,10 +212,10 @@ class TestLogin(TestCase):
             follow=True
         )
         user = auth.get_user(self.client)
-        self.assertTrue(user.is_authenticated())
+        self.assertTrue(user.is_authenticated)
         response = self.client.get(reverse('account:logout'), follow=True)
         self.assertEqual(response.redirect_chain[0][1], 302)
         self.assertTrue(response.redirect_chain[0][0].startswith(reverse('base:home')))
         self.assertEqual(response.status_code, 200)
         user = auth.get_user(self.client)
-        self.assertFalse(user.is_authenticated())
+        self.assertFalse(user.is_authenticated)

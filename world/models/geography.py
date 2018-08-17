@@ -86,7 +86,7 @@ class Region(models.Model):
         )
 
     name = models.CharField(max_length=100)
-    world = models.ForeignKey(World)
+    world = models.ForeignKey(World, models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -112,9 +112,10 @@ class Tile(models.Model):
         )
 
     name = models.CharField(max_length=100)
-    world = models.ForeignKey(World)
-    region = models.ForeignKey(Region)
-    controlled_by = models.ForeignKey('organization.Organization')
+    world = models.ForeignKey(World, models.CASCADE)
+    region = models.ForeignKey(Region, models.CASCADE)
+    controlled_by = models.ForeignKey(
+        'organization.Organization', models.PROTECT)
     x_pos = models.IntegerField()
     y_pos = models.FloatField()
     z_pos = models.IntegerField()
@@ -170,7 +171,7 @@ class Settlement(models.Model):
     )
 
     name = models.CharField(max_length=100)
-    tile = models.ForeignKey(Tile)
+    tile = models.ForeignKey(Tile, models.CASCADE)
     population = models.IntegerField(default=0)
     population_default = models.IntegerField()
     x_pos = models.IntegerField()

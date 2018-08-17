@@ -71,27 +71,29 @@ class CharacterMessage(models.Model):
     creation_time = models.DateTimeField(auto_now_add=True)
     creation_turn = models.IntegerField()
     sender = models.ForeignKey(
-        'character.Character', related_name='messages_sent', blank=True, null=True)
+        'character.Character',
+        models.SET_NULL,
+        related_name='messages_sent', blank=True, null=True)
     category = models.CharField(
         max_length=20, choices=CATEGORY_CHOICES, blank=True, null=True)
     link = models.TextField(blank=True, null=True)
 
     def get_nice_recipient_list(self):
         return (
-            [group.organization for group in
-             self.messagerecipientgroup_set.all()]
-            +
-            [recipient.character for recipient in
-             self.messagerecipient_set.filter(group=None)]
+                [group.organization for group in
+                 self.messagerecipientgroup_set.all()]
+                +
+                [recipient.character for recipient in
+                 self.messagerecipient_set.filter(group=None)]
         )
 
     def get_post_recipient_list(self):
         return (
-            ["organization_{}".format(group.organization.id) for group in
-             self.messagerecipientgroup_set.all()]
-            +
-            ["character_{}".format(recipient.character.id) for recipient in
-             self.messagerecipient_set.filter(group=None)]
+                ["organization_{}".format(group.organization.id) for group in
+                 self.messagerecipientgroup_set.all()]
+                +
+                ["character_{}".format(recipient.character.id) for recipient in
+                 self.messagerecipient_set.filter(group=None)]
         )
 
 
@@ -101,8 +103,9 @@ class MessageRecipientGroup(models.Model):
             ("message", "organization"),
         )
 
-    message = models.ForeignKey(CharacterMessage)
-    organization = models.ForeignKey('organization.Organization')
+    message = models.ForeignKey(CharacterMessage, models.CASCADE)
+    organization = models.ForeignKey('organization.Organization',
+                                     models.CASCADE)
 
 
 class MessageRecipient(models.Model):
@@ -114,10 +117,13 @@ class MessageRecipient(models.Model):
             ("character", "read"),
         )
 
-    message = models.ForeignKey(CharacterMessage)
-    group = models.ForeignKey(MessageRecipientGroup, blank=True, null=True)
+    message = models.ForeignKey(CharacterMessage, models.CASCADE)
+    group = models.ForeignKey(
+        MessageRecipientGroup, models.CASCADE,
+        blank=True, null=True
+    )
     read = models.BooleanField(default=False)
-    character = models.ForeignKey('character.Character')
+    character = models.ForeignKey('character.Character', models.CASCADE)
     favourite = models.BooleanField(default=False)
 
     def get_mark_read_url(self):
@@ -135,6 +141,8 @@ class MessageRelationship(models.Model):
             ("from_character", "to_character"),
         )
 
-    from_character = models.ForeignKey('character.Character')
+    from_character = models.ForeignKey('character.Character', models.CASCADE)
     to_character = models.ForeignKey(
-        'character.Character', related_name='message_relationships_to')
+        'character.Character', models.CASCADE,
+        related_name='message_relationships_to'
+    )

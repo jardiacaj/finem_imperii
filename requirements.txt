@@ -1,9 +1,8 @@
-Django==1.11
-django-bootstrap-form==3.3
-django-extensions==1.9.6
-PyYAML==3.12
+Django
+django-bootstrap-form
+django-extensions
+PyYAML
 coverage>=4.0,<4.4
-mysqlclient==1.3.10
-# psycopg2==2.7.1
+mysqlclient
 django-classy-tags
 django-cookie-law

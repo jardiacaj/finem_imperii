@@ -81,11 +81,15 @@ class WorldUnit(models.Model):
 
     owner_character = models.ForeignKey(
         'character.Character',
+        models.SET_NULL,
         blank=True, null=True)
-    world = models.ForeignKey('world.World', blank=True, null=True)
-    location = models.ForeignKey('world.Settlement', blank=True, null=True)
+    world = models.ForeignKey('world.World', models.SET_NULL, blank=True,
+                              null=True)
+    location = models.ForeignKey('world.Settlement', models.SET_NULL,
+                                 blank=True, null=True)
     origin = models.ForeignKey(
         'world.Settlement',
+        models.PROTECT,
         related_name='units_originating')
     name = models.CharField(max_length=100)
     recruitment_type = models.CharField(
@@ -100,7 +104,7 @@ class WorldUnit(models.Model):
     generation_size = models.IntegerField(
         default=0, help_text="Only used in tests that need generated units"
     )
-    default_battle_orders = models.ForeignKey('battle.Order')
+    default_battle_orders = models.ForeignKey('battle.Order', models.PROTECT)
     owners_debt = models.IntegerField(default=0)
 
     @staticmethod

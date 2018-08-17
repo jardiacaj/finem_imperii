@@ -61,10 +61,10 @@ class Building(models.Model):
     level = models.SmallIntegerField(default=1, help_text="Go from 1 to 5")
     type = models.CharField(max_length=15, choices=TYPE_CHOICES)
     quantity = models.IntegerField(default=1)
-    settlement = models.ForeignKey('world.Settlement')
+    settlement = models.ForeignKey('world.Settlement', models.CASCADE)
     field_production_counter = models.IntegerField(default=0)
     owner = models.ForeignKey(
-        'organization.Organization', null=True, blank=True,
+        'organization.Organization', models.SET_NULL, null=True, blank=True,
         help_text="NULL means 'owned by local population'"
     )
 

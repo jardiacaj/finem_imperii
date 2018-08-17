@@ -19,14 +19,6 @@
 
                 {% if user.is_authenticated %}
 
-                    {% if request.hero %}
-                        <li class="active">
-                            <a href="{{ request.hero.activation_url }}" class="active">
-                                {{ request.hero.get_html_name|safe }}
-                            </a>
-                        </li>
-                    {% endif %}
-
                     <li class="dropdown">
                         <a href="{% url 'account:home' %}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                             {% if request.hero %}Switch{% else %}Choose character{% endif %}
@@ -102,5 +94,38 @@
                 {% endif %}
             </ul>
         </div>
+
+        {% if user.is_authenticated and request.hero %}
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-3">
+                <ul class="nav navbar-nav">
+
+                    <li class="active">
+                        <a href="{{ request.hero.activation_url }}" class="active">
+                            {{ request.hero.get_html_name|safe }}
+                        </a>
+                    </li>
+
+                    <li class="navbar-text nav-inline-links">
+                        You are in
+                        {{ request.hero.location }},
+                        a {{ request.hero.location.size_name }} in
+                        {{ request.hero.location.tile.get_html_link|safe }},
+                        {{ request.hero.location.tile.controlled_by.get_violence_monopoly.get_html_link|safe }}
+                        terrotory
+                    </li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="navbar-text nav-inline-links">
+                        It's {{ request.hero.world.get_current_date }} in
+                        <a href="{{ request.hero.world.get_absolute_url }}">
+                            {{ request.hero.world }}
+                            <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+        {% endif %}
     </div>
 </nav>

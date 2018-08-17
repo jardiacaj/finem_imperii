@@ -105,3 +105,9 @@ pre.wrapping {
 .formation-drawing {
     line-height: 1em;
 }
+
+ul.navbar-nav li.nav-inline-links a {
+    display: inline;
+    padding-left: 0;
+    padding-right: 0;
+}

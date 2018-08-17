@@ -1,0 +1,1307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BookmarkManager">
+    <bookmark url="file://$PROJECT_DIR$" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f4406f07-7f97-400d-85bf-fdd84cdff006" name="Default" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__organization_test_test_leave_TestLeaveOrganization.coverage" NAME="Test: organization.test.test_leave.TestLeaveOrganization Coverage Results" MODIFIED="1495375988950" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__battle_test_test_battle_start_TestBattleStart_test_battle_create_from_conflict.coverage" NAME="Test: battle.test.test_battle_start.TestBattleStart.test_battle_create_from_conflict Coverage Results" MODIFIED="1494781316101" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__battle_test_test_barbarian_battle_TestBarbarianBattle_test_battle_initialization.coverage" NAME="Test: battle.test.test_barbarian_battle.TestBarbarianBattle.test_battle_initialization Coverage Results" MODIFIED="1493901973301" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__battle_test_test_barbarian_battle_TestBarbarianBattle.coverage" NAME="Test: battle.test.test_barbarian_battle.TestBarbarianBattle Coverage Results" MODIFIED="1493902464799" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_inventory_TestInventory_test_take_grain_with_carts.coverage" NAME="Test: world.test.test_inventory.TestInventory.test_take_grain_with_carts Coverage Results" MODIFIED="1495132930236" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__organization_test_test_documents.coverage" NAME="Test: organization.test.test_documents Coverage Results" MODIFIED="1493911447402" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_unit_actions_TestUnitActions_test_support_conquest.coverage" NAME="Test: world.test.test_unit_actions.TestUnitActions.test_support_conquest Coverage Results" MODIFIED="1493404783123" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__battle_tests_TestBattleStart_test_unit_move.coverage" NAME="Test: battle.tests.TestBattleStart.test_unit_move Coverage Results" MODIFIED="1492110578954" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_views_TestWorldView_test_view_character.coverage" NAME="Test: world.test.test_views.TestWorldView.test_view_character Coverage Results" MODIFIED="1493564222521" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_field_production_TestFieldProduction_test_field_input_ideal_workload.coverage" NAME="Test: world.test.test_field_production.TestFieldProduction.test_field_input_ideal_workload Coverage Results" MODIFIED="1494080785845" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_turn_TestTurn_test_population_generation_in_empty_settlement.coverage" NAME="Test: world.test.test_turn.TestTurn.test_population_generation_in_empty_settlement Coverage Results" MODIFIED="1494934817389" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_character_creation_TestCharacterCreation_test_step2_view.coverage" NAME="Test: world.test.test_character_creation.TestCharacterCreation.test_step2_view Coverage Results" MODIFIED="1493563972597" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_food_consumption.coverage" NAME="Test: world.test.test_food_consumption Coverage Results" MODIFIED="1494154327109" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Pass_turn_on_Parvus.coverage" NAME="Pass turn on Parvus Coverage Results" MODIFIED="1512166245161" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_turn_TestTurn_test_create_battle_from_conflict.coverage" NAME="Test: world.test.test_turn.TestTurn.test_create_battle_from_conflict Coverage Results" MODIFIED="1494781248149" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_recruitment_TestUnitActions_test_fail_because_no_gender_selected.coverage" NAME="Test: world.test.test_recruitment.TestUnitActions.test_fail_because_no_gender_selected Coverage Results" MODIFIED="1493839694729" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__battle_test_test_battle_start_BattleBarbarians.coverage" NAME="Test: battle.test.test_battle_start.BattleBarbarians Coverage Results" MODIFIED="1495296268503" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_turn_TestTurn_test_unit_debt_for_barbarian_unit.coverage" NAME="Test: world.test.test_turn.TestTurn.test_unit_debt_for_barbarian_unit Coverage Results" MODIFIED="1512208724596" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__battle_test_test_battle_movement_TestBattleMovement_test_move_while_unit_blocks.coverage" NAME="Test: battle.test.test_battle_movement.TestBattleMovement.test_move_while_unit_blocks Coverage Results" MODIFIED="1493558598355" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_views_TestTileView_test_view_region_iframe.coverage" NAME="Test: world.test.test_views.TestTileView.test_view_region_iframe Coverage Results" MODIFIED="1493563775498" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__battle_test_test_battle_start_TestBattleStartWithAllies_test_battle_create_from_units_with_allies.coverage" NAME="Test: battle.test.test_battle_start.TestBattleStartWithAllies.test_battle_create_from_units_with_allies Coverage Results" MODIFIED="1494865121741" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__battle_test_test_battle_movement_TestBattleMovement_test_unit_pos_swap.coverage" NAME="Test: battle.test.test_battle_movement.TestBattleMovement.test_unit_pos_swap Coverage Results" MODIFIED="1492964160103" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__organization_test_test_diplomacy_TestDiplomacy_test_diplomacy_take_back.coverage" NAME="Test: organization.test.test_diplomacy.TestDiplomacy.test_diplomacy_take_back Coverage Results" MODIFIED="1493732663719" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_travel_TestTravel_test_travel_in_tile_with_unit.coverage" NAME="Test: world.test.test_travel.TestTravel.test_travel_in_tile_with_unit Coverage Results" MODIFIED="1498241969773" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__battle_test_test_battle_movement_TestBattleMovement_test_move_avoiding_wall_obstacle.coverage" NAME="Test: battle.test.test_battle_movement.TestBattleMovement.test_move_avoiding_wall_obstacle Coverage Results" MODIFIED="1493055786234" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_turn_TestTurn_test_barbarian_non_creation_in_occupied_settlement.coverage" NAME="Test: world.test.test_turn.TestTurn.test_barbarian_non_creation_in_occupied_settlement Coverage Results" MODIFIED="1493851695241" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__battle_test_test_battle_movement_TestBattleMovement_test_move_avoiding_obstacle.coverage" NAME="Test: battle.test.test_battle_movement.TestBattleMovement.test_move_avoiding_obstacle Coverage Results" MODIFIED="1493055543317" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__battle_test_test_barbarian_battle_TestBarbarianBattle_test_battle_orders_attack.coverage" NAME="Test: battle.test.test_barbarian_battle.TestBarbarianBattle.test_battle_orders_attack Coverage Results" MODIFIED="1493902369357" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__battle_test_test_barbarian_battle_TestBarbarianBattle_test_unit_move.coverage" NAME="Test: battle.test.test_barbarian_battle.TestBarbarianBattle.test_unit_move Coverage Results" MODIFIED="1493899608121" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Tests_in_parallel.coverage" NAME="Tests in parallel Coverage Results" MODIFIED="1512257527856" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_unit_actions_TestUnitActions_test_counter_conquest.coverage" NAME="Test: world.test.test_unit_actions.TestUnitActions.test_counter_conquest Coverage Results" MODIFIED="1493404868834" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_building_production_TestGuildProduction.coverage" NAME="Test: world.test.test_building_production.TestGuildProduction Coverage Results" MODIFIED="1494594988620" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_taxation_TestTaxation_test_tax_countdown.coverage" NAME="Test: world.test.test_taxation.TestTaxation.test_tax_countdown Coverage Results" MODIFIED="1494596558297" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__unit_test_test_debt_payment_TestDebtPayment.coverage" NAME="Test: unit.test.test_debt_payment.TestDebtPayment Coverage Results" MODIFIED="1512257009111" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Tests.coverage" NAME="Tests Coverage Results" MODIFIED="1512213935078" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__organization_test_test_capabilities.coverage" NAME="Test: organization.test.test_capabilities Coverage Results" MODIFIED="1493909869623" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_views_TestWorldView_test_travel_step2_view.coverage" NAME="Test: world.test.test_views.TestWorldView.test_travel_step2_view Coverage Results" MODIFIED="1493564156723" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__organization_test_test_guild_settings_TestGuildSetting.coverage" NAME="Test: organization.test.test_guild_settings.TestGuildSetting Coverage Results" MODIFIED="1494456507278" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_unit_actions_TestUnitActions.coverage" NAME="Test: world.test.test_unit_actions.TestUnitActions Coverage Results" MODIFIED="1494877604608" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_turn_TestTurn_test_unit_debt_increase.coverage" NAME="Test: world.test.test_turn.TestTurn.test_unit_debt_increase Coverage Results" MODIFIED="1512208600465" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_travel_TestTravel_test_travel_to_other_tile.coverage" NAME="Test: world.test.test_travel.TestTravel.test_travel_to_other_tile Coverage Results" MODIFIED="1494955309994" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__organization_test_test_views_TestViews_test_view.coverage" NAME="Test: organization.test.test_views.TestViews.test_view Coverage Results" MODIFIED="1493564424748" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__organization_test_test_diplomacy_TestDiplomacy_test_view.coverage" NAME="Test: organization.test.test_diplomacy.TestDiplomacy.test_view Coverage Results" MODIFIED="1493731217430" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_character_creation_TestCharacterCreation_test_step1_view.coverage" NAME="Test: world.test.test_character_creation.TestCharacterCreation.test_step1_view Coverage Results" MODIFIED="1493563898413" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_turn_TestEmortuusTurn_test_pass_one_year_in_emortuus.coverage" NAME="Test: world.test.test_turn.TestEmortuusTurn.test_pass_one_year_in_emortuus Coverage Results" MODIFIED="1495216678356" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_cash_transfer_TestCashTransfer_test_can_transfer_cash_to_character_in_same_settlement.coverage" NAME="Test: world.test.test_cash_transfer.TestCashTransfer.test_can_transfer_cash_to_character_in_same_settlement Coverage Results" MODIFIED="1509899149488" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__battle_test_test_battle_movement_TestBattleMovement_test_move_charge.coverage" NAME="Test: battle.test.test_battle_movement.TestBattleMovement.test_move_charge Coverage Results" MODIFIED="1493574158889" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__battle_test_test_battle_movement_TestBattleMovement_test_unit_superposition.coverage" NAME="Test: battle.test.test_battle_movement.TestBattleMovement.test_unit_superposition Coverage Results" MODIFIED="1492959213198" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Unittests_for_test_diplomacy_TestDiplomacy_test_no_diplomacy_with_barbarians.coverage" NAME="Unittests for test_diplomacy.TestDiplomacy.test_no_diplomacy_with_barbarians Coverage Results" MODIFIED="1493731356803" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/organization/test" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__organization_test_test_elections_TestElections.coverage" NAME="Test: organization.test.test_elections.TestElections Coverage Results" MODIFIED="1493922415679" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Unittests_in_test_turn_py.coverage" NAME="Unittests in test_turn.py Coverage Results" MODIFIED="1493398898046" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__battle_test_test_barbarian_battle_TestBarbarianBattle_test_battle_orders.coverage" NAME="Test: battle.test.test_barbarian_battle.TestBarbarianBattle.test_battle_orders Coverage Results" MODIFIED="1493900501272" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_unit_actions_TestUnitActions_test_disband.coverage" NAME="Test: world.test.test_unit_actions.TestUnitActions.test_disband Coverage Results" MODIFIED="1494929614008" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_turn_TestTurn_test_barbarian_creation_in_barbaric_settlement.coverage" NAME="Test: world.test.test_turn.TestTurn.test_barbarian_creation_in_barbaric_settlement Coverage Results" MODIFIED="1498214358478" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_recruitment_TestUnitActions_test_recruitment_view.coverage" NAME="Test: world.test.test_recruitment.TestUnitActions.test_recruitment_view Coverage Results" MODIFIED="1493824294326" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__battle_test_test_battle_start_TestBattleStart_test_manpower.coverage" NAME="Test: battle.test.test_battle_start.TestBattleStart.test_manpower Coverage Results" MODIFIED="1493896915635" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__battle_test_test_barbarian_battle_TestBarbarianBattle_test_battle_orders_flee.coverage" NAME="Test: battle.test.test_barbarian_battle.TestBarbarianBattle.test_battle_orders_flee Coverage Results" MODIFIED="1493902602754" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__organization_test_test_diplomacy_TestDiplomacy_test_diplomacy_reject.coverage" NAME="Test: organization.test.test_diplomacy.TestDiplomacy.test_diplomacy_reject Coverage Results" MODIFIED="1493732610032" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_recruitment_TestUnitActions_test_default_recruitment.coverage" NAME="Test: world.test.test_recruitment.TestUnitActions.test_default_recruitment Coverage Results" MODIFIED="1493839488705" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__battle_test_test_battle_start_BattleBarbarians_test_battle_with_barbarians.coverage" NAME="Test: battle.test.test_battle_start.BattleBarbarians.test_battle_with_barbarians Coverage Results" MODIFIED="1495296288532" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_cash_transfer_TestCashTransfer.coverage" NAME="Test: world.test.test_cash_transfer.TestCashTransfer Coverage Results" MODIFIED="1509899291061" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__organization_test_test_heir_TestSetHeir.coverage" NAME="Test: organization.test.test_heir.TestSetHeir Coverage Results" MODIFIED="1495370813559" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_recruitment_TestUnitActions_test_can_recruit_method.coverage" NAME="Test: world.test.test_recruitment.TestUnitActions.test_can_recruit_method Coverage Results" MODIFIED="1494948417888" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_character_creation_TestCharacterCreation.coverage" NAME="Test: world.test.test_character_creation.TestCharacterCreation Coverage Results" MODIFIED="1495128045554" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_job_updates_TestJobUpdates.coverage" NAME="Test: world.test.test_job_updates.TestJobUpdates Coverage Results" MODIFIED="1495365084749" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_character_pause_TestCharacterPause.coverage" NAME="Test: world.test.test_character_pause.TestCharacterPause Coverage Results" MODIFIED="1508080775701" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_travel_TestTravel_test_travel_in_tile_with_following_unit.coverage" NAME="Test: world.test.test_travel.TestTravel.test_travel_in_tile_with_following_unit Coverage Results" MODIFIED="1498241827009" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__organization_test_test_diplomacy_TestDiplomacy_test_diplomacy.coverage" NAME="Test: organization.test.test_diplomacy.TestDiplomacy.test_diplomacy Coverage Results" MODIFIED="1493732597542" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_travel_TestTravel.coverage" NAME="Test: world.test.test_travel.TestTravel Coverage Results" MODIFIED="1494955185042" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_turn_TestEmortuusTurn_test_pass_turn_in_emortuus.coverage" NAME="Test: world.test.test_turn.TestEmortuusTurn.test_pass_turn_in_emortuus Coverage Results" MODIFIED="1495216668356" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__organization_test_test_organization_model_TestOrganizationModel_test_organizations_character_can_apply_capabilities_to_this_with3.coverage" NAME="Test: organization.test.test_organization_model.TestOrganizationModel.test_organizations_character_can_apply_capabilities_to_this_with3 Coverage Results" MODIFIED="1494269490549" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__battle_test_test_battle_movement_TestBattleMovement_test_move_flee.coverage" NAME="Test: battle.test.test_battle_movement.TestBattleMovement.test_move_flee Coverage Results" MODIFIED="1493574629782" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_inventory_TestInventory.coverage" NAME="Test: world.test.test_inventory.TestInventory Coverage Results" MODIFIED="1494329483821" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__organization_test_test_guild_settings_TestConquest.coverage" NAME="Test: organization.test.test_guild_settings.TestConquest Coverage Results" MODIFIED="1494456320145" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__organization_test_test_ban.coverage" NAME="Test: organization.test.test_ban Coverage Results" MODIFIED="1494171872026" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__organization_test_test_elections.coverage" NAME="Test: organization.test.test_elections Coverage Results" MODIFIED="1494167410795" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_recruitment_TestUnitActions.coverage" NAME="Test: world.test.test_recruitment.TestUnitActions Coverage Results" MODIFIED="1494869544884" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_turn_TestTurn_test_conquest_end.coverage" NAME="Test: world.test.test_turn.TestTurn.test_conquest_end Coverage Results" MODIFIED="1493399040227" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Unittests_in_test_views_py.coverage" NAME="Unittests in test_views.py Coverage Results" MODIFIED="1493128637261" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_field_production_TestFieldProduction.coverage" NAME="Test: world.test.test_field_production.TestFieldProduction Coverage Results" MODIFIED="1494096964499" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_turn_TestTurn_test_conquest_success.coverage" NAME="Test: world.test.test_turn.TestTurn.test_conquest_success Coverage Results" MODIFIED="1493399048963" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_taxation_TestTaxation.coverage" NAME="Test: world.test.test_taxation.TestTaxation Coverage Results" MODIFIED="1494624327977" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__battle_test_test_battle_start_TestBattleStartWithAllies_test_battle_create_from_units_with_allies_joining_during_battle1.coverage" NAME="Test: battle.test.test_battle_start.TestBattleStartWithAllies.test_battle_create_from_units_with_allies_joining_during_battle1 Coverage Results" MODIFIED="1494865695750" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__battle_test_test_battle_start_TestBattleStartWithAllies.coverage" NAME="Test: battle.test.test_battle_start.TestBattleStartWithAllies Coverage Results" MODIFIED="1494866581684" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/finem_imperii$Test__world_test_test_turn_TestTurn.coverage" NAME="Test: world.test.test_turn.TestTurn Coverage Results" MODIFIED="1491832512607" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_TABLE_DETAILS" value="true" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <expand />
+    <select />
+  </component>
+  <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="finem_imperii" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="view_unit.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/unit/templates/unit/view_unit.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="500">
+              <caret line="92" column="62" lean-forward="false" selection-start-line="92" selection-start-column="62" selection-end-line="92" selection-end-column="62" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="rename_modal_include.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/unit/templates/unit/rename_modal_include.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="120">
+              <caret line="6" column="40" lean-forward="false" selection-start-line="6" selection-start-column="40" selection-end-line="6" selection-end-column="40" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pay_debt_modal_include.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/unit/templates/unit/pay_debt_modal_include.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="560">
+              <caret line="28" column="57" lean-forward="false" selection-start-line="28" selection-start-column="57" selection-end-line="28" selection-end-column="57" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="JavaScript File" />
+        <option value="CSS File" />
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>organization.models.relationship.OrganizationRelationship</find>
+      <find>capability</find>
+      <find>bootst</find>
+      <find>world.models.items</find>
+      <find>world.models.geography</find>
+      <find>bmd-modalButton</find>
+      <find>csrf_token</find>
+      <find>only</find>
+      <find>what</find>
+      <find>page-header</find>
+      <find>military stance</find>
+      <find>military or</find>
+      <find>trave</find>
+      <find>recipient_list</find>
+      <find>can_cons</find>
+      <find>manage</find>
+      <find>can curr</find>
+      <find>skill_distribution</find>
+      <find>hunger</find>
+      <find>unit</find>
+      <find>battle_joins</find>
+      <find>unit.models</find>
+      <find>self.world</find>
+      <find>import.*turn</find>
+      <find>label</find>
+      <find>gitter</find>
+      <find>open cha</find>
+      <find>chat</find>
+      <find>rename</find>
+      <find>include</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>character:travel</replace>
+      <replace>character:inventory</replace>
+      <replace>character:character</replace>
+      <replace>character:public_order</replace>
+      <replace>character:transfer_cach</replace>
+      <replace>transfer_cash</replace>
+      <replace>character:create</replace>
+      <replace>character.Character</replace>
+      <replace>battle_orders</replace>
+      <replace>battle_settings</replace>
+      <replace>rename</replace>
+      <replace>world.World</replace>
+      <replace>world.models.NPC</replace>
+      <replace>world.models.npcs.NPC</replace>
+      <replace>world.models.geography.Tile</replace>
+      <replace>world.models.buildings.Building</replace>
+      <replace>world.models.geograpy.Tile</replace>
+      <replace>world.Settlement</replace>
+      <replace>world.models.events.TileEvent</replace>
+      <replace>'$1'</replace>
+      <replace>Capability</replace>
+      <replace>OrganizationRelationship</replace>
+      <replace>capability_models</replace>
+      <replace>capability</replace>
+      <replace>election</replace>
+      <replace>relationship</replace>
+      <replace>items</replace>
+      <replace>geography</replace>
+      <replace>World</replace>
+      <replace>world</replace>
+    </replaceStrings>
+    <dirStrings>
+      <dir>$PROJECT_DIR$/unit/templates/unit</dir>
+      <dir>$PROJECT_DIR$/</dir>
+    </dirStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/base/static/base/css/backend_developer.css" />
+        <option value="$PROJECT_DIR$/messaging/templates/messaging/base.html" />
+        <option value="$PROJECT_DIR$/character/views/views.py" />
+        <option value="$PROJECT_DIR$/base/fixtures/simple_world.yaml" />
+        <option value="$PROJECT_DIR$/character/templates/character/view_character.html" />
+        <option value="$PROJECT_DIR$/character/templates/character/bureaucrat_public_order_work_modal_include.html" />
+        <option value="$PROJECT_DIR$/organization/models/capability.py" />
+        <option value="$PROJECT_DIR$/organization/templates/organization/view_organization.html" />
+        <option value="$PROJECT_DIR$/organization/models/organization.py" />
+        <option value="$PROJECT_DIR$/character/templates/character/character_home.html" />
+        <option value="$PROJECT_DIR$/world/models/npcs.py" />
+        <option value="$PROJECT_DIR$/battle/models.py" />
+        <option value="$PROJECT_DIR$/world/management/commands/pass_turn.py" />
+        <option value="$PROJECT_DIR$/context_managers.py" />
+        <option value="$PROJECT_DIR$/battle/battle_tick.py" />
+        <option value="$PROJECT_DIR$/world/management/commands/initialize_world.py" />
+        <option value="$PROJECT_DIR$/battle/templates/battle/battle_nav_include.html" />
+        <option value="$PROJECT_DIR$/unit/models.py" />
+        <option value="$PROJECT_DIR$/world/turn.py" />
+        <option value="$PROJECT_DIR$/world/test/test_turn.py" />
+        <option value="$PROJECT_DIR$/finem_imperii/settings_common.py" />
+        <option value="$PROJECT_DIR$/world/models/events.py" />
+        <option value="$PROJECT_DIR$/unit/views/recruitment.py" />
+        <option value="$PROJECT_DIR$/turn/character.py" />
+        <option value="$PROJECT_DIR$/turn/barbarians.py" />
+        <option value="$PROJECT_DIR$/turn/turn.py" />
+        <option value="$PROJECT_DIR$/turn/building_production.py" />
+        <option value="$PROJECT_DIR$/turn/demography.py" />
+        <option value="$PROJECT_DIR$/turn/elections.py" />
+        <option value="$PROJECT_DIR$/turn/npc_jobs.py" />
+        <option value="$PROJECT_DIR$/turn/public_order.py" />
+        <option value="$PROJECT_DIR$/turn/conquest.py" />
+        <option value="$PROJECT_DIR$/turn/battle.py" />
+        <option value="$PROJECT_DIR$/battle/test/test_battle_start.py" />
+        <option value="$PROJECT_DIR$/character/test/test_character_pause.py" />
+        <option value="$PROJECT_DIR$/character/test/test_travel.py" />
+        <option value="$PROJECT_DIR$/turn/test/test_building_production.py" />
+        <option value="$PROJECT_DIR$/turn/test/test_food_consumption.py" />
+        <option value="$PROJECT_DIR$/turn/test/test_job_updates.py" />
+        <option value="$PROJECT_DIR$/turn/taxes.py" />
+        <option value="$PROJECT_DIR$/turn/test/test_taxation.py" />
+        <option value="$PROJECT_DIR$/turn/test/test_turn.py" />
+        <option value="$PROJECT_DIR$/turn/unit.py" />
+        <option value="$PROJECT_DIR$/unit/urls.py" />
+        <option value="$PROJECT_DIR$/unit/views/actions.py" />
+        <option value="$PROJECT_DIR$/unit/test/test_debt_payment.py" />
+        <option value="$PROJECT_DIR$/base/templates/base/base.html" />
+        <option value="$PROJECT_DIR$/base/templates/base/topnav.html" />
+        <option value="$PROJECT_DIR$/unit/templates/unit/pay_debt_modal_include.html" />
+        <option value="$PROJECT_DIR$/unit/templates/unit/view_unit.html" />
+        <option value="$PROJECT_DIR$/unit/templates/unit/rename_modal_include.html" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="y" value="21" />
+    <option name="width" value="3840" />
+    <option name="height" value="2139" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scratches" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="finem_imperii" type="b2602c69:ProjectViewProjectNode" />
+              <item name="finem_imperii" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="finem_imperii" type="b2602c69:ProjectViewProjectNode" />
+              <item name="finem_imperii" type="462c0819:PsiDirectoryNode" />
+              <item name="unit" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="finem_imperii" type="b2602c69:ProjectViewProjectNode" />
+              <item name="finem_imperii" type="462c0819:PsiDirectoryNode" />
+              <item name="unit" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="finem_imperii" type="b2602c69:ProjectViewProjectNode" />
+              <item name="finem_imperii" type="462c0819:PsiDirectoryNode" />
+              <item name="unit" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="unit" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="finem_imperii" type="b2602c69:ProjectViewProjectNode" />
+              <item name="finem_imperii" type="462c0819:PsiDirectoryNode" />
+              <item name="unit" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="finem_imperii" type="b2602c69:ProjectViewProjectNode" />
+              <item name="finem_imperii" type="462c0819:PsiDirectoryNode" />
+              <item name="unit" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/character/views/creation.py" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
+    <property name="SearchEverywhereHistoryKey" value="base_na&#9;FILE&#9;file:///home/joan/Code/finem_imperii/base/templates/base/base_naked.html&#10;base&#9;FILE&#9;file:///home/joan/Code/finem_imperii/base/templates/base/base.html&#10;Charact&#9;null&#9;null&#10;recruitmenvi&#9;null&#9;null&#10;settings&#9;null&#9;null&#10;simple&#9;FILE&#9;file:///home/joan/Code/finem_imperii/base/fixtures/simple_world.yaml&#10;turn.&#9;FILE&#9;file:///home/joan/Code/finem_imperii/world/turn.py&#10;WorldUn&#9;null&#9;null&#10;nav&#9;FILE&#9;file:///home/joan/Code/finem_imperii/battle/templates/battle/battle_nav_include.html&#10;icon&#9;FILE&#9;file:///home/joan/Code/finem_imperii/base/static/base/css/icons.css&#10;initia&#9;FILE&#9;file:///home/joan/Code/finem_imperii/world/management/commands/initialize_world.py&#10;pass_t&#9;FILE&#9;file:///home/joan/Code/finem_imperii/world/management/commands/pass_turn.py&#10;attle&#9;FILE&#9;file:///home/joan/Code/finem_imperii/battle/battle_tick.py&#10;battlefie&#9;FILE&#9;file:///home/joan/Code/finem_imperii/battle/templates/battle/battlefield_view_iframe.html&#10;battle_rende&#9;FILE&#9;file:///home/joan/Code/finem_imperii/battle/static/battle/battle_renderer.js&#10;battle_ren&#9;null&#9;null&#10;view_un&#9;FILE&#9;file:///home/joan/Code/finem_imperii/unit/templates/unit/view_unit.html&#10;Organi&#9;null&#9;null&#10;proposal&#9;null&#9;null&#10;view_or&#9;FILE&#9;file:///home/joan/Code/finem_imperii/organization/templates/organization/view_organization.html&#10;recruit&#9;null&#9;null&#10;view_cha&#9;FILE&#9;file:///home/joan/Code/finem_imperii/character/templates/character/view_character.html&#10;minima&#9;FILE&#9;file:///home/joan/Code/finem_imperii/world/templates/world/minimap_iframe.html&#10;base.&#9;FILE&#9;file:///home/joan/Code/finem_imperii/base/templates/base/base.html&#10;simple_w&#9;FILE&#9;file:///home/joan/Code/finem_imperii/base/fixtures/simple_world.yaml&#10;simple_&#9;null&#9;null&#10;topna&#9;FILE&#9;file:///home/joan/Code/finem_imperii/base/templates/base/topnav.html&#10;back&#9;FILE&#9;file:///home/joan/Code/finem_imperii/base/static/base/css/backend_developer.css&#10;inven&#9;null&#9;null&#10;chara&#9;FILE&#9;file:///home/joan/Code/finem_imperii/character/templates/character/character_home.html&#10;modal&#9;FILE&#9;file:///home/joan/Code/finem_imperii/unit/templates/unit/battle_settings_modal_include.html&#10;pass_turn&#9;null&#9;null&#10;backen&#9;FILE&#9;file:///home/joan/Code/finem_imperii/base/static/base/css/backend_developer.css&#10;character_ho&#9;FILE&#9;file:///home/joan/Code/finem_imperii/character/templates/character/character_home.html&#10;urls&#9;null&#9;null&#10;base_n&#9;FILE&#9;file:///home/joan/Code/finem_imperii/base/templates/base/base_naked.html&#10;message&#9;FILE&#9;file:///home/joan/Code/finem_imperii/messaging/templates/messaging/message_include.html&#10;CharacterMes&#9;null&#9;null&#10;character/mo&#9;FILE&#9;file:///home/joan/Code/finem_imperii/character/models.py&#10;organizatio&#9;FILE&#9;file:///home/joan/Code/finem_imperii/organization/models/organization.py&#10;TravelV&#9;null&#9;null&#10;world_view&#9;null&#9;null&#10;_iframe&#9;FILE&#9;file:///home/joan/Code/finem_imperii/character/templates/character/travel_map_iframe.html&#10;render_wor&#9;null&#9;null&#10;battl&#9;FILE&#9;file:///home/joan/Code/finem_imperii/battle/static/battle/battle_renderer.js&#10;view_w&#9;FILE&#9;file:///home/joan/Code/finem_imperii/world/templates/world/view_world_iframe.html&#10;view_wo&#9;FILE&#9;file:///home/joan/Code/finem_imperii/world/templates/world/view_world.html&#10;world_re&#9;FILE&#9;file:///home/joan/Code/finem_imperii/world/static/world/world_renderer.js&#10;views.&#9;FILE&#9;file:///home/joan/Code/finem_imperii/world/views.py&#10;renderer&#9;FILE&#9;file:///home/joan/Code/finem_imperii/world/renderer.py" />
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="run.code.analysis.last.selected.profile" value="aDefault" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$2/Languages" value="JavaScript&#10;Python" />
+    <property name="list.type.of.created.stylesheet" value="CSS" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/unit/templates/unit" />
+      <recent name="$PROJECT_DIR$/unit/test" />
+      <recent name="$PROJECT_DIR$/character/templates/character/" />
+      <recent name="$PROJECT_DIR$/unit" />
+      <recent name="$PROJECT_DIR$/base/static/base" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/turn/test" />
+      <recent name="$PROJECT_DIR$/turn" />
+      <recent name="$PROJECT_DIR$/messaging/views" />
+      <recent name="$PROJECT_DIR$/messaging/views/decorators.py" />
+      <recent name="$PROJECT_DIR$/character/templates/character" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Django server.finem_imperii">
+    <configuration name="Test: organization.test.test_leave.TestLeaveOrganization" type="DjangoTestsConfigurationType" factoryName="Django tests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="finem_imperii" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="TARGET" value="organization.test.test_leave.TestLeaveOrganization" />
+      <option name="SETTINGS_FILE" value="" />
+      <option name="CUSTOM_SETTINGS" value="false" />
+      <option name="USE_OPTIONS" value="false" />
+      <option name="OPTIONS" value="" />
+    </configuration>
+    <configuration name="Test: unit.test.test_debt_payment.TestDebtPayment" type="DjangoTestsConfigurationType" factoryName="Django tests" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="finem_imperii" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="TARGET" value="unit.test.test_debt_payment.TestDebtPayment" />
+      <option name="SETTINGS_FILE" value="" />
+      <option name="CUSTOM_SETTINGS" value="false" />
+      <option name="USE_OPTIONS" value="false" />
+      <option name="OPTIONS" value="" />
+    </configuration>
+    <configuration name="Test: world.test.test_cash_transfer.TestCashTransfer" type="DjangoTestsConfigurationType" factoryName="Django tests" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="finem_imperii" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="TARGET" value="world.test.test_cash_transfer.TestCashTransfer" />
+      <option name="SETTINGS_FILE" value="" />
+      <option name="CUSTOM_SETTINGS" value="false" />
+      <option name="USE_OPTIONS" value="false" />
+      <option name="OPTIONS" value="" />
+    </configuration>
+    <configuration name="Test: world.test.test_cash_transfer.TestCashTransfer.test_can_transfer_cash_to_character_in_same_settlement" type="DjangoTestsConfigurationType" factoryName="Django tests" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="finem_imperii" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="TARGET" value="world.test.test_cash_transfer.TestCashTransfer.test_can_transfer_cash_to_character_in_same_settlement" />
+      <option name="SETTINGS_FILE" value="" />
+      <option name="CUSTOM_SETTINGS" value="false" />
+      <option name="USE_OPTIONS" value="false" />
+      <option name="OPTIONS" value="" />
+    </configuration>
+    <configuration name="Test: world.test.test_character_pause.TestCharacterPause" type="DjangoTestsConfigurationType" factoryName="Django tests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="finem_imperii" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="TARGET" value="world.test.test_character_pause.TestCharacterPause" />
+      <option name="SETTINGS_FILE" value="" />
+      <option name="CUSTOM_SETTINGS" value="false" />
+      <option name="USE_OPTIONS" value="false" />
+      <option name="OPTIONS" value="" />
+    </configuration>
+    <configuration name="Test: world.test.test_turn.TestTurn.test_unit_debt_for_barbarian_unit" type="DjangoTestsConfigurationType" factoryName="Django tests" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="finem_imperii" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="TARGET" value="world.test.test_turn.TestTurn.test_unit_debt_for_barbarian_unit" />
+      <option name="SETTINGS_FILE" value="" />
+      <option name="CUSTOM_SETTINGS" value="false" />
+      <option name="USE_OPTIONS" value="false" />
+      <option name="OPTIONS" value="" />
+    </configuration>
+    <configuration name="Test: world.test.test_turn.TestTurn.test_unit_debt_increase" type="DjangoTestsConfigurationType" factoryName="Django tests" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="finem_imperii" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="TARGET" value="world.test.test_turn.TestTurn.test_unit_debt_increase" />
+      <option name="SETTINGS_FILE" value="" />
+      <option name="CUSTOM_SETTINGS" value="false" />
+      <option name="USE_OPTIONS" value="false" />
+      <option name="OPTIONS" value="" />
+    </configuration>
+    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <envs />
+    </configuration>
+    <configuration default="true" type="BashConfigurationType" factoryName="Bash">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="INTERPRETER_PATH" value="/sbin/bash" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="DjangoTestsConfigurationType" factoryName="Django tests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="TARGET" value="" />
+      <option name="SETTINGS_FILE" value="" />
+      <option name="CUSTOM_SETTINGS" value="false" />
+      <option name="USE_OPTIONS" value="false" />
+      <option name="OPTIONS" value="" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerJest" factoryName="Jest">
+      <node-interpreter value="project" />
+      <working-dir value="" />
+      <envs />
+      <scope-kind value="ALL" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerProtractor" factoryName="Protractor">
+      <config-file value="" />
+      <node-interpreter value="project" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
+      <method />
+    </configuration>
+    <configuration default="true" type="PyBehaveRunConfigurationType" factoryName="Behave">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="finem_imperii" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="ADDITIONAL_ARGS" value="" />
+      <method />
+    </configuration>
+    <configuration default="true" type="PyLettuceRunConfigurationType" factoryName="Lettuce">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="finem_imperii" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="ADDITIONAL_ARGS" value="" />
+      <method />
+    </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="finem_imperii" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="Python.DjangoServer" factoryName="Django server">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8000" />
+      <option name="host" value="" />
+      <option name="additionalOptions" value="" />
+      <option name="browserUrl" value="" />
+      <option name="runTestServer" value="false" />
+      <option name="runNoReload" value="false" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
+      <method />
+    </configuration>
+    <configuration default="true" type="Tox" factoryName="Tox">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <module name="finem_imperii" />
+      <method />
+    </configuration>
+    <configuration default="true" type="docker-deploy" factoryName="Docker Deployment">
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.npm" factoryName="npm">
+      <command value="run" />
+      <scripts />
+      <node-interpreter value="project" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Doctests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="finem_imperii" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Nosetests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="finem_imperii" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="_new_regexPattern" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;.&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Unittests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="finem_imperii" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;.&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="py.test">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="finem_imperii" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;.&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method />
+    </configuration>
+    <list size="13">
+      <item index="0" class="java.lang.String" itemvalue="Django tests.Test: world.test.test_character_pause.TestCharacterPause" />
+      <item index="1" class="java.lang.String" itemvalue="Python.Pass turn on Emortuus" />
+      <item index="2" class="java.lang.String" itemvalue="Django server.finem_imperii" />
+      <item index="3" class="java.lang.String" itemvalue="Docker Deployment.Docker Deployment" />
+      <item index="4" class="java.lang.String" itemvalue="Django tests.Tests" />
+      <item index="5" class="java.lang.String" itemvalue="Django tests.Tests in parallel" />
+      <item index="6" class="java.lang.String" itemvalue="Python.Pass turn on Parvus" />
+      <item index="7" class="java.lang.String" itemvalue="Django tests.Test: organization.test.test_leave.TestLeaveOrganization" />
+      <item index="8" class="java.lang.String" itemvalue="Django tests.Test: world.test.test_cash_transfer.TestCashTransfer" />
+      <item index="9" class="java.lang.String" itemvalue="Django tests.Test: world.test.test_cash_transfer.TestCashTransfer.test_can_transfer_cash_to_character_in_same_settlement" />
+      <item index="10" class="java.lang.String" itemvalue="Django tests.Test: world.test.test_turn.TestTurn.test_unit_debt_increase" />
+      <item index="11" class="java.lang.String" itemvalue="Django tests.Test: world.test.test_turn.TestTurn.test_unit_debt_for_barbarian_unit" />
+      <item index="12" class="java.lang.String" itemvalue="Django tests.Test: unit.test.test_debt_payment.TestDebtPayment" />
+    </list>
+    <recent_temporary>
+      <list size="5">
+        <item index="0" class="java.lang.String" itemvalue="Django tests.Test: unit.test.test_debt_payment.TestDebtPayment" />
+        <item index="1" class="java.lang.String" itemvalue="Django tests.Test: world.test.test_turn.TestTurn.test_unit_debt_for_barbarian_unit" />
+        <item index="2" class="java.lang.String" itemvalue="Django tests.Test: world.test.test_turn.TestTurn.test_unit_debt_increase" />
+        <item index="3" class="java.lang.String" itemvalue="Django tests.Test: world.test.test_cash_transfer.TestCashTransfer" />
+        <item index="4" class="java.lang.String" itemvalue="Django tests.Test: world.test.test_cash_transfer.TestCashTransfer.test_can_transfer_cash_to_character_in_same_settlement" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="StructureViewFactory">
+    <option name="AUTOSCROLL_MODE" value="false" />
+    <option name="ACTIVE_ACTIONS" value=",ALPHA_COMPARATOR,SHOW_INHERITED" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f4406f07-7f97-400d-85bf-fdd84cdff006" name="Default" comment="" />
+      <created>1491224917568</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1491224917568</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TestHistory">
+    <history-entry file="Test__unit_test_test_debt_payment_TestDebtPayment - 2017.12.03 at 00h 21m 15s.xml">
+      <configuration name="Test: unit.test.test_debt_payment.TestDebtPayment" configurationId="DjangoTestsConfigurationType" />
+    </history-entry>
+    <history-entry file="Test__unit_test_test_debt_payment_TestDebtPayment - 2017.12.03 at 00h 21m 59s.xml">
+      <configuration name="Test: unit.test.test_debt_payment.TestDebtPayment" configurationId="DjangoTestsConfigurationType" />
+    </history-entry>
+    <history-entry file="Test__unit_test_test_debt_payment_TestDebtPayment - 2017.12.03 at 00h 22m 30s.xml">
+      <configuration name="Test: unit.test.test_debt_payment.TestDebtPayment" configurationId="DjangoTestsConfigurationType" />
+    </history-entry>
+    <history-entry file="Test__unit_test_test_debt_payment_TestDebtPayment - 2017.12.03 at 00h 23m 12s.xml">
+      <configuration name="Test: unit.test.test_debt_payment.TestDebtPayment" configurationId="DjangoTestsConfigurationType" />
+    </history-entry>
+    <history-entry file="Test__unit_test_test_debt_payment_TestDebtPayment - 2017.12.03 at 00h 23m 31s.xml">
+      <configuration name="Test: unit.test.test_debt_payment.TestDebtPayment" configurationId="DjangoTestsConfigurationType" />
+    </history-entry>
+    <history-entry file="Tests - 2017.12.02 at 12h 12m 23s.xml">
+      <configuration name="Tests" configurationId="DjangoTestsConfigurationType" />
+    </history-entry>
+    <history-entry file="Tests - 2017.12.02 at 12h 22m 47s.xml">
+      <configuration name="Tests" configurationId="DjangoTestsConfigurationType" />
+    </history-entry>
+    <history-entry file="Tests - 2017.12.02 at 12h 25m 37s.xml">
+      <configuration name="Tests" configurationId="DjangoTestsConfigurationType" />
+    </history-entry>
+    <history-entry file="Tests_in_parallel - 2017.12.02 at 12h 26m 24s.xml">
+      <configuration name="Tests in parallel" configurationId="DjangoTestsConfigurationType" />
+    </history-entry>
+    <history-entry file="Tests_in_parallel - 2017.12.03 at 00h 32m 51s.xml">
+      <configuration name="Tests in parallel" configurationId="DjangoTestsConfigurationType" />
+    </history-entry>
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="21" width="3840" height="2139" extended-state="0" />
+    <editor active="true" />
+    <layout>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32984555" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32984555" sideWeight="0.50428265" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.43541148" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32984555" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="top" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24488778" sideWeight="0.49785867" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24538654" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.08183738" sideWeight="0.6248349" order="1" side_tool="false" content_ui="combo" />
+      <window_info id="Docker" active="false" anchor="top" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1395117" sideWeight="0.49571735" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32922912" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1627409" sideWeight="0.37516513" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.10970874" sideWeight="0.6054991" order="0" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="top" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24239402" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32976446" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="manage.py@finem_imperii" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32941177" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32984555" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25910065" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
+      <window_info id="Database Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32984555" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26417112" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+    </layout>
+    <layout-to-restore>
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="manage.py@finem_imperii" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32941177" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32984555" sideWeight="0.50428265" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
+      <window_info id="Docker" active="false" anchor="top" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1395117" sideWeight="0.49571735" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32984555" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32922912" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1627409" sideWeight="0.37516513" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="top" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24239402" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32976446" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32984555" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.43541148" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32984555" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="top" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24488778" sideWeight="0.49785867" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25910065" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24538654" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Database Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32984555" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1627409" sideWeight="0.6248349" order="1" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2648379" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.10970874" sideWeight="0.6054991" order="0" side_tool="true" content_ui="tabs" />
+    </layout-to-restore>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.conf" />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ORDER">
+      <list>
+        <option value="0" />
+        <option value="2" />
+        <option value="3" />
+        <option value="1" />
+      </list>
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/.." />
+    </ignored-roots>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints-dialog>
+        <breakpoints-dialog />
+      </breakpoints-dialog>
+      <option name="time" value="121" />
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="Python.DjangoServer">
+        <watch expression="battle_contubernium_in_turn.battle_unit_in_turn.battle_unit.get_turn_order().what" language="Python" />
+      </configuration>
+    </watches-manager>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/base/static/base/css/icons.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1140">
+          <caret line="72" column="0" lean-forward="false" selection-start-line="72" selection-start-column="0" selection-end-line="72" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/battle/templates/battle/battle_nav_include.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="280">
+          <caret line="14" column="0" lean-forward="true" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turn/models.py" />
+    <entry file="file://$PROJECT_DIR$/world/admin.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="600">
+          <caret line="30" column="0" lean-forward="true" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/base/fixtures/simple_world.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="495">
+          <caret line="37" column="6" lean-forward="false" selection-start-line="37" selection-start-column="6" selection-end-line="37" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turn/admin.py" />
+    <entry file="file://$PROJECT_DIR$/finem_imperii/settings_common.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="780">
+          <caret line="39" column="9" lean-forward="false" selection-start-line="39" selection-start-column="9" selection-end-line="39" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/finem_imperii/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="29" lean-forward="false" selection-start-line="0" selection-start-column="29" selection-end-line="0" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turn/tests.py" />
+    <entry file="file://$PROJECT_DIR$/world/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#54#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/world/models/events.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="380">
+          <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#28#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/world/models/buildings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1338">
+          <caret line="133" column="0" lean-forward="false" selection-start-line="133" selection-start-column="0" selection-end-line="133" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#11#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2017.2/system/python_stubs/-1247971763/builtins.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="495">
+          <caret line="4745" column="8" lean-forward="false" selection-start-line="4745" selection-start-column="8" selection-end-line="4745" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/unit/recruitment.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1338">
+          <caret line="137" column="0" lean-forward="true" selection-start-line="137" selection-start-column="0" selection-end-line="137" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/unit/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="565">
+          <caret line="218" column="8" lean-forward="false" selection-start-line="218" selection-start-column="8" selection-end-line="218" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/unit/views/recruitment.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="798">
+          <caret line="122" column="19" lean-forward="false" selection-start-line="122" selection-start-column="19" selection-end-line="122" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/battle/battle_init.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1105">
+          <caret line="367" column="4" lean-forward="false" selection-start-line="367" selection-start-column="4" selection-end-line="367" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/organization/models/organization.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-5782">
+          <caret line="12" column="6" lean-forward="false" selection-start-line="12" selection-start-column="6" selection-end-line="12" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turn/apps.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="100">
+          <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turn/barbarians.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1338">
+          <caret line="71" column="0" lean-forward="true" selection-start-line="71" selection-start-column="0" selection-end-line="71" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turn/character.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="920">
+          <caret line="46" column="0" lean-forward="true" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turn/conquest.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1060">
+          <caret line="53" column="0" lean-forward="true" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turn/elections.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="620">
+          <caret line="31" column="0" lean-forward="true" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turn/public_order.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="920">
+          <caret line="46" column="0" lean-forward="true" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turn/turn.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1080">
+          <caret line="54" column="0" lean-forward="true" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turn/battle.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="17" column="34" lean-forward="true" selection-start-line="17" selection-start-column="34" selection-end-line="17" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/battle/test/test_battle_start.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="986">
+          <caret line="543" column="0" lean-forward="true" selection-start-line="543" selection-start-column="0" selection-end-line="543" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/character/test/test_character_pause.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1278">
+          <caret line="137" column="51" lean-forward="false" selection-start-line="137" selection-start-column="51" selection-end-line="137" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/character/test/test_travel.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="718">
+          <caret line="81" column="52" lean-forward="false" selection-start-line="81" selection-start-column="52" selection-end-line="81" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turn/building_production.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="15" column="26" lean-forward="false" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#43#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turn/test/test_building_production.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1218">
+          <caret line="224" column="36" lean-forward="false" selection-start-line="224" selection-start-column="36" selection-end-line="224" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turn/test/test_food_consumption.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1218">
+          <caret line="79" column="50" lean-forward="false" selection-start-line="79" selection-start-column="50" selection-end-line="79" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turn/npc_jobs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="15" column="26" lean-forward="false" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turn/test/test_job_updates.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1118">
+          <caret line="77" column="30" lean-forward="false" selection-start-line="77" selection-start-column="30" selection-end-line="77" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turn/taxes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="8" column="19" lean-forward="false" selection-start-line="8" selection-start-column="4" selection-end-line="8" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turn/test/test_taxation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="540">
+          <caret line="27" column="0" lean-forward="true" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turn/demography.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="205">
+          <caret line="15" column="36" lean-forward="false" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turn/test/test_turn.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1138">
+          <caret line="195" column="29" lean-forward="false" selection-start-line="195" selection-start-column="29" selection-end-line="195" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/character/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2775">
+          <caret line="164" column="8" lean-forward="false" selection-start-line="164" selection-start-column="8" selection-end-line="164" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/unit/test/test_unit_actions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/unit/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="140">
+          <caret line="13" column="45" lean-forward="false" selection-start-line="13" selection-start-column="45" selection-end-line="13" selection-end-column="45" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/unit/test/test_debt_payment.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1700">
+          <caret line="92" column="0" lean-forward="false" selection-start-line="92" selection-start-column="0" selection-end-line="92" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/unit/views/actions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="29" column="29" lean-forward="false" selection-start-line="29" selection-start-column="29" selection-end-line="29" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#35#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turn/unit.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="480">
+          <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/base/templates/base/base_naked.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="700">
+          <caret line="35" column="0" lean-forward="false" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/base/templates/base/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="20" column="23" lean-forward="false" selection-start-line="20" selection-start-column="23" selection-end-line="20" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/base/templates/base/topnav.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1833">
+          <caret line="106" column="0" lean-forward="true" selection-start-line="106" selection-start-column="0" selection-end-line="106" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/unit/templates/unit/battle_settings_modal_include.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="480">
+          <caret line="24" column="0" lean-forward="false" selection-start-line="24" selection-start-column="0" selection-end-line="53" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/unit/templates/unit/view_unit.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="500">
+          <caret line="92" column="62" lean-forward="false" selection-start-line="92" selection-start-column="62" selection-end-line="92" selection-end-column="62" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/unit/templates/unit/pay_debt_modal_include.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="560">
+          <caret line="28" column="57" lean-forward="false" selection-start-line="28" selection-start-column="57" selection-end-line="28" selection-end-column="57" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/unit/templates/unit/rename_modal_include.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="6" column="40" lean-forward="false" selection-start-line="6" selection-start-column="40" selection-end-line="6" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

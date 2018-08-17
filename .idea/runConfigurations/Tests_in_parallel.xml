@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Tests in parallel" type="DjangoTestsConfigurationType" factoryName="Django tests" singleton="true">
     <option name="INTERPRETER_OPTIONS" value="" />
@@ -20,3 +21,4 @@
     <method />
   </configuration>
 </component>
+

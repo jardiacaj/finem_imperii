@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Pass turn on Emortuus" type="PythonConfigurationType" factoryName="Python" singleton="true">
+  <configuration default="false" name="Tests" type="DjangoTestsConfigurationType" factoryName="Django tests" singleton="true">
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
     <envs>
@@ -13,11 +12,11 @@
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <module name="finem_imperii" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-    <option name="SCRIPT_NAME" value="manage.py" />
-    <option name="PARAMETERS" value="pass_turn 1" />
-    <option name="SHOW_COMMAND_LINE" value="false" />
-    <option name="EMULATE_TERMINAL" value="false" />
+    <option name="TARGET" value="" />
+    <option name="SETTINGS_FILE" value="" />
+    <option name="CUSTOM_SETTINGS" value="false" />
+    <option name="USE_OPTIONS" value="false" />
+    <option name="OPTIONS" value="" />
     <method />
   </configuration>
 </component>
-

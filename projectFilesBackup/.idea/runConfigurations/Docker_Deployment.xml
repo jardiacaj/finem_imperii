@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Docker Deployment" type="docker-deploy" factoryName="dockerfile" singleton="true" server-name="Docker">
-    <deployment type="dockerfile">
+  <configuration default="false" name="Docker Deployment" type="docker-deploy" factoryName="Docker Deployment" singleton="true" server-name="Docker">
+    <deployment type="dockerfile" path="$PROJECT_DIR$/Dockerfile">
       <settings>
         <option name="JSONFilePath" value="" />
         <option name="command" value="" />
@@ -21,10 +20,8 @@
         <option name="startBrowserSettings">
           <browser />
         </option>
-        <option name="sourceFilePath" value="$PROJECT_DIR$/Dockerfile" />
       </settings>
     </deployment>
     <method />
   </configuration>
 </component>
-

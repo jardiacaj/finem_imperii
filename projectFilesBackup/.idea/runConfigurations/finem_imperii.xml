@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="finem_imperii" type="Python.DjangoServer" factoryName="Django server" singleton="true">
     <option name="INTERPRETER_OPTIONS" value="" />
@@ -25,4 +24,3 @@
     <method />
   </configuration>
 </component>
-

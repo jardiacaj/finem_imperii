@@ -209,7 +209,7 @@ function MapRenderer(world_data) {
     zis.focus_to_region = function (region_id) {
         var region = zis.regions[region_id];
         zis.renderer.camera.position.x = region.mesh.position.x;
-        zis.renderer.camera.position.y = 4;
+        zis.renderer.camera.position.y = 5;
         zis.renderer.camera.position.z = region.mesh.position.z;
         zis.renderer.camera.lookAt(region.mesh.position);
     };

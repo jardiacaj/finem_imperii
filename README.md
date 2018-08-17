@@ -1,7 +1,4 @@
 [![Join the chat at https://gitter.im/finemimperii/Lobby](https://badges.gitter.im/finemimperii/Lobby.svg)](https://gitter.im/finemimperii/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Maintainability](https://api.codeclimate.com/v1/badges/80d5efdbde0db436fd53/maintainability)](https://codeclimate.com/github/jardiacaj/finem_imperii/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/80d5efdbde0db436fd53/test_coverage)](https://codeclimate.com/github/jardiacaj/finem_imperii/test_coverage)
-
 [![Build Status](https://travis-ci.org/jardiacaj/finem_imperii.svg?branch=master)](https://travis-ci.org/jardiacaj/finem_imperii)
 [![Coverage Status](https://coveralls.io/repos/github/jardiacaj/finem_imperii/badge.svg?branch=HEAD)](https://coveralls.io/github/jardiacaj/finem_imperii?branch=HEAD)
 [![Docker Image Layers](https://images.microbadger.com/badges/image/jardiacaj/finem_imperii.svg)](https://microbadger.com/images/jardiacaj/finem_imperii)

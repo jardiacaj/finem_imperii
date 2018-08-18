@@ -61,6 +61,38 @@
                             </a>
                         </li>
 
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                Politics
+                                <span class="caret"></span>
+                            </a>
+
+                            <ul class="dropdown-menu" role="menu">
+                                {% for organization in request.hero.organization_set.all %}
+                                    <li>
+                                        {{ organization.get_html_link|safe }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+
+                        {% if request.hero.worldunit_set.exists %}
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                    Units
+                                    <span class="caret"></span>
+                                </a>
+
+                                <ul class="dropdown-menu" role="menu">
+                                    {% for unit in request.hero.worldunit_set.all %}
+                                        <li class="nav-inline-links">
+                                            {{ unit.get_html_link|safe }}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endif %}
+
                     {% endif %}
 
                 {%  else %}

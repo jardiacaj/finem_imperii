@@ -113,3 +113,8 @@ ul.navbar-nav li.nav-inline-links a {
     padding-left: 0;
     padding-right: 0;
 }
+
+.vertical-align {
+    display: flex;
+    align-items: center;
+}

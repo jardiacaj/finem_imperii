@@ -2,13 +2,14 @@
 
 {% block content %}
 
-    <h1 class="page-header">
-        {{ organization.get_html_name|safe }}
-    </h1>
 
-    <div class="row">
+    <div class="row vertical-align">
         <div class="col-md-6">
-            <p>{{ organization.description }}</p>
+            <h1 class="page-header">
+                {{ organization.get_html_name|safe }}
+            </h1>
+
+            <p class="text-justify">{{ organization.description }}</p>
             {% if organization.heir_first %}
                 <p>First heir: {{ organization.heir_first.get_html_link|safe }}</p>
             {% endif %}
@@ -16,40 +17,55 @@
                 <p>Second heir: {{ organization.heir_second.get_html_link|safe }}</p>
             {% endif %}
         </div>
-        <div class="col-md-6 lead">
+        <div class="col-md-6 lead text-center">
+            {% if hero_is_member %}
+                {% if organization.is_position %}
+                    You occupy this position.<br>
+                {% else %}
+                    You are a member.<br>
+                {% endif %}
+            {% endif %}
+
             {% if organization.get_position_occupier %}
                 {{ organization.get_position_occupier.get_html_link|safe }}<br>
             {% endif %}
-            {{ organization.name }}
             {% if organization.violence_monopoly and not organization.barbaric %}
-                <br><b>Sovereign <span class="glyphicon glyphicon-tower" aria-hidden="true"></span></b>
+                <b>Sovereign <span class="glyphicon glyphicon-tower" aria-hidden="true"></span></b><br>
             {% endif %}
+
+            {% if relationship_to_member_violence_monopoly %}
+                {{  relationship_to_member_violence_monopoly.get_relationship_html|safe }}
+                with {{ request.hero.get_violence_monopoly.get_html_link|safe }}<br>
+            {% endif %}
+
             {% if organization.violence_monopoly and organization.barbaric %}
-                <br><b>Barbaric <span class="glyphicon glyphicon-fire" aria-hidden="true"></span></b>
+                <b>Barbaric <span class="glyphicon glyphicon-fire" aria-hidden="true"></span></b><br>
             {% endif %}
             {% if organization.owner %}
-                <br>Owned by {{ organization.owner.get_html_link|safe }}
+                Owned by {{ organization.owner.get_html_link|safe }}<br>
             {% endif %}
             {% if organization.leader %}
-                <br>Lead by {{ organization.leader.get_html_link|safe }}
+                Lead by {{ organization.leader.get_html_link|safe }}<br>
             {% endif %}
             {% if organization.leaded_organizations.all %}
-                <br>Leader of
+                Leader of
                 {% for leaded_orga in organization.leaded_organizations.all %}
                     {{ leaded_orga.get_html_link|safe }}
                     {% if not forloop.last %},{% endif %}
                 {% endfor %}
+                <br>
             {% endif %}
             {% if organization.owned_organizations.all %}
-                <br>Owner of
+                Owner of
                     {% for owned_orga in organization.owned_organizations.all %}
                         {{ owned_orga.get_html_link|safe }}
                         {% if not forloop.last %},{% endif %}
                     {% endfor %}
+                <br>
             {% endif %}
             {% if organization.has_tax_collection %}
-                <br>Next tax collection in {{ organization.tax_countdown }}
-                months.
+                Next tax collection in {{ organization.tax_countdown }}
+                months.<br>
             {% endif %}
         </div>
     </div>

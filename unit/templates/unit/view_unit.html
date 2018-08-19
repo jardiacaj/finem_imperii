@@ -42,6 +42,7 @@
                                     {% csrf_token %}
                                     <button
                                         type="submit"
+                                        onclick="return confirm('A unit that is not mobilized will not fight, but it also won\'t cost a salary. You can\'t mobilize the unit again in the same turn.');"
                                         class="btn btn-sm
                                         {% if unit.status == 'not mobilized' %}disabled btn-success
                                         {% elif unit.get_current_battle %}disabled btn-default
@@ -54,6 +55,7 @@
                                     {% csrf_token %}
                                     <button
                                         type="submit"
+                                        onclick="return confirm('A standing unit will stay where it is ready to fight without following you on your voyages, and as a mobilized unit cost a salary. You can\'t demobilize the unit again the same turn it has been mobilized.');"
                                         class="btn btn-sm
                                         {% if unit.status == 'standing' %}disabled btn-success
                                         {% elif unit.get_current_battle %}disabled btn-default
@@ -66,6 +68,7 @@
                                     {% csrf_token %}
                                     <button
                                         type="submit"
+                                        onclick="return confirm('A following unit will follow you on your voyages, and as a mobilized unit cost a salary. You can\'t demobilize the unit again the same turn it has been mobilized.');"
                                         class="btn btn-sm
                                         {% if unit.status == 'following' %}disabled btn-success
                                         {% elif unit.get_current_battle %}disabled btn-default

@@ -81,19 +81,27 @@
             <div class="panel panel-default">
                 <div class="panel-heading"><h3 class="panel-title">
                     <span class="lead">{{ settlement }}</span>
-                    pop. {{ settlement.population }}
                 </h3></div>
                 <div class="panel-body">
+                    <h4><small>Population: {{ settlement.population }}</small></h4>
 
-                    <p class="{% if settlement.get_hunger_percentage > 15 %}text-danger{% endif %}">
-                    Hunger: {{ settlement.get_hunger_percentage }}%
+                    <p>
+
+                        <span class="{% if settlement.public_order < 500 %}text-danger{% endif %}">
+                            {{ settlement.get_public_order_display }} Public order
+                        </span>
+                        <br>
+                        <span class="{% if settlement.get_hunger_percentage > 15 %}text-danger{% endif %}">
+                            {{ settlement.get_hunger_percentage }}% Hunger
+                        </span>
+                        <br>
+                        <span>
+                            {{ settlement.disability_percentage }}% disabled
+                            population
+                        </span>
                     </p>
 
-                    <p class="{% if settlement.public_order < 500 %}text-danger{% endif %}">
-                    Public order: {{ settlement.get_public_order_display }}
-                    </p>
-
-                    <h6>Buildings</h6>
+                    <h4><small>Buildings</small></h4>
 
                     <ul>
                         {% for building in settlement.building_set.all %}
@@ -113,14 +121,17 @@
                         {% endfor %}
                     </ul>
 
-                    <p>
-                        {{ settlement.disability_percentage }}% disabled
-                        population
-                    </p>
+                    <h4><small>Economy</small></h4>
 
                     <p>
-                        {{ settlement.female_percentage }}% female -
-                        {{ settlement.male_percentage }}% male
+                        <span class="{% if settlement.get_default_granary.grain_reserve_in_months < 6 %}text-danger{% endif %}">
+                            {{ settlement.get_default_granary.grain_reserve_in_months }}
+                            months of food reserve left.
+                        </span>
+                        <br>
+                        <span>
+                            Guilds provide
+                        </span>
                     </p>
                 </div>
             </div>

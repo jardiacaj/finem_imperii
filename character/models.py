@@ -17,6 +17,95 @@ from messaging import shortcuts
 from messaging.models import CharacterMessage
 
 
+class CharacterEvent(models.Model):
+    class Meta:
+        ordering = ['create_timestamp']
+
+    RECRUIT_UNIT = 'recruit_unit'
+    TRAVEL = 'travel'
+    PAUSE = 'pause'
+    UNPAUSE = 'unpause'
+    RAISE_UNIT = 'raise_unit'
+    BUREAUCRATIC_WORK = 'bureaucratic_work'
+
+    TYPE_CHOICES = (
+        (RECRUIT_UNIT, RECRUIT_UNIT),
+        (TRAVEL, TRAVEL),
+        (PAUSE, PAUSE),
+        (UNPAUSE, UNPAUSE),
+        (RAISE_UNIT, RAISE_UNIT),
+        (BUREAUCRATIC_WORK, BUREAUCRATIC_WORK),
+    )
+
+    character = models.ForeignKey('Character', models.CASCADE)
+    create_timestamp = models.DateTimeField(auto_now_add=True)
+    active = models.BooleanField()
+    type = models.CharField(max_length=20, choices=TYPE_CHOICES,
+                            db_index=True)
+    counter = models.IntegerField(blank=True, null=True,
+                                  help_text='Counter for general use')
+    hour_cost = models.IntegerField(blank=True, null=True, default=None)
+    start_turn = models.IntegerField()
+    end_turn = models.IntegerField(blank=True, null=True)
+    unit = models.ForeignKey('unit.WorldUnit', models.SET_NULL, blank=True,
+                             null=True)
+    settlement = models.ForeignKey('world.Settlement', models.SET_NULL,
+                                   blank=True, null=True)
+
+    actions = {
+        TRAVEL: {
+            'url': '/character/travel',
+            'condition': lambda character: character.can_travel(),
+            'common': True,
+            'nice_name': 'Travel',
+            'html': 'Traveled to {event.settlement}'
+        },
+        PAUSE: {
+            'url': '/character/pause',
+            'condition': lambda character: character.can_pause(),
+            'common': False,
+            'nice_name': 'Pause',
+            'html': 'Character paused'
+        },
+        UNPAUSE: {
+            'url': '/character/unpause',
+            'condition': lambda character: character.can_unpause(),
+            'common': False,
+            'nice_name': 'Unpause',
+            'html': 'Character unpaused'
+        },
+        RECRUIT_UNIT: {
+            'url': '/unit/recruit',
+            'condition': lambda
+                character: character.can_conscript_unit(),
+            'common': True,
+            'nice_name': 'Recruit',
+            'html': 'Recruited unit {event.unit}'
+        },
+        RAISE_UNIT: {
+            'url': '/unit/raise',
+            'condition': lambda
+                character: character.can_raise_unit(),
+            'common': True,
+            'nice_name': 'Raise unit',
+            'html': 'Raised unit {event.unit}'
+        },
+        BUREAUCRATIC_WORK: {
+            'url': '/character/bureaucratic_work',
+            'condition': lambda
+                character: character.can_do_bureaucratic_work(),
+            'common': True,
+            'nice_name': 'Bureaucratic work',
+            'html': 'Public order work in {event.settlement}'
+        },
+    }
+
+    def get_html(self):
+        return CharacterEvent.actions[self.type].get('html').format(
+            event=self
+        )
+
+
 class Character(models.Model):
     COMMANDER = 'commander'
     TRADER = 'trader'
@@ -37,7 +126,7 @@ class Character(models.Model):
     )
     owner_user = models.ForeignKey(User, models.CASCADE)
     cash = models.IntegerField(default=0)
-    hours_in_turn_left = models.IntegerField(default=15*24)
+    hours_in_turn_left = models.IntegerField(default=15 * 24)
     travel_destination = models.ForeignKey(
         'world.Settlement',
         null=True, blank=True, related_name='travellers_heading',
@@ -67,9 +156,9 @@ class Character(models.Model):
 
     def inactivity_hours_allowed(self):
         time_since_user_registered = (
-            timezone.now() - self.owner_user.date_joined)
+                timezone.now() - self.owner_user.date_joined)
         hours_since_user_registered = (
-            time_since_user_registered.total_seconds() / 60 / 60)
+                time_since_user_registered.total_seconds() / 60 / 60)
         return 24 * 2 if hours_since_user_registered < 24 * 5 else 24 * 6
 
     def hours_until_autopause(self):
@@ -114,17 +203,37 @@ class Character(models.Model):
         self.paused = True
         self.save()
 
+        CharacterEvent.objects.create(
+            character=self,
+            active=False,
+            type=CharacterEvent.PAUSE,
+            counter=0,
+            hour_cost=None,
+            start_turn=self.world.current_turn,
+            end_turn=self.world.current_turn
+        )
+
     def can_pause(self):
         return not self.paused
 
     def can_unpause(self):
-        return self.paused and self.hours_since_last_activation() > 24*5
+        return self.paused and self.hours_since_last_activation() > 24 * 5
 
     def unpause(self):
         self.paused = False
         self.oath_sworn_to.character_members.add(self)
         self.world.get_barbaric_state().character_members.remove(self)
         self.save()
+
+        CharacterEvent.objects.create(
+            character=self,
+            active=False,
+            type=CharacterEvent.UNPAUSE,
+            counter=0,
+            hour_cost=None,
+            start_turn=self.world.current_turn,
+            end_turn=self.world.current_turn
+        )
 
         message = shortcuts.create_message(
             'messaging/messages/character_unpaused.html',
@@ -181,11 +290,12 @@ class Character(models.Model):
         ):
             return "You cant travel to {} because you are already travelling" \
                    " to {}.".format(
-                        target_settlement,
-                        self.travel_destination
-                   )
+                target_settlement,
+                self.travel_destination
+            )
         return None
 
+    @transaction.atomic
     def perform_travel(self, destination):
         for travelling_unit in self.worldunit_set.filter(
                 status=unit.models.WorldUnit.FOLLOWING,
@@ -198,6 +308,18 @@ class Character(models.Model):
         self.location = destination
         self.hours_in_turn_left -= travel_time
         self.save()
+
+        CharacterEvent.objects.create(
+            character=self,
+            active=False,
+            type=CharacterEvent.TRAVEL,
+            counter=0,
+            hour_cost=travel_time,
+            start_turn=self.world.current_turn,
+            end_turn=self.world.current_turn,
+            settlement=destination
+        )
+
         return travel_time, destination
 
     @transaction.atomic
@@ -266,14 +388,20 @@ class Character(models.Model):
             organization.models.capability.Capability.TAKE_GRAIN
         )
 
-    def has_conscripting_capability_in_current_location(self):
+    def can_conscript_unit(self):
         return (
-            self.can_use_capability_in_current_location(
-                organization.models.capability.Capability.CONSCRIPT
-            )
-            and
-            self.get_battle_participating_in() is None
+                self.can_use_capability_in_current_location(
+                    organization.models.capability.Capability.CONSCRIPT
+                )
+                and
+                self.get_battle_participating_in() is None
         )
+
+    def max_amount_of_conscripted_soldiers(self):
+        return math.floor(min(
+            self.cash,
+            (self.hours_in_turn_left - self.location.base_unit_conscription_cost()) * 5
+        ))
 
     def can_use_capability_in_current_location(self, capability_type):
         local_violence_monopoly = \
@@ -281,14 +409,14 @@ class Character(models.Model):
 
         organizations_local_vm = local_violence_monopoly. \
             organizations_character_can_apply_capabilities_to_this_with(
-                self, capability_type)
+            self, capability_type)
         organizations_controlled_by = self.location.tile.controlled_by \
             .organizations_character_can_apply_capabilities_to_this_with(
-                self, capability_type)
+            self, capability_type)
         return (
-            organizations_local_vm
-            or
-            organizations_controlled_by
+                organizations_local_vm
+                or
+                organizations_controlled_by
         )
 
     def takeable_grain_from_public_granary(self):
@@ -347,8 +475,22 @@ class Character(models.Model):
             return 5000
         return 500
 
-    def can_work_public_order(self):
+    def can_do_bureaucratic_work(self):
         return (
-            self.profile == self.BUREAUCRAT and
-            self.get_battle_participating_in() is None
+                self.profile == self.BUREAUCRAT and
+                self.get_battle_participating_in() is None
         )
+
+    def can_raise_unit(self):
+        return True
+
+    def possible_common_actions(self):
+        return ((name, descriptor) for (name, descriptor) in
+                CharacterEvent.actions.items() if
+                descriptor.get('common') and
+                descriptor.get('condition')(self))
+
+    def possible_actions(self):
+        return ((name, descriptor) for (name, descriptor) in
+                CharacterEvent.actions.items() if
+                descriptor.get('condition')(self))

@@ -186,7 +186,7 @@ class Organization(models.Model):
             conquest_tile_event = tile.tileevent_set.filter(
                 organization=self,
                 type=world.models.events.TileEvent.CONQUEST,
-                end_turn__isnull=True
+                active=True
             )
             conquering_units = tile.get_units() \
                 .filter(owner_character__in=self.character_members.all()) \

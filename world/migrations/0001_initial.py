@@ -75,7 +75,7 @@ class Migration(migrations.Migration):
                 ('population_default', models.IntegerField()),
                 ('x_pos', models.IntegerField()),
                 ('z_pos', models.IntegerField()),
-                ('public_order', models.IntegerField(default=1000, help_text='0-1000, shown as %')),
+                ('bureaucratic_work', models.IntegerField(default=1000, help_text='0-1000, shown as %')),
                 ('guilds_setting', models.CharField(choices=[('prohibit guilds', 'prohibit guilds'), ('restrict guilds', 'restrict guilds'), ('keep guilds', 'keep guilds'), ('promote guilds', 'promote guilds')], default='keep guilds', max_length=20)),
             ],
         ),

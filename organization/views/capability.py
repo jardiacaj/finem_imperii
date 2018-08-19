@@ -63,7 +63,7 @@ def conquest_capability_context(request, capability, context):
         context['conquests_in_progress'] = TileEvent.objects.filter(
             organization=capability.applying_to,
             type=TileEvent.CONQUEST,
-            end_turn=None
+            active=True
         )
 
 

@@ -195,11 +195,14 @@ class Settlement(models.Model):
     def __str__(self):
         return self.name
 
-    def base_conscription_cost(self):
+    def base_unit_raising_cost(self):
         return math.ceil(math.log10(self.population) * 12)
 
-    def conscription_time(self, soldiers):
-        return math.ceil(self.base_conscription_cost() + soldiers / 5)
+    def base_unit_conscription_cost(self):
+        return math.ceil(math.log10(self.population) * 12)
+
+    def unit_conscription_time(self, soldiers):
+        return math.ceil(self.base_unit_conscription_cost() + soldiers / 5)
 
     def get_absolute_coords(self):
         return Point(

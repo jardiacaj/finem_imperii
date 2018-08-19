@@ -93,6 +93,25 @@
                             </li>
                         {% endif %}
 
+                        {% if request.hero.possible_common_actions %}
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                    Actions
+                                    <span class="caret"></span>
+                                </a>
+
+                                <ul class="dropdown-menu" role="menu">
+                                    {% for action_name, action in request.hero.possible_common_actions %}
+                                        <li>
+                                            <a href="{{ action.url }}">
+                                                {{ action.nice_name }}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endif %}
+
                     {% endif %}
 
                 {%  else %}

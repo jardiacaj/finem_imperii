@@ -80,11 +80,15 @@
                             </tr>
                         {% empty %}
                             <tr><td class="text-center">
-                                You own no units.<br>
-                                <a href="{% url 'unit:recruit' %}"
-                                   class="btn {% if request.hero.has_conscripting_capability_in_current_location %}btn-primary{% else %}btn-default{% endif %} btn-sm">
-                                    Recruit
-                                </a>
+                                You own no units.
+                                {% if request.hero.can_conscript_unit %}
+                                    <a href="{% url 'unit:recruit' %}">
+                                        Recruit</a>.
+                                {% endif %}
+                                {% if request.hero.can_raise_unit %}
+                                    <a href="{% url 'unit:raise' %}">
+                                        Raise</a>.
+                                {% endif %}
                             </td></tr>
                         {% endfor %}
                     </tbody>

@@ -14,7 +14,7 @@ def unit_view(request, unit_id):
         'conquests': TileEvent.objects.filter(
             tile=unit.location.tile,
             type=TileEvent.CONQUEST,
-            end_turn__isnull=True
+            active=True
         )
     }
     return render(request, 'unit/view_unit.html', context)

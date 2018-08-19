@@ -22,7 +22,7 @@ def conquest_capability_view(request, capability_id):
             tile_event = TileEvent.objects.get(
                 tile=tile_to_conquer,
                 organization=capability.applying_to,
-                end_turn__isnull=True
+                active=True
             )
         except TileEvent.DoesNotExist:
             raise Http404

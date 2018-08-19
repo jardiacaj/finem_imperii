@@ -1,7 +1,7 @@
 import random
 
 import unit.models
-import unit.recruitment
+import unit.creation
 from world.models.geography import World, Settlement
 
 
@@ -57,11 +57,11 @@ def do_settlement_barbarian_generation(settlement: Settlement):
 
 
 def generate_barbarian_unit(recruitment_size, settlement):
-    soldiers = unit.recruitment.sample_candidates(
-        unit.recruitment.all_recruitable_soldiers_in_settlement(settlement),
+    soldiers = unit.creation.sample_candidates(
+        unit.creation.all_recruitable_soldiers_in_settlement(settlement),
         recruitment_size
     )
-    unit.recruitment.recruit_unit(
+    unit.creation.create_unit(
         "Barbarians of {}".format(settlement),
         None,
         settlement,

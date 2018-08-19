@@ -1,0 +1,113 @@
+{% extends "base/base.html" %}
+
+{% load extra_filters %}
+
+{% block content %}
+
+    {% if not request.hero.can_do_bureaucratic_work %}
+        <div class="alert alert-danger">
+            <p>
+                You can't currently do bureaucratic work. This can be cause
+                by several reasons.
+            </p>
+            <ul>
+                <li>You must be a bureaucrat.</li>
+                <li>You can''t be taking part in a battle.</li>
+            </ul>
+        </div>
+    {% endif %}
+
+
+    <div class="row">
+        <div class="col-lg-6">
+            <h1 class="page-header">Bureaucratic work</h1>
+
+            <p>
+                As a bureaucrat you can use your skills to try and influence
+                politics and organize the local administration for the sake
+                of good order.
+            </p>
+
+        </div>
+
+        <div class="col-lg-6">
+            <h4>Choose a work type</h4>
+
+            <div class="well">
+                <h4><small>Public order</small></h4>
+
+                <p>
+                    Work in improving the local government's control over
+                    {{ request.hero.location.name }} by organizing the local
+                    authorities.
+                </p>
+
+                <p>
+                    This won't be very efficient if the public order is very low.
+                    It is currently
+                    {{ request.hero.location.get_public_order_display }}.
+                </p>
+
+                <p>
+                    <a href="#" class="btn btn-primary" data-toggle="modal"
+                       data-target="#public_order_work_modal">
+                        Public order work
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="public_order_work_modal" tabindex="-1"
+         role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form class="form-horizontal" method="post"
+                      action="{% url 'character:bureaucratic_work' %}">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            Public order work
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        {% csrf_token %}
+                        <p>
+                            Do public order work in the settlement you are
+                            currently located: {{ request.hero.location }}.
+                        </p>
+
+                        <div class="form-group">
+                            <label for="hours" class="col-sm-3 control-label">
+                                Hours
+                            </label>
+                            <div class="col-sm-9">
+                                <input class="form-control"
+                                       id="hours"
+                                       name="hours"
+                                       placeholder="max {{ request.hero.hours_in_turn_left }}"
+                                       type="number"
+                                       max="{{ hours_in_turn_left }}"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default"
+                                data-dismiss="modal">Close
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Work
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+

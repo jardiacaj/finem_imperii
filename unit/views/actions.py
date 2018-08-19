@@ -40,7 +40,7 @@ def conquest_action(request, unit_id):
     )
     tile_event = get_object_or_404(
         TileEvent,
-        end_turn__isnull=True,
+        active=True,
         type=TileEvent.CONQUEST,
         tile=unit.location.tile,
         organization_id=request.POST.get('conqueror_id')

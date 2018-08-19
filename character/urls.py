@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 
-from character.views.actions import activate, public_order
+from character.views.actions import activate, bureaucratic_work
 from character.views.creation import CharacterCreationView, create
 from character.views.inventory import InventoryView, transfer_cash
 from character.views.pause import unpause, pause
@@ -22,6 +22,6 @@ urlpatterns = [
     url(r'^inventory$', inchar_required(InventoryView.as_view()), name='inventory'),
     url(r'^view/(?P<character_id>[0-9]+)$', character_view, name='character'),
     url(r'^view_iframe/(?P<character_id>[0-9]+)$', character_view_iframe, name='character_iframe'),
-    url(r'^public_order$', public_order, name='public_order'),
+    url(r'^bureaucratic_work', bureaucratic_work, name='bureaucratic_work'),
     url(r'^transfer_cash$', transfer_cash, name='transfer_cash'),
 ]

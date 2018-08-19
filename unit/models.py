@@ -1,6 +1,7 @@
 from django.db import models
 
 from django.db.models import Avg, F
+from django.db.transaction import atomic
 from django.urls import reverse
 from django.utils.html import format_html
 
@@ -20,10 +21,12 @@ class WorldUnit(models.Model):
     CONSCRIPTION = 'conscription'
     PROFESSIONAL = 'professional'
     MERCENARY = 'mercenary'
+    RAISED = 'raised'
     RECRUITMENT_CHOICES = (
         (CONSCRIPTION, CONSCRIPTION),
         (PROFESSIONAL, PROFESSIONAL),
         (MERCENARY, MERCENARY),
+        (RAISED, RAISED),
     )
 
     INFANTRY = 'infantry'
@@ -220,14 +223,19 @@ class WorldUnit(models.Model):
         self.status = new_status
         self.save()
 
+    @atomic
     def mobilize(self):
+        self.mobilization_status_since = self.world.current_turn
+        self.save()
         self.soldier.update(
             residence=None,
             location=None,
             workplace=None
         )
 
+    @atomic
     def demobilize(self):
+        self.mobilization_status_since = self.world.current_turn
         self.status = WorldUnit.NOT_MOBILIZED
         self.soldier.update(
             location=F('origin'),

@@ -8,7 +8,7 @@ from world.models.geography import World
 def worldwide_do_conquests(world: World):
     conquests_in_this_world = TileEvent.objects.filter(
         type=TileEvent.CONQUEST,
-        end_turn__isnull=True,
+        active=True,
         tile__world=world
     )
     for conquest in conquests_in_this_world:
@@ -26,6 +26,7 @@ def worldwide_do_conquests(world: World):
         # stop conquest if no more units present
         if len(conquering_units) == 0:
             conquest.end_turn = world.current_turn
+            conquest.active = False
             conquest.save()
             continue
 
@@ -40,6 +41,7 @@ def worldwide_do_conquests(world: World):
             previous_owner = conquest.tile.controlled_by.get_violence_monopoly()
             conquest.tile.controlled_by = conquest.organization
             conquest.end_turn = world.current_turn
+            conquest.active = False
             conquest.tile.save()
             conquest.save()
             send_notification_to_characters(

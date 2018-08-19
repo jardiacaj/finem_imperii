@@ -11,10 +11,13 @@ class TileEvent(models.Model):
     )
 
     tile = models.ForeignKey(Tile, models.CASCADE)
+    create_timestamp = models.DateTimeField(auto_now_add=True)
+    active = models.BooleanField()
     type = models.CharField(max_length=20, choices=TYPE_CHOICES, db_index=True)
+    counter = models.IntegerField(blank=True, null=True,
+                                  help_text='Counter for general use')
+    start_turn = models.IntegerField()
+    end_turn = models.IntegerField(blank=True, null=True)
     organization = models.ForeignKey(
         organization.models.organization.Organization, models.SET_NULL,
         blank=True, null=True)
-    counter = models.IntegerField(blank=True, null=True)
-    start_turn = models.IntegerField()
-    end_turn = models.IntegerField(blank=True, null=True)

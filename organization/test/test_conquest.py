@@ -65,6 +65,8 @@ class TestConquest(TestCase):
         self.assertEqual(event.organization.id, 105)
         self.assertEqual(event.counter, 0)
         self.assertEqual(event.start_turn, tile.world.current_turn)
+        self.assertEqual(event.end_turn, None)
+        self.assertEqual(event.active, True)
 
         response = self.client.get(capability.get_absolute_url())
         self.assertEqual(response.status_code, 200)
@@ -105,6 +107,7 @@ class TestConquest(TestCase):
         self.assertEqual(event.counter, 0)
         self.assertEqual(event.start_turn, tile.world.current_turn)
         self.assertEqual(event.end_turn, tile.world.current_turn)
+        self.assertEqual(event.active, False)
 
         response = self.client.post(
             reverse('organization:conquest_capability', kwargs={'capability_id': capability.id}),
@@ -131,6 +134,8 @@ class TestConquest(TestCase):
         self.assertEqual(event.organization.id, 105)
         self.assertEqual(event.counter, 0)
         self.assertEqual(event.start_turn, tile.world.current_turn)
+        self.assertEqual(event.end_turn, None)
+        self.assertEqual(event.active, True)
 
         response = self.client.get(capability.get_absolute_url())
         self.assertEqual(response.status_code, 200)

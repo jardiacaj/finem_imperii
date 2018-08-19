@@ -307,10 +307,12 @@ class CapabilityProposal(models.Model):
                     tile_event = world.models.events.TileEvent.objects.get(
                         tile=tile,
                         organization=applying_to,
-                        end_turn__isnull=True
+                        active=True,
+                        type=world.models.events.TileEvent.CONQUEST,
                     )
                     tile_event.end_turn = applying_to. \
                         world.current_turn
+                    tile_event.active = False
                     tile_event.save()
                     self.announce_execution(
                         'conquest',
@@ -320,15 +322,15 @@ class CapabilityProposal(models.Model):
                         }
                     )
                 else:
-                    if tile in \
-                            applying_to.conquestable_tiles():
+                    if tile in applying_to.conquestable_tiles():
                         tile_event = world.models.events.TileEvent.objects. \
                             create(
                             tile=tile,
                             type=world.models.events.TileEvent.CONQUEST,
                             organization=applying_to,
                             counter=0,
-                            start_turn=applying_to.world.current_turn
+                            start_turn=applying_to.world.current_turn,
+                            active=True
                         )
                         self.announce_execution(
                             'conquest',

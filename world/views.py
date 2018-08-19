@@ -44,7 +44,7 @@ def tile_view(request, tile_id):
         'characters': Character.objects.filter(location__tile=tile, paused=False),
         'units': WorldUnit.objects.filter(location__tile=tile),
         'conquests': TileEvent.objects.filter(
-            tile=tile, type=TileEvent.CONQUEST, end_turn__isnull=True)
+            tile=tile, type=TileEvent.CONQUEST, active=True)
     }
     return render(request, 'world/view_tile.html', context)
 

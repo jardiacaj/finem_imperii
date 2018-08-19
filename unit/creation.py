@@ -113,7 +113,7 @@ def sample_candidates(candidates, target_soldier_count):
         return list(candidates)
 
 
-def recruit_unit(name, owner, location, soldiers, recruitment_type, unit_type):
+def create_unit(name, owner, location, soldiers, recruitment_type, unit_type):
     orders = Order.objects.create(what=Order.STAND)
 
     unit = WorldUnit.objects.create(

@@ -6,3 +6,5 @@ coverage>=4.0,<4.4
 mysqlclient
 django-classy-tags
 django-cookie-law
+tblib
+

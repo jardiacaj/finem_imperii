@@ -123,7 +123,8 @@ class TestTurn(TestCase):
             type=TileEvent.CONQUEST,
             organization=conqueror,
             counter=0,
-            start_turn=0
+            start_turn=0,
+            active=True
         )
         worldwide_do_conquests(tile.world)
 
@@ -141,7 +142,8 @@ class TestTurn(TestCase):
             type=TileEvent.CONQUEST,
             organization=conqueror,
             counter=0,
-            start_turn=0
+            start_turn=0,
+            active=True
         )
         worldwide_do_conquests(tile.world)
 
@@ -150,6 +152,7 @@ class TestTurn(TestCase):
         tile_event.refresh_from_db()
         self.assertEqual(tile_event.end_turn, 0)
         self.assertNotEqual(tile_event.end_turn, None)
+        self.assertFalse(tile_event.active)
 
     def test_conquest_success(self):
         tile = Tile.objects.get(name="More mountains")
@@ -159,7 +162,8 @@ class TestTurn(TestCase):
             type=TileEvent.CONQUEST,
             organization=conqueror,
             counter=100000,
-            start_turn=0
+            start_turn=0,
+            active=True
         )
         worldwide_do_conquests(tile.world)
 
@@ -168,6 +172,7 @@ class TestTurn(TestCase):
         tile_event.refresh_from_db()
         self.assertEqual(tile_event.end_turn, 0)
         self.assertNotEqual(tile_event.end_turn, None)
+        self.assertFalse(tile_event.active)
 
     def test_barbarian_non_creation_in_occupied_settlement(self):
         settlement = Settlement.objects.get(name="Small Fynkah")

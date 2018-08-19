@@ -54,7 +54,8 @@ class TestUnitActions(TestCase):
             type=TileEvent.CONQUEST,
             organization=conqueror,
             counter=0,
-            start_turn=0
+            start_turn=0,
+            active=True
         )
 
         response = self.client.post(
@@ -83,7 +84,8 @@ class TestUnitActions(TestCase):
             type=TileEvent.CONQUEST,
             organization=conqueror,
             counter=10,
-            start_turn=0
+            start_turn=0,
+            active=True
         )
 
         response = self.client.post(

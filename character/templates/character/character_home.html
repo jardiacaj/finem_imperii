@@ -27,15 +27,9 @@
 
         <ul>
             <li>
-                <a href="{{ request.hero.get_absolute_url }}">
-                    Check out your status
-                </a>
-            </li>
-            <li>
-                {% if request.hero.can_travel %}
-                    <a href="{% url 'character:travel' %}">Travel</a>
-                {% else %}
-                    Travel (you can't travel right now)
+                <a href="{% url 'character:travel' %}">Travel</a>
+                {% if not request.hero.can_travel %}
+                    (you can't travel right now)
                 {% endif %}
             </li>
             <li>
@@ -48,14 +42,12 @@
                     Write a message
                 </a>
             </li>
-        </ul>
 
-        <h4><small>Abilities</small></h4>
-
-        <ul>
-            {% if request.hero.can_work_public_order %}
+            {% if request.hero.can_do_bureaucratic_work %}
                 <li>
-                    {% include 'character/bureaucrat_public_order_work_modal_include.html' %}
+                    <a href="{% url 'character:bureaucratic_work' %}">
+                        Bureaucratic work
+                    </a>
                 </li>
             {% endif %}
         </ul>
@@ -63,18 +55,26 @@
         <h4><small>Units</small></h4>
 
         <p>
-            You may control up to {{ request.hero.max_soldiers }} soldiers
-            distributed in up to {{ request.hero.max_units }} units.
+            Unit limits: You may control up to
+            {{ request.hero.max_soldiers }} soldiers in
+            up to {{ request.hero.max_units }} units.
         </p>
 
         <ul>
             <li>
-                {% if request.hero.has_conscripting_capability_in_current_location %}
-                    <a href="{% url 'unit:recruit' %}">
-                        Recruit a new unit
-                    </a>
-                {% else %}
-                    Recruit a new unit (you can't recruit right now)
+                <a href="{% url 'unit:recruit' %}">
+                    Recruit a new unit
+                </a>
+                {% if not request.hero.can_conscript_unit %}
+                    (you can't right now)
+                {% endif %}
+            </li>
+            <li>
+                <a href="{% url 'unit:raise' %}">
+                    Raise a new unit
+                </a>
+                {% if not request.hero.can_raise_unit %}
+                    (you can't right now)
                 {% endif %}
             </li>
             <li>Manage your existing units</li>
@@ -126,6 +126,25 @@
                 {% endfor %}
             {% endfor %}
         </ul>
+
+        <h4><small>Diary</small></h4>
+        <table class="table">
+            {% for event in request.hero.characterevent_set.all.reverse %}
+                <tr>
+                    <td>{{ event.start_turn|nice_turn }}</td>
+                    <td>{{ event.get_html|safe }}</td>
+                    <td>
+                        {% if event.hour_cost %}
+                            {{ event.hour_cost }} hours
+                        {% else %}
+                            --
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td>No events.</td></tr>
+            {% endfor %}
+        </table>
     </div>
 
 {% endblock %}

@@ -4,9 +4,7 @@
 
 {% block content %}
 
-    <h1 class="page-header">Recruitment</h1>
-
-    {% if not can_recruit %}
+    {% if not request.hero.can_conscript_unit %}
         <div class="alert alert-danger">
             <p>
                 You can't currently recruit an unit, either because you are not
@@ -16,127 +14,114 @@
         </div>
     {% endif %}
 
-    <p>
-        You may recruit up to {{ request.hero.max_soldiers }} soldiers in
-        up to {{ request.hero.max_units }} units.
-    </p>
 
-    <!--
-    <p>To form a new unit, you can choose different options.</p>
-    <ol>
-        <li>
-            You may <b>conscript</b> forces from the local population.
-            <ul>
-                <li>Pro: it's almost always possible and cheap to conscript units.</li>
-                <li>Con: conscripted units will probably lack proper training.</li>
-            </ul>
-        </li>
-        <li>
-            You may form a <b>professional unit</b> of soldiers.
-            <ul>
-                <li>Pro: properly trained and better willingness to fight.</li>
-                <li>Con: more expensive.</li>
-            </ul>
-        </li>
-        <li>
-            You may hire <b>mercenaries</b>.
-            <ul>
-                <li>Pro: mostly true battle-hardened fighters.</li>
-                <li>Con: most expensive, sporadic availability.</li>
-            </ul>
-        </li>
-    </ol>
-    -->
+    <div class="row">
+        <div class="col-lg-6">
+            <h1 class="page-header">Recruiting a unit</h1>
 
-    <div class="well">
-        <h4>Conscription</h4>
+            <p>
+                Unit limits: You may control up to
+                {{ request.hero.max_soldiers }} soldiers in
+                up to {{ request.hero.max_units }} units.
+            </p>
+            <!--
+            <p>To form a new unit, you can choose different options.</p>
+            <ol>
+                <li>
+                    You may <b>conscript</b> forces from the local population.
+                    <ul>
+                        <li>Pro: it's almost always possible and cheap to conscript units.</li>
+                        <li>Con: conscripted units will probably lack proper training.</li>
+                    </ul>
+                </li>
+                <li>
+                    You may form a <b>professional unit</b> of soldiers.
+                    <ul>
+                        <li>Pro: properly trained and better willingness to fight.</li>
+                        <li>Con: more expensive.</li>
+                    </ul>
+                </li>
+                <li>
+                    You may hire <b>mercenaries</b>.
+                    <ul>
+                        <li>Pro: mostly true battle-hardened fighters.</li>
+                        <li>Con: most expensive, sporadic availability.</li>
+                    </ul>
+                </li>
+            </ol>
+            -->
+            <p>
+                The government of this region allows you to conscript soldiers
+                and command them as part of military forces.
+            </p>
+            <p>
+                You will be allowed to use the local powers and infrastructure
+                as far as conditions allow to call people to their duty. This
+                will sometimes mean separating families and will likely affect
+                the local population. There is an alternative to conscription:
+                <a href="{% url 'unit:raise' %}">raising a unit</a>.
+            </p>
+            <p>
+                This will take you
+                {{ request.hero.location.base_unit_conscription_cost }} hours
+                plus one
+                hour for each five soldiers to conscript. Every soldier will
+                get an initial payment of one silver coin. Thus, you may now
+                try to conscript up to
+                {{ request.hero.max_amount_of_conscripted_soldiers }}
+                soldiers. You
+                can later add further conscripts to existing units.
+            </p>
+            <p>
+                Each soldier will get a monthly payment of one silver coin
+                as long as the unit is mobilized. You will have to let pass a
+                month to demobilize the unit.
+            </p>
 
-        <p>Conscripting soldiers from {{ request.hero.location }}.</p>
+        </div>
 
-        <p>
-            This will take you
-            {{ request.hero.location.base_conscription_cost }} hours plus one
-            hour for each five soldiers to conscript.
-        </p>
+        <div class="col-lg-6">
+            <div class="well">
+                <form class="form-horizontal" role="form" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="recruitment_type" value="conscription">
 
-        <p>
-            It will cost you 1 silver coin per soldier.
-        </p>
+                    <div class="form-group">
+                        <label for="count">
+                            Target unit size (up to
+                            {{ request.hero.max_amount_of_conscripted_soldiers }})
+                        </label>
+                        <input class="form-control" id="count" name="count"
+                               type="number" min="1"
+                               max="{{ request.hero.max_amount_of_conscripted_soldiers }}"
+                        >
+                    </div>
 
-        <form class="form-horizontal" role="form" method="post">
-            {% csrf_token %}
-            <input type="hidden" name="recruitment_type" value="conscription">
+                    <div class="form-group">
+                        <label for="unit_type">Unit type</label>
+                        <select class="form-control" id="unit_type" name="unit_type">
+                            <option value="infantry">Infantry</option>
+                            <option value="archers">Archers</option>
+                            {% comment %}
+                            {% for type in unit_types %}
+                                <option value="{{ type }}">{{ type|capfirst }}</option>
+                            {% endfor %}
+                            {% endcomment %}
+                        </select>
+                    </div>
 
-            <div class="form-group">
-                <label for="count">Max soldier count (unit size)</label>
-                <input class="form-control" id="count" name="count" type="number" min="1">
+                    <h4>Conscripts profile</h4>
+
+                    {% include 'unit/soldier_profile_form.html' %}
+
+                    <div class="form-group text-center">
+                        <button type="submit" class="btn btn-primary">Conscript</button>
+                    </div>
+                </form>
             </div>
-
-            <div class="form-group">
-                <label for="unit_type">Unit type</label>
-                <select class="form-control" id="unit_type" name="unit_type">
-                    <option value="infantry">Infantry</option>
-                    <option value="archers">Archers</option>
-                    {% comment %}
-                    {% for type in unit_types %}
-                        <option value="{{ type }}">{{ type|capfirst }}</option>
-                    {% endfor %}
-                    {% endcomment %}
-                </select>
-            </div>
-
-            <h4>Conscripts profile</h4>
-
-            <div class="form-group">
-                <h6>Gender</h6>
-                <input type="checkbox" name="men" id="men" checked="checked">
-                <label for="men">Men</label>
-                <br>
-                <input type="checkbox" name="women" id="women">
-                <label for="women">Women</label>
-            </div>
-
-            <div class="form-group">
-                <h6>Training</h6>
-                <input type="checkbox" name="trained" id="trained" checked="checked">
-                <label for="trained">Trained</label>
-                <br>
-                <input type="checkbox" name="untrained" id="untrained" checked="checked">
-                <label for="untrained">Untrained</label>
-            </div>
-
-            <div class="form-group">
-                <h6>Ability</h6>
-                <input type="checkbox" name="skill_high" id="skill_high" checked="checked">
-                <label for="skill_high">High skill</label>
-                <br>
-                <input type="checkbox" name="skill_medium" id="skill_medium" checked="checked">
-                <label for="skill_medium">Average skill</label>
-                <br>
-                <input type="checkbox" name="skill_low" id="skill_low" checked="checked">
-                <label for="skill_low">Low skill</label>
-            </div>
-
-            <div class="form-group">
-                <h6>Age</h6>
-                <input type="checkbox" name="age_old" id="age_old">
-                <label for="age_old">Old age</label>
-                <br>
-                <input type="checkbox" name="age_middle" id="age_middle" checked="checked">
-                <label for="age_middle">Middle age</label>
-                <br>
-                <input type="checkbox" name="age_young" id="age_young" checked="checked">
-                <label for="age_young">Young age</label>
-                <br>
-                <input type="checkbox" name="age_very_young" id="age_very_young">
-                <label for="age_very_young">Very young age</label>
-            </div>
-
-            <div class="form-group text-center">
-                <button type="submit" class="btn btn-primary">Conscript</button>
-            </div>
-        </form>
+        </div>
     </div>
+
 {% endblock %}
 
 

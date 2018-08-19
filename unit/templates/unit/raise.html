@@ -1,0 +1,106 @@
+{% extends "base/base.html" %}
+
+{% load extra_filters %}
+
+{% block content %}
+
+
+    {% if not request.hero.can_raise_unit %}
+        <div class="alert alert-danger">
+            <p>
+                You can't currently raise a unit, are you imprisoned?
+            </p>
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-lg-6">
+            <h1 class="page-header">Raising a unit</h1>
+
+            <p>
+                Unit limits: You may control up to
+                {{ request.hero.max_soldiers }} soldiers in
+                up to {{ request.hero.max_units }} units.
+            </p>
+            <p>
+                You may rise a unit by trying to convince locals to follow your
+                adventures, either for some silver or for leadership skills.
+            </p>
+            <p>
+                If you can, you may want to prefer to
+                <a href="{% url 'unit:recruit' %}">recruit a unit</a>, which is
+                much easier than forming a unit.
+            </p>
+            <p>
+                You will need to invest at least
+                {{ request.hero.location.base_unit_raising_cost }} hours to get
+                to know potential comrades. The more time you invest, the more
+                you may find. This is of course easier said than done. You may
+                want to sweeten things up with some silver.
+            </p>
+            <p>
+                You will be able to let further soldiers join the unit
+                after you have raised it.
+            </p>
+            <p>
+                Each soldier will get a monthly payment of one silver coin as
+                as long as the unit is mobilized. You will have to let pass a
+                month to demobilize the unit.
+            </p>
+
+        </div>
+
+        <div class="col-lg-6">
+
+            <div class="well">
+
+                <form class="form-horizontal" role="form" method="post">
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <label for="hours_invested">
+                            Hours invested (at least
+                            {{ request.hero.location.base_unit_raising_cost }})
+                        </label>
+                        <input class="form-control" id="hours_invested"
+                               name="hours_invested" type="number"
+                               min="{{ request.hero.location.base_unit_raising_cost }}"
+                               max="{{ request.hero.hours_in_turn_left }}"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="silver_invested">Silver coins invested (you have {{ request.hero.cash }})</label>
+                        <input class="form-control" id="silver_invested"
+                               name="silver_invested" type="number"
+                               min="0"
+                               max="{{ request.hero.cash }}"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="unit_type">Unit type</label>
+                        <select class="form-control" id="unit_type" name="unit_type">
+                            <option value="infantry">Infantry</option>
+                            <option value="archers">Archers</option>
+                            {% comment %}
+                            {% for type in unit_types %}
+                                <option value="{{ type }}">{{ type|capfirst }}</option>
+                            {% endfor %}
+                            {% endcomment %}
+                        </select>
+                    </div>
+
+                    <h4>Soldier profile</h4>
+
+                    {% include 'unit/soldier_profile_form.html' %}
+
+                    <div class="form-group text-center">
+                        <button type="submit" class="btn btn-primary">Try to raise</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

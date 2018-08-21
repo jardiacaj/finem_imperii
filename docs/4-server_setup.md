@@ -29,9 +29,9 @@ tested with versions 3.4 to 3.6. The required packages are commonly
 named `python3` and `python3-pip`.
 - Make sure you have mysql installed on your system
 - Go to the directory where you downloaded the Finem Imperii code.
-- Create a Python venv by running `python3 -m venv env`.
+- Create a Python venv by running `python3 -m venv venv`.
 - Run `source venv/bin/activate` to activate the venv.
-- Run `sudo pip3 install -r requirements.txt` to install the required
+- Run `pip3 install -r requirements.txt` to install the required
 python dependencies.
 - Run `devops/db_recreate.sh` to initialize the database. You will be
 asked the password for the admin user.

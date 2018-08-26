@@ -131,8 +131,23 @@
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li><a href="/admin">Django admin</a></li>
-                            <li><a href="{{ request.hero.world.get_admin_url }}">Edit world</a></li>
-                            <li><a href="{{ displayed_object.get_admin_url }}">Edit {{ displayed_object }}</a></li>
+                            {% if request.hero %}
+                                <li>
+                                    <form action="/admin/world/world/" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="pass_turn">
+                                        <input type="hidden" name="select_across" value="0">
+                                        <input type="hidden" name="index" value="0">
+                                        <input type="hidden" name="_selected_action" value="{{ request.hero.world.id }}">
+                                        <button type="submit" class="btn btn-default">
+                                            Pass turn
+                                        </button>
+                                    </form>
+                                <li><a href="{{ request.hero.world.get_admin_url }}">Edit world</a></li>
+                            {% endif %}
+                            {% if displayed_object %}
+                                <li><a href="{{ displayed_object.get_admin_url }}">Edit {{ displayed_object }}</a></li>
+                            {% endif %}
                         </ul>
                     </li>
                 {% endif %}

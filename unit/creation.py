@@ -119,7 +119,6 @@ def create_unit(name, owner, location, soldiers, recruitment_type, unit_type):
     unit = WorldUnit.objects.create(
         owner_character=owner,
         world=location.tile.world,
-        origin=location,
         location=location,
         name=name,
         recruitment_type=recruitment_type,
@@ -127,11 +126,17 @@ def create_unit(name, owner, location, soldiers, recruitment_type, unit_type):
         status=WorldUnit.STANDING,
         mobilization_status_since=location.tile.world.current_turn - 1,
         current_status_since=location.tile.world.current_turn - 1,
-        default_battle_orders=orders
+        default_battle_orders=orders,
+        auto_pay=(recruitment_type == WorldUnit.CONSCRIPTED)
     )
 
     for soldier in soldiers:
         soldier.unit = unit
+        soldier.unit_morale = (
+            10 + 20 * random.random() if recruitment_type == WorldUnit.CONSCRIPTED else
+            30 + 60 * random.random() if recruitment_type == WorldUnit.RAISED else
+            None
+        )
         soldier.save()
 
     return unit

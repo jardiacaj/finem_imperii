@@ -8,7 +8,7 @@ from unit.models import WorldUnit
 from world.initialization import initialize_unit
 
 
-class TestDebtPayment(TestCase):
+class TestPaymentSettings(TestCase):
     fixtures = ['simple_world']
 
     def setUp(self):
@@ -34,15 +34,12 @@ class TestDebtPayment(TestCase):
         initialize_unit(self.my_unit)
         initialize_unit(self.not_my_unit)
 
-    def test_pay_my_units_debt(self):
-        cash_before = self.active_character.cash
-        soldier = self.my_unit.soldier.first()
-        soldier.unit_debt = 100
-        soldier.save()
-        self.assertEquals(soldier.unit_debt, self.my_unit.get_owners_debt())
+    def test_change_my_unit_payment_settings(self):
+        self.assertFalse(self.my_unit.auto_pay)
 
         response = self.client.post(
-            reverse('unit:pay_debt', kwargs={'unit_id': self.my_unit.id})
+            reverse('unit:payment_settings', kwargs={'unit_id': self.my_unit.id}),
+            data={'action': 'enable'}
         )
 
         self.assertRedirects(
@@ -50,26 +47,31 @@ class TestDebtPayment(TestCase):
             self.my_unit.get_absolute_url()
         )
         self.my_unit.refresh_from_db()
-        self.assertEqual(self.my_unit.get_owners_debt(), 0)
-        self.active_character.refresh_from_db()
-        self.assertEqual(self.active_character.cash, cash_before - 100)
-
-    def test_pay_not_my_units_debt(self):
-        cash_before = self.active_character.cash
-        soldier = self.not_my_unit.soldier.first()
-        soldier.unit_debt = 50
-        soldier.save()
-        self.assertEquals(soldier.unit_debt, self.not_my_unit.get_owners_debt())
+        self.assertTrue(self.my_unit.auto_pay)
 
         response = self.client.post(
-            reverse('unit:pay_debt', kwargs={'unit_id': self.not_my_unit.id})
+            reverse('unit:payment_settings', kwargs={'unit_id': self.my_unit.id}),
+            data={'action': 'disable'}
         )
 
         self.assertRedirects(
             response,
-            self.not_my_unit.get_absolute_url()
+            self.my_unit.get_absolute_url()
+        )
+        self.my_unit.refresh_from_db()
+        self.assertFalse(self.my_unit.auto_pay)
+
+    def test_not_my_unit_payment_settings(self):
+        self.assertFalse(self.not_my_unit.auto_pay)
+
+        response = self.client.post(
+            reverse('unit:payment_settings', kwargs={'unit_id': self.not_my_unit.id}),
+            data={'action': 'enable'}
+        )
+
+        self.assertEquals(
+            response.status_code,
+            404
         )
         self.not_my_unit.refresh_from_db()
-        self.assertEqual(self.not_my_unit.get_owners_debt(), 0)
-        self.active_character.refresh_from_db()
-        self.assertEqual(self.active_character.cash, cash_before - 50)
+        self.assertFalse(self.not_my_unit.auto_pay)

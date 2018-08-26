@@ -20,7 +20,8 @@ def organization_view(request, organization_id):
             relationship=OrganizationRelationship.PEACE),
         'relationship_to_member_violence_monopoly': None if organization.character_is_member(
             request.hero) or not organization.violence_monopoly else organization.get_relationship_from(
-            request.hero.get_violence_monopoly())
+            request.hero.get_violence_monopoly()),
+        'displayed_object': organization
     }
     return render(request, 'organization/view_organization.html', context)
 

@@ -9,9 +9,10 @@ import organization.models.organization
 import world.models
 from battle.models import BattleFormation
 from messaging import shortcuts
+from mixins import AdminURLMixin
 
 
-class Capability(models.Model):
+class Capability(models.Model, AdminURLMixin):
     BAN = 'ban'
     POLICY_DOCUMENT = 'policy'
     CONSCRIPT = 'conscript'

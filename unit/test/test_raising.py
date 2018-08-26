@@ -40,7 +40,7 @@ class TestRaising(TestCase):
             data={
                 "hours_invested": 300,
                 "silver_invested": 100000,
-                "unit_type": "infantry",
+                "unit_type": "light infantry soldiers",
                 "men": "on",
                 "trained": "on",
                 "untrained": "on",
@@ -53,6 +53,9 @@ class TestRaising(TestCase):
             follow=True
         )
 
+        # FIXME PLEASE NOTE!
+        # Raising units is an action that succeeds on a certain probabilty.
+        # This test may fail if raising failed.
         unit = WorldUnit.objects.get(owner_character=self.character)
         self.assertRedirects(response, unit.get_absolute_url())
 
@@ -74,7 +77,7 @@ class TestRaising(TestCase):
             data={
                 "hours_invested": 300,
                 "silver_invested": 100,
-                "unit_type": "infantry",
+                "unit_type": "light infantry soldiers",
                 "men": "on",
                 "trained": "on",
                 "untrained": "on",
@@ -97,7 +100,7 @@ class TestRaising(TestCase):
             data={
                 "hours_invested": 300,
                 "silver_invested": 100,
-                "unit_type": "infantry",
+                "unit_type": "light infantry soldiers",
                 "trained": "on",
                 "untrained": "on",
                 "skill_high": "on",

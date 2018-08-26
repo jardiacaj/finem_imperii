@@ -1,12 +1,12 @@
 #!/bin/bash
 
 pushd "$(dirname $0)"
-./run_backup_job.sh
 docker run \
   --rm \
   -v fi:/var/www/finem_imperii/prod \
   -v fi_logs:/var/logs -d jardiacaj/finem_imperii \
+  -v backups:/var/www/finem_imperii/backups \
   -e DJANGO_SETTINGS_MODULE=prod.settings \
   bin/bash \
-  "./manage.py pass_turn $1"
+  `./manage.py dumpdata | gzip > "backups/$(date --iso-8601=seconds).gz"`
 popd

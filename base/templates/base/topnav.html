@@ -131,6 +131,8 @@
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li><a href="/admin">Django admin</a></li>
+                            <li><a href="{{ request.hero.world.get_admin_url }}">Edit world</a></li>
+                            <li><a href="{{ displayed_object.get_admin_url }}">Edit {{ displayed_object }}</a></li>
                         </ul>
                     </li>
                 {% endif %}

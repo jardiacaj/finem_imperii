@@ -199,7 +199,7 @@ class TestTurn(TestCase):
         unit = WorldUnit.objects.get(id=4)
         initialize_unit(unit)
         do_unit_debt_increase(unit)
-        self.assertEqual(unit.owners_debt, 100)
+        self.assertEqual(unit.get_owners_debt(), 100)
 
     def test_unit_debt_for_barbarian_unit(self):
         unit = WorldUnit.objects.get(id=4)
@@ -207,4 +207,4 @@ class TestTurn(TestCase):
         unit.save()
         initialize_unit(unit)
         do_unit_debt_increase(unit)
-        self.assertEqual(unit.owners_debt, 0)
+        self.assertEqual(unit.get_owners_debt(), 0)

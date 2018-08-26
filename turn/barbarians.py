@@ -66,6 +66,6 @@ def generate_barbarian_unit(recruitment_size, settlement):
         None,
         settlement,
         soldiers,
-        unit.models.WorldUnit.CONSCRIPTION,
-        unit.models.WorldUnit.INFANTRY
+        unit.models.WorldUnit.CONSCRIPTED,
+        unit.models.WorldUnit.LIGHT_INFANTRY
     )

@@ -39,7 +39,7 @@ class TestRecruitment(TestCase):
             reverse('unit:recruit'),
             data={
                 "count": 30,
-                "unit_type": "infantry",
+                "unit_type": "light infantry soldiers",
                 "pay": 3,
                 "men": "on",
                 "trained": "on",
@@ -49,7 +49,7 @@ class TestRecruitment(TestCase):
                 "skill_low": "on",
                 "age_middle": "on",
                 "age_young": "on",
-                "recruitment_type": "conscription"
+                "recruitment_type": "conscripted"
             },
             follow=True
         )
@@ -75,7 +75,7 @@ class TestRecruitment(TestCase):
             reverse('unit:recruit'),
             data={
                 "count": 30,
-                "unit_type": "infantry",
+                "unit_type": "light infantry soldiers",
                 "pay": 3,
                 "men": "on",
                 "trained": "on",
@@ -85,7 +85,7 @@ class TestRecruitment(TestCase):
                 "skill_low": "on",
                 "age_middle": "on",
                 "age_young": "on",
-                "recruitment_type": "conscription"
+                "recruitment_type": "conscripted"
             },
             follow=True
         )
@@ -99,7 +99,7 @@ class TestRecruitment(TestCase):
             reverse('unit:recruit'),
             data={
                 "count": 30,
-                "unit_type": "infantry",
+                "unit_type": "light infantry soldiers",
                 "pay": 3,
                 "trained": "on",
                 "untrained": "on",
@@ -108,7 +108,7 @@ class TestRecruitment(TestCase):
                 "skill_low": "on",
                 "age_middle": "on",
                 "age_young": "on",
-                "recruitment_type": "conscription"
+                "recruitment_type": "conscripted"
             },
             follow=True
         )

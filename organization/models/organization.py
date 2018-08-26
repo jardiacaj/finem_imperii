@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 
+from mixins import AdminURLMixin
 from organization.models import capability, election, relationship
 import unit.models
 import world.models
@@ -10,7 +11,7 @@ from battle.models import BattleFormation
 from messaging import shortcuts
 
 
-class Organization(models.Model):
+class Organization(models.Model, AdminURLMixin):
     DEMOCRATIC = 'democratic'  # decisions are voted among members
     DISTRIBUTED = 'distributed'  # decisions can be taken by each member
     DECISION_TAKING_CHOICES = (

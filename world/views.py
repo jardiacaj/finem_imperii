@@ -20,6 +20,7 @@ def world_view(request, world_id):
             current=True
         ),
         'hide_sidebar': True,
+        'displayed_object': world
     }
     return render(request, 'world/view_world.html', context)
 
@@ -44,7 +45,8 @@ def tile_view(request, tile_id):
         'characters': Character.objects.filter(location__tile=tile, paused=False),
         'units': WorldUnit.objects.filter(location__tile=tile),
         'conquests': TileEvent.objects.filter(
-            tile=tile, type=TileEvent.CONQUEST, active=True)
+            tile=tile, type=TileEvent.CONQUEST, active=True),
+        'displayed_object': tile
     }
     return render(request, 'world/view_tile.html', context)
 

@@ -1,35 +1,32 @@
 from django.db import models
 
-from django.db.models import Avg, F
+from django.db.models import Avg, F, Sum
 from django.db.transaction import atomic
 from django.urls import reverse
 from django.utils.html import format_html
 
 import character.models
 from battle.models import BattleUnit
+from mixins import AdminURLMixin
 
 
 class WorldUnitStatusChangeException(Exception):
     pass
 
 
-def unit_cost(soldier_count):
-    return soldier_count
-
-
-class WorldUnit(models.Model):
-    CONSCRIPTION = 'conscription'
+class WorldUnit(models.Model, AdminURLMixin):
+    CONSCRIPTED = 'conscripted'
     PROFESSIONAL = 'professional'
     MERCENARY = 'mercenary'
     RAISED = 'raised'
     RECRUITMENT_CHOICES = (
-        (CONSCRIPTION, CONSCRIPTION),
+        (CONSCRIPTED, CONSCRIPTED),
         (PROFESSIONAL, PROFESSIONAL),
         (MERCENARY, MERCENARY),
         (RAISED, RAISED),
     )
 
-    INFANTRY = 'infantry'
+    LIGHT_INFANTRY = 'light infantry soldiers'
     PIKEMEN = 'pikemen'
     ARCHERS = 'archers'
     CAVALRY = 'cavalry'
@@ -37,7 +34,7 @@ class WorldUnit(models.Model):
     SIEGE_TOWER = 'siege tower'
     RAM = 'ram'
     TYPE_CHOICES = (
-        (INFANTRY, INFANTRY),
+        (LIGHT_INFANTRY, LIGHT_INFANTRY),
         (PIKEMEN, PIKEMEN),
         (ARCHERS, ARCHERS),
         (CAVALRY, CAVALRY),
@@ -90,10 +87,6 @@ class WorldUnit(models.Model):
                               null=True)
     location = models.ForeignKey('world.Settlement', models.SET_NULL,
                                  blank=True, null=True)
-    origin = models.ForeignKey(
-        'world.Settlement',
-        models.PROTECT,
-        related_name='units_originating')
     name = models.CharField(max_length=100)
     recruitment_type = models.CharField(
         max_length=30, choices=RECRUITMENT_CHOICES
@@ -108,7 +101,8 @@ class WorldUnit(models.Model):
         default=0, help_text="Only used in tests that need generated units"
     )
     default_battle_orders = models.ForeignKey('battle.Order', models.PROTECT)
-    owners_debt = models.IntegerField(default=0)
+    auto_pay = models.BooleanField(default=False,
+                                   help_text="Unit is paid automatically from character cash each turn.")
 
     @staticmethod
     def get_unit_types(nice=False):
@@ -132,8 +126,11 @@ class WorldUnit(models.Model):
             return 5
         return 0
 
+    def get_owners_debt(self):
+        return self.soldier.aggregate(Sum('unit_debt'))['unit_debt__sum']
+
     def monthly_cost(self):
-        return unit_cost(self.soldier.count())
+        return self.soldier.count()
 
     def __str__(self):
         return self.name
@@ -268,4 +265,11 @@ class WorldUnit(models.Model):
         self.owner_character = None
         self.location = None
         self.world = None
+        self.save()
+
+    @atomic
+    def pay_debt(self, payer):
+        payer.cash -= self.get_owners_debt()
+        payer.save()
+        self.soldier.update(unit_debt=0)
         self.save()

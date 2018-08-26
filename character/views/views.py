@@ -8,7 +8,7 @@ from world.renderer import render_world_for_view
 
 @inchar_required
 def character_home(request):
-    context = {}
+    context = {'displayed_object': request.hero}
     return render(request, 'character/character_home.html', context=context)
 
 
@@ -25,7 +25,8 @@ def character_view(request, character_id):
     ).exists()
     context = {
         'character': character,
-        'favourite': favourite
+        'favourite': favourite,
+        'displayed_object': character,
     }
     return render(request, 'character/view_character.html', context=context)
 

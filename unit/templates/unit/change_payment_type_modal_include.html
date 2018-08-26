@@ -1,0 +1,69 @@
+<button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+        data-target="#unit_payment_type_{{ unit.id }}">
+    Change payment type
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="unit_payment_type_{{ unit.id }}" tabindex="-1"
+     role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form class="form-horizontal" method="post"
+                  action="{% url 'unit:payment_settings' unit.id %}">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        Debt payment for {{ unit.get_long_html_descriptor|safe }}
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %}
+
+                    <p>
+                        Conscripted units will expect a monthly
+                        payment, but most of the times they will tolerate
+                        an occasional delay of a few months.
+                    </p>
+
+                    <p>
+                        Raised units on the other hand may go for longer
+                        without payment as long as the morale is high. But
+                        unpaid soldiers may become poor, and hungry.
+                    </p>
+
+                    <p>
+                        Monthly payment is
+                        {% if unit.auto_pay %}
+                            <span class="label label-success">
+                                enabled
+                            </span>
+                        {% else %}
+                            <span class="label label-warning">
+                                disabled
+                            </span>
+                        {% endif %}
+
+                    </span>
+                    </p>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"
+                            data-dismiss="modal">Close
+                    </button>
+                    {% if unit.auto_pay %}
+                        <button type="submit" name="action" value="disable" class="btn btn-warning">
+                            Disable
+                        </button>
+                    {% else %}
+                        <button type="submit" name="action" value="enable" class="btn btn-primary">
+                            Enable
+                        </button>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

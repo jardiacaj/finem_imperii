@@ -1,6 +1,6 @@
 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
         data-target="#unit_debt_modal_{{ unit.id }}">
-    Pay debt
+    Pay all debt
 </button>
 
 <!-- Modal -->
@@ -23,29 +23,14 @@
 
                     <p>
                         {% if unit.owner_character == request.hero %}
-                            Due payment: {{ unit.owners_debt }}
+                            You owe these soldiers <span class="text-primary">
+                            {{ unit.get_owners_debt }}</span>.
+                            You have {{ request.hero.cash }}.
                         {% else %}
                             Because you don't own this unit, the debt of its
                             owner to it is unknown to you.
                         {% endif %}
                     </p>
-
-                    <div class="form-group">
-                        <label for="debt"
-                               class="col-sm-3 control-label">Pay debt</label>
-                        <div class="col-sm-9">
-                            <input
-                                    id="debt"
-                                    class="form-control form-control"
-                                    type="number"
-                                    value=""
-                                    min="1"
-                                    max="{{ request.hero.cash }}"
-                                    name="amount"
-                                    placeholder="Coins"
-                            >
-                        </div>
-                    </div>
 
                 </div>
                 <div class="modal-footer">

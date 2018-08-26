@@ -5,6 +5,7 @@ from django.db import models
 import world.models.buildings
 import world.models.geography
 from battle.models import BattleSoldierInTurn
+from mixins import AdminURLMixin
 
 
 class NPCManager(models.Manager):
@@ -65,7 +66,7 @@ class NPCManager(models.Manager):
         return result
 
 
-class NPC(models.Model):
+class NPC(models.Model, AdminURLMixin):
     class Meta:
         base_manager_name = 'stats_manager'
         index_together = (
@@ -103,6 +104,10 @@ class NPC(models.Model):
         'unit.WorldUnit', models.SET_NULL, null=True, blank=True,
         related_name='soldier'
     )
+    unit_debt = models.IntegerField(default=0,
+                                    help_text='Silver coins owed to NPC')
+    unit_morale = models.IntegerField(default=0,
+                                      help_text='Unit morale, 0 to 1000')
     trained_soldier = models.BooleanField(default=None)
     skill_fighting = models.IntegerField()
     wound_status = models.SmallIntegerField(
@@ -160,3 +165,14 @@ class NPC(models.Model):
             "hungry" if self.hunger == 1 else \
                 "very hungry" if self.hunger in (2, 3) else \
                     "starving"
+
+    def get_unit_morale_display(self):
+        return (
+            "rebelling" if self.unit_morale <= 10 else
+            "very low" if self.unit_morale <= 25 else
+            "low" if self.unit_morale <= 50 else
+            "okay" if self.unit_morale <= 70 else
+            "high" if self.unit_morale <= 90 else
+            "exceptional"
+        )
+

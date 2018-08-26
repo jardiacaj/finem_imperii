@@ -84,6 +84,7 @@ class CapabilityView(View):
             'subtemplate': 'organization/capabilities/{}.html'.format(
                 capability.type
             ),
+            'displayed_object': capability
         }
 
         if capability.type in self.context_decorators.keys():

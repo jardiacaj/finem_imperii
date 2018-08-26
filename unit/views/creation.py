@@ -3,12 +3,11 @@ import random
 
 from django.contrib import messages
 from django.db import transaction
-from django.http import Http404
 from django.shortcuts import render, redirect
 from django.views import View
 
 from character.models import CharacterEvent
-from unit.models import WorldUnit, unit_cost
+from unit.models import WorldUnit
 from unit.creation import build_population_query_from_request, \
     BadPopulation, sample_candidates, create_unit
 
@@ -46,7 +45,7 @@ def get_unit_type(request):
 
 
 def test_if_hero_has_enough_cash_for_soldier_count(hero, target_soldier_count):
-    if hero.cash < unit_cost(target_soldier_count):
+    if hero.cash < target_soldier_count:
         raise RecruitmentFailure(
             "You need {} silver coins to recruit a unit of {} soldiers "
             "and you don't have that much.".format(
@@ -138,8 +137,8 @@ class RecruitmentView(View):
                 request.hero,
                 request.hero.location,
                 soldiers,
-                "conscription",
-                unit_type
+                WorldUnit.CONSCRIPTED,
+                unit_type,
             )
             unit.mobilize()
             unit.status = WorldUnit.FOLLOWING

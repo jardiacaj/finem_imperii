@@ -12,21 +12,48 @@ from world.models.events import TileEvent
 @inchar_required
 @require_POST
 def pay_debt(request, unit_id):
-    unit = get_object_or_404(WorldUnit, id=unit_id)
+    unit = get_object_or_404(
+        WorldUnit,
+        id=unit_id,
+        location=request.hero.location
+    )  # it is allowed to pay units owned by another character
 
-    amount = int(request.POST.get('amount', 0))
-    if amount < 0:
-        return redirect_back(request, unit.get_absolute_url, "Invalid amount")
-    if amount > request.hero.cash:
+    owners_debt = unit.get_owners_debt()
+    if owners_debt > request.hero.cash:
         return redirect_back(request, unit.get_absolute_url,
                              "You don't have that much money")
 
-    amount = min(amount, unit.owners_debt)
-    request.hero.cash -= amount
-    request.hero.save()
-    unit.owners_debt -= amount
-    unit.save()
-    messages.success(request, "You paid {} coins of debt.".format(amount))
+    unit.pay_debt(request.hero)
+    messages.success(request, "You paid your full debt of {} coins.".format(
+        owners_debt
+    ))
+    return redirect_back(request, unit.get_absolute_url())
+
+
+@inchar_required
+@require_POST
+def payment_settings(request, unit_id):
+    unit = get_object_or_404(
+        WorldUnit,
+        id=unit_id,
+        owner_character=request.hero
+    )
+
+    if request.POST.get('action') == 'enable' and unit.auto_pay == 0:
+        unit.auto_pay = 1
+        unit.save()
+        messages.success(request, "You enabled auto payment for {}.".format(
+            unit
+        ))
+    elif request.POST.get('action') == 'disable' and unit.auto_pay == 1:
+        unit.auto_pay = 0
+        unit.save()
+        messages.success(request, "You disabled auto payment for {}.".format(
+            unit
+        ))
+    else:
+        messages.warning(request, "Invalid action.")
+
     return redirect_back(request, unit.get_absolute_url())
 
 

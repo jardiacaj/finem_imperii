@@ -11,6 +11,7 @@ import unit.models
 import world.models.buildings
 import world.models.npcs
 from messaging import shortcuts
+from mixins import AdminURLMixin
 from world.templatetags.extra_filters import turn_to_date
 
 settlement_size_names = [
@@ -31,7 +32,7 @@ def euclidean_distance(p1, p2):
     return sqrt((p1.x - p2.x)**2 + (p1.z - p2.z)**2)
 
 
-class World(models.Model):
+class World(models.Model, AdminURLMixin):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField()
     initialized = models.BooleanField(default=False)
@@ -92,7 +93,7 @@ class Region(models.Model):
         return self.name
 
 
-class Tile(models.Model):
+class Tile(models.Model, AdminURLMixin):
     PLAINS = 'plains'
     FOREST = 'forest'
     SHORE = 'shore'

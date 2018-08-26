@@ -6,6 +6,9 @@ def worldwide_unit_maintenance(world: World):
     for unit in world.worldunit_set.all():
         do_unit_status_update(unit)
         do_unit_debt_increase(unit)
+        if unit.auto_pay and unit.owner_character:
+            if unit.get_owners_debt() <= unit.owner_character.cash:
+                unit.pay_debt(unit.owner_character)
 
 
 def do_unit_status_update(unit: WorldUnit):
@@ -22,4 +25,6 @@ def do_unit_status_update(unit: WorldUnit):
 
 def do_unit_debt_increase(unit: WorldUnit):
     if unit.owner_character and unit.status != WorldUnit.NOT_MOBILIZED:
-        unit.owners_debt += unit.monthly_cost()
+        for soldier in unit.soldier.all():
+            soldier.unit_debt += 1
+            soldier.save()

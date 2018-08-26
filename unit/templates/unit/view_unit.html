@@ -13,11 +13,23 @@
     </h1>
 
     <div class="row">
-        <div class="col-sm-9">
+        <div class="col-sm-6">
             <table class="table table-striped table-hover">
                 <tbody>
                     <tr>
-                        <td>Owner</td>
+                        <td></td>
+                        <td>
+                            {{ unit.soldier.all|length }}
+                            {{ unit.get_recruitment_type_display }}
+                            {{ unit.get_type_display }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Average skill</td>
+                        <td>{{ unit.average_fighting_skill }}%</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Owner</td>
                         <td>
                             {% if unit.owner_character %}
                                 {{ unit.owner_character.get_html_link|safe }}
@@ -27,163 +39,191 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Soldiers</td>
-                        <td>
-                            {{ unit.soldier.all|length }}
-                            {{ unit.get_type_display|capfirst }}
-                            ({{ unit.get_recruitment_type_display }})
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Status</td>
-                        <td>
-                            {% if unit.owner_character == request.hero %}
-                                <form class="form-inline" role="form" method="post" action="{% url 'unit:status_change' unit.id 'not mobilized' %}" style="display: inline">
-                                    {% csrf_token %}
-                                    <button
-                                        type="submit"
-                                        onclick="return confirm('A unit that is not mobilized will not fight, but it also won\'t cost a salary. You can\'t mobilize the unit again in the same turn.');"
-                                        class="btn btn-sm
-                                        {% if unit.status == 'not mobilized' %}disabled btn-success
-                                        {% elif unit.get_current_battle %}disabled btn-default
-                                        {% else %}btn-default
-                                        {% endif %}">
-                                        Not mobilized
-                                    </button>
-                                </form>
-                                <form class="form-inline" role="form" method="post" action="{% url 'unit:status_change' unit.id 'standing' %}" style="display: inline">
-                                    {% csrf_token %}
-                                    <button
-                                        type="submit"
-                                        onclick="return confirm('A standing unit will stay where it is ready to fight without following you on your voyages, and as a mobilized unit cost a salary. You can\'t demobilize the unit again the same turn it has been mobilized.');"
-                                        class="btn btn-sm
-                                        {% if unit.status == 'standing' %}disabled btn-success
-                                        {% elif unit.get_current_battle %}disabled btn-default
-                                        {% else %}btn-default
-                                        {% endif %}">
-                                        Standing
-                                    </button>
-                                </form>
-                                <form class="form-inline" role="form" method="post" action="{% url 'unit:status_change' unit.id 'following' %}" style="display: inline">
-                                    {% csrf_token %}
-                                    <button
-                                        type="submit"
-                                        onclick="return confirm('A following unit will follow you on your voyages, and as a mobilized unit cost a salary. You can\'t demobilize the unit again the same turn it has been mobilized.');"
-                                        class="btn btn-sm
-                                        {% if unit.status == 'following' %}disabled btn-success
-                                        {% elif unit.get_current_battle %}disabled btn-default
-                                        {% else %}btn-default
-                                        {% endif %}">
-                                        Following
-                                    </button>
-                                </form>
-
-                                {% if unit.get_current_battle %}
-                                    Can't change status when in a battle
-                                {% endif %}
-                            {% else %}
-                                {{ unit.get_status_display|capfirst }}
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% if unit.owner_character %}
-                        <tr>
-                            <td>Debt</td>
-                            <td>
-                                {% if unit.owner_character == request.hero %}
-                                    Payment due: {{ unit.owners_debt }} coins
-                                {% endif %}
-                                {% include 'unit/pay_debt_modal_include.html' with unit=unit %}
-                            </td>
-                        </tr>
-                    {% endif %}
-                    <tr>
-                        <td>Location</td>
+                        <td class="text-right">Location</td>
                         <td>
                             {{ unit.location }} ({{ unit.location.tile.get_html_link|safe }},
                             {{ unit.location.tile.controlled_by.get_html_link|safe }}
                             )
                         </td>
                     </tr>
-                    <tr>
-                        <td>Origin</td>
-                        <td>
-                            {{ unit.origin }} ({{ unit.origin.tile.get_html_link|safe }},
-                            {{ unit.origin.tile.controlled_by.get_html_link|safe }}
-                            )
-                        </td>
-                    </tr>
-                    {% if unit.owner_character == request.hero %}
-                        <tr>
-                            <td>Average skill</td>
-                            <td>{{ unit.average_fighting_skill }}%</td>
-                        </tr>
-                        <tr>
-                            <td>Battle settings</td>
-                            <td>
-                                {{ unit.get_battle_line_display|capfirst }},
-                                {{ unit.get_battle_side_pos_display }}.
-                                Orders: {{ unit.default_battle_orders.what }}
-                                {% include 'unit/battle_settings_modal_include.html' with unit=unit %}
-                            </td>
-                        </tr>
-                    {% endif %}
                 </tbody>
             </table>
+
+
+            {% if unit.owner_character == request.hero %}
+                <div class="well">
+                    <h4>
+                        {% if unit.auto_pay %}
+                            Pay in advance.
+                        {% else %}
+                            Pay as we go.
+                        {% endif %}
+
+                        {% if unit.get_owners_debt > 0 %}
+                            {{ unit.get_owners_debt }} coins debt.
+                        {% endif %}
+                    </h4>
+
+                    <p>
+                        {% include 'unit/change_payment_type_modal_include.html' with unit=unit %}
+                    </p>
+
+                    {% if unit.get_owners_debt > 0 %}
+                        <p>
+                            {% include 'unit/pay_debt_modal_include.html' with unit=unit %}
+                        </p>
+                    {% endif %}
+                </div>
+            {% endif %}
         </div>
 
-        <div class="col-sm-3">
-            {% if unit.owner_character == request.hero %}
-                <h4>Actions</h4>
-
-                <p>
-                    <form class="form-inline" role="form" method="post" action="{% url 'unit:disband' unit.id %}">
+        <div class="col-sm-6">
+            <div class="well">
+                <h4>Unit status: {{ unit.get_status_display|capfirst }}</h4>
+                {% if unit.owner_character == request.hero %}
+                    <form class="form-inline" role="form" method="post" action="{% url 'unit:status_change' unit.id 'not mobilized' %}" style="display: inline">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">
-                            Disband
+                        <button
+                            type="submit"
+                            onclick="return confirm('A unit that is not mobilized will not fight, but it also won\'t cost a salary. You can\'t mobilize the unit again in the same turn.');"
+                            class="btn btn-sm
+                            {% if unit.status == 'not mobilized' %}disabled btn-success
+                            {% elif unit.get_current_battle %}disabled btn-default
+                            {% else %}btn-default
+                            {% endif %}">
+                            Not mobilized
                         </button>
                     </form>
-                </p>
+                    <form class="form-inline" role="form" method="post" action="{% url 'unit:status_change' unit.id 'standing' %}" style="display: inline">
+                        {% csrf_token %}
+                        <button
+                            type="submit"
+                            onclick="return confirm('A standing unit will stay where it is ready to fight without following you on your voyages, and as a mobilized unit cost a salary. You can\'t demobilize the unit again the same turn it has been mobilized.');"
+                            class="btn btn-sm
+                            {% if unit.status == 'standing' %}disabled btn-success
+                            {% elif unit.get_current_battle %}disabled btn-default
+                            {% else %}btn-default
+                            {% endif %}">
+                            Standing
+                        </button>
+                    </form>
+                    <form class="form-inline" role="form" method="post" action="{% url 'unit:status_change' unit.id 'following' %}" style="display: inline">
+                        {% csrf_token %}
+                        <button
+                            type="submit"
+                            onclick="return confirm('A following unit will follow you on your voyages, and as a mobilized unit cost a salary. You can\'t demobilize the unit again the same turn it has been mobilized.');"
+                            class="btn btn-sm
+                            {% if unit.status == 'following' %}disabled btn-success
+                            {% elif unit.get_current_battle %}disabled btn-default
+                            {% else %}btn-default
+                            {% endif %}">
+                            Following
+                        </button>
+                    </form>
 
-                {% if unit.status != 'not mobilized' and unit.location == request.hero.location %}
-                    {% for conquest in conquests %}
-                        <div class="well text-center">
-                            <p>
-                                Conquest of {{ conquest.tile }} by {{ conquest.organization.get_html_link|safe }}
-                            </p>
-                            <form class="form-inline" role="form" method="post" action="{% url 'unit:conquest_action' unit.id %}">
-                                {% csrf_token %}
-                                <input type="hidden" name="conqueror_id" value="{{ conquest.organization_id }}">
-                                <input
-                                        class="form-control"
-                                        name="hours"
-                                        type="number"
-                                        min="1"
-                                        placeholder="hours, max {{ request.hero.hours_in_turn_left }}"
-                                        required="required"
-                                >
-                                <button
-                                        name="action"
-                                        value="support"
-                                        type="submit"
-                                        class="btn btn-primary btn-sm"
-                                        onclick="return confirm('Are you sure?')"
-                                >
-                                    Support
-                                </button>
-                                <button
-                                        name="action"
-                                        value="counter"
-                                        type="submit"
-                                        class="btn btn-primary btn-sm"
-                                        onclick="return confirm('Are you sure?')"
-                                >
-                                    Counter
-                                </button>
-                            </form>
-                        </div>
-                    {% endfor %}
+                    {% if unit.get_current_battle %}
+                        <p>Can't change status when in a battle</p>
+                    {% endif %}
                 {% endif %}
+            </div>
+
+            {% if unit.owner_character == request.hero %}
+
+                <div class="well">
+                    <h4>Battle orders</h4>
+                        <p>
+                            Position:
+                            {{ unit.get_battle_line_display }},
+                            {{ unit.get_battle_side_pos_display }}
+                        </p>
+                        <p>
+                            Orders: {{ unit.default_battle_orders.what }}
+                        </p>
+                        <p>
+                            {% include 'unit/battle_settings_modal_include.html' with unit=unit %}
+                        </p>
+                </div>
+
+                <div class="well">
+                    <h4>Actions</h4>
+
+                    <p>
+                        <form class="form-inline" role="form" method="post" action="">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary btn-sm" onclick="return confirm('Are you sure?')">
+                                Train local population
+                            </button>
+                        </form>
+                    </p>
+
+                    <p>
+                        <form class="form-inline" role="form" method="post" action="">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary btn-sm" onclick="return confirm('Are you sure?')">
+                                Train unit
+                            </button>
+                        </form>
+                    </p>
+
+                    <p>
+                        <form class="form-inline" role="form" method="post" action="">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary btn-sm" onclick="return confirm('Are you sure?')">
+                                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                                Add soldiers
+                            </button>
+                        </form>
+                    </p>
+
+                    <p>
+                        <form class="form-inline" role="form" method="post" action="{% url 'unit:disband' unit.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">
+                                Disband
+                            </button>
+                        </form>
+                    </p>
+
+                    {% if unit.status != 'not mobilized' and unit.location == request.hero.location %}
+                        {% for conquest in conquests %}
+                            <div class="well text-center">
+                                <p>
+                                    Conquest of {{ conquest.tile }} by {{ conquest.organization.get_html_link|safe }}
+                                </p>
+                                <form class="form-inline" role="form" method="post" action="{% url 'unit:conquest_action' unit.id %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="conqueror_id" value="{{ conquest.organization_id }}">
+                                    <input
+                                            class="form-control"
+                                            name="hours"
+                                            type="number"
+                                            min="1"
+                                            placeholder="hours, max {{ request.hero.hours_in_turn_left }}"
+                                            required="required"
+                                    >
+                                    <button
+                                            name="action"
+                                            value="support"
+                                            type="submit"
+                                            class="btn btn-primary btn-sm"
+                                            onclick="return confirm('Are you sure?')"
+                                    >
+                                        Support
+                                    </button>
+                                    <button
+                                            name="action"
+                                            value="counter"
+                                            type="submit"
+                                            class="btn btn-primary btn-sm"
+                                            onclick="return confirm('Are you sure?')"
+                                    >
+                                        Counter
+                                    </button>
+                                </form>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
             {% endif %}
         </div>
     </div>
@@ -199,8 +239,8 @@
                             <td>Name, age</td>
                             <td>Health</td>
                             <td>Skill</td>
-                            <td>Origin</td>
                             <td>Hunger</td>
+                            <td>Morale</td>
                             <td>Actions</td>
                         </tr>
                     </thead>
@@ -216,6 +256,12 @@
                                             disabled
                                         </span>
                                     {% endif %}
+
+                                    {% if request.user.is_staff %}
+                                        <a href="{{ soldier.get_admin_url }}">
+                                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                    {% endif %}
+                                    </a>
                                 </td>
                                 <td>
                                     {{ soldier.get_wound_status_display }}
@@ -227,13 +273,13 @@
                                     {% endif %}
                                 </td>
                                 <td>
-                                    {{ soldier.origin }}
-                                </td>
-                                <td>
                                     {{ soldier.get_hunger_display }}
                                 </td>
                                 <td>
-
+                                    {{ soldier.get_unit_morale_display }}
+                                </td>
+                                <td>
+                                    Dismiss Train
                                 </td>
                             </tr>
                         {% endfor %}

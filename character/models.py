@@ -10,6 +10,7 @@ from django.utils.safestring import mark_safe
 
 import organization.models.capability
 import organization.models.organization
+from mixins import AdminURLMixin
 from world.models import items, geography
 import unit.models
 from battle.models import BattleCharacter
@@ -106,7 +107,7 @@ class CharacterEvent(models.Model):
         )
 
 
-class Character(models.Model):
+class Character(models.Model, AdminURLMixin):
     COMMANDER = 'commander'
     TRADER = 'trader'
     BUREAUCRAT = 'bureaucrat'

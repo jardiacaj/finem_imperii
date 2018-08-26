@@ -15,6 +15,7 @@ def unit_view(request, unit_id):
             tile=unit.location.tile,
             type=TileEvent.CONQUEST,
             active=True
-        )
+        ),
+        'displayed_object': unit,
     }
     return render(request, 'unit/view_unit.html', context)

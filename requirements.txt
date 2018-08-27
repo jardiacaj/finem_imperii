@@ -7,4 +7,5 @@ mysqlclient
 django-classy-tags
 django-cookie-law
 tblib
+codacy-coverage
 

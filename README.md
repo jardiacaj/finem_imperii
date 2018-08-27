@@ -1,7 +1,7 @@
 [![Join the chat at https://gitter.im/finemimperii/Lobby](https://badges.gitter.im/finemimperii/Lobby.svg)](https://gitter.im/finemimperii/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/jardiacaj/finem_imperii.svg?branch=master)](https://travis-ci.org/jardiacaj/finem_imperii)
-[![Coverage Status](https://coveralls.io/repos/github/jardiacaj/finem_imperii/badge.svg?branch=HEAD)](https://coveralls.io/github/jardiacaj/finem_imperii?branch=HEAD)
-[![Docker Image Layers](https://images.microbadger.com/badges/image/jardiacaj/finem_imperii.svg)](https://microbadger.com/images/jardiacaj/finem_imperii)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c3c3e998aba649aca3c6a512fbe553a4)](https://www.codacy.com/app/jardiacaj/finem_imperii?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jardiacaj/finem_imperii&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/c3c3e998aba649aca3c6a512fbe553a4)](https://www.codacy.com/app/jardiacaj/finem_imperii?utm_source=github.com&utm_medium=referral&utm_content=jardiacaj/finem_imperii&utm_campaign=Badge_Coverage)
 
 # Finem Imperii
 

@@ -98,6 +98,16 @@
 
         <h4><small>Elections</small></h4>
         <ul>
+            {% for election in current_elections %}
+                <li>
+                    <a href="{{ election.get_absolute_url }}">
+                        {{ election }}
+                    </a>
+                </li>
+                {% empty %}
+                No ongoing elections
+            {% endfor %}
+
             {% for organization in request.hero.organization_set.all %}
                 {% if organization.current_election %}
                     <li>

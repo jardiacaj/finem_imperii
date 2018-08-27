@@ -1,11 +1,3 @@
-<p>
-    You have been granted the power to present yourself as a candidate to {{ capability.applying_to }}.
-</p>
-<p>
-    This means that you are able to participate as a candidate in the elections and, eventually, be able to occupy the
-    position of {{ capability.applying_to }}. Candidacies can be presented up to three months before the elections.
-</p>
-
 {% if not capability.applying_to.current_election %}
     <p>
         You can't present your candidacy in this moment as there is no election currently in progress.

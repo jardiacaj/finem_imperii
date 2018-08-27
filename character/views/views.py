@@ -3,12 +3,25 @@ from django.shortcuts import render, get_object_or_404
 from character.models import Character
 from decorators import inchar_required
 from messaging.models import MessageRelationship
+from organization.models.capability import Capability
 from world.renderer import render_world_for_view
 
 
 @inchar_required
 def character_home(request):
-    context = {'displayed_object': request.hero}
+    elections = (
+        capability.applying_to.current_election for capability in
+    Capability.objects.filter(
+            applying_to__current_election__isnull=False,
+            type=Capability.ELECT,
+            organization__in=request.hero.organization_set.all()
+        )
+    )
+
+    context = {
+        'displayed_object': request.hero,
+        'current_elections': elections,
+    }
     return render(request, 'character/character_home.html', context=context)
 
 

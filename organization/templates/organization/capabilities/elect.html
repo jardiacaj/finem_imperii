@@ -1,7 +1,3 @@
-<p>
-    You have been granted to vote for the position {{ capability.applying_to }}.
-</p>
-
 {% if not capability.applying_to.current_election %}
 
     <p>
@@ -10,8 +6,9 @@
 
 {% else %}
     {% if capability.applying_to.current_election.can_present_candidacy %}
-        <p class="alert alert-warning">
-            Please note that up to two months before the election, new candidates may present themselves and existing
+        <p class="alert alert-info">
+            Please note that up to two months before the election
+            new candidates may present themselves and existing
             candidates may retire.
         </p>
     {% endif %}

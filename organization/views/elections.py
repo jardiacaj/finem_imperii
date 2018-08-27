@@ -154,5 +154,15 @@ def election_view(request, election_id):
 
     context = {
         'election': election,
+        'voting_capabilities': Capability.objects.filter(
+            type=Capability.ELECT,
+            applying_to=election.position,
+            organization__in=request.hero.organization_set.all()
+        ),
+        'candidacy_capabilities': Capability.objects.filter(
+            type=Capability.CANDIDACY,
+            applying_to=election.position,
+            organization__in=request.hero.organization_set.all()
+        )
     }
     return render(request, 'organization/view_election.html', context)

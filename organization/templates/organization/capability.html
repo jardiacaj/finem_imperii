@@ -2,19 +2,6 @@
 
 {% block content %}
 
-    <h1 class="page-header">{{ capability.get_type_display|capfirst }}</h1>
-
-    <h5>
-        {% if capability.applying_to != capability.organization %}
-            {{ capability.organization.get_html_link|safe }} on
-        {% endif %}
-        {{ capability.applying_to.get_html_link|safe }}
-        {% if capability.stemming_from %}
-            as delegated by
-            {{ capability.stemming_from.organization.get_html_link|safe }}
-        {% endif %}
-    </h5>
-
     {% if not capability.organization.is_position and not capability.is_individual_action %}
         {% if capability.organization.decision_taking == 'democratic' %}
             <p class="alert alert-info">
@@ -31,6 +18,137 @@
         {% elif capability.organization.decision_taking == 'distributed' %}
         {% endif %}
     {% endif %}
+
+    <div class="row vertical-align">
+        <div class="col-lg-6 text-center">
+            <h1>{{ capability.get_type_display|capfirst }}</h1>
+
+            <h5>
+                {% if capability.applying_to != capability.organization %}
+                    {{ capability.organization.get_html_link|safe }} on
+                {% endif %}
+                {{ capability.applying_to.get_html_link|safe }}
+                {% if capability.stemming_from %}
+                    as delegated by
+                    {{ capability.stemming_from.organization.get_html_link|safe }}
+                {% endif %}
+            </h5>
+
+        </div>
+        <div class="col-lg-6">
+            {% if capability.type == 'ban' %}
+                <p>
+                    Banning a member is a decision that should not be taken
+                    lightly. A ban has serious consequences.
+                </p>
+            {% elif capability.type == 'policy' %}
+                <p>
+                    Writing policy and law has been and still is part of the
+                    backbone of any organization. Help coordinate or
+                    strengthen your rule over
+                    {{ capability.applying_to.get_html_link }}
+                    by maintaining a body of written documents.
+                </p>
+                <p>
+                    Documents may be public (readable by anyone) or private
+                    (readable only for members).
+                </p>
+            {% elif capability.type == 'conscript' %}
+                <p>
+                    You have been granted the power to conscript
+                    troops in {{ capability.applying_to.get_html_link }}.
+                </p>
+            {% elif capability.type == 'diplomacy' %}
+                <p>
+                    Diplomacy does not just create alliances, war and peace,
+                    but also lets realms thrive or destroys them. Be wise
+                    choosing your friends and enemies.
+                </p>
+                <p>
+                    Note that diplomacy only changes your default military
+                    stance towards other realms, but this can be overriden by
+                    using the military orders.
+                </p>
+            {% elif capability.type == 'heir' %}
+                <p>
+                    Choose a worthy heir to
+                    {{ capability.applying_to.get_html_link }}.
+                    Heirs will inherit this position when you die. They may
+                    also inherit it in other circumstances.
+                </p>
+            {% elif capability.type == 'elect' %}
+                <p>
+                    You can issue a vote on elections to
+                    {{ capability.applying_to.get_html_link }}.
+                </p>
+            {% elif capability.type == 'candidacy' %}
+                <p>
+                    You may present yourself as a candidate to the elections to
+                    {{ capability.applying_to.get_html_link }}.
+                </p>
+                <p>
+                    This means that you are able to participate as a candidate
+                    in the elections and, maybe, be able to occupy the
+                    position of {{ capability.applying_to }}. Candidacies
+                    can be presented up to three months before the elections.
+                </p>
+            {% elif capability.type == 'convoke elections' %}
+                <p>
+                    You may start an election for
+                    {{ capability.applying_to.get_html_link }}.
+                </p>
+            {% elif capability.type == 'military stance' %}
+                <p>
+                    You have been given the possibility, or maybe the
+                    responsibility, of deciding the military stance of
+                    {{ capability.applying_to.get_html_link|safe }} against
+                    other realms. Thus, you may decide if meeting forces
+                    of another realm will trigger a battle or not.
+                </p>
+            {% elif capability.type == 'battle formation' %}
+                <p>
+                    You have been assigned the responsibility of deciding the
+                    formation of the units of
+                    {{ capability.applying_to.get_html_link|safe }} when
+                    battles ensue.
+                </p>
+                <p>
+                    This capability allows you to set the default battle
+                    formation for {{ capability.applying_to.get_html_link|safe }}.
+                    When a battle starts, you may be able to
+                    change the formation for that battle if your enemy allows
+                    you to.
+                </p>
+            {% elif capability.type == 'occupy region' %}
+                <p>
+                    You have been granted the power to start occupation of
+                    territories in the name of {{ capability.applying_to }}.
+                    Successfully occupied territories will form part of the
+                    realm.
+                </p>
+            {% elif capability.type == 'take grain' %}
+                <p>
+                    You have been granted the take grain from public granaries
+                    in {{ capability.applying_to }}.
+                </p>
+            {% elif capability.type == 'manage guilds' %}
+                <p>
+                    You have been granted the power the guilds in
+                    {{ capability.applying_to }}.
+                </p>
+            {% elif capability.type == 'manage taxation' %}
+                <p>
+                    You have been granted the power to manage taxation in
+                    {{ capability.applying_to }}.
+                </p>
+            {% else %}
+                Missing help text in capability.html!
+            {% endif %}
+
+        </div>
+    </div>
+
+    <hr>
 
     <div class="row">
         {% include subtemplate %}

@@ -113,7 +113,9 @@
 
         {% include 'base/messages.html' %}
 
-        {% block content %}{% endblock %}
+        <div style="margin: 12px">
+            {% block content %}{% endblock %}
+        </div>
 
         {% if request.hero and not hide_sidebar %}
             </div>

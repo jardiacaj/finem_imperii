@@ -1,8 +1,3 @@
-<p>
-    You have been granted to choose the heir to the position
-    {{ capability.applying_to }}.
-</p>
-
 <form class="" role="form" method="post" action="{% url 'organization:heir_capability' capability.id %}">
     {% csrf_token %}
     <p>

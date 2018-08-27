@@ -1,7 +1,3 @@
-<p>
-    You have been granted the power to ban members of {{ capability.applying_to }}.
-</p>
-
 {% for member in capability.applying_to.character_members.all %}
     <form class="" role="form" method="post" action="{% url 'organization:banning_capability' capability.id %}">
         {% csrf_token %}

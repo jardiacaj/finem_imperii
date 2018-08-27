@@ -4,11 +4,12 @@
 
 {% block content %}
 
-    <h1 class="page-header">Election to {{ election.position.get_html_link|safe }}</h1>
-
-    <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-            <p class="alert lead {% if not election.closed %}alert-success{% else %}alert-default{% endif %}">
+    <div class="row vertical-align">
+        <div class="col-md-6">
+            <h1 class="text-center">{{ election.position.get_html_link|safe }} election</h1>
+        </div>
+        <div class="col-md-6">
+            <p class="alert lead {% if not election.closed %}alert-success{% else %}alert-default{% endif %} text-center">
                 Election of {{ election.turn|nice_turn }}.
 
                 {% if election.closed %}
@@ -27,6 +28,25 @@
             </p>
         </div>
     </div>
+
+    <div class="row text-center">
+        {% if not election.closed %}
+            {% for capability in voting_capabilities %}
+                <a href="{{ capability.get_absolute_url }}" class="btn btn-primary btn-sm button_margin">
+                    Vote as {{ capability.organization.get_html_name }}
+                </a>
+            {% endfor %}
+            {% if election.can_present_candidacy %}
+                {% for capability in candidacy_capabilities %}
+                    <a href="{{ capability.get_absolute_url }}" class="btn btn-primary btn-sm button_margin">
+                        Candidacy as {{ capability.organization.get_html_name }}
+                    </a>
+                {% endfor %}
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <hr>
 
     {% if election.closed %}
         <h4>Results</h4>

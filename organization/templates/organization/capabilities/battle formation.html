@@ -1,14 +1,3 @@
-<p>
-    You have been assigned the responsibility of deciding the formation of the units of
-    {{ capability.applying_to.get_html_link|safe }} when battles ensue.
-</p>
-
-<p>
-    This capability allows you to set the default battle formation for {{ capability.applying_to.get_html_link|safe }}.
-    Furthermore, when a battle starts, you will be able to change the formation for that battle if your enemy allows
-    you to.
-</p>
-
 <h4>Current default formation</h4>
 
 {% include 'organization/formation_display.html' with formation=capability.applying_to.get_default_formation_settings %}

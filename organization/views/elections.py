@@ -34,7 +34,7 @@ def elect_capability_view(request, capability_id):
             voter=request.hero).exists():
         messages.error(
             request,
-            "You already issued a vote before.".format(capability.applying_to),
+            "You already issued a vote before.",
             "danger"
         )
         return redirect(capability.get_absolute_url())

@@ -110,9 +110,7 @@ class CapabilityProposal(models.Model):
             context = {**context, **extra_context}
 
         message = shortcuts.create_message(
-            template='messaging/messages/proposal.html'.format(
-                self.capability.type
-            ),
+            template='messaging/messages/proposal.html',
             world=self.capability.organization.world,
             category="proposal",
             template_context=context,

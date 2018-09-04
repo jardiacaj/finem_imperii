@@ -10,18 +10,24 @@
         Choose the world where your character will start.
     </p>
 
-    <div class="container-fluid">
-        <ul>
-            {% for world in worlds %}
-                <li>
+    <div class="container-fluid vertical-align">
+        {% for world in worlds %}
+            <div class="col-md-6 col-lg-4">
+                <div class="well well-lg">
                     <h4>{{ world }}</h4>
                     <p>{{ world.description }}</p>
-                    <a href="{% url 'character:create' world.id %}" class="btn btn-primary">Choose</a>
-                </li>
-            {% empty %}
-                <li>No worlds :(</li>
-            {% endfor %}
-        </ul>
+                    <ul>
+                        <li>{{ world.character_set.count }} characters.</li>
+                        <li>{{ world.get_violence_monopolies.count }} realms.</li>
+                    </ul>
+                    <a href="{% url 'character:create' world.id %}" class="btn btn-primary">
+                        Choose {{ world }}
+                    </a>
+                </div>
+            </div>
+        {% empty %}
+            <p>No worlds :(</p>
+        {% endfor %}
     </div>
 
 {% endblock %}

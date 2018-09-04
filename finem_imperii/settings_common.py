@@ -105,11 +105,11 @@ LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Europe/Berlin'
 
-USE_I18N = True
+USE_I18N = False
 
-USE_L10N = True
+USE_L10N = False
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

@@ -13,11 +13,18 @@
             <div class="form-group">
                 <h2>Choose your realm</h2>
                 {% for state in world.get_violence_monopolies.all %}
-                    <div class="col-md-6">
+                    <div class="col-md-6 col-lg-4">
                         <div class="well">
                             <label class="btn {% if state.barbaric %}btn-default{% else %}btn-primary{% endif %}">
                                 <input type="radio" name="state_id" value="{{ state.id }}"> {{ state.get_html_name|safe }}
                             </label>
+                            <br>
+                            <br>
+                            {% if state.leader %}
+                                <p>
+                                    Leader: {{ state.leader.get_html_name|safe }}
+                                </p>
+                            {% endif %}
                             {% if state.barbaric %}
                                 <p><b>
                                     This is a barbaric realm and recommended
@@ -25,15 +32,14 @@
                                 </b></p>
                             {% endif %}
                             <p>{{ state.description }}</p>
-                            <p>{{ state.get_membership_including_descendants|length }} members</p>
-                            <p>{{ state.get_all_controlled_tiles|length }} regions</p>
-                            <p>
-                                {% if state.leader %}
-                                    Leader: {{ state.leader.get_html_name|safe }}
-                                {% else %}
-                                    Fully horizontal Realm.
-                                {% endif %}
-                            </p>
+                            <ul>
+                                <li>
+                                    {{ state.get_membership_including_descendants|length }} members
+                                </li>
+                                <li>
+                                    {{ state.get_all_controlled_tiles|length }} regions
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 {% endfor %}
@@ -44,12 +50,14 @@
             <div class="form-group">
                 <h2>Choose your profile</h2>
 
-                <div class="col-md-6">
+                <div class="col-md-6 col-lg-4">
                     <div class="well">
                         <label class="btn btn-primary">
                             <input type="radio" name="profile" value="commander">
                             Commander
                         </label>
+                        <br>
+                        <br>
                         <p><b>
                             This is the recommended option for your first
                             character.
@@ -63,30 +71,34 @@
                     </div>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-6 col-lg-4">
+                    <div class="well">
+                        <label class="btn btn-primary">
+                            <input type="radio" name="profile" value="bureaucrat">
+                            Bureaucrat
+                        </label>
+                        <br>
+                        <br>
+                        <p>
+                            Bureaucrats help in the organization of realms
+                            and keep their backbones functioning properly.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
                     <div class="well">
                         <label class="btn btn-primary">
                             <input type="radio" name="profile" value="trader">
                             Trader (experimental)
                         </label>
+                        <br>
+                        <br>
                         <p>
                             Traders move goods from one place to another,
                             taking care of the logistics of realms. Traders
                             start with transport carts, which allow them to
                             carry more goods around.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="well">
-                        <label class="btn btn-primary">
-                            <input type="radio" name="profile" value="bureaucrat">
-                            Bureaucrat (experimental)
-                        </label>
-                        <p>
-                            Bureaucrats help in the organization of realms
-                            and keep their backbones functioning properly.
                         </p>
                     </div>
                 </div>

@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    <h1 class="page-header">Hi {{ user.username|capfirst }}</h1>
+    <h1 class="page-header">Hi {{ user.username }}</h1>
 
     <div class="col-md-6 well well-lg">
         {% if not user.character_set.exists %}

@@ -6,8 +6,11 @@
 </p>
 
 <p>
-    A good way to start your journey is to write a message
-    to the other members of {{ state.get_html_link|safe }} asking for orders
+    A good way to start your journey is to
+    <a href="{% url 'messaging:compose' %}">
+        write a message
+    </a>
+    to the other members of {{ state.get_html_name|safe }} asking for orders
     or guidance on how you can be useful.
 </p>
 

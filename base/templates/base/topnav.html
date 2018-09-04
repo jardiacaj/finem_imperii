@@ -123,6 +123,10 @@
 
             </ul>
             <ul class="nav navbar-nav navbar-right">
+                <li class="navbar-text">
+                     Server time: {% now "H:i" %}
+                </li>
+
                 {% if user.is_staff %}
                     <li class="dropdown">
                         <a href="/admin" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">

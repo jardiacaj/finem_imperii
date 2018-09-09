@@ -7,7 +7,7 @@ from turn.barbarians import do_settlement_barbarian_generation
 from turn.battle import organizations_with_battle_ready_units, \
     battle_ready_units_in_tile, opponents_in_organization_list, \
     get_largest_conflict_in_list, create_battle_from_conflict
-from turn.conquest import worldwide_do_conquests
+from turn.conquest import worldwide_conquests
 from turn.demography import do_settlement_population_changes
 from turn.unit import do_unit_debt_increase
 from unit.models import WorldUnit
@@ -126,7 +126,7 @@ class TestTurn(TestCase):
             start_turn=0,
             active=True
         )
-        worldwide_do_conquests(tile.world)
+        worldwide_conquests(tile.world)
 
         tile.refresh_from_db()
         self.assertNotEqual(tile.controlled_by, conqueror)
@@ -145,7 +145,7 @@ class TestTurn(TestCase):
             start_turn=0,
             active=True
         )
-        worldwide_do_conquests(tile.world)
+        worldwide_conquests(tile.world)
 
         tile.refresh_from_db()
         self.assertNotEqual(tile.controlled_by, conqueror)
@@ -165,7 +165,7 @@ class TestTurn(TestCase):
             start_turn=0,
             active=True
         )
-        worldwide_do_conquests(tile.world)
+        worldwide_conquests(tile.world)
 
         tile.refresh_from_db()
         self.assertEqual(tile.controlled_by, conqueror)

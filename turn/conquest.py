@@ -5,7 +5,7 @@ from world.models.events import TileEvent
 from world.models.geography import World
 
 
-def worldwide_do_conquests(world: World):
+def worldwide_conquests(world: World):
     conquests_in_this_world = TileEvent.objects.filter(
         type=TileEvent.CONQUEST,
         active=True,

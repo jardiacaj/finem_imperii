@@ -4,7 +4,7 @@ from unit.models import WorldUnit
 from world.models.geography import World, Settlement
 
 
-def worldwide_public_order_update(world: World):
+def worldwide_public_order(world: World):
     for tile in world.tile_set.all():
         for settlement in tile.settlement_set.all():
             do_settlement_public_order_update(settlement)

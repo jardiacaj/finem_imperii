@@ -4,7 +4,7 @@ from organization.models.organization import Organization
 from world.models.geography import World
 
 
-def worldwide_do_elections(world: World):
+def worldwide_elections(world: World):
     for election in PositionElection.objects.filter(
         position__world=world,
         turn=world.current_turn

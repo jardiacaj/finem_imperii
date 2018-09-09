@@ -1,0 +1,6 @@
+<p>
+    An arrest warrant has been made for
+    {{ character_to_imprison.get_html_link|safe }} by
+    {{ proposal.capability.applying_to.get_html_link|safe }}.
+</p>
+{% include 'messaging/messages/proposal_execution/vote_result.html' %}

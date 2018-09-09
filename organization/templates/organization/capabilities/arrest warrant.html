@@ -1,0 +1,12 @@
+{% for candidate in capability.applying_to.world.character_set.all %}
+    <form class="" role="form" method="post" action="{% url 'organization:arrest warrant_capability' capability.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="character_to_ban_id" value="{{ candidate.id }}">
+        <span class="form-group form-inline">
+            {{ candidate }}
+            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">arrest warrant</button>
+        </span>
+    </form>
+{% empty %}
+    <p>No members</p>
+{% endfor %}

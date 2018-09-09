@@ -41,6 +41,22 @@
                     Banning a member is a decision that should not be taken
                     lightly. A ban has serious consequences.
                 </p>
+            {% elif capability.type == 'arrest warrant' %}
+                <p>
+                    You can issue a capture order for anyone on the world.
+                    You don't need to issue warrants for enemies of
+                    {{ capability.applying_to.get_html_link }} or barbars.
+                </p>
+                <p>
+                    Ordering to imprison someone allows you and your allies to
+                    imprison people on your name. Arrested characters will be
+                    brought to the nearest prison immediately.
+                </p>
+                <p>
+                    Subjects will be deprived from freedom and can have tough
+                    times, being completely at the hands of the local
+                    government.
+                </p>
             {% elif capability.type == 'policy' %}
                 <p>
                     Writing policy and law has been and still is part of the

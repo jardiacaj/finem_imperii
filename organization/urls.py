@@ -13,6 +13,7 @@ from organization.views.elections import elect_capability_view, \
     election_convoke_capability_view, \
     present_candidacy_capability_view, election_list_view, election_view
 from organization.views.decorator import capability_required_decorator
+from organization.views.prison_order import prison_order_capability_view
 from organization.views.proposal import ProposalView
 from organization.views.capability import CapabilityView
 from organization.views.organization import organization_view, leave_view
@@ -35,6 +36,8 @@ urlpatterns = [
         name='capability'),
     url(r'^capability/(?P<capability_id>[0-9]+)/ban$',
         banning_capability_view, name='banning_capability'),
+    url(r'^capability/(?P<capability_id>[0-9]+)/arrest_warrant',
+        prison_order_capability_view, name='arrest warrant_capability'),
     url(r'^capability/(?P<capability_id>[0-9]+)/conquer',
         conquest_capability_view, name='conquest_capability'),
     url(r'^capability/(?P<capability_id>[0-9]+)/guilds',

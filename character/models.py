@@ -28,6 +28,7 @@ class CharacterEvent(models.Model):
     UNPAUSE = 'unpause'
     RAISE_UNIT = 'raise_unit'
     BUREAUCRATIC_WORK = 'bureaucratic_work'
+    ARREST_WARRANT = 'arrest_warrant'
 
     TYPE_CHOICES = (
         (RECRUIT_UNIT, RECRUIT_UNIT),
@@ -36,6 +37,7 @@ class CharacterEvent(models.Model):
         (UNPAUSE, UNPAUSE),
         (RAISE_UNIT, RAISE_UNIT),
         (BUREAUCRATIC_WORK, BUREAUCRATIC_WORK),
+        (ARREST_WARRANT, ARREST_WARRANT),
     )
 
     character = models.ForeignKey('Character', models.CASCADE)
@@ -52,6 +54,9 @@ class CharacterEvent(models.Model):
                              null=True)
     settlement = models.ForeignKey('world.Settlement', models.SET_NULL,
                                    blank=True, null=True)
+    organization = models.ForeignKey('organization.Organization',
+                                     models.SET_NULL,
+                                     blank=True, null=True)
 
     actions = {
         TRAVEL: {

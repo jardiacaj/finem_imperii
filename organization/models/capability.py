@@ -7,7 +7,7 @@ import character.models
 import organization.models.document
 import organization.models.organization
 import world.models
-from battle.models import BattleFormation
+import battle.models
 from messaging import shortcuts
 from mixins import AdminURLMixin
 
@@ -27,6 +27,7 @@ class Capability(models.Model, AdminURLMixin):
     TAKE_GRAIN = 'take grain'
     GUILDS = 'manage guilds'
     TAXES = 'manage taxation'
+    ARREST_WARRANT = 'arrest warrant'
 
     TYPE_CHOICES = (
         (BAN, 'ban'),
@@ -43,6 +44,7 @@ class Capability(models.Model, AdminURLMixin):
         (TAKE_GRAIN, 'take grain'),
         (GUILDS, 'manage guilds'),
         (TAXES, 'manage taxation'),
+        (ARREST_WARRANT, 'arrest warrant'),
     )
 
     organization = models.ForeignKey('Organization', models.CASCADE)
@@ -196,6 +198,30 @@ class CapabilityProposal(models.Model):
             except character.models.Character.DoesNotExist:
                 pass
 
+        elif self.capability.type == Capability.ARREST_WARRANT:
+            try:
+                character_to_imprison = character.models.Character.objects.get(
+                    id=proposal['character_id']
+                )
+                character.models.CharacterEvent.objects.create(
+                    character=character_to_imprison,
+                    start_turn=applying_to.world.current_turn,
+                    active=True,
+                    type=character.models.CharacterEvent.ARREST_WARRANT,
+                    organization=applying_to,
+                )
+                character_to_imprison.add_notification(
+                    'messaging/messages/arrest_warrant.html',
+                    '',
+                    {'warrantor': applying_to}
+                )
+                self.announce_execution(
+                    'arrest warrant',
+                    {'character_to_imprison': character_to_imprison}
+                )
+            except character.models.Character.DoesNotExist:
+                pass
+
         elif self.capability.type == Capability.CONVOKE_ELECTIONS:
             if applying_to.current_election is None:
                 months_to_election = proposal['months_to_election']
@@ -283,10 +309,10 @@ class CapabilityProposal(models.Model):
 
         elif self.capability.type == Capability.BATTLE_FORMATION:
             try:
-                formation = BattleFormation.objects.get(
+                formation = battle.models.BattleFormation.objects.get(
                     organization=applying_to, battle=None)
-            except BattleFormation.DoesNotExist:
-                formation = BattleFormation(
+            except battle.models.BattleFormation.DoesNotExist:
+                formation = battle.models.BattleFormation(
                     organization=applying_to, battle=None)
             formation.formation = proposal['formation']
             formation.spacing = proposal['spacing']

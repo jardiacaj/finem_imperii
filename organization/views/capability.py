@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 from django.views import View
 
+from character.models import CharacterEvent
 from organization.models.capability import Capability
 from organization.models.election import PositionCandidacy, \
     PositionElectionVote
@@ -16,6 +17,13 @@ def candidacy_capability_context(request, capability, context):
                 get(candidate=request.hero)
         except PositionCandidacy.DoesNotExist:
             pass
+
+
+def arrest_warrant_capability_context(request, capability, context):
+    context['active_warrants'] = CharacterEvent.objects.filter(
+        active=True,
+        organization=capability.applying_to
+    )
 
 
 def elect_capability_context(request, capability, context):
@@ -74,6 +82,7 @@ class CapabilityView(View):
         Capability.DIPLOMACY: diplomacy_capability_context,
         Capability.MILITARY_STANCE: military_stance_capability_context,
         Capability.CONQUEST: conquest_capability_context,
+        Capability.ARREST_WARRANT: arrest_warrant_capability_context,
     }
 
     def get(self, request, capability_id):

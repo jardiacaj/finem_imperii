@@ -199,28 +199,50 @@ class CapabilityProposal(models.Model):
                 pass
 
         elif self.capability.type == Capability.ARREST_WARRANT:
-            try:
-                character_to_imprison = character.models.Character.objects.get(
-                    id=proposal['character_id']
-                )
-                character.models.CharacterEvent.objects.create(
-                    character=character_to_imprison,
-                    start_turn=applying_to.world.current_turn,
-                    active=True,
-                    type=character.models.CharacterEvent.ARREST_WARRANT,
-                    organization=applying_to,
-                )
-                character_to_imprison.add_notification(
-                    'messaging/messages/arrest_warrant.html',
-                    '',
-                    {'warrantor': applying_to}
-                )
-                self.announce_execution(
-                    'arrest warrant',
-                    {'character_to_imprison': character_to_imprison}
-                )
-            except character.models.Character.DoesNotExist:
-                pass
+            if proposal['action'] == 'issue':
+                try:
+                    character_to_imprison = character.models.Character.objects.get(
+                        id=proposal['character_id']
+                    )
+                    character.models.CharacterEvent.objects.create(
+                        character=character_to_imprison,
+                        start_turn=applying_to.world.current_turn,
+                        active=True,
+                        type=character.models.CharacterEvent.ARREST_WARRANT,
+                        organization=applying_to,
+                    )
+                    character_to_imprison.add_notification(
+                        'messaging/messages/arrest_warrant.html',
+                        'Arrest warrant against you',
+                        {'warrantor': applying_to}
+                    )
+                    self.announce_execution(
+                        'arrest warrant',
+                        {'character_to_imprison': character_to_imprison}
+                    )
+                except character.models.Character.DoesNotExist:
+                    pass
+            elif proposal['action'] == 'revoke':
+                try:
+                    warrant = character.models.CharacterEvent.objects.get(
+                        id=proposal['warrant_id'],
+                        active=True,
+                        organization=applying_to,
+                        type=character.models.CharacterEvent.ARREST_WARRANT
+                    )
+                    warrant.active = False
+                    warrant.save()
+                    warrant.character.add_notification(
+                        'messaging/messages/arrest_warrant_revoked.html',
+                        'Arrest warrant revoked',
+                        {'warrantor': applying_to}
+                    )
+                    self.announce_execution(
+                        'arrest warrant revoked',
+                        {'warrant': warrant}
+                    )
+                except character.models.CharacterEvent.DoesNotExist:
+                    pass
 
         elif self.capability.type == Capability.CONVOKE_ELECTIONS:
             if applying_to.current_election is None:

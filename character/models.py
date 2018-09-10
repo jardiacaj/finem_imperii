@@ -104,6 +104,13 @@ class CharacterEvent(models.Model):
             'nice_name': 'Bureaucratic work',
             'html': 'Public order work in {event.settlement}'
         },
+        ARREST_WARRANT: {
+            'url': None,
+            'condition': lambda character: False,
+            'common': False,
+            'nice_name': 'Arrest warrant',
+            'html': 'Arrest warrant from {event.organization}'
+        },
     }
 
     def get_html(self):

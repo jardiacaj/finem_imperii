@@ -62,6 +62,11 @@
 - model: organization.Capability
   fields:
     organization_id: 2
+    type: 'arrest warrant'
+    applying_to: 1
+- model: organization.Capability
+  fields:
+    organization_id: 2
     type: 'policy'
     applying_to: 1
 - model: organization.Capability
@@ -230,6 +235,11 @@
 - model: organization.Capability
   fields:
     organization_id: 6
+    type: 'arrest warrant'
+    applying_to: 5
+- model: organization.Capability
+  fields:
+    organization_id: 6
     type: 'diplomacy'
     applying_to: 5
 - model: organization.Capability
@@ -281,6 +291,11 @@
   fields:
     organization_id: 7
     type: 'ban'
+    applying_to: 7
+- model: organization.Capability
+  fields:
+    organization_id: 7
+    type: 'arrest warrant'
     applying_to: 7
 - model: organization.Capability
   fields:

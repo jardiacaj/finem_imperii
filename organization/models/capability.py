@@ -63,8 +63,8 @@ class Capability(models.Model, AdminURLMixin):
 
     def create_proposal(self, character, proposal_dict):
         voted_proposal = (
-                self.organization.is_position or
-                self.organization.decision_taking == organization.models.organization.Organization.DISTRIBUTED
+                not self.organization.is_position and
+                self.organization.decision_taking == organization.models.organization.Organization.DEMOCRATIC
         )
         proposal = CapabilityProposal.objects.create(
             proposing_character=character,
@@ -74,10 +74,10 @@ class Capability(models.Model, AdminURLMixin):
             democratic=voted_proposal
         )
         if voted_proposal:
-            proposal.execute()
-        else:
             proposal.announce_proposal()
             proposal.issue_vote(character, CapabilityVote.YEA)
+        else:
+            proposal.execute()
 
     def is_passive(self):
         return self.type in (self.CONSCRIPT, self.TAKE_GRAIN,)

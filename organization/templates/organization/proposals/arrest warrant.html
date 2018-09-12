@@ -1,0 +1,15 @@
+<blockquote>
+    {% if action == 'issue' %}
+        <p>
+            {{ proposal.proposing_character }} proposes to <b>issue an arrest
+            warrant {{ character }} from
+            {{ proposal.capability.applying_to }}</b>.
+        </p>
+    {% elif action == 'revoke' %}
+        <p>
+            {{ proposal.proposing_character }} proposes to <b>revoke an arrest
+            warrant {{ character_to_ban }} from
+            {{ proposal.capability.applying_to }}</b>.
+        </p>
+    {% endif %}
+</blockquote>

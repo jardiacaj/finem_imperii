@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.views import View
 
 from base.utils import redirect_back
-from character.models import Character
+from character.models import Character, CharacterEvent
 from organization.models.relationship import OrganizationRelationship
 from organization.models.document import PolicyDocument
 from organization.models.capability import Capability, CapabilityProposal, \
@@ -26,6 +26,18 @@ def policy_proposal_context(proposal_content, context):
 def ban_proposal_context(proposal_content, context):
     context['character_to_ban'] = Character.objects.get(
         id=proposal_content['character_id'])
+
+
+def arrest_warrant_proposal_context(proposal_content, context):
+    action = 'issue'
+    if action == 'issue':
+        context['character'] = Character.objects.get(
+            id=proposal_content['character_id'])
+    elif action == 'revoke':
+        context['warrant'] = CharacterEvent.objects.get(
+            id=proposal_content['warrant_id'])
+    else:
+        raise Exception('Unknown action type')
 
 
 def diplomacy_proposal_context(proposal_content, context):
@@ -60,6 +72,7 @@ class ProposalView(View):
     context_decorators = {
         Capability.POLICY_DOCUMENT: policy_proposal_context,
         Capability.BAN: ban_proposal_context,
+        Capability.ARREST_WARRANT: arrest_warrant_proposal_context,
         Capability.DIPLOMACY: diplomacy_proposal_context,
         Capability.CONQUEST: conquest_proposal_context,
         Capability.GUILDS: guilds_proposal_context,
@@ -93,6 +106,7 @@ class ProposalView(View):
             'heros_vote': heros_vote,
             'subtemplate': 'organization/proposals/{}.html'.format(
                 proposal.capability.type),
+            'displayed_object': proposal,
         }
 
         if proposal.capability.type in self.context_decorators.keys():

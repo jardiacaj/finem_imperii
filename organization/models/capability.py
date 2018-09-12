@@ -96,7 +96,7 @@ class Capability(models.Model, AdminURLMixin):
         )
 
 
-class CapabilityProposal(models.Model):
+class CapabilityProposal(models.Model, AdminURLMixin):
     proposing_character = models.ForeignKey(
         'character.Character', models.PROTECT)
     capability = models.ForeignKey(Capability, models.CASCADE)
@@ -123,7 +123,7 @@ class CapabilityProposal(models.Model):
         shortcuts.add_organization_recipient(
             message, self.capability.organization)
 
-    def announce_execution(self, category, extra_context=None, link=None):
+    def announce_execution(self, title, extra_context=None, link=None):
         context = {'proposal': self}
         if extra_context is not None:
             context = {**context, **extra_context}
@@ -133,7 +133,7 @@ class CapabilityProposal(models.Model):
                 self.capability.type
             ),
             world=self.capability.organization.world,
-            category=category,
+            category=title,
             template_context=context,
             link=(self.get_absolute_url() if link is None and self.democratic
                   else link),
@@ -217,8 +217,11 @@ class CapabilityProposal(models.Model):
                         {'warrantor': applying_to}
                     )
                     self.announce_execution(
-                        'arrest warrant',
-                        {'character_to_imprison': character_to_imprison}
+                        '{} issued arrest warrant'.format(applying_to.name),
+                        {
+                            'action': 'issue',
+                            'character_to_imprison': character_to_imprison
+                        }
                     )
                 except character.models.Character.DoesNotExist:
                     pass
@@ -238,8 +241,11 @@ class CapabilityProposal(models.Model):
                         {'warrantor': applying_to}
                     )
                     self.announce_execution(
-                        'arrest warrant revoked',
-                        {'warrant': warrant}
+                        '{} revoked arrest warrant'.format(applying_to.name),
+                        {
+                            'action': 'revoke',
+                            'warrant': warrant
+                        }
                     )
                 except character.models.CharacterEvent.DoesNotExist:
                     pass

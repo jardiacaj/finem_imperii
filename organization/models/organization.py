@@ -118,7 +118,7 @@ class Organization(models.Model, AdminURLMixin):
         message = shortcuts.create_message(
             'messaging/messages/member_left_organization.html',
             self.world,
-            'leaving',
+            'Member leaves',
             {
                 'organization': self,
                 'member': member
@@ -284,7 +284,7 @@ class Organization(models.Model, AdminURLMixin):
         message = shortcuts.create_message(
             'messaging/messages/elections_convoked.html',
             self.world,
-            'elections',
+            'Elections convoked',
             {'organization': self},
             link=new_election.get_absolute_url()
         )

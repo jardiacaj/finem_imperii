@@ -73,7 +73,7 @@ def pass_turn(world):
 
             world.broadcast(
                 "messaging/messages/new_turn.html",
-                'turn',
+                'A month goes by...',
                 {'world': world}
             )
 

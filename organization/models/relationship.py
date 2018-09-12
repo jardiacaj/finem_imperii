@@ -110,7 +110,7 @@ class OrganizationRelationship(models.Model):
 
         self.to_organization.world.broadcast(
             'messaging/messages/organization_relationship_change.html',
-            'diplomacy',
+            'Diplomacy',
             {
                 'relationship': self,
                 'previous_relationship': previous_relationship

@@ -104,7 +104,7 @@ class CharacterCreationView(View):
 
         character.add_notification(
             'messaging/messages/welcome.html',
-            'welcome',
+            'Welcome, {}'.format(character),
             {
                 'state': state,
                 'character': character
@@ -115,7 +115,7 @@ class CharacterCreationView(View):
             message = shortcuts.create_message(
                 'messaging/messages/new_character.html',
                 world,
-                "newcomer",
+                "New member",
                 {
                     'character': character,
                     'organization': state

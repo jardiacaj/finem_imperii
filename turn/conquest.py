@@ -47,7 +47,10 @@ def worldwide_conquests(world: World):
             send_notification_to_characters(
                 world.character_set,
                 'messaging/messages/conquest_success.html',
-                CharacterMessage.CONQUEST,
+                '{} conquers {}!'.format(
+                    conquest.organization,
+                    conquest.tile
+                ),
                 {
                     'tile_event': conquest,
                     'previous_owner': previous_owner

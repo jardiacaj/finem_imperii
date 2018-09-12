@@ -4,7 +4,7 @@
             {% if recipient.message.sender %}
                 Message from {{ recipient.message.sender.get_html_link|safe }}
             {% else %}
-                {{ recipient.message.get_category_display|capfirst }}
+                {{ recipient.message.title }}
             {% endif %}
             {% if recipient.message.link %}
                 <a

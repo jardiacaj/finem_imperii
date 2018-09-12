@@ -41,14 +41,14 @@ class World(models.Model, AdminURLMixin):
         default=False, help_text="True during turn processing"
     )
 
-    def broadcast(self, template, category, context=None, link=None):
+    def broadcast(self, template, title, context=None, link=None):
         if context is None:
             context = {}
 
         message = shortcuts.create_message(
             template=template,
             world=self,
-            category=category,
+            title=title,
             template_context=context,
             link=link,
         )
@@ -195,6 +195,13 @@ class Settlement(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_html_link(self):
+        return format_html('<a href="{url}">{name}, {tile}</a>',
+                           url=self.tile.get_absolute_url(),
+                           name=self.name,
+                           tile=self.tile.name
+                           )
 
     def base_unit_raising_cost(self):
         return math.ceil(math.log10(self.population) * 12)

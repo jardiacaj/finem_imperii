@@ -130,7 +130,7 @@ def transfer_cash(request):
     message = shortcuts.create_message(
         'messaging/messages/cash_received.html',
         request.hero.world,
-        "cash transfer",
+        "You receive {} coins".format(transfer_cash_amount),
         {
             'sender': request.hero,
             'amount': transfer_cash_amount

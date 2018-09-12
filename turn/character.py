@@ -24,7 +24,7 @@ def do_character_travel(character: Character):
                 character.travel_destination)
             character.add_notification(
                 'messaging/messages/travel.html',
-                CharacterMessage.TRAVEL,
+                'You arrive to {}'.format(destination.name),
                 {
                     'travel_time': travel_time,
                     'destination': destination

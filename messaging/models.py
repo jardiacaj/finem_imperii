@@ -23,50 +23,6 @@ class CharacterMessage(models.Model):
     class Meta:
         ordering = ['creation_time']
 
-    TRAVEL = 'travel'
-    CONQUEST = 'conquest'
-    TURN = 'turn'
-    PROPOSAL = 'proposal'
-    BATTLE = 'battle'
-    POLICY = 'policy'
-    BAN = 'ban'
-    ELECTIONS = 'elections'
-    DIPLOMACY = 'diplomacy'
-    MILITARY_STANCE = 'military stance'
-    BATTLE_FORMATION = 'battle formation'
-    GUILDS = 'guilds'
-    UNIT = 'unit'
-    WELCOME = 'welcome'
-    HEIR = 'heir'
-    LEAVE = 'leaving'
-    TAXES = 'taxes'
-    NEWCOMER = 'newcomer'
-    PAUSE = 'pause'
-    CASH = 'cash transfer'
-    CATEGORY_CHOICES = (
-        (TRAVEL, TRAVEL),
-        (CONQUEST, CONQUEST),
-        (TURN, "new turn"),
-        (PROPOSAL, "action proposal"),
-        (BATTLE, BATTLE),
-        (POLICY, "policy and law"),
-        (BAN, "ban"),
-        (ELECTIONS, "elections"),
-        (DIPLOMACY, "diplomacy"),
-        (MILITARY_STANCE, "military stance"),
-        (BATTLE_FORMATION, "battle formation"),
-        (CONQUEST, "conquest"),
-        (GUILDS, "guilds"),
-        (UNIT, "unit"),
-        (WELCOME, "welcome"),
-        (HEIR, "heir"),
-        (LEAVE, "leaving"),
-        (TAXES, "taxes"),
-        (NEWCOMER, "newcomer"),
-        (PAUSE, "pause"),
-        (CASH, "cash transfer"),
-    )
-
     content = models.TextField()
     creation_time = models.DateTimeField(auto_now_add=True)
     creation_turn = models.IntegerField()
@@ -74,8 +30,7 @@ class CharacterMessage(models.Model):
         'character.Character',
         models.SET_NULL,
         related_name='messages_sent', blank=True, null=True)
-    category = models.CharField(
-        max_length=20, choices=CATEGORY_CHOICES, blank=True, null=True)
+    title = models.TextField(blank=True, null=True)
     link = models.TextField(blank=True, null=True)
 
     def get_nice_recipient_list(self):

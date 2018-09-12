@@ -122,7 +122,7 @@ def create_battle_from_conflict(conflict, tile):
 
     battle.tile.world.broadcast(
         'messaging/messages/battle_start.html',
-        'battle',
+        'Battle starts!',
         {'battle': battle},
         battle.get_absolute_url()
     )

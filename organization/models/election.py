@@ -49,7 +49,7 @@ class PositionElection(models.Model):
         message = shortcuts.create_message(
             'messaging/messages/elections_resolved.html',
             self.position.world,
-            'elections',
+            'Election results',
             {
                 'election': self,
                 'winner_count': len(winners),

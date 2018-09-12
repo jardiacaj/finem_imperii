@@ -200,7 +200,7 @@ class Character(models.Model, AdminURLMixin):
             message = shortcuts.create_message(
                 'messaging/messages/character_paused.html',
                 self.world,
-                'pause',
+                'OOC: {} has been paused'.format(self.name),
                 {'character': self},
                 link=self.get_absolute_url()
             )
@@ -251,7 +251,7 @@ class Character(models.Model, AdminURLMixin):
         message = shortcuts.create_message(
             'messaging/messages/character_unpaused.html',
             self.world,
-            'pause',
+            'OOC: {} has been unpaused'.format(self.name),
             {'character': self},
             link=self.get_absolute_url()
         )
@@ -336,13 +336,13 @@ class Character(models.Model, AdminURLMixin):
         return travel_time, destination
 
     @transaction.atomic
-    def add_notification(self, template, category, template_context=None):
+    def add_notification(self, template, title, template_context=None):
         if template_context is None:
             template_context = {}
         message = shortcuts.create_message(
             template=template,
             world=self.world,
-            category=category,
+            title=title,
             template_context=template_context
         )
         shortcuts.add_character_recipient(message, self)

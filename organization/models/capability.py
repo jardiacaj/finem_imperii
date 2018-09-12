@@ -114,7 +114,7 @@ class CapabilityProposal(models.Model, AdminURLMixin):
         message = shortcuts.create_message(
             template='messaging/messages/proposal.html',
             world=self.capability.organization.world,
-            category="proposal",
+            title="New proposal",
             template_context=context,
             link=self.get_absolute_url(),
         )
@@ -133,7 +133,7 @@ class CapabilityProposal(models.Model, AdminURLMixin):
                 self.capability.type
             ),
             world=self.capability.organization.world,
-            category=title,
+            title=title,
             template_context=context,
             link=(self.get_absolute_url() if link is None and self.democratic
                   else link),
@@ -158,7 +158,7 @@ class CapabilityProposal(models.Model, AdminURLMixin):
 
                 if proposal['delete']:
                     self.announce_execution(
-                        "policy",
+                        "Document voided",
                         extra_context={
                             'deleted': True,
                             'document': document
@@ -174,7 +174,7 @@ class CapabilityProposal(models.Model, AdminURLMixin):
                     document.save()
 
                     self.announce_execution(
-                        "policy",
+                        "Policy and law",
                         extra_context={
                             'new': proposal['new'],
                             'document': document
@@ -192,7 +192,7 @@ class CapabilityProposal(models.Model, AdminURLMixin):
                 )
                 applying_to.remove_member(character_to_ban)
                 self.announce_execution(
-                    'ban',
+                    'Banned from {}!'.format(applying_to),
                     {'banned_character': character_to_ban}
                 )
             except character.models.Character.DoesNotExist:
@@ -217,7 +217,7 @@ class CapabilityProposal(models.Model, AdminURLMixin):
                         {'warrantor': applying_to}
                     )
                     self.announce_execution(
-                        '{} issued arrest warrant'.format(applying_to.name),
+                        '{} issues arrest warrant'.format(applying_to.name),
                         {
                             'action': 'issue',
                             'character_to_imprison': character_to_imprison
@@ -237,11 +237,11 @@ class CapabilityProposal(models.Model, AdminURLMixin):
                     warrant.save()
                     warrant.character.add_notification(
                         'messaging/messages/arrest_warrant_revoked.html',
-                        'Arrest warrant revoked',
+                        'Arrest warrant against you revoked',
                         {'warrantor': applying_to}
                     )
                     self.announce_execution(
-                        '{} revoked arrest warrant'.format(applying_to.name),
+                        '{} revokes arrest warrant'.format(applying_to.name),
                         {
                             'action': 'revoke',
                             'warrant': warrant
@@ -256,7 +256,7 @@ class CapabilityProposal(models.Model, AdminURLMixin):
                 election = applying_to.convoke_elections(
                     months_to_election)
                 self.announce_execution(
-                    'elections',
+                    'Elections convoked',
                     {'election': election}
                 )
 
@@ -272,7 +272,7 @@ class CapabilityProposal(models.Model, AdminURLMixin):
 
                 if self.democratic:
                     self.announce_execution(
-                        'diplomacy',
+                        'Diplomacy',
                         {
                             'action_type': action_type,
                             'target_organization': target_organization,
@@ -323,7 +323,7 @@ class CapabilityProposal(models.Model, AdminURLMixin):
                 target_stance.save()
 
                 self.announce_execution(
-                    'military stance',
+                    'New military stance',
                     extra_context={
                         'stance': target_stance
                     }
@@ -348,7 +348,7 @@ class CapabilityProposal(models.Model, AdminURLMixin):
             formation.save()
 
             self.announce_execution(
-                'battle formation',
+                'New battle formation',
                 {'formation': formation}
             )
 
@@ -368,7 +368,7 @@ class CapabilityProposal(models.Model, AdminURLMixin):
                     tile_event.active = False
                     tile_event.save()
                     self.announce_execution(
-                        'conquest',
+                        'Occupation halted',
                         {
                             'tile_event': tile_event,
                             'action': 'stop'
@@ -386,7 +386,7 @@ class CapabilityProposal(models.Model, AdminURLMixin):
                             active=True
                         )
                         self.announce_execution(
-                            'conquest',
+                            'Occupation starts!',
                             {
                                 'tile_event': tile_event,
                                 'action': 'start'
@@ -395,7 +395,7 @@ class CapabilityProposal(models.Model, AdminURLMixin):
 
                         tile.world.broadcast(
                             'messaging/messages/conquest_start.html',
-                            'conquest',
+                            'Occupation',
                             {'tile_event': tile_event},
                             tile.get_absolute_url()
                         )
@@ -421,7 +421,7 @@ class CapabilityProposal(models.Model, AdminURLMixin):
                     settlement.guilds_setting = proposal['option']
                     settlement.save()
                     self.announce_execution(
-                        'guilds',
+                        'Guilds change',
                         {'settlement': settlement}
                     )
             except world.models.geography.Settlement.DoesNotExist:
@@ -449,7 +449,7 @@ class CapabilityProposal(models.Model, AdminURLMixin):
                         applying_to.heir_second = second_heir
                         applying_to.save()
 
-                    message = self.announce_execution('heir')
+                    message = self.announce_execution('New heir')
                     shortcuts.add_organization_recipient(
                         message,
                         applying_to.get_violence_monopoly()

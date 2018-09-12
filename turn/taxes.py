@@ -50,7 +50,7 @@ def do_state_taxes(state: Organization):
     message = shortcuts.create_message(
         'messaging/messages/tax_collection.html',
         state.world,
-        'taxes',
+        'Tax collection',
         {
             'organization': state,
             'settlement_input': settlement_input,

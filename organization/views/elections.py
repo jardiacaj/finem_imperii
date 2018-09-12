@@ -121,7 +121,7 @@ def present_candidacy_capability_view(request, capability_id):
     message = shortcuts.create_message(
         'messaging/messages/elections_candidacy.html',
         capability.applying_to.world,
-        'elections',
+        'New candidate to elections',
         {
             'candidacy': candidacy,
             'retire': retire,

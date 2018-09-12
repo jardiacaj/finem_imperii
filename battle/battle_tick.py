@@ -516,7 +516,7 @@ def battle_turn(battle: Battle):
 
     battle.tile.world.broadcast(
         'messaging/messages/battle_progress.html',
-        'battle',
+        'Battle in {}'.format(battle.tile.name),
         {'battle': battle},
         battle.get_absolute_url()
     )

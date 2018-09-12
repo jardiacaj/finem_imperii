@@ -1,10 +1,11 @@
 <p>
     {% if new %}
-        The document {{ document.get_html_link|safe }} has been created.
+        {{ proposal.capability.applying_to }} released :
+        {{ document.get_html_link|safe }}.
     {% elif deleted %}
-        The document {{ document.get_html_link|safe }} has been deleted.
+        The document {{ document.get_html_link|safe }} has been voided.
     {% else %}
-        The document {{ document.title }} has been edited.
+        {{ document.get_html_link|safe }} has been changed.
     {% endif %}
 </p>
 {% include 'messaging/messages/proposal_execution/vote_result.html' %}

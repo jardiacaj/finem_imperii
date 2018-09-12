@@ -5,7 +5,7 @@ from messaging.models import CharacterMessage, MessageRecipient, \
 
 
 def create_message(
-        template, world, category, template_context=None, sender=None,
+        template, world, title, template_context=None, sender=None,
         link=None
 ):
     content = render_to_string(
@@ -16,7 +16,7 @@ def create_message(
         content=content,
         creation_turn=world.current_turn,
         sender=sender,
-        category=category,
+        title=title,
         link=link
     )
 

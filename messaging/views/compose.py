@@ -106,7 +106,7 @@ class ComposeView(View):
             message = create_message(
                 template='messaging/messages/character_written_message.html',
                 world=request.hero.world,
-                category=None,
+                title=None,
                 template_context={'content': message_body},
                 sender=request.hero
             )

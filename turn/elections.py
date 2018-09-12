@@ -25,7 +25,7 @@ def worldwide_elections(world: World):
             message = shortcuts.create_message(
                 'messaging/messages/elections_soon.html',
                 world,
-                'elections',
+                'Elections soon',
                 {'election': organization.current_election},
                 link=organization.current_election.get_absolute_url()
             )

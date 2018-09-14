@@ -1,59 +1,67 @@
 import random
+from multiprocessing.pool import Pool
+
+from django import db
+from django.db import transaction
 
 import unit.models
 import unit.creation
+from context_managers import perf_timer
+from parallelism import max_parallelism
 from world.models.geography import World, Settlement
 
 
 def worldwide_barbarian_generation(world: World):
-    world_settlements = Settlement.objects.filter(
-        tile__world=world
+    db.connections.close_all()
+    p = Pool(max_parallelism())
+    p.map(
+        do_settlement_barbarian_generation,
+        Settlement.objects.filter(tile__world=world)[:]
     )
-    for settlement in world_settlements:
-        do_settlement_barbarian_generation(settlement)
 
-
+@transaction.atomic
 def do_settlement_barbarian_generation(settlement: Settlement):
-    if settlement.population < 40:
-        return
+    with perf_timer("Barbarian generation at {}".format(settlement)):
+        if settlement.population < 40:
+            return
 
-    pure_barbarian_units = unit.models.WorldUnit.objects.filter(
-        location=settlement,
-        owner_character__isnull=True
-    )
-    barbarian_soldiers = sum(
-        [unit.soldier.count() for unit in pure_barbarian_units]
-    )
+        pure_barbarian_units = unit.models.WorldUnit.objects.filter(
+            location=settlement,
+            owner_character__isnull=True
+        )
+        barbarian_soldiers = sum(
+            [unit.soldier.count() for unit in pure_barbarian_units]
+        )
 
-    non_barbarian_units = unit.models.WorldUnit.objects.filter(
-        location=settlement,
-        owner_character__isnull=False
-    )
-    non_barbarian_soldiers = sum(
-        [unit.soldier.count() for unit in non_barbarian_units]
-    )
+        non_barbarian_units = unit.models.WorldUnit.objects.filter(
+            location=settlement,
+            owner_character__isnull=False
+        )
+        non_barbarian_soldiers = sum(
+            [unit.soldier.count() for unit in non_barbarian_units]
+        )
 
-    if settlement.tile.controlled_by.get_violence_monopoly().barbaric:
-        if (
-                barbarian_soldiers < settlement.population * 0.2
-                and non_barbarian_soldiers < settlement.population * 0.2
-        ):
-            recruitment_size = random.randrange(
-                int(settlement.population * 0.05),
-                int(settlement.population * 0.15)
-            )
-            generate_barbarian_unit(recruitment_size, settlement)
+        if settlement.tile.controlled_by.get_violence_monopoly().barbaric:
+            if (
+                    barbarian_soldiers < settlement.population * 0.2
+                    and non_barbarian_soldiers < settlement.population * 0.2
+            ):
+                recruitment_size = random.randrange(
+                    int(settlement.population * 0.05),
+                    int(settlement.population * 0.15)
+                )
+                generate_barbarian_unit(recruitment_size, settlement)
 
-    else:
-        if settlement.public_order < 500:
-            public_order_ratio = settlement.public_order / 1000
-            public_disorder_ratio = 1 - public_order_ratio
+        else:
+            if settlement.public_order < 500:
+                public_order_ratio = settlement.public_order / 1000
+                public_disorder_ratio = 1 - public_order_ratio
 
-            if barbarian_soldiers >= \
-                            settlement.population * public_disorder_ratio:
-                return
-            recruitment_size = random.randrange(10, settlement.population // 3)
-            generate_barbarian_unit(recruitment_size, settlement)
+                if barbarian_soldiers >= \
+                                settlement.population * public_disorder_ratio:
+                    return
+                recruitment_size = random.randrange(10, settlement.population // 3)
+                generate_barbarian_unit(recruitment_size, settlement)
 
 
 def generate_barbarian_unit(recruitment_size, settlement):

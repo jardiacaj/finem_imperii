@@ -1,6 +1,7 @@
-import logging
+from multiprocessing import Pool
 import random
 
+from django import db
 from django.db import transaction
 
 import world.models.npcs
@@ -8,6 +9,7 @@ import world.models.buildings
 from context_managers import perf_timer
 from finem_imperii.random import WeightedChoice, weighted_choice
 from name_generator.name_generator import generate_name
+from parallelism import max_parallelism
 from world.models.npcs import NPC
 
 
@@ -15,19 +17,25 @@ class AlreadyInitializedException(Exception):
     pass
 
 
-@transaction.atomic
 def initialize_world(world):
     with perf_timer('Initializing world {} ({})'.format(
             world, world.id)):
         if world.initialized:
             raise AlreadyInitializedException(
                 "World {} already initialized!".format(world))
-        for organization in world.organization_set.all():
-            initialize_organization(organization)
-        for unit in world.worldunit_set.all():
-            initialize_unit(unit)
-        for tile in world.tile_set.all():
-            initialize_tile(tile)
+
+        db.connections.close_all()
+        p = Pool(max_parallelism())
+        p.map(initialize_organization, world.organization_set.all()[:])
+
+        db.connections.close_all()
+        p = Pool(max_parallelism())
+        p.map(initialize_unit, world.worldunit_set.all()[:])
+
+        db.connections.close_all()
+        p = Pool(max_parallelism())
+        p.map(initialize_tile, world.tile_set.all()[:])
+
         world.initialized = True
         world.save()
 
@@ -36,6 +44,7 @@ def initialize_organization(organization):
     pass
 
 
+@transaction.atomic
 def initialize_tile(tile):
     for settlement in tile.settlement_set.all():
         initialize_settlement(settlement)
@@ -105,6 +114,7 @@ def generate_npc(i, residences, settlement):
     return npc
 
 
+@transaction.atomic
 def initialize_unit(unit):
     with perf_timer('Initializing unit {} ({})'.format(
             unit, unit.id)):

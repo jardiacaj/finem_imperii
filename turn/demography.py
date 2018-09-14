@@ -1,8 +1,12 @@
 import random
+from multiprocessing.pool import Pool
 
+from django import db
+from django.db import transaction
 from django.db.models import F
 
 import world.initialization
+from parallelism import max_parallelism
 from world.models.buildings import Building
 from world.models.geography import World, Settlement
 
@@ -35,12 +39,14 @@ def do_settlement_population_changes(settlement: Settlement):
 
 
 def worldwide_food_consumption(world: World):
-    for settlement in Settlement.objects.filter(
-        tile__world=world
-    ):
-        do_settlement_food_consumption(settlement)
+    db.connections.close_all()
+    p = Pool(max_parallelism())
+    p.map(
+        do_settlement_food_consumption,
+        Settlement.objects.filter(tile__world=world)[:]
+    )
 
-
+@transaction.atomic
 def do_settlement_food_consumption(settlement: Settlement):
     mouths = settlement.population
     granary = settlement.get_default_granary()

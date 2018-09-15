@@ -1,21 +1,17 @@
 import random
-from multiprocessing.pool import Pool
 
-from django import db
 from django.db import transaction
 
 from context_managers import perf_timer
 from finem_imperii.random import WeightedChoice, weighted_choice
-from parallelism import max_parallelism
+from parallelism import parallel
 from world.models.buildings import Building
 from world.models.geography import World, Settlement
 from world.models.npcs import NPC
 
 
 def worldwide_npc_job_updates(world: World):
-    db.connections.close_all()
-    p = Pool(max_parallelism())
-    p.map(
+    parallel(
         settlement_job_updates,
         Settlement.objects.filter(tile__world=world)[:]
     )

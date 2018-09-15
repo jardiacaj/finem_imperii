@@ -1,3 +1,5 @@
+import sys
+
 from finem_imperii.settings_common import *
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -9,20 +11,24 @@ DEBUG = True
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-
-        #'ENGINE': 'django.db.backends.postgresql',
-        #'HOST': 'localhost',
-        #'NAME': 'fi',
-        #'USER': 'postgres',
-        #'PASSWORD': 'pwd',
-
-        #'ENGINE': 'django.db.backends.mysql',
-        #'HOST': '/var/run/mysqld/mysqld.sock',
-        #'NAME': 'fi',
-        #'USER': 'fi',
+if 'test' in sys.argv:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
+else:
+    DATABASES = {
+        # 'default': {
+        #     'ENGINE': 'django.db.backends.mysql',
+        #     'HOST': '/var/run/mysqld/mysqld.sock',
+        #     'NAME': 'fi',
+        #     'PASSWORD': 'fi',
+        #     'USER': 'fi',
+        # }
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }

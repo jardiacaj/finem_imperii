@@ -1,23 +1,20 @@
 import random
-from multiprocessing.pool import Pool
 
-from django import db
 from django.db import transaction
 
 import unit.models
 import unit.creation
 from context_managers import perf_timer
-from parallelism import max_parallelism
+from parallelism import parallel
 from world.models.geography import World, Settlement
 
 
 def worldwide_barbarian_generation(world: World):
-    db.connections.close_all()
-    p = Pool(max_parallelism())
-    p.map(
+    parallel(
         do_settlement_barbarian_generation,
         Settlement.objects.filter(tile__world=world)[:]
     )
+
 
 @transaction.atomic
 def do_settlement_barbarian_generation(settlement: Settlement):

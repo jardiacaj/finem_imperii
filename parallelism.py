@@ -1,11 +1,20 @@
 import os
 
+from multiprocessing.pool import Pool
+
+import sys
+from django import db
 from django.db import connection
 
 
-def max_parallelism():
-    if connection.vendor == 'sqlite':
-        max_parallelism = 1
+def parallel(operator, elements):
+    if connection.vendor == 'sqlite' or 'test' in sys.argv:
+        for element in elements:
+            operator(element)
     else:
-        max_parallelism = os.cpu_count()
-    return max_parallelism
+        db.connections.close_all()
+        p = Pool()
+        p.map(
+            operator,
+            elements
+        )

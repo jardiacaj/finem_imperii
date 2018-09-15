@@ -1,7 +1,5 @@
-from multiprocessing import Pool
 import random
 
-from django import db
 from django.db import transaction
 
 import world.models.npcs
@@ -9,7 +7,7 @@ import world.models.buildings
 from context_managers import perf_timer
 from finem_imperii.random import WeightedChoice, weighted_choice
 from name_generator.name_generator import generate_name
-from parallelism import max_parallelism
+from parallelism import parallel
 from world.models.npcs import NPC
 
 
@@ -24,17 +22,9 @@ def initialize_world(world):
             raise AlreadyInitializedException(
                 "World {} already initialized!".format(world))
 
-        db.connections.close_all()
-        p = Pool(max_parallelism())
-        p.map(initialize_organization, world.organization_set.all()[:])
-
-        db.connections.close_all()
-        p = Pool(max_parallelism())
-        p.map(initialize_unit, world.worldunit_set.all()[:])
-
-        db.connections.close_all()
-        p = Pool(max_parallelism())
-        p.map(initialize_tile, world.tile_set.all()[:])
+        parallel(initialize_organization, world.organization_set.all()[:])
+        parallel(initialize_unit, world.worldunit_set.all()[:])
+        parallel(initialize_tile, world.tile_set.all()[:])
 
         world.initialized = True
         world.save()

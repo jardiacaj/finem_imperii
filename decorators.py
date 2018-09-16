@@ -30,5 +30,3 @@ def inchar_required(func):
         return func(*args, **kwargs)
 
     return inner
-
-

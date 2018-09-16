@@ -1,43 +1,39 @@
 # Buildings
 
+Fields:
+
+ - Level:
+ - Type:
+ - Quantity:
+ - Settlement: 
+ - Owner:
+
 ## Residence
 
 Ideal usage: 7 inhabitants
 Maximum usage: 15 inhabitants
 
-Level 0: shack
-Level 1: shabby house
-Level 2: simple house
+Level 0: Shack
+Level 1:
 
 ## Grain field
 
-Ideal employment: 10 workers per field.
-Max employment: 20 workers per fields.
+Ideal employment: 1 worker per 10 fields.
+Max employment: 1 workers per 2 fields.
 
-One field provides for food for 10 workers one year plus 20% surplus.
+One inhabitant needs the grain of 5 fields.
 
-#### Level 0: low production field.
+-> One worker could ideally produce food for 2 inhabitants.
 
-Produces about as much as to subsist.
-
-#### Level 1: regular field
-
-Produces about a 20% surplus over subsistence.
-
-#### Level 2: fertile field
-
-Produces about twice as much as needed compared to subsistence.
-
-## Prison
-
-Every tile has at least one prison. Prisoners can be held there.
-Prisoner management always will always be controlled by the local
-government.
+Level 0: Barren land
+Level 1: Open field
 
 ## Sawmill
 
 ## Iron mine
 
 ## Granary
+
+## Prison
 
 

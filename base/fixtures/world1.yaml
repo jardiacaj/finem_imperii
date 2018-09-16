@@ -13,7 +13,7 @@
   pk: 1
   fields:
     name: Emortuus
-    description: A large test world
+    description: The default world. A good place to start in.
     initialized: false
     current_turn: 4
 

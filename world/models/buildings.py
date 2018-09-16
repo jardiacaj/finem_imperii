@@ -28,14 +28,14 @@ class Building(models.Model):
     LEVEL_DESCRIPTORS = {
         GRAIN_FIELD:
             [
-                ('barren land', '{qty} barren lands'),
-                ('open field', '{qty} open fields'),
-                ('fenced field', '{qty} fenced fields'),
+                ('low production field', '{qty} low production fields'),
+                ('regular field', '{qty} regular fields'),
+                ('fertile field', '{qty} fertile fields'),
             ],
         RESIDENCE:
             [
                 ('shack', '{qty} shacks'),
-                ('low quality house', '{qty} low quality houses'),
+                ('shabby house', '{qty} shabby houses'),
                 ('simple house', '{qty} simple houses'),
             ],
         GRANARY:

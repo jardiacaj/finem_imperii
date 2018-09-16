@@ -1,51 +1,41 @@
-- model: messaging.ServerMOTD
-  fields:
-    title: Welcome to this development server
-    display_order: 0
-    draft: false
-    html_content: >
-      <p>This seems to be your private development server.<p>
-      <p>Thanks a lot for helping me in this project :)</p>
-      <p>Found a bug? <a href="https://github.com/jardiacaj/finem_imperii/issues/new">
-      Please report it</a>, you will be helping improve this game.</p>
-
 - model: world.World
-  pk: 1
+  pk: 3
   fields:
-    name: Emortuus
-    description: A large test world
+    name: Corelia
+    description: >
+      The world has fallen into darkness after the fall of the Empire. A small
+      remainder still calls itself a successor to it, wanting to recover
+      its past glory. In the rest of the world barbarianism reigns... for now.
     initialized: false
     current_turn: 4
 
 - model: organization.Organization
-  pk: 1
+  pk: 201
   fields:
-    world_id: 1
-    name: "Kingdom of Cardell"
+    world_id: 3
+    name: "The Empire of Corelia"
     color: "8F00CC"
     description: >
-      The Kingdom emerged from the old Province of Luria. Through alliances and
-      diplomatic marriages, the Cardell family manage to bring under their
-      control the barbaric tribes of the old province and created a thriving
-      Kingdom.
+      The rulers of Corelia still call it empire, but it's really just the left
+      over bones of what it once was. Not everyone recognizes it a legitimate
+      successor to the Empire.
     is_position: false
     position_type: inherited
     owner_id: null
-    leader_id: 2
+    leader_id: 202
     owner_and_leader_locked: false
     violence_monopoly: true
     decision_taking: distributed
     membership_type: character
     election_period_months: 0
 - model: organization.Organization
-  pk: 2
+  pk: 202
   fields:
-    world_id: 1
-    name: "King of Cardell"
+    world_id: 3
+    name: "Emperor of Corelia"
     color: "B300FF"
     description: >
-      The King of Cardell is the patriarch of his Kingdom, leader of leaders,
-      guard and sovereign of Cardell and Luria.
+      The sumpreme Emperor of Corelia.
     is_position: true
     owner_id: null
     leader_id: null
@@ -56,333 +46,87 @@
     election_period_months: 0
 - model: organization.Capability
   fields:
-    organization_id: 2
+    organization_id: 202
     type: 'ban'
-    applying_to: 1
+    applying_to: 201
 - model: organization.Capability
   fields:
-    organization_id: 2
+    organization_id: 202
     type: 'arrest warrant'
-    applying_to: 1
+    applying_to: 201
 - model: organization.Capability
   fields:
-    organization_id: 2
+    organization_id: 202
     type: 'policy'
-    applying_to: 1
+    applying_to: 201
 - model: organization.Capability
   fields:
-    organization_id: 2
+    organization_id: 202
     type: 'conscript'
-    applying_to: 1
+    applying_to: 201
 - model: organization.Capability
   fields:
-    organization_id: 1
+    organization_id: 201
     type: 'conscript'
-    applying_to: 1
+    applying_to: 201
 - model: organization.Capability
   fields:
-    organization_id: 2
+    organization_id: 202
     type: 'heir'
-    applying_to: 2
+    applying_to: 202
 - model: organization.Capability
   fields:
-    organization_id: 2
+    organization_id: 202
     type: 'diplomacy'
-    applying_to: 1
+    applying_to: 201
 - model: organization.Capability
   fields:
-    organization_id: 2
+    organization_id: 202
     type: 'military stance'
-    applying_to: 1
+    applying_to: 201
 - model: organization.Capability
   fields:
-    organization_id: 2
+    organization_id: 202
     type: 'battle formation'
-    applying_to: 1
+    applying_to: 201
 - model: organization.Capability
   fields:
-    organization_id: 2
+    organization_id: 202
     type: 'occupy region'
-    applying_to: 1
+    applying_to: 201
 - model: organization.Capability
   fields:
-    organization_id: 2
+    organization_id: 202
     type: 'take grain'
-    applying_to: 1
+    applying_to: 201
 - model: organization.Capability
   fields:
-    organization_id: 1
+    organization_id: 201
     type: 'take grain'
-    applying_to: 1
+    applying_to: 201
 - model: organization.Capability
   fields:
-    organization_id: 2
+    organization_id: 202
     type: 'manage guilds'
-    applying_to: 1
+    applying_to: 201
 - model: organization.Capability
   fields:
-    organization_id: 2
+    organization_id: 202
     type: 'manage taxation'
-    applying_to: 1
+    applying_to: 201
 
 - model: organization.Organization
-  pk: 3
+  pk: 203
   fields:
-    world_id: 1
-    name: "Federated Realms of Central Emortuus"
-    color: "008691"
-    description: >
-      (This is an experimental organization)
-      Soon after the establishment of the First Realms of Emortuus, some
-      leaders decided it was better for the civilized nations to work
-      together to better fend off enemies and barbarians. Some Realms of
-      the central territories joined in this Federation.
-    is_position: false
-    owner_id: null
-    leader_id: 4
-    owner_and_leader_locked: false
-    violence_monopoly: false
-    decision_taking: democratic
-    membership_type: organization
-    election_period_months: 0
-    organization_members:
-      - 5
-      - 7
-- model: organization.Organization
-  pk: 4
-  fields:
-    world_id: 1
-    name: "President of the Federated Realms of Central Emortuus"
-    color: "008691"
-    description: >
-      (This is an experimental organization)
-      The elected President of the Federation's role is to defend the
-      interests of the Federated Realms, coordinate their efforts and
-      represent the unity of the Federation.
-    is_position: true
-    position_type: elected
-    owner_id: null
-    leader_id: null
-    owner_and_leader_locked: false
-    violence_monopoly: false
-    decision_taking: distributed
-    membership_type: character
-    election_period_months: 0
-- model: organization.Organization
-  pk: 5
-  fields:
-    world_id: 1
-    name: "Jade Commonwealth"
-    color: "CE0004"
-    description: >
-      The Commonwealth started as a successful tribe that controlled the
-      territories of Jade. After a couple of generations of relative
-      peace and prosperity, it rose as an influential emortuic Realm of
-      it's own right.
-    is_position: false
-    owner_id: null
-    leader_id: 6
-    owner_and_leader_locked: false
-    violence_monopoly: true
-    decision_taking: democratic
-    membership_type: character
-    election_period_months: 0
-- model: organization.Capability
-  fields:
-    organization_id: 5
-    type: 'ban'
-    applying_to: 5
-- model: organization.Capability
-  fields:
-    organization_id: 5
-    type: 'policy'
-    applying_to: 5
-- model: organization.Capability
-  fields:
-    organization_id: 5
-    type: 'conscript'
-    applying_to: 5
-- model: organization.Capability
-  fields:
-    organization_id: 5
-    type: 'heir'
-    applying_to: 6
-- model: organization.Capability
-  fields:
-    organization_id: 5
-    type: 'take grain'
-    applying_to: 5
-
-- model: organization.Organization
-  pk: 6
-  fields:
-    world_id: 1
-    name: "Jade Lord"
-    color: "A70004"
-    description: >
-      The Lord of Jade is a life-long position elected by the members of the
-      Commonwealth. Ritualistic in the tradition of the old tribes and
-      respected by it's people.
-    is_position: true
-    position_type: inherited
-    owner_id: null
-    leader_id: null
-    owner_and_leader_locked: false
-    violence_monopoly: false
-    decision_taking: distributed
-    membership_type: character
-    election_period_months: 0
-- model: organization.Capability
-  fields:
-    organization_id: 6
-    type: 'arrest warrant'
-    applying_to: 5
-- model: organization.Capability
-  fields:
-    organization_id: 6
-    type: 'diplomacy'
-    applying_to: 5
-- model: organization.Capability
-  fields:
-    organization_id: 6
-    type: 'military stance'
-    applying_to: 5
-- model: organization.Capability
-  fields:
-    organization_id: 6
-    type: 'battle formation'
-    applying_to: 5
-- model: organization.Capability
-  fields:
-    organization_id: 6
-    type: 'occupy region'
-    applying_to: 5
-- model: organization.Capability
-  fields:
-    organization_id: 6
-    type: 'manage guilds'
-    applying_to: 5
-- model: organization.Capability
-  fields:
-    organization_id: 6
-    type: 'manage taxation'
-    applying_to: 5
-
-- model: organization.Organization
-  pk: 7
-  fields:
-    world_id: 1
-    name: "Mir"
-    color: "928439"
-    description: >
-      Unique for its horizontality and communal organization, Mir is a
-      Realm formed by the free and democratic union of it's people. While often
-      marred in internal disputes, Mirians always rise united when
-      external threats arise.
-    is_position: false
-    owner_id: null
-    leader_id: 8
-    owner_and_leader_locked: false
-    violence_monopoly: true
-    decision_taking: democratic
-    membership_type: character
-    election_period_months: 0
-- model: organization.Capability
-  fields:
-    organization_id: 7
-    type: 'ban'
-    applying_to: 7
-- model: organization.Capability
-  fields:
-    organization_id: 7
-    type: 'arrest warrant'
-    applying_to: 7
-- model: organization.Capability
-  fields:
-    organization_id: 7
-    type: 'policy'
-    applying_to: 7
-- model: organization.Capability
-  fields:
-    organization_id: 7
-    type: 'conscript'
-    applying_to: 7
-- model: organization.Capability
-  fields:
-    organization_id: 7
-    type: 'diplomacy'
-    applying_to: 7
-- model: organization.Capability
-  fields:
-    organization_id: 7
-    type: 'elect'
-    applying_to: 8
-- model: organization.Capability
-  fields:
-    organization_id: 7
-    type: 'candidacy'
-    applying_to: 8
-- model: organization.Capability
-  fields:
-    organization_id: 7
-    type: 'convoke elections'
-    applying_to: 8
-- model: organization.Capability
-  fields:
-    organization_id: 7
-    type: 'military stance'
-    applying_to: 7
-- model: organization.Capability
-  fields:
-    organization_id: 7
-    type: 'battle formation'
-    applying_to: 7
-- model: organization.Capability
-  fields:
-    organization_id: 7
-    type: 'take grain'
-    applying_to: 7
-- model: organization.Capability
-  fields:
-    organization_id: 7
-    type: 'manage guilds'
-    applying_to: 7
-- model: organization.Capability
-  fields:
-    organization_id: 7
-    type: 'manage taxation'
-    applying_to: 7
-
-- model: organization.Organization
-  pk: 8
-  fields:
-    world_id: 1
-    name: "Mir Thain"
-    color: "928439"
-    description: >
-      The Thain represents Mir and is not so much a position of power
-      as a symbol of the Realm's unity, strength and dignity.
-    is_position: true
-    position_type: elected
-    owner_id: null
-    leader_id: null
-    owner_and_leader_locked: false
-    violence_monopoly: false
-    decision_taking: distributed
-    membership_type: character
-    election_period_months: 48
-
-- model: organization.Organization
-  pk: 9
-  fields:
-    world_id: 1
+    world_id: 3
     name: "Barbarians"
     barbaric: true
     color: "111111"
     description: >
-      The anarchic barbaric tribes of Emortuus lack the infrastructure and
-      organization of the Realms, but their might should not be underrated,
-      especially in times when the population is unhappy with their leaders.
+      The anarchic barbaric tribes of Corelia lack the infrastructure and
+      organization of the Empire, but their might should not be underrated,
+      especially in times when the population is unhappy with their leaders,
+      or when someone manages to lead them against the unfair rulers.
     is_position: false
     owner_and_leader_locked: false
     violence_monopoly: true
@@ -390,188 +134,183 @@
     membership_type: character
 - model: organization.Capability
   fields:
-    organization_id: 9
-    type: 'conscript'
-    applying_to: 9
-- model: organization.Capability
-  fields:
-    organization_id: 9
+    organization_id: 203
     type: 'military orders'
-    applying_to: 9
+    applying_to: 203
 - model: organization.Capability
   fields:
-    organization_id: 9
+    organization_id: 203
     type: 'battle formation'
-    applying_to: 9
+    applying_to: 203
 - model: organization.Capability
   fields:
-    organization_id: 9
+    organization_id: 203
     type: 'occupy region'
-    applying_to: 9
+    applying_to: 203
 
 - model: world.Region
-  pk: 1
+  pk: 201
   fields:
-    world_id: 1
+    world_id: 3
     name: Lurian Peninsula
 - model: world.Region
-  pk: 2
+  pk: 202
   fields:
-    world_id: 1
+    world_id: 3
     name: Jade Mountains
 - model: world.Region
-  pk: 3
+  pk: 203
   fields:
-    world_id: 1
+    world_id: 3
     name: Mir Woods
 - model: world.Region
-  pk: 4
+  pk: 204
   fields:
-    world_id: 1
+    world_id: 3
     name: Shamba Peninsula
 - model: world.Region
-  pk: 5
+  pk: 205
   fields:
-    world_id: 1
+    world_id: 3
     name: Bular Plains
 - model: world.Region
-  pk: 6
+  pk: 206
   fields:
-    world_id: 1
+    world_id: 3
     name: Fallen
 - model: world.Region
-  pk: 7
+  pk: 207
   fields:
-    world_id: 1
+    world_id: 3
     name: Aedon Ocean
 - model: world.Region
-  pk: 8
+  pk: 208
   fields:
-    world_id: 1
+    world_id: 3
     name: Tortuga Bay
 - model: world.Region
-  pk: 9
+  pk: 209
   fields:
-    world_id: 1
+    world_id: 3
     name: Maab Ocean
 - model: world.Region
-  pk: 10
+  pk: 210
   fields:
-    world_id: 1
+    world_id: 3
     name: West Bay
 - model: world.Region
-  pk: 11
+  pk: 211
   fields:
-    world_id: 1
+    world_id: 3
     name: Tortuga Sea
 
 # ROW -4
 - model: world.Tile
-  pk: 100
+  pk: 2000
   fields:
     name: Aedon Ocean
-    world_id: 1
-    region_id: 7
-    controlled_by: 9
+    world_id: 3
+    region_id: 207
+    controlled_by: 203
     x_pos: -4
     z_pos: -4
     y_pos: 0
     type: deepsea
 - model: world.Tile
-  pk: 1
+  pk: 2001
   fields:
     name: Aedon Ocean
-    world_id: 1
-    region_id: 7
-    controlled_by: 9
+    world_id: 3
+    region_id: 207
+    controlled_by: 203
     x_pos: -3
     z_pos: -4
     y_pos: 0
     type: deepsea
 - model: world.Tile
-  pk: 2
+  pk: 2002
   fields:
     name: Aedon Ocean
-    world_id: 1
-    region_id: 7
-    controlled_by: 9
+    world_id: 3
+    region_id: 207
+    controlled_by: 203
     x_pos: -2
     z_pos: -4
     y_pos: 0
     type: deepsea
 - model: world.Tile
-  pk: 3
+  pk: 2003
   fields:
     name: Aedon Ocean
-    world_id: 1
-    region_id: 7
-    controlled_by: 9
+    world_id: 3
+    region_id: 207
+    controlled_by: 203
     x_pos: -1
     z_pos: -4
     y_pos: 0
     type: deepsea
 - model: world.Tile
-  pk: 4
+  pk: 2004
   fields:
     name: Aedon Ocean
-    world_id: 1
-    region_id: 7
-    controlled_by: 9
+    world_id: 3
+    region_id: 207
+    controlled_by: 203
     x_pos: 0
     z_pos: -4
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 5
+  pk: 2005
   fields:
     name: North Cardell shore
-    world_id: 1
-    region_id: 1
-    controlled_by: 9
+    world_id: 3
+    region_id: 201
+    controlled_by: 203
     x_pos: 1
     z_pos: -4
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 6
+  pk: 2006
   fields:
     name: North Cardell shore
-    world_id: 1
-    region_id: 1
-    controlled_by: 9
+    world_id: 3
+    region_id: 201
+    controlled_by: 203
     x_pos: 2
     z_pos: -4
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 7
+  pk: 2007
   fields:
     name: North Cardell shore
-    world_id: 1
-    region_id: 1
-    controlled_by: 9
+    world_id: 3
+    region_id: 201
+    controlled_by: 203
     x_pos: 3
     z_pos: -4
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 8
+  pk: 2008
   fields:
     name: North Cardell shore
-    world_id: 1
-    region_id: 1
-    controlled_by: 9
+    world_id: 3
+    region_id: 201
+    controlled_by: 203
     x_pos: 4
     z_pos: -4
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 9
+  pk: 2009
   fields:
     name: Northeast Cardell shore
-    world_id: 1
-    region_id: 1
-    controlled_by: 9
+    world_id: 3
+    region_id: 201
+    controlled_by: 203
     x_pos: 5
     z_pos: -4
     y_pos: 0
@@ -580,111 +319,111 @@
 
 # ROW -3
 - model: world.Tile
-  pk: 10
+  pk: 2010
   fields:
     name: Aedon Ocean
-    world_id: 1
-    region_id: 7
-    controlled_by: 9
+    world_id: 3
+    region_id: 207
+    controlled_by: 203
     x_pos: -4
     z_pos: -3
     y_pos: 0
     type: deepsea
 - model: world.Tile
-  pk: 11
+  pk: 2011
   fields:
     name: Aedon Ocean
-    world_id: 1
-    region_id: 7
-    controlled_by: 9
+    world_id: 3
+    region_id: 207
+    controlled_by: 203
     x_pos: -3
     z_pos: -3
     y_pos: 0
     type: deepsea
 - model: world.Tile
-  pk: 12
+  pk: 2012
   fields:
     name: Aedon Ocean
-    world_id: 1
-    region_id: 7
-    controlled_by: 9
+    world_id: 3
+    region_id: 207
+    controlled_by: 203
     x_pos: -2
     z_pos: -3
     y_pos: 0
     type: deepsea
 - model: world.Tile
-  pk: 13
+  pk: 2013
   fields:
     name: North Cardell shore
-    world_id: 1
-    region_id: 1
-    controlled_by: 9
+    world_id: 3
+    region_id: 201
+    controlled_by: 203
     x_pos: -1
     z_pos: -3
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 14
+  pk: 2014
   fields:
     name: North Cardell shore
-    world_id: 1
-    region_id: 7
-    controlled_by: 9
+    world_id: 3
+    region_id: 207
+    controlled_by: 203
     x_pos: 0
     z_pos: -3
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 15
+  pk: 2015
   fields:
     name: Wattingham
-    world_id: 1
-    region_id: 1
-    controlled_by: 9
+    world_id: 3
+    region_id: 201
+    controlled_by: 201
     x_pos: 1
     z_pos: -3
     y_pos: 0.1
     type: plains
 - model: world.Tile
-  pk: 16
+  pk: 2016
   fields:
     name: Dewbury
-    world_id: 1
-    region_id: 1
-    controlled_by: 9
+    world_id: 3
+    region_id: 201
+    controlled_by: 201
     x_pos: 2
     z_pos: -3
     y_pos: 0.1
     type: plains
 - model: world.Tile
-  pk: 17
+  pk: 2017
   fields:
     name: Wray
-    world_id: 1
-    region_id: 1
-    controlled_by: 1
+    world_id: 3
+    region_id: 201
+    controlled_by: 203
     x_pos: 3
     z_pos: -3
     y_pos: 0.2
     type: forest
 - model: world.Tile
-  pk: 18
+  pk: 2018
   fields:
     name: Muria
-    world_id: 1
-    region_id: 1
-    controlled_by: 1
+    world_id: 3
+    region_id: 201
+    controlled_by: 203
     x_pos: 4
     z_pos: -3
     y_pos: 0.15
     type: forest
 - model: world.Tile
-  pk: 19
+  pk: 2019
   fields:
     name: East Cardell shore
-    world_id: 1
-    region_id: 1
-    controlled_by: 9
+    world_id: 3
+    region_id: 201
+    controlled_by: 203
     x_pos: 5
     z_pos: -3
     y_pos: 0
@@ -692,111 +431,111 @@
 
 # ROW -2
 - model: world.Tile
-  pk: 20
+  pk: 2020
   fields:
     name: Aedon Ocean
-    world_id: 1
-    region_id: 7
-    controlled_by: 9
+    world_id: 3
+    region_id: 207
+    controlled_by: 203
     x_pos: -4
     z_pos: -2
     y_pos: 0
     type: deepsea
 - model: world.Tile
-  pk: 21
+  pk: 2021
   fields:
     name: Aedon Ocean
-    world_id: 1
-    region_id: 7
-    controlled_by: 9
+    world_id: 3
+    region_id: 207
+    controlled_by: 203
     x_pos: -3
     z_pos: -2
     y_pos: 0
     type: deepsea
 - model: world.Tile
-  pk: 22
+  pk: 2022
   fields:
     name: North Mir shore
-    world_id: 1
-    region_id: 3
-    controlled_by: 9
+    world_id: 3
+    region_id: 203
+    controlled_by: 203
     x_pos: -2
     z_pos: -2
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 23
+  pk: 2023
   fields:
     name: Narris
-    world_id: 1
-    region_id: 1
-    controlled_by: 9
+    world_id: 3
+    region_id: 201
+    controlled_by: 203
     x_pos: -1
     z_pos: -2
     y_pos: 0.1
     type: forest
 - model: world.Tile
-  pk: 24
+  pk: 2024
   fields:
     name: Warcton
-    world_id: 1
-    region_id: 1
-    controlled_by: 9
+    world_id: 3
+    region_id: 201
+    controlled_by: 203
     x_pos: 0
     z_pos: -2
     y_pos: 0.2
     type: plains
 - model: world.Tile
-  pk: 25
+  pk: 2025
   fields:
     name: West Luria
-    world_id: 1
-    region_id: 1
-    controlled_by: 9
+    world_id: 3
+    region_id: 201
+    controlled_by: 201
     x_pos: 1
     z_pos: -2
     y_pos: 0.5
     type: mountain
 - model: world.Tile
-  pk: 26
+  pk: 2026
   fields:
     name: Central Luria
-    world_id: 1
-    region_id: 1
-    controlled_by: 9
+    world_id: 3
+    region_id: 201
+    controlled_by: 203
     x_pos: 2
     z_pos: -2
     y_pos: 0.6
     type: mountain
 - model: world.Tile
-  pk: 27
+  pk: 2027
   fields:
     name: East Luria
-    world_id: 1
-    region_id: 1
-    controlled_by: 9
+    world_id: 3
+    region_id: 201
+    controlled_by: 203
     x_pos: 3
     z_pos: -2
     y_pos: 0.4
     type: mountain
 - model: world.Tile
-  pk: 28
+  pk: 2028
   fields:
     name: East Cardell shore
-    world_id: 1
-    region_id: 1
-    controlled_by: 9
+    world_id: 3
+    region_id: 201
+    controlled_by: 203
     x_pos: 4
     z_pos: -2
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 29
+  pk: 2029
   fields:
     name: Tortuga Sea
-    world_id: 1
-    region_id: 11
-    controlled_by: 9
+    world_id: 3
+    region_id: 211
+    controlled_by: 203
     x_pos: 5
     z_pos: -2
     y_pos: 0
@@ -804,111 +543,111 @@
 
 # ROW -1
 - model: world.Tile
-  pk: 30
+  pk: 2030
   fields:
     name: Aedon Ocean
-    world_id: 1
-    region_id: 7
-    controlled_by: 9
+    world_id: 3
+    region_id: 207
+    controlled_by: 203
     x_pos: -4
     z_pos: -1
     y_pos: 0
     type: deepsea
 - model: world.Tile
-  pk: 31
+  pk: 2031
   fields:
     name: East Mir shore
-    world_id: 1
-    region_id: 3
-    controlled_by: 9
+    world_id: 3
+    region_id: 203
+    controlled_by: 203
     x_pos: -3
     z_pos: -1
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 32
+  pk: 2032
   fields:
     name: North Mir
-    world_id: 1
-    region_id: 3
-    controlled_by: 7
+    world_id: 3
+    region_id: 203
+    controlled_by: 203
     x_pos: -2
     z_pos: -1
     y_pos: 0.15
     type: forest
 - model: world.Tile
-  pk: 33
+  pk: 2033
   fields:
     name: North Jade
-    world_id: 1
-    region_id: 2
-    controlled_by: 5
+    world_id: 3
+    region_id: 202
+    controlled_by: 203
     x_pos: -1
     z_pos: -1
     y_pos: 0.4
     type: mountain
 - model: world.Tile
-  pk: 34
+  pk: 2034
   fields:
     name: Tortuga Bay
-    world_id: 1
-    region_id: 8
-    controlled_by: 9
+    world_id: 3
+    region_id: 208
+    controlled_by: 203
     x_pos: 0
     z_pos: -1
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 35
+  pk: 2035
   fields:
     name: Tortuga Bay
-    world_id: 1
-    region_id: 8
-    controlled_by: 9
+    world_id: 3
+    region_id: 208
+    controlled_by: 203
     x_pos: 1
     z_pos: -1
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 36
+  pk: 2036
   fields:
     name: Clarn Plains
-    world_id: 1
-    region_id: 1
-    controlled_by: 9
+    world_id: 3
+    region_id: 201
+    controlled_by: 203
     x_pos: 2
     z_pos: -1
     y_pos: 0.15
     type: plains
 - model: world.Tile
-  pk: 37
+  pk: 2037
   fields:
     name: Clarn Woords
-    world_id: 1
-    region_id: 1
-    controlled_by: 9
+    world_id: 3
+    region_id: 201
+    controlled_by: 203
     x_pos: 3
     z_pos: -1
     y_pos: 0.2
     type: forest
 - model: world.Tile
-  pk: 38
+  pk: 2038
   fields:
     name: East Cardell shore
-    world_id: 1
-    region_id: 1
-    controlled_by: 9
+    world_id: 3
+    region_id: 201
+    controlled_by: 203
     x_pos: 4
     z_pos: -1
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 39
+  pk: 2039
   fields:
     name: Tortuga Sea
-    world_id: 1
-    region_id: 11
-    controlled_by: 9
+    world_id: 3
+    region_id: 211
+    controlled_by: 203
     x_pos: 5
     z_pos: -1
     y_pos: 0
@@ -916,111 +655,111 @@
 
 # ROW 0
 - model: world.Tile
-  pk: 40
+  pk: 2040
   fields:
     name: East Mir shore
-    world_id: 1
-    region_id: 3
-    controlled_by: 9
+    world_id: 3
+    region_id: 203
+    controlled_by: 203
     x_pos: -4
     z_pos: 0
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 41
+  pk: 2041
   fields:
     name: East Mir
-    world_id: 1
-    region_id: 3
-    controlled_by: 9
+    world_id: 3
+    region_id: 203
+    controlled_by: 203
     x_pos: -3
     z_pos: 0
     y_pos: 0.15
     type: forest
 - model: world.Tile
-  pk: 42
+  pk: 2042
   fields:
     name: South Mir
-    world_id: 1
-    region_id: 1
-    controlled_by: 7
+    world_id: 3
+    region_id: 201
+    controlled_by: 203
     x_pos: -2
     z_pos: 0
     y_pos: 0.2
     type: forest
 - model: world.Tile
-  pk: 43
+  pk: 2043
   fields:
     name: Jade-Mir Peaks
-    world_id: 1
-    region_id: 2
-    controlled_by: 5
+    world_id: 3
+    region_id: 202
+    controlled_by: 203
     x_pos: -1
     z_pos: 0
     y_pos: 0.5
     type: mountain
 - model: world.Tile
-  pk: 44
+  pk: 2044
   fields:
     name: Deep Jade
-    world_id: 1
-    region_id: 2
-    controlled_by: 9
+    world_id: 3
+    region_id: 202
+    controlled_by: 203
     x_pos: 0
     z_pos: 0
     y_pos: 0.6
     type: mountain
 - model: world.Tile
-  pk: 45
+  pk: 2045
   fields:
     name: Tortuga Bay
-    world_id: 1
-    region_id: 8
-    controlled_by: 9
+    world_id: 3
+    region_id: 208
+    controlled_by: 203
     x_pos: 1
     z_pos: 0
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 46
+  pk: 2046
   fields:
     name: Tortuga Bay entry
-    world_id: 1
-    region_id: 8
-    controlled_by: 9
+    world_id: 3
+    region_id: 208
+    controlled_by: 203
     x_pos: 2
     z_pos: 0
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 47
+  pk: 2047
   fields:
     name: South Cardell shore
-    world_id: 1
-    region_id: 8
-    controlled_by: 9
+    world_id: 3
+    region_id: 208
+    controlled_by: 203
     x_pos: 3
     z_pos: 0
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 48
+  pk: 2048
   fields:
     name: Tortuga Sea
-    world_id: 1
-    region_id: 11
-    controlled_by: 9
+    world_id: 3
+    region_id: 211
+    controlled_by: 203
     x_pos: 4
     z_pos: 0
     y_pos: 0
     type: deepsea
 - model: world.Tile
-  pk: 49
+  pk: 2049
   fields:
     name: Tortuga Sea
-    world_id: 1
-    region_id: 11
-    controlled_by: 9
+    world_id: 3
+    region_id: 211
+    controlled_by: 203
     x_pos: 5
     z_pos: 0
     y_pos: 0
@@ -1028,111 +767,111 @@
 
 # ROW 1
 - model: world.Tile
-  pk: 50
+  pk: 2050
   fields:
     name: West Bay
-    world_id: 1
-    region_id: 10
-    controlled_by: 9
+    world_id: 3
+    region_id: 210
+    controlled_by: 203
     x_pos: -4
     z_pos: 1
     y_pos: 0
     type: deepsea
 - model: world.Tile
-  pk: 51
+  pk: 2051
   fields:
     name: West Bay
-    world_id: 1
-    region_id: 10
-    controlled_by: 9
+    world_id: 3
+    region_id: 210
+    controlled_by: 203
     x_pos: -3
     z_pos: 1
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 52
+  pk: 2052
   fields:
     name: West Bay
-    world_id: 1
-    region_id: 10
-    controlled_by: 9
+    world_id: 3
+    region_id: 210
+    controlled_by: 203
     x_pos: -2
     z_pos: 1
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 53
+  pk: 2053
   fields:
     name: West Jade
-    world_id: 1
-    region_id: 2
-    controlled_by: 9
+    world_id: 3
+    region_id: 202
+    controlled_by: 203
     x_pos: -1
     z_pos: 1
     y_pos: 0.45
     type: mountain
 - model: world.Tile
-  pk: 54
+  pk: 2054
   fields:
     name: Knarkt
-    world_id: 1
-    region_id: 2
-    controlled_by: 9
+    world_id: 3
+    region_id: 202
+    controlled_by: 203
     x_pos: 0
     z_pos: 1
     y_pos: 0.55
     type: mountain
 - model: world.Tile
-  pk: 55
+  pk: 2055
   fields:
     name: Casmir
-    world_id: 1
-    region_id: 6
-    controlled_by: 9
+    world_id: 3
+    region_id: 206
+    controlled_by: 203
     x_pos: 1
     z_pos: 1
     y_pos: 0.25
     type: plains
 - model: world.Tile
-  pk: 56
+  pk: 2056
   fields:
     name: Balan
-    world_id: 1
-    region_id: 6
-    controlled_by: 9
+    world_id: 3
+    region_id: 206
+    controlled_by: 203
     x_pos: 2
     z_pos: 1
     y_pos: 0.2
     type: forest
 - model: world.Tile
-  pk: 57
+  pk: 2057
   fields:
     name: North Fallen shore
-    world_id: 1
-    region_id: 6
-    controlled_by: 9
+    world_id: 3
+    region_id: 206
+    controlled_by: 203
     x_pos: 3
     z_pos: 1
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 58
+  pk: 2058
   fields:
     name: North Fallen shore
-    world_id: 1
-    region_id: 6
-    controlled_by: 9
+    world_id: 3
+    region_id: 206
+    controlled_by: 203
     x_pos: 4
     z_pos: 1
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 59
+  pk: 2059
   fields:
     name: Tortuga Sea
-    world_id: 1
-    region_id: 11
-    controlled_by: 9
+    world_id: 3
+    region_id: 211
+    controlled_by: 203
     x_pos: 5
     z_pos: 1
     y_pos: 0
@@ -1140,111 +879,111 @@
 
 # ROW 2
 - model: world.Tile
-  pk: 60
+  pk: 2060
   fields:
     name: West Bay
-    world_id: 1
-    region_id: 10
-    controlled_by: 9
+    world_id: 3
+    region_id: 210
+    controlled_by: 203
     x_pos: -4
     z_pos: 2
     y_pos: 0
     type: deepsea
 - model: world.Tile
-  pk: 61
+  pk: 2061
   fields:
     name: West Bay
-    world_id: 1
-    region_id: 10
-    controlled_by: 9
+    world_id: 3
+    region_id: 210
+    controlled_by: 203
     x_pos: -3
     z_pos: 2
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 62
+  pk: 2062
   fields:
     name: West Bay
-    world_id: 1
-    region_id: 10
-    controlled_by: 9
+    world_id: 3
+    region_id: 210
+    controlled_by: 203
     x_pos: -2
     z_pos: 2
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 63
+  pk: 2063
   fields:
     name: Khandir
-    world_id: 1
-    region_id: 5
-    controlled_by: 9
+    world_id: 3
+    region_id: 205
+    controlled_by: 203
     x_pos: -1
     z_pos: 2
     y_pos: 0.2
     type: plains
 - model: world.Tile
-  pk: 64
+  pk: 2064
   fields:
     name: Jade Creek
-    world_id: 1
-    region_id: 2
-    controlled_by: 9
+    world_id: 3
+    region_id: 202
+    controlled_by: 203
     x_pos: 0
     z_pos: 2
     y_pos: 0.4
     type: mountain
 - model: world.Tile
-  pk: 65
+  pk: 2065
   fields:
     name: Cor Valley
-    world_id: 1
-    region_id: 6
-    controlled_by: 9
+    world_id: 3
+    region_id: 206
+    controlled_by: 203
     x_pos: 1
     z_pos: 2
     y_pos: 0.15
     type: plains
 - model: world.Tile
-  pk: 66
+  pk: 2066
   fields:
     name: Fallenwood
-    world_id: 1
-    region_id: 6
-    controlled_by: 9
+    world_id: 3
+    region_id: 206
+    controlled_by: 203
     x_pos: 2
     z_pos: 2
     y_pos: 0.17
     type: forest
 - model: world.Tile
-  pk: 67
+  pk: 2067
   fields:
     name: Tamba
-    world_id: 1
-    region_id: 6
-    controlled_by: 9
+    world_id: 3
+    region_id: 206
+    controlled_by: 203
     x_pos: 3
     z_pos: 2
     y_pos: 0.2
     type: forest
 - model: world.Tile
-  pk: 68
+  pk: 2068
   fields:
     name: Fallenhavn
-    world_id: 1
-    region_id: 6
-    controlled_by: 9
+    world_id: 3
+    region_id: 206
+    controlled_by: 203
     x_pos: 4
     z_pos: 2
     y_pos: 0.17
     type: forest
 - model: world.Tile
-  pk: 69
+  pk: 2069
   fields:
     name: West Fallen shore
-    world_id: 1
-    region_id: 6
-    controlled_by: 9
+    world_id: 3
+    region_id: 206
+    controlled_by: 203
     x_pos: 5
     z_pos: 2
     y_pos: 0
@@ -1252,111 +991,111 @@
 
 # ROW 3
 - model: world.Tile
-  pk: 70
+  pk: 2070
   fields:
     name: West shamba shore
-    world_id: 1
-    region_id: 4
-    controlled_by: 9
+    world_id: 3
+    region_id: 204
+    controlled_by: 203
     x_pos: -4
     z_pos: 3
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 71
+  pk: 2071
   fields:
     name: West Shatak
-    world_id: 1
-    region_id: 4
-    controlled_by: 9
+    world_id: 3
+    region_id: 204
+    controlled_by: 203
     x_pos: -3
     z_pos: 3
     y_pos: 0.3
     type: forest
 - model: world.Tile
-  pk: 72
+  pk: 2072
   fields:
     name: East Shatak
-    world_id: 1
-    region_id: 4
-    controlled_by: 9
+    world_id: 3
+    region_id: 204
+    controlled_by: 203
     x_pos: -2
     z_pos: 3
     y_pos: 0.35
     type: forest
 - model: world.Tile
-  pk: 73
+  pk: 2073
   fields:
     name: Bambular
-    world_id: 1
-    region_id: 5
-    controlled_by: 9
+    world_id: 3
+    region_id: 205
+    controlled_by: 203
     x_pos: -1
     z_pos: 3
     y_pos: 0.2
     type: plains
 - model: world.Tile
-  pk: 74
+  pk: 2074
   fields:
     name: Lut Gholein
-    world_id: 1
-    region_id: 5
-    controlled_by: 9
+    world_id: 3
+    region_id: 205
+    controlled_by: 203
     x_pos: 0
     z_pos: 3
     y_pos: 0.15
     type: plains
 - model: world.Tile
-  pk: 75
+  pk: 2075
   fields:
     name: Temi
-    world_id: 1
-    region_id: 5
-    controlled_by: 9
+    world_id: 3
+    region_id: 205
+    controlled_by: 203
     x_pos: 1
     z_pos: 3
     y_pos: 0.2
     type: plains
 - model: world.Tile
-  pk: 76
+  pk: 2076
   fields:
     name: Nafat Ke
-    world_id: 1
-    region_id: 6
-    controlled_by: 9
+    world_id: 3
+    region_id: 206
+    controlled_by: 203
     x_pos: 2
     z_pos: 3
     y_pos: 0.18
     type: forest
 - model: world.Tile
-  pk: 77
+  pk: 2077
   fields:
     name: South Fallen shore
-    world_id: 1
-    region_id: 6
-    controlled_by: 9
+    world_id: 3
+    region_id: 206
+    controlled_by: 203
     x_pos: 3
     z_pos: 3
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 78
+  pk: 2078
   fields:
     name:  South Fallen shore
-    world_id: 1
-    region_id: 6
-    controlled_by: 9
+    world_id: 3
+    region_id: 206
+    controlled_by: 203
     x_pos: 4
     z_pos: 3
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 79
+  pk: 2079
   fields:
     name: Maab Ocean
-    world_id: 1
-    region_id: 9
-    controlled_by: 9
+    world_id: 3
+    region_id: 209
+    controlled_by: 203
     x_pos: 5
     z_pos: 3
     y_pos: 0
@@ -1364,111 +1103,111 @@
 
 # ROW 4
 - model: world.Tile
-  pk: 80
+  pk: 2080
   fields:
     name: Maab Ocean
-    world_id: 1
-    region_id: 9
-    controlled_by: 9
+    world_id: 3
+    region_id: 209
+    controlled_by: 203
     x_pos: -4
     z_pos: 4
     y_pos: 0
     type: deepsea
 - model: world.Tile
-  pk: 81
+  pk: 2081
   fields:
     name: West Shamba shore
-    world_id: 1
-    region_id: 4
-    controlled_by: 9
+    world_id: 3
+    region_id: 204
+    controlled_by: 203
     x_pos: -3
     z_pos: 4
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 82
+  pk: 2082
   fields:
     name: Ludur
-    world_id: 1
-    region_id: 4
-    controlled_by: 9
+    world_id: 3
+    region_id: 204
+    controlled_by: 203
     x_pos: -2
     z_pos: 4
     y_pos: 0.1
     type: plains
 - model: world.Tile
-  pk: 83
+  pk: 2083
   fields:
     name: Kutashnedra
-    world_id: 1
-    region_id: 4
-    controlled_by: 9
+    world_id: 3
+    region_id: 204
+    controlled_by: 203
     x_pos: -1
     z_pos: 4
     y_pos: 0.12
     type: plains
 - model: world.Tile
-  pk: 84
+  pk: 2084
   fields:
     name: South Bular coast
-    world_id: 1
-    region_id: 3
-    controlled_by: 9
+    world_id: 3
+    region_id: 203
+    controlled_by: 203
     x_pos: 0
     z_pos: 4
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 85
+  pk: 2085
   fields:
     name: South Bular coast
-    world_id: 1
-    region_id: 3
-    controlled_by: 9
+    world_id: 3
+    region_id: 203
+    controlled_by: 203
     x_pos: 1
     z_pos: 4
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 86
+  pk: 2086
   fields:
     name: South Fallen coast
-    world_id: 1
-    region_id: 6
-    controlled_by: 9
+    world_id: 3
+    region_id: 206
+    controlled_by: 203
     x_pos: 2
     z_pos: 4
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 87
+  pk: 2087
   fields:
     name: Maab Ocean
-    world_id: 1
-    region_id: 9
-    controlled_by: 9
+    world_id: 3
+    region_id: 209
+    controlled_by: 203
     x_pos: 3
     z_pos: 4
     y_pos: 0
     type: deepsea
 - model: world.Tile
-  pk: 88
+  pk: 2088
   fields:
     name: Maab Ocean
-    world_id: 1
-    region_id: 9
-    controlled_by: 9
+    world_id: 3
+    region_id: 209
+    controlled_by: 203
     x_pos: 4
     z_pos: 4
     y_pos: 0
     type: deepsea
 - model: world.Tile
-  pk: 89
+  pk: 2089
   fields:
     name: Maab Ocean
-    world_id: 1
-    region_id: 9
-    controlled_by: 9
+    world_id: 3
+    region_id: 209
+    controlled_by: 203
     x_pos: 5
     z_pos: 4
     y_pos: 0
@@ -1476,111 +1215,111 @@
 
 # ROW 5
 - model: world.Tile
-  pk: 90
+  pk: 2090
   fields:
     name: Maab Ocean
-    world_id: 1
-    region_id: 9
-    controlled_by: 9
+    world_id: 3
+    region_id: 209
+    controlled_by: 203
     x_pos: -4
     z_pos: 5
     y_pos: 0
     type: deepsea
 - model: world.Tile
-  pk: 91
+  pk: 2091
   fields:
     name: Maab Ocean
-    world_id: 1
-    region_id: 9
-    controlled_by: 9
+    world_id: 3
+    region_id: 209
+    controlled_by: 203
     x_pos: -3
     z_pos: 5
     y_pos: 0
     type: deepsea
 - model: world.Tile
-  pk: 92
+  pk: 2092
   fields:
     name: South Shamba Coast
-    world_id: 1
-    region_id: 4
-    controlled_by: 9
+    world_id: 3
+    region_id: 204
+    controlled_by: 203
     x_pos: -2
     z_pos: 5
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 93
+  pk: 2093
   fields:
     name: South Shamba Coast
-    world_id: 1
-    region_id: 4
-    controlled_by: 9
+    world_id: 3
+    region_id: 204
+    controlled_by: 203
     x_pos: -1
     z_pos: 5
     y_pos: 0
     type: shore
 - model: world.Tile
-  pk: 94
+  pk: 2094
   fields:
     name: Maab Ocean
-    world_id: 1
-    region_id: 9
-    controlled_by: 9
+    world_id: 3
+    region_id: 209
+    controlled_by: 203
     x_pos: 0
     z_pos: 5
     y_pos: 0
     type: deepsea
 - model: world.Tile
-  pk: 95
+  pk: 2095
   fields:
     name: Maab Ocean
-    world_id: 1
-    region_id: 9
-    controlled_by: 9
+    world_id: 3
+    region_id: 209
+    controlled_by: 203
     x_pos: 1
     z_pos: 5
     y_pos: 0
     type: deepsea
 - model: world.Tile
-  pk: 96
+  pk: 2096
   fields:
     name: Maab Ocean
-    world_id: 1
-    region_id: 9
-    controlled_by: 9
+    world_id: 3
+    region_id: 209
+    controlled_by: 203
     x_pos: 2
     z_pos: 5
     y_pos: 0
     type: deepsea
 - model: world.Tile
-  pk: 97
+  pk: 2097
   fields:
     name: Maab Ocean
-    world_id: 1
-    region_id: 9
-    controlled_by: 9
+    world_id: 3
+    region_id: 209
+    controlled_by: 203
     x_pos: 3
     z_pos: 5
     y_pos: 0
     type: deepsea
 - model: world.Tile
-  pk: 98
+  pk: 2098
   fields:
     name: Maab Ocean
-    world_id: 1
-    region_id: 9
-    controlled_by: 9
+    world_id: 3
+    region_id: 209
+    controlled_by: 203
     x_pos: 4
     z_pos: 5
     y_pos: 0
     type: deepsea
 - model: world.Tile
-  pk: 99
+  pk: 2099
   fields:
     name: Maab Ocean
-    world_id: 1
-    region_id: 9
-    controlled_by: 9
+    world_id: 3
+    region_id: 209
+    controlled_by: 203
     x_pos: 5
     z_pos: 5
     y_pos: 0
@@ -1589,10 +1328,10 @@
 
 # Wattingham
 - model: world.Settlement
-  pk: 1
+  pk: 2001
   fields:
     name: Iadar
-    tile_id: 15
+    tile_id: 2015
     population_default: 355
     x_pos: 14
     z_pos: 5
@@ -1601,30 +1340,30 @@
     type: residence
     level: 2
     quantity: 50
-    settlement_id: 1
+    settlement_id: 2001
 - model: world.Building
   fields:
     type: grain field
     level: 2
     quantity: 2378
-    settlement_id: 1
+    settlement_id: 2001
 - model: world.Building
   fields:
     type: granary
     level: 0
     quantity: 1
-    settlement_id: 1
+    settlement_id: 2001
 - model: world.Building
   fields:
     type: guild
     level: 0
     quantity: 1
-    settlement_id: 1
+    settlement_id: 2001
 - model: world.Settlement
-  pk: 2
+  pk: 2002
   fields:
     name: Diorynnhavn
-    tile_id: 15
+    tile_id: 2015
     population_default: 4010
     x_pos: 5
     z_pos: 60
@@ -1633,36 +1372,36 @@
     type: residence
     level: 2
     quantity: 300
-    settlement_id: 2
+    settlement_id: 2002
 - model: world.Building
   fields:
     type: residence
     level: 1
     quantity: 270
-    settlement_id: 2
+    settlement_id: 2002
 - model: world.Building
   fields:
     type: grain field
     level: 2
     quantity: 2819
-    settlement_id: 2
+    settlement_id: 2002
 - model: world.Building
   fields:
     type: granary
     level: 2
     quantity: 1
-    settlement_id: 2
+    settlement_id: 2002
 - model: world.Building
   fields:
     type: guild
     level: 2
     quantity: 1
-    settlement_id: 2
+    settlement_id: 2002
 - model: world.Settlement
-  pk: 3
+  pk: 2003
   fields:
     name: Diorynn
-    tile_id: 15
+    tile_id: 2015
     population_default: 1300
     x_pos: 43
     z_pos: 73
@@ -1671,37 +1410,37 @@
     type: residence
     level: 2
     quantity: 200
-    settlement_id: 3
+    settlement_id: 2003
 - model: world.Building
   fields:
     type: prison
     level: 1
-    settlement_id: 3
+    settlement_id: 2003
 - model: world.Building
   fields:
     type: grain field
     level: 2
     quantity: 17310
-    settlement_id: 3
+    settlement_id: 2003
 - model: world.Building
   fields:
     type: granary
     level: 1
     quantity: 1
-    settlement_id: 3
+    settlement_id: 2003
 - model: world.Building
   fields:
     type: guild
     level: 1
     quantity: 1
-    settlement_id: 3
+    settlement_id: 2003
 
 # Dewbury
 - model: world.Settlement
-  pk: 4
+  pk: 2004
   fields:
     name: Upcreek
-    tile_id: 16
+    tile_id: 2016
     population_default: 1600
     x_pos: 43
     z_pos: 40
@@ -1710,35 +1449,35 @@
     type: residence
     level: 2
     quantity: 200
-    settlement_id: 4
+    settlement_id: 2004
 - model: world.Building
   fields:
     type: prison
     level: 2
-    settlement_id: 4
+    settlement_id: 2004
 - model: world.Building
   fields:
     type: grain field
     level: 2
     quantity: 21737
-    settlement_id: 4
+    settlement_id: 2004
 - model: world.Building
   fields:
     type: granary
     level: 2
     quantity: 1
-    settlement_id: 4
+    settlement_id: 2004
 - model: world.Building
   fields:
     type: guild
     level: 1
     quantity: 1
-    settlement_id: 4
+    settlement_id: 2004
 - model: world.Settlement
-  pk: 5
+  pk: 2005
   fields:
     name: Valley
-    tile_id: 16
+    tile_id: 2016
     population_default: 900
     x_pos: 15
     z_pos: 73
@@ -1747,32 +1486,32 @@
     type: residence
     level: 2
     quantity: 80
-    settlement_id: 5
+    settlement_id: 2005
 - model: world.Building
   fields:
     type: grain field
     level: 2
     quantity: 3110
-    settlement_id: 5
+    settlement_id: 2005
 - model: world.Building
   fields:
     type: granary
     level: 1
     quantity: 1
-    settlement_id: 5
+    settlement_id: 2005
 - model: world.Building
   fields:
     type: guild
     level: 1
     quantity: 1
-    settlement_id: 5
+    settlement_id: 2005
 
 # Wray
 - model: world.Settlement
-  pk: 10
+  pk: 2010
   fields:
     name: Dryburgh
-    tile_id: 17
+    tile_id: 2017
     population_default: 13594
     x_pos: 87
     z_pos: 91
@@ -1781,35 +1520,35 @@
     type: residence
     level: 1
     quantity: 1010
-    settlement_id: 10
+    settlement_id: 2010
 - model: world.Building
   fields:
     type: prison
     level: 1
-    settlement_id: 10
+    settlement_id: 2010
 - model: world.Building
   fields:
     type: grain field
     level: 1
     quantity: 33914
-    settlement_id: 10
+    settlement_id: 2010
 - model: world.Building
   fields:
     type: granary
     level: 2
     quantity: 1
-    settlement_id: 10
+    settlement_id: 2010
 - model: world.Building
   fields:
     type: guild
     level: 1
     quantity: 1
-    settlement_id: 10
+    settlement_id: 2010
 - model: world.Settlement
-  pk: 11
+  pk: 2011
   fields:
     name: Efird
-    tile_id: 17
+    tile_id: 2017
     population_default: 584
     x_pos: 50
     z_pos: 43
@@ -1818,30 +1557,30 @@
     type: residence
     level: 2
     quantity: 80
-    settlement_id: 11
+    settlement_id: 2011
 - model: world.Building
   fields:
     type: grain field
     level: 2
     quantity: 7274
-    settlement_id: 11
+    settlement_id: 2011
 - model: world.Building
   fields:
     type: granary
     level: 1
     quantity: 1
-    settlement_id: 11
+    settlement_id: 2011
 - model: world.Building
   fields:
     type: guild
     level: 0
     quantity: 1
-    settlement_id: 11
+    settlement_id: 2011
 - model: world.Settlement
-  pk: 12
+  pk: 2012
   fields:
     name: Fort
-    tile_id: 17
+    tile_id: 2017
     population_default: 210
     x_pos: 78
     z_pos: 12
@@ -1850,32 +1589,32 @@
     type: residence
     level: 1
     quantity:  40
-    settlement_id: 12
+    settlement_id: 2012
 - model: world.Building
   fields:
     type: grain field
     level: 2
     quantity: 1000
-    settlement_id: 12
+    settlement_id: 2012
 - model: world.Building
   fields:
     type: granary
     level: 1
     quantity: 1
-    settlement_id: 12
+    settlement_id: 2012
 - model: world.Building
   fields:
     type: guild
     level: 1
     quantity: 1
-    settlement_id: 12
+    settlement_id: 2012
 
 # Muria
 - model: world.Settlement
-  pk: 13
+  pk: 2013
   fields:
     name: Exard
-    tile_id: 18
+    tile_id: 2018
     population_default: 1325
     x_pos: 43
     z_pos: 34
@@ -1884,35 +1623,35 @@
     type: residence
     level: 1
     quantity: 151
-    settlement_id: 13
+    settlement_id: 2013
 - model: world.Building
   fields:
     type: prison
     level: 0
-    settlement_id: 13
+    settlement_id: 2013
 - model: world.Building
   fields:
     type: grain field
     level: 1
     quantity: 16304
-    settlement_id: 13
+    settlement_id: 2013
 - model: world.Building
   fields:
     type: granary
     level: 2
     quantity: 1
-    settlement_id: 13
+    settlement_id: 2013
 - model: world.Building
   fields:
     type: guild
     level: 2
     quantity: 1
-    settlement_id: 13
+    settlement_id: 2013
 - model: world.Settlement
-  pk: 14
+  pk: 2014
   fields:
     name: Baygrove
-    tile_id: 18
+    tile_id: 2018
     population_default: 584
     x_pos: 88
     z_pos: 46
@@ -1921,30 +1660,30 @@
     type: residence
     level: 2
     quantity: 80
-    settlement_id: 14
+    settlement_id: 2014
 - model: world.Building
   fields:
     type: grain field
     level: 2
     quantity: 7274
-    settlement_id: 14
+    settlement_id: 2014
 - model: world.Building
   fields:
     type: granary
     level: 1
     quantity: 1
-    settlement_id: 14
+    settlement_id: 2014
 - model: world.Building
   fields:
     type: guild
     level: 0
     quantity: 1
-    settlement_id: 14
+    settlement_id: 2014
 - model: world.Settlement
-  pk: 15
+  pk: 2015
   fields:
     name: Haigate
-    tile_id: 18
+    tile_id: 2018
     population_default: 369
     x_pos: 78
     z_pos: 12
@@ -1953,32 +1692,32 @@
     type: residence
     level: 1
     quantity:  50
-    settlement_id: 15
+    settlement_id: 2015
 - model: world.Building
   fields:
     type: grain field
     level: 1
     quantity: 1000
-    settlement_id: 15
+    settlement_id: 2015
 - model: world.Building
   fields:
     type: granary
     level: 1
     quantity: 1
-    settlement_id: 15
+    settlement_id: 2015
 - model: world.Building
   fields:
     type: guild
     level: 0
     quantity: 1
-    settlement_id: 15
+    settlement_id: 2015
 
 # Narris
 - model: world.Settlement
-  pk: 16
+  pk: 2016
   fields:
     name: Cheadon
-    tile_id: 23
+    tile_id: 2023
     population_default: 5325
     x_pos: 77
     z_pos: 82
@@ -1987,35 +1726,35 @@
     type: residence
     level: 1
     quantity: 750
-    settlement_id: 16
+    settlement_id: 2016
 - model: world.Building
   fields:
     type: prison
     level: 1
-    settlement_id: 16
+    settlement_id: 2016
 - model: world.Building
   fields:
     type: grain field
     level: 1
     quantity: 42085
-    settlement_id: 16
+    settlement_id: 2016
 - model: world.Building
   fields:
     type: granary
     level: 1
     quantity: 1
-    settlement_id: 16
+    settlement_id: 2016
 - model: world.Building
   fields:
     type: guild
     level: 0
     quantity: 1
-    settlement_id: 16
+    settlement_id: 2016
 - model: world.Settlement
-  pk: 17
+  pk: 2017
   fields:
     name: Ersstone
-    tile_id: 23
+    tile_id: 2023
     population_default: 684
     x_pos: 88
     z_pos: 46
@@ -2024,32 +1763,32 @@
     type: residence
     level: 2
     quantity: 80
-    settlement_id: 17
+    settlement_id: 2017
 - model: world.Building
   fields:
     type: grain field
     level: 0
     quantity: 7014
-    settlement_id: 17
+    settlement_id: 2017
 - model: world.Building
   fields:
     type: granary
     level: 1
     quantity: 1
-    settlement_id: 17
+    settlement_id: 2017
 - model: world.Building
   fields:
     type: guild
     level: 1
     quantity: 1
-    settlement_id: 17
+    settlement_id: 2017
 
 # Warcton
 - model: world.Settlement
-  pk: 18
+  pk: 2018
   fields:
     name: Ledale
-    tile_id: 24
+    tile_id: 2024
     population_default: 259
     x_pos: 23
     z_pos: 85
@@ -2058,30 +1797,30 @@
     type: residence
     level: 2
     quantity: 28
-    settlement_id: 18
+    settlement_id: 2018
 - model: world.Building
   fields:
     type: grain field
     level: 1
     quantity: 2581
-    settlement_id: 18
+    settlement_id: 2018
 - model: world.Building
   fields:
     type: granary
     level: 2
     quantity: 1
-    settlement_id: 18
+    settlement_id: 2018
 - model: world.Building
   fields:
     type: guild
     level: 1
     quantity: 1
-    settlement_id: 18
+    settlement_id: 2018
 - model: world.Settlement
-  pk: 19
+  pk: 2019
   fields:
     name: Daydale
-    tile_id: 24
+    tile_id: 2024
     population_default: 624
     x_pos: 67
     z_pos: 38
@@ -2090,30 +1829,30 @@
     type: residence
     level: 1
     quantity: 80
-    settlement_id: 19
+    settlement_id: 2019
 - model: world.Building
   fields:
     type: grain field
     level: 1
     quantity: 4068
-    settlement_id: 19
+    settlement_id: 2019
 - model: world.Building
   fields:
     type: granary
     level: 1
     quantity: 1
-    settlement_id: 19
+    settlement_id: 2019
 - model: world.Building
   fields:
     type: guild
     level: 1
     quantity: 1
-    settlement_id: 19
+    settlement_id: 2019
 - model: world.Settlement
-  pk: 20
+  pk: 2020
   fields:
     name: Adfield
-    tile_id: 24
+    tile_id: 2024
     population_default: 305
     x_pos: 47
     z_pos: 83
@@ -2122,32 +1861,32 @@
     type: residence
     level: 1
     quantity: 39
-    settlement_id: 20
+    settlement_id: 2020
 - model: world.Building
   fields:
     type: grain field
     level: 0
     quantity: 7014
-    settlement_id: 20
+    settlement_id: 2020
 - model: world.Building
   fields:
     type: granary
     level: 2
     quantity: 1
-    settlement_id: 20
+    settlement_id: 2020
 - model: world.Building
   fields:
     type: guild
     level: 2
     quantity: 1
-    settlement_id: 20
+    settlement_id: 2020
 
 # West Luria
 - model: world.Settlement
-  pk: 21
+  pk: 2021
   fields:
     name: Barla
-    tile_id: 25
+    tile_id: 2025
     population_default: 1357
     x_pos: 20
     z_pos: 13
@@ -2156,30 +1895,30 @@
     type: residence
     level: 2
     quantity: 163
-    settlement_id: 21
+    settlement_id: 2021
 - model: world.Building
   fields:
     type: grain field
     level: 2
     quantity: 9610
-    settlement_id: 21
+    settlement_id: 2021
 - model: world.Building
   fields:
     type: granary
     level: 1
     quantity: 1
-    settlement_id: 21
+    settlement_id: 2021
 - model: world.Building
   fields:
     type: guild
     level: 1
     quantity: 1
-    settlement_id: 21
+    settlement_id: 2021
 - model: world.Settlement
-  pk: 22
+  pk: 2022
   fields:
     name: Deminster
-    tile_id: 25
+    tile_id: 2025
     population_default: 843
     x_pos: 67
     z_pos: 60
@@ -2188,32 +1927,32 @@
     type: residence
     level: 1
     quantity: 80
-    settlement_id: 22
+    settlement_id: 2022
 - model: world.Building
   fields:
     type: grain field
     level: 1
     quantity: 4068
-    settlement_id: 22
+    settlement_id: 2022
 - model: world.Building
   fields:
     type: granary
     level: 1
     quantity: 1
-    settlement_id: 22
+    settlement_id: 2022
 - model: world.Building
   fields:
     type: guild
     level: 1
     quantity: 1
-    settlement_id: 22
+    settlement_id: 2022
 
 # Central Luria
 - model: world.Settlement
-  pk: 23
+  pk: 2023
   fields:
     name: Lurview
-    tile_id: 26
+    tile_id: 2026
     population_default: 333
     x_pos: 38
     z_pos: 25
@@ -2222,30 +1961,30 @@
     type: residence
     level: 1
     quantity: 40
-    settlement_id: 23
+    settlement_id: 2023
 - model: world.Building
   fields:
     type: grain field
     level: 2
     quantity: 710
-    settlement_id: 23
+    settlement_id: 2023
 - model: world.Building
   fields:
     type: granary
     level: 2
     quantity: 1
-    settlement_id: 23
+    settlement_id: 2023
 - model: world.Building
   fields:
     type: guild
     level: 2
     quantity: 1
-    settlement_id: 23
+    settlement_id: 2023
 - model: world.Settlement
-  pk: 24
+  pk: 2024
   fields:
     name: Byhill
-    tile_id: 26
+    tile_id: 2026
     population_default: 810
     x_pos: 50
     z_pos: 60
@@ -2254,32 +1993,32 @@
     type: residence
     level: 1
     quantity: 80
-    settlement_id: 24
+    settlement_id: 2024
 - model: world.Building
   fields:
     type: grain field
     level: 1
     quantity: 1257
-    settlement_id: 24
+    settlement_id: 2024
 - model: world.Building
   fields:
     type: granary
     level: 2
     quantity: 1
-    settlement_id: 24
+    settlement_id: 2024
 - model: world.Building
   fields:
     type: guild
     level: 2
     quantity: 1
-    settlement_id: 24
+    settlement_id: 2024
 
 # East Luria
 - model: world.Settlement
-  pk: 25
+  pk: 2025
   fields:
     name: Freehill
-    tile_id: 27
+    tile_id: 2027
     population_default: 677
     x_pos: 62
     z_pos: 25
@@ -2288,30 +2027,30 @@
     type: residence
     level: 1
     quantity: 101
-    settlement_id: 25
+    settlement_id: 2025
 - model: world.Building
   fields:
     type: grain field
     level: 1
     quantity: 1203
-    settlement_id: 25
+    settlement_id: 2025
 - model: world.Building
   fields:
     type: granary
     level: 2
     quantity: 1
-    settlement_id: 25
+    settlement_id: 2025
 - model: world.Building
   fields:
     type: guild
     level: 2
     quantity: 1
-    settlement_id: 25
+    settlement_id: 2025
 - model: world.Settlement
-  pk: 26
+  pk: 2026
   fields:
     name: Verburgh
-    tile_id: 27
+    tile_id: 2027
     population_default: 977
     x_pos: 60
     z_pos: 76
@@ -2320,33 +2059,33 @@
     type: residence
     level: 1
     quantity: 101
-    settlement_id: 26
+    settlement_id: 2026
 - model: world.Building
   fields:
     type: grain field
     level: 0
     quantity: 3504
-    settlement_id: 26
+    settlement_id: 2026
 - model: world.Building
   fields:
     type: granary
     level: 1
     quantity: 1
-    settlement_id: 26
+    settlement_id: 2026
 - model: world.Building
   fields:
     type: guild
     level: 2
     quantity: 1
-    settlement_id: 26
+    settlement_id: 2026
 
 
 # Clarn Plains
 - model: world.Settlement
-  pk: 27
+  pk: 2027
   fields:
     name: Wyedon
-    tile_id: 36
+    tile_id: 2036
     population_default: 7498
     x_pos: 44
     z_pos: 34
@@ -2355,30 +2094,30 @@
     type: residence
     level: 1
     quantity: 1000
-    settlement_id: 27
+    settlement_id: 2027
 - model: world.Building
   fields:
     type: grain field
     level: 1
     quantity: 9427
-    settlement_id: 27
+    settlement_id: 2027
 - model: world.Building
   fields:
     type: granary
     level: 2
     quantity: 1
-    settlement_id: 27
+    settlement_id: 2027
 - model: world.Building
   fields:
     type: guild
     level: 2
     quantity: 1
-    settlement_id: 27
+    settlement_id: 2027
 - model: world.Settlement
-  pk: 28
+  pk: 2028
   fields:
     name: Shreham
-    tile_id: 36
+    tile_id: 2036
     population_default: 749
     x_pos: 90
     z_pos: 90
@@ -2387,33 +2126,33 @@
     type: residence
     level: 1
     quantity: 100
-    settlement_id: 28
+    settlement_id: 2028
 - model: world.Building
   fields:
     type: grain field
     level: 2
     quantity: 7604
-    settlement_id: 28
+    settlement_id: 2028
 - model: world.Building
   fields:
     type: granary
     level: 2
     quantity: 1
-    settlement_id: 28
+    settlement_id: 2028
 - model: world.Building
   fields:
     type: guild
     level: 1
     quantity: 1
-    settlement_id: 28
+    settlement_id: 2028
 
 
 # Clarn Woords
 - model: world.Settlement
-  pk: 29
+  pk: 2029
   fields:
     name: Dimrajud
-    tile_id: 37
+    tile_id: 2037
     population_default: 1278
     x_pos: 44
     z_pos: 17
@@ -2422,30 +2161,30 @@
     type: residence
     level: 1
     quantity: 101
-    settlement_id: 29
+    settlement_id: 2029
 - model: world.Building
   fields:
     type: grain field
     level: 1
     quantity: 15690
-    settlement_id: 29
+    settlement_id: 2029
 - model: world.Building
   fields:
     type: granary
     level: 1
     quantity: 1
-    settlement_id: 29
+    settlement_id: 2029
 - model: world.Building
   fields:
     type: guild
     level: 1
     quantity: 1
-    settlement_id: 29
+    settlement_id: 2029
 - model: world.Settlement
-  pk: 30
+  pk: 2030
   fields:
     name: Dubin
-    tile_id: 37
+    tile_id: 2037
     population_default: 1078
     x_pos: 15
     z_pos: 90
@@ -2454,30 +2193,30 @@
     type: residence
     level: 2
     quantity: 94
-    settlement_id: 30
+    settlement_id: 2030
 - model: world.Building
   fields:
     type: grain field
     level: 1
     quantity: 13481
-    settlement_id: 30
+    settlement_id: 2030
 - model: world.Building
   fields:
     type: granary
     level: 1
     quantity: 1
-    settlement_id: 30
+    settlement_id: 2030
 - model: world.Building
   fields:
     type: guild
     level: 2
     quantity: 1
-    settlement_id: 30
+    settlement_id: 2030
 - model: world.Settlement
-  pk: 31
+  pk: 2031
   fields:
     name: Onguz
-    tile_id: 37
+    tile_id: 2037
     population_default: 741
     x_pos: 91
     z_pos: 84
@@ -2486,32 +2225,32 @@
     type: residence
     level: 2
     quantity: 94
-    settlement_id: 31
+    settlement_id: 2031
 - model: world.Building
   fields:
     type: grain field
     level: 1
     quantity: 11048
-    settlement_id: 31
+    settlement_id: 2031
 - model: world.Building
   fields:
     type: granary
     level: 1
     quantity: 1
-    settlement_id: 31
+    settlement_id: 2031
 - model: world.Building
   fields:
     type: guild
     level: 2
     quantity: 1
-    settlement_id: 31
+    settlement_id: 2031
 
 # Jade-Mir Peaks
 - model: world.Settlement
-  pk: 6
+  pk: 2006
   fields:
     name: Shaax
-    tile_id: 43
+    tile_id: 2043
     population_default: 2666
     x_pos: 29
     z_pos: 31
@@ -2520,35 +2259,35 @@
     type: residence
     level: 1
     quantity: 250
-    settlement_id: 6
+    settlement_id: 2006
 - model: world.Building
   fields:
     type: prison
     level: 1
-    settlement_id: 6
+    settlement_id: 2006
 - model: world.Building
   fields:
     type: grain field
     level: 1
     quantity: 13330
-    settlement_id: 6
+    settlement_id: 2006
 - model: world.Building
   fields:
     type: granary
     level: 1
     quantity: 1
-    settlement_id: 6
+    settlement_id: 2006
 - model: world.Building
   fields:
     type: guild
     level: 1
     quantity: 1
-    settlement_id: 6
+    settlement_id: 2006
 - model: world.Settlement
-  pk: 7
+  pk: 2007
   fields:
     name: Fynkah
-    tile_id: 43
+    tile_id: 2043
     population_default: 812
     x_pos: 61
     z_pos: 50
@@ -2557,32 +2296,32 @@
     type: residence
     level: 1
     quantity: 90
-    settlement_id: 7
+    settlement_id: 2007
 - model: world.Building
   fields:
     type: grain field
     level: 1
     quantity: 3248
-    settlement_id: 7
+    settlement_id: 2007
 - model: world.Building
   fields:
     type: granary
     level: 1
     quantity: 1
-    settlement_id: 7
+    settlement_id: 2007
 - model: world.Building
   fields:
     type: guild
     level: 2
     quantity: 1
-    settlement_id: 7
+    settlement_id: 2007
 
 # South Mir
 - model: world.Settlement
-  pk: 8
+  pk: 2008
   fields:
     name: Dipak
-    tile_id: 42
+    tile_id: 2042
     population_default: 5300
     x_pos: 33
     z_pos: 8
@@ -2591,35 +2330,35 @@
     type: residence
     level: 1
     quantity: 444
-    settlement_id: 8
+    settlement_id: 2008
 - model: world.Building
   fields:
     type: prison
     level: 2
-    settlement_id: 8
+    settlement_id: 2008
 - model: world.Building
   fields:
     type: grain field
     level: 1
     quantity: 42400
-    settlement_id: 8
+    settlement_id: 2008
 - model: world.Building
   fields:
     type: granary
     level: 2
     quantity: 1
-    settlement_id: 8
+    settlement_id: 2008
 - model: world.Building
   fields:
     type: guild
     level: 1
     quantity: 1
-    settlement_id: 8
+    settlement_id: 2008
 - model: world.Settlement
-  pk: 9
+  pk: 2009
   fields:
     name: Kalyana
-    tile_id: 42
+    tile_id: 2042
     population_default: 2100
     x_pos: 40
     z_pos: 53
@@ -2628,32 +2367,32 @@
     type: residence
     level: 1
     quantity: 175
-    settlement_id: 9
+    settlement_id: 2009
 - model: world.Building
   fields:
     type: grain field
     level: 1
     quantity: 31500
-    settlement_id: 9
+    settlement_id: 2009
 - model: world.Building
   fields:
     type: granary
     level: 1
     quantity: 1
-    settlement_id: 9
+    settlement_id: 2009
 - model: world.Building
   fields:
     type: guild
     level: 1
     quantity: 1
-    settlement_id: 9
+    settlement_id: 2009
 
 # North Mir
 - model: world.Settlement
-  pk: 32
+  pk: 2032
   fields:
     name: Shahill
-    tile_id: 32
+    tile_id: 2032
     population_default: 711
     x_pos: 25
     z_pos: 20
@@ -2662,30 +2401,30 @@
     type: residence
     level: 1
     quantity: 70
-    settlement_id: 32
+    settlement_id: 2032
 - model: world.Building
   fields:
     type: grain field
     level: 2
     quantity: 10094
-    settlement_id: 32
+    settlement_id: 2032
 - model: world.Building
   fields:
     type: granary
     level: 2
     quantity: 1
-    settlement_id: 32
+    settlement_id: 2032
 - model: world.Building
   fields:
     type: guild
     level: 1
     quantity: 1
-    settlement_id: 32
+    settlement_id: 2032
 - model: world.Settlement
-  pk: 33
+  pk: 2033
   fields:
     name: Deeproot
-    tile_id: 32
+    tile_id: 2032
     population_default: 2100
     x_pos: 40
     z_pos: 60
@@ -2694,30 +2433,30 @@
     type: residence
     level: 1
     quantity: 190
-    settlement_id: 33
+    settlement_id: 2033
 - model: world.Building
   fields:
     type: grain field
     level: 1
     quantity: 15302
-    settlement_id: 33
+    settlement_id: 2033
 - model: world.Building
   fields:
     type: granary
     level: 1
     quantity: 1
-    settlement_id: 33
+    settlement_id: 2033
 - model: world.Building
   fields:
     type: guild
     level: 1
     quantity: 1
-    settlement_id: 33
+    settlement_id: 2033
 - model: world.Settlement
-  pk: 34
+  pk: 2034
   fields:
     name: Gra
-    tile_id: 32
+    tile_id: 2032
     population_default: 287
     x_pos: 80
     z_pos: 70
@@ -2726,32 +2465,32 @@
     type: residence
     level: 1
     quantity: 40
-    settlement_id: 34
+    settlement_id: 2034
 - model: world.Building
   fields:
     type: grain field
     level: 1
     quantity: 3878
-    settlement_id: 34
+    settlement_id: 2034
 - model: world.Building
   fields:
     type: granary
     level: 0
     quantity: 1
-    settlement_id: 34
+    settlement_id: 2034
 - model: world.Building
   fields:
     type: guild
     level: 2
     quantity: 1
-    settlement_id: 34
+    settlement_id: 2034
 
 # North Jade
 - model: world.Settlement
-  pk: 35
+  pk: 2035
   fields:
     name: Gogab
-    tile_id: 33
+    tile_id: 2033
     population_default: 3264
     x_pos: 25
     z_pos: 30
@@ -2760,30 +2499,30 @@
     type: residence
     level: 2
     quantity: 300
-    settlement_id: 35
+    settlement_id: 2035
 - model: world.Building
   fields:
     type: grain field
     level: 2
     quantity: 10909
-    settlement_id: 35
+    settlement_id: 2035
 - model: world.Building
   fields:
     type: granary
     level: 2
     quantity: 1
-    settlement_id: 35
+    settlement_id: 2035
 - model: world.Building
   fields:
     type: guild
     level: 1
     quantity: 1
-    settlement_id: 35
+    settlement_id: 2035
 - model: world.Settlement
-  pk: 36
+  pk: 2036
   fields:
     name: Deeproot
-    tile_id: 33
+    tile_id: 2033
     population_default: 300
     x_pos: 20
     z_pos: 65
@@ -2792,30 +2531,30 @@
     type: residence
     level: 2
     quantity: 40
-    settlement_id: 36
+    settlement_id: 2036
 - model: world.Building
   fields:
     type: grain field
     level: 2
     quantity: 5000
-    settlement_id: 36
+    settlement_id: 2036
 - model: world.Building
   fields:
     type: granary
     level: 2
     quantity: 1
-    settlement_id: 36
+    settlement_id: 2036
 - model: world.Building
   fields:
     type: guild
     level: 2
     quantity: 1
-    settlement_id: 36
+    settlement_id: 2036
 - model: world.Settlement
-  pk: 37
+  pk: 2037
   fields:
     name: Kash Falls
-    tile_id: 33
+    tile_id: 2033
     population_default: 640
     x_pos: 75
     z_pos: 80
@@ -2824,22 +2563,22 @@
     type: residence
     level: 2
     quantity: 80
-    settlement_id: 37
+    settlement_id: 2037
 - model: world.Building
   fields:
     type: grain field
     level: 2
     quantity: 6030
-    settlement_id: 37
+    settlement_id: 2037
 - model: world.Building
   fields:
     type: granary
     level: 2
     quantity: 1
-    settlement_id: 37
+    settlement_id: 2037
 - model: world.Building
   fields:
     type: guild
     level: 2
     quantity: 1
-    settlement_id: 37
+    settlement_id: 2037

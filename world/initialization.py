@@ -43,7 +43,7 @@ def initialize_tile(tile):
 def initialize_settlement(settlement):
     with perf_timer('Initializing settlement {} ({}), pop. {}'.format(
             settlement, settlement.id, settlement.population_default)):
-        
+
         residences = settlement.building_set.filter(
             type=world.models.buildings.Building.RESIDENCE).all()
         fields = settlement.building_set.filter(

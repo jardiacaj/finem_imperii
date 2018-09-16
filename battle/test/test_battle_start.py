@@ -265,7 +265,7 @@ class TestBattleStartWithAllies(TestCase):
             ],
             self.tile
         )
-        
+
         self.assertEqual(self.battle.battleside_set.count(), 2)
 
         self.assertTrue(BattleOrganization.objects.filter(side__battle=self.battle, organization=self.kingdom).exists())

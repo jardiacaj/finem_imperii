@@ -8,5 +8,5 @@ docker run \
   -v backups:/var/www/finem_imperii/backups \
   -e DJANGO_SETTINGS_MODULE=prod.settings \
   bin/bash \
-  `./manage.py dumpdata | gzip > "backups/$(date --iso-8601=seconds).gz"`
+  './manage.py dumpdata | gzip > "backups/$(date --iso-8601=seconds).gz"'
 popd

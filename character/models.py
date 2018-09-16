@@ -449,28 +449,28 @@ class Character(models.Model, AdminURLMixin):
             return 4
         return 2
 
-    def inventory_object(self, type):
+    def inventory_object(self, item_type):
         try:
             return items.InventoryItem.objects.get(
-                type=type,
+                type=item_type,
                 owner_character=self,
                 location=None
             )
         except items.InventoryItem.DoesNotExist:
             return None
 
-    def carrying_quantity(self, type):
-        inventory_object = self.inventory_object(type)
+    def carrying_quantity(self, item_type):
+        inventory_object = self.inventory_object(item_type)
         if inventory_object is None:
             return 0
         else:
             return inventory_object.quantity
 
-    def add_to_inventory(self, type, quantity):
-        inventory_object = self.inventory_object(type)
+    def add_to_inventory(self, item_type, quantity):
+        inventory_object = self.inventory_object(item_type)
         if inventory_object is None:
             items.InventoryItem.objects.create(
-                type=type,
+                type=item_type,
                 owner_character=self,
                 quantity=quantity
             )

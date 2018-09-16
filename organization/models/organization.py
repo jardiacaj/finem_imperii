@@ -207,6 +207,8 @@ class Organization(models.Model, AdminURLMixin):
     def get_all_controlled_tiles(self):
         return world.models.geography.Tile.objects.filter(
             controlled_by__in=self.get_descendants_list(including_self=True)
+        ).exclude(
+            type__in=("shore", "deepsea")
         )
 
     def external_capabilities_to_this(self):

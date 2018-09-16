@@ -82,8 +82,8 @@ pre.wrapping {
     text-align: center;
     background: transparent;
     font-weight: bold;
-    text-decoration: underline;
-    font-size: 130%;
+    text-decoration: none;
+    font-size: 110%;
     color: #000000;
     text-shadow: #FFF 0px 0px 2px;
     -webkit-font-smoothing: antialiased;
@@ -95,9 +95,9 @@ pre.wrapping {
     width: 100px;
     text-align: center;
     background: transparent;
-    font-weight: bold;
-    text-decoration: underline;
-    font-size: 110%;
+    font-weight: normal;
+    text-decoration: none;
+    font-size: 90%;
     color: #000000;
     text-shadow: #FFF 0px 0px 2px;
     -webkit-font-smoothing: antialiased;

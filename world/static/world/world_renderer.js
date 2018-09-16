@@ -187,7 +187,9 @@ function MapRenderer(world_data) {
         for (var region_id in zis.regions)  {
             if (Object.prototype.hasOwnProperty.call(zis.regions, region_id)) {
                 var region = world_data.regions[region_id];
-                zis.render_region_tag(region);
+                if (region['type'] !== "shore" && region['type'] !== "deepsea") {
+                    zis.render_region_tag(region);
+                }
             }
         }
     };

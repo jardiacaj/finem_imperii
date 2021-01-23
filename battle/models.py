@@ -377,7 +377,7 @@ class Order(models.Model):
         RANGED_AND_STAND: 1,
     }
 
-    what = models.CharField(max_length=15, choices=WHAT_CHOICES)
+    what = models.CharField(max_length=30, choices=WHAT_CHOICES)
     target_location_x = models.IntegerField(null=True)
     target_location_z = models.IntegerField(null=True)
     done = models.BooleanField(default=0)
